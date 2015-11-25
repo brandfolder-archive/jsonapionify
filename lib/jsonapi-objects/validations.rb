@@ -1,6 +1,7 @@
 module JSONAPIObjects
   module Validations
     extend ActiveSupport::Concern
+    using UnstrictProc
 
     module ClassMethods
       # Raise the validation errors
@@ -115,8 +116,8 @@ module JSONAPIObjects
         self.permitted_keys = [*self.permitted_keys, *keys]
         before_compile do
           Continuation.new(**options).check(self) do
-            keys           = expand_keys(*keys)
-            missing_keys   = keys.map(&:to_sym) - self.keys.map(&:to_sym)
+            keys         = expand_keys(*keys)
+            missing_keys = keys.map(&:to_sym) - self.keys.map(&:to_sym)
             if (origin.nil? || origin == self.origin) && missing_keys.present?
               missing_keys.each do |key|
                 errors.add key, 'must be provided.'
@@ -152,8 +153,8 @@ module JSONAPIObjects
       def validate!(key, with: nil, message: 'is not valid.', **options, &block)
         before_compile do
           Continuation.new(**options).check(self, key, self[key]) do
-            block = get_block_from_options(with, &block)
-            errors.add key, message unless block.call(self, key)
+            real_block = get_block_from_options(with, &block)
+            errors.add key, message unless real_block.call(self, key)
           end
         end
       end
@@ -161,8 +162,8 @@ module JSONAPIObjects
       def validate_object!(with: nil, message: 'is not valid.', **options, &block)
         before_compile do
           Continuation.new(**options).check(self) do
-            block = get_block_from_options(with, &block)
-            errors.add '*', message unless block.call(self)
+            real_block = get_block_from_options(with, &block)
+            errors.add '*', message unless real_block.call(self)
           end
         end
       end
@@ -170,10 +171,10 @@ module JSONAPIObjects
       # Validates the object using a provided method or block
       def validate_each!(with: nil, message: 'not valid.', **options, &block)
         before_compile do
-          block = get_block_from_options(with, &block)
+          real_block = get_block_from_options(with, &block)
           keys.each do |key|
             Continuation.new(**options).check(self, key, self[key]) do
-              errors.add key, message unless block.call(self, key, self[key])
+              errors.add key, message unless real_block.call(self, key, self[key])
             end
           end
         end
@@ -277,7 +278,7 @@ module JSONAPIObjects
     def get_block_from_options(symbol, &block)
       raise ArgumentError, 'cannot pass symbol and block.' if symbol && block
       raise ArgumentError, 'must pass symbol or block.' unless symbol || block
-      block || method(symbol).to_proc
+      (block || method(symbol).to_proc).unstrict
     end
 
     def keys_to_sentence(*keys, connector: "or")

@@ -396,7 +396,6 @@ module JSONAPIObjects
         end
       end
 
-
       # Here's how an article (i.e. a resource of type "articles") might appear in a document:
       #
       # ```javascript
@@ -421,6 +420,57 @@ module JSONAPIObjects
       # ```
       #
       # #### <a href="#document-resource-object-identification" id="document-resource-object-identification" class="headerlink"></a> Identification
+
+      describe 'identification' do
+        context 'when `id` is a string' do
+          data = { id: "1", type: "stuff" }
+          it_should_behave_like 'a valid jsonapi object', data
+        end
+
+        context 'when `id` is not a string' do
+          data = { id: nil, type: "stuff" }
+          it_should_behave_like 'an invalid jsonapi object', data
+        end
+
+        context 'when `type` is a string' do
+          data = { id: "1", type: "stuff" }
+          it_should_behave_like 'a valid jsonapi object', data
+        end
+
+        context 'when `type` is not a string' do
+          data = { id: "1", type: nil }
+          it_should_behave_like 'an invalid jsonapi object', data
+        end
+
+        context 'when both `id` and `type` are strings' do
+          data = { id: "1", type: "stuff" }
+          it_should_behave_like 'a valid jsonapi object', data
+        end
+
+        context 'when both `id` and `type` are not strings' do
+          data = { id: nil, type: nil }
+          it_should_behave_like 'an invalid jsonapi object', data
+        end
+
+        context 'when all of the resources are unique' do
+          parent = TopLevelObject.new(
+            data:
+              [
+                described_class.new(id: "1", "type": "stuff"),
+                described_class.new(id: "1", "type": "stuff"),
+              ]
+          )
+          it 'should not compile' do
+            parent[:data].each do |resource|
+              expect { resource.compile }.to raise_error
+            end
+          end
+        end
+
+        context 'when all of the resources are not unique' do
+
+        end
+      end
       #
       # Every [resource object][resource objects] **MUST** contain an `id` member and a `type` member.
       # The values of the `id` and `type` members **MUST** be strings.
