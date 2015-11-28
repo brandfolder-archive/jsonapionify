@@ -3,6 +3,7 @@ require 'active_support/concern'
 module JSONAPIObjects
   module ObjectDefaults
     extend ActiveSupport::Concern
+    using UnstrictProc
 
     module ClassMethods
       # Forces the setter to a type

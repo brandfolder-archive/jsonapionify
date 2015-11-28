@@ -14,7 +14,7 @@ module JSONAPIObjects
 
     def check_if(*arguments)
       return true unless @options[:if]
-      not @options[:if].unstrict.call(*arguments)
+      @options[:if].unstrict.call(*arguments)
     end
 
     def check_unless(*arguments)

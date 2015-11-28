@@ -25,7 +25,7 @@ module JSONAPIObjects
     end
 
     shared_examples "an invalid jsonapi object" do |data|
-      it "should be an invalid jsonapi object" do
+      it "should not be a valid jsonapi object" do
         object = described_class.new(data)
         allow(object).to receive(:origin).and_return origin
         expect { object.compile }.to raise_error(ValidationError)
@@ -279,6 +279,7 @@ module JSONAPIObjects
           it_should_behave_like 'a valid jsonapi object', **hash
 
           it 'should be a resource identifier object' do
+            $pry = true
             expect(described_class.new(hash)[:data]).to be_a JSONAPIObjects::ResourceIdentifierObject
           end
         end
@@ -460,9 +461,9 @@ module JSONAPIObjects
                 described_class.new(id: "1", "type": "stuff"),
               ]
           )
-          it 'should not compile' do
+          it 'should not be a valid jsonapi object' do
             parent[:data].each do |resource|
-              expect { resource.compile }.to raise_error
+              expect { resource.compile }.to raise_error ValidationError
             end
           end
         end

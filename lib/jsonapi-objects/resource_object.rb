@@ -31,7 +31,7 @@ module JSONAPIObjects
       MemberNames.valid? value
     end
 
-    validate_object!(with: :duplicate_exists?, message: 'is not unique')
+    validate_object!(with: :duplicate_does_not_exist?, message: 'is not unique')
 
     # Note: This spec is agnostic about inflection rules, so the value of `type`
     # can be either plural or singular. However, the same value should be used
@@ -43,12 +43,16 @@ module JSONAPIObjects
 
     def duplicate_exists?
       return false unless parent.is_a?(Array)
-      peers            = parent[:data] - [self]
+      peers            = parent - [self]
       peers.any? do |peer|
         matches_id   = peer.has_key?(:id) && has_key?(:id) && peer[:id] == self[:id]
         matches_type = peer[:type] == self[:type]
         matches_type && matches_id
       end
+    end
+
+    def duplicate_does_not_exist?
+      !duplicate_exists?
     end
 
     def relationship_keys

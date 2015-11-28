@@ -11,6 +11,11 @@ module JSONAPIObjects
     end
 
     def initialize(array = [])
+      observe(added: ->(_, items) {
+        items.each do |item|
+          item.instance_variable_set(:@parent, self) unless item.frozen?
+        end
+      })
       array.each do |instance|
         self << instance
       end

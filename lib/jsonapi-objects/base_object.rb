@@ -9,6 +9,7 @@ require 'active_support/core_ext/hash/keys'
 module JSONAPIObjects
   class BaseObject
     include Enumerable
+    include EnumerableObserver
     include ActiveSupport::Callbacks
     include InheritsOrigin
     define_callbacks :compile, :initialize
@@ -25,7 +26,7 @@ module JSONAPIObjects
 
     set_callback :initialize, :before do
       @object = {}
-      EnumerableObserver.observe(@object, added: ->(_, items) {
+      observe(@object, added: ->(_, items) {
         items.each do |_, value|
           value.instance_variable_set(:@parent, self) unless value.frozen?
         end

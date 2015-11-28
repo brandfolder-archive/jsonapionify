@@ -2,7 +2,7 @@ module JSONAPIObjects
   module EnumerableObserver
     extend self
 
-    def observe(obj, added: proc {}, removed: proc {})
+    def observe(obj = self, added: proc {}, removed: proc {})
       add_proc    = added
       remove_proc = removed
       (obj.methods - %i{each define_singleton_method}).each do |meth|
