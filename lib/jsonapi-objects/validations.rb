@@ -12,6 +12,7 @@ module JSONAPIObjects
 
       def inherited(subclass)
         vars = %i{
+          required_keys
           permitted_keys
           allowed_type_map
           implementations
@@ -114,16 +115,8 @@ module JSONAPIObjects
       # Fails if these keys dont exist
       def must_contain!(*keys, **options)
         self.permitted_keys = [*self.permitted_keys, *keys]
-        before_compile do
-          Continuation.new(**options).check(self) do
-            keys         = expand_keys(*keys)
-            missing_keys = keys.map(&:to_sym) - self.keys.map(&:to_sym)
-            if (origin.nil? || origin == self.origin) && missing_keys.present?
-              missing_keys.each do |key|
-                errors.add key, 'must be provided.'
-              end
-            end
-          end
+        keys.each do |key|
+          required_keys[key] = options
         end
       end
 
@@ -152,9 +145,11 @@ module JSONAPIObjects
       # Validates key using a provided method or block
       def validate!(key, with: nil, message: 'is not valid.', **options, &block)
         before_compile do
-          Continuation.new(**options).check(self, key, self[key]) do
-            real_block = get_block_from_options(with, &block)
-            errors.add key, message unless real_block.call(self, key)
+          if has_key? key
+            Continuation.new(**options).check(self, key, self[key]) do
+              real_block = get_block_from_options(with, &block)
+              errors.add key, message unless real_block.call(self, key, self[key])
+            end
           end
         end
       end
@@ -199,11 +194,12 @@ module JSONAPIObjects
     included do
       attr_reader :errors
       delegate :validation_error, to: :class
-      class_attribute :allow_only_permitted, :implementations, :collections, instance_writer: false
+      class_attribute :required_keys, :allow_only_permitted, :implementations, :collections, instance_writer: false
       class_attribute :allowed_type_map, :permitted_keys, instance_accessor: false
       self.allow_only_permitted = false
       self.permitted_keys       = []
       self.allowed_type_map     = {}
+      self.required_keys        = {}
 
       # Check Permitted Keys
       before_compile do
@@ -227,6 +223,19 @@ module JSONAPIObjects
                 errors.add(key, message)
               end
             end
+          end
+        end
+      end
+
+      # Check Required Keys
+      before_compile do
+        keys         = required_keys.select do |_, options|
+          Continuation.new(**options).check(self) { true }
+        end.keys
+        missing_keys = keys.map(&:to_sym) - self.keys.map(&:to_sym)
+        if (origin.nil? || origin == self.origin) && missing_keys.present?
+          missing_keys.each do |key|
+            errors.add key, 'must be provided.'
           end
         end
       end

@@ -421,132 +421,195 @@ module JSONAPIObjects
       # ```
       #
       # #### <a href="#document-resource-object-identification" id="document-resource-object-identification" class="headerlink"></a> Identification
+    end
 
-      describe 'identification' do
-        context 'when `id` is a string' do
-          data = { id: "1", type: "stuff" }
-          it_should_behave_like 'a valid jsonapi object', data
-        end
+    [ResourceObject, ResourceIdentifierObject].each do |klass|
+      describe klass do
+        describe 'identification' do
+          # Every ResourceObject **MUST** contain an `id` member and a `type` member.
+          describe '**MUST** contain an `id` member and a `type` member' do
+            context 'when `id` and `type` are provided' do
+              data = { id: "1", type: "stuff" }
+              it_should_behave_like 'a valid jsonapi object', data
+            end
 
-        context 'when `id` is not a string' do
-          data = { id: nil, type: "stuff" }
-          it_should_behave_like 'an invalid jsonapi object', data
-        end
+            context 'when only `id` is provided' do
+              data = { id: "1" }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
 
-        context 'when `type` is a string' do
-          data = { id: "1", type: "stuff" }
-          it_should_behave_like 'a valid jsonapi object', data
-        end
+            context 'when only `type` is provided' do
+              data = { type: "stuff" }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
 
-        context 'when `type` is not a string' do
-          data = { id: "1", type: nil }
-          it_should_behave_like 'an invalid jsonapi object', data
-        end
-
-        context 'when both `id` and `type` are strings' do
-          data = { id: "1", type: "stuff" }
-          it_should_behave_like 'a valid jsonapi object', data
-        end
-
-        context 'when both `id` and `type` are not strings' do
-          data = { id: nil, type: nil }
-          it_should_behave_like 'an invalid jsonapi object', data
-        end
-
-        context 'when all of the resources are unique' do
-          parent = TopLevelObject.new(
-            data:
-              [
-                described_class.new(id: "1", "type": "stuff"),
-                described_class.new(id: "1", "type": "stuff"),
-              ]
-          )
-          it 'should not be a valid jsonapi object' do
-            parent[:data].each do |resource|
-              expect { resource.compile }.to raise_error ValidationError
+            context 'when `id` and `type` are not provided' do
+              data = {}
+              it_should_behave_like 'an invalid jsonapi object', data
             end
           end
-        end
 
-        context 'when all of the resources are not unique' do
+          # The values of the `id` and `type` members **MUST** be strings.
+          describe 'The values of the `id` and `type` members **MUST** be strings.' do
+            context 'when `id` is a string' do
+              data = { id: "1", type: "stuff" }
+              it_should_behave_like 'a valid jsonapi object', data
+            end
 
+            context 'when `id` is not a string' do
+              data = { id: nil, type: "stuff" }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+
+            context 'when `type` is a string' do
+              data = { id: "1", type: "stuff" }
+              it_should_behave_like 'a valid jsonapi object', data
+            end
+
+            context 'when `type` is not a string' do
+              data = { id: "1", type: nil }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+
+            context 'when both `id` and `type` are strings' do
+              data = { id: "1", type: "stuff" }
+              it_should_behave_like 'a valid jsonapi object', data
+            end
+
+            context 'when both `id` and `type` are not strings' do
+              data = { id: nil, type: nil }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+          end
+
+          # Within a given API, each resource object's `type` and `id` pair **MUST**
+          # identify a single, unique resource. (The set of URIs controlled by a server,
+          # or multiple servers acting as one, constitute an API.)
+          describe 'unique resources' do
+
+            context 'when all of the resources are unique' do
+              parent = TopLevelObject.new(
+                data:
+                  [
+                    described_class.new(id: "1", "type": "stuff"),
+                    described_class.new(id: "2", "type": "stuff"),
+                  ]
+              )
+              it 'should not be a valid jsonapi object' do
+                parent[:data].each do |resource|
+                  expect { resource.compile }.to_not raise_error
+                end
+              end
+            end
+
+
+            context 'when all of the resources are not unique' do
+              parent = TopLevelObject.new(
+                data:
+                  [
+                    described_class.new(id: "1", "type": "stuff"),
+                    described_class.new(id: "1", "type": "stuff"),
+                  ]
+              )
+              it 'should not be a valid jsonapi object' do
+                parent[:data].each do |resource|
+                  expect { resource.compile }.to raise_error ValidationError
+                end
+              end
+            end
+          end
+
+          # The `type` member is used to describe [resource objects] that share common
+          # attributes and relationships.
+          #
+          # The values of `type` members **MUST** adhere to the same constraints as
+          # [member names].
+          describe 'type must be a valid member name' do
+            context 'when a proper member name' do
+              data = { id: "1", type: "valid-name" }
+              it_should_behave_like 'a valid jsonapi object', data
+            end
+
+            context 'when an improper member name' do
+              data = { id: "1", type: "_an-valid-name" }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+          end
+
+          # > Note: This spec is agnostic about inflection rules, so the value of `type`
+          # can be either plural or singular. However, the same value should be used
+          # consistently throughout an implementation.
         end
       end
+    end
+
+    describe 'Fields' do
+
+      # #### Fields
       #
-      # Every [resource object][resource objects] **MUST** contain an `id` member and a `type` member.
-      # The values of the `id` and `type` members **MUST** be strings.
+      # A resource object's [attributes] and its [relationships] are collectively called
+      # its "[fields]".
       #
-      # Within a given API, each resource object's `type` and `id` pair **MUST**
-      # identify a single, unique resource. (The set of URIs controlled by a server,
-      # or multiple servers acting as one, constitute an API.)
-      #
-      # The `type` member is used to describe [resource objects] that share common
-      # attributes and relationships.
-      #
-      # The values of `type` members **MUST** adhere to the same constraints as
-      # [member names].
-      #
-      # > Note: This spec is agnostic about inflection rules, so the value of `type`
-      # can be either plural or singular. However, the same value should be used
-      # consistently throughout an implementation.
+      # Fields for a ResourceObjects **MUST** share a common namespace with each
+      # other and with `type` and `id`. In other words, a resource can not have an
+      # attribute and relationship with the same name, nor can it have an attribute
+      # or relationship named `type` or `id`.
 
     end
-    # #### <a href="#document-resource-object-fields" id="document-resource-object-fields" class="headerlink"></a> Fields
-    #
-    # A resource object's [attributes] and its [relationships] are collectively called
-    # its "[fields]".
-    #
-    # Fields for a [resource object][resource objects] **MUST** share a common namespace with each
-    # other and with `type` and `id`. In other words, a resource can not have an
-    # attribute and relationship with the same name, nor can it have an attribute
-    # or relationship named `type` or `id`.
-    #
-    # #### <a href="#document-resource-object-attributes" id="document-resource-object-attributes" class="headerlink"></a> Attributes
-    #
-    # The value of the `attributes` key **MUST** be an object (an "attributes
-    # object"). Members of the attributes object ("attributes") represent information
-    # about the [resource object][resource objects] in which it's defined.
-    #
-    # Attributes may contain any valid JSON value.
-    #
-    # Complex data structures involving JSON objects and arrays are allowed as
-    # attribute values. However, any object that constitutes or is contained in an
-    # attribute **MUST NOT** contain a `relationships` or `links` member, as those
-    # members are reserved by this specification for future use.
-    #
-    # Although has-one foreign keys (e.g. `author_id`) are often stored internally
-    # alongside other information to be represented in a resource object, these keys
-    # **SHOULD NOT** appear as attributes.
-    #
-    # > Note: See [fields] and [member names] for more restrictions on this container.
-    #
-    # #### <a href="#document-resource-object-relationships" id="document-resource-object-relationships" class="headerlink"></a> Relationships
-    #
-    # The value of the `relationships` key **MUST** be an object (a "relationships
-    # object"). Members of the relationships object ("relationships") represent
-    # references from the [resource object][resource objects] in which it's defined to other resource
-    # objects.
-    #
-    # Relationships may be to-one or to-many.
-    #
-    # A "relationship object" **MUST** contain at least one of the following:
-    #
-    # * `links`: a [links object][links] containing at least one of the following:
-    #   * `self`: a link for the relationship itself (a "relationship link"). This
-    #     link allows the client to directly manipulate the relationship. For example,
-    #     it would allow a client to remove an `author` from an `article` without
-    #     deleting the `people` resource itself.
-    #   * `related`: a [related resource link]
-    # * `data`: [resource linkage]
-    # * `meta`: a [meta object][meta] that contains non-standard meta-information about the
-    #   relationship.
-    #
-    # A relationship object that represents a to-many relationship **MAY** also contain
-    # [pagination] links under the `links` member, as described below.
-    #
-    # > Note: See [fields] and [member names] for more restrictions on this container.
-    #
-    # #### <a href="#document-resource-object-related-resource-links" id="document-resource-object-related-resource-links" class="headerlink"></a> Related Resource Links
+
+    describe AttributesObject do
+      # #### Attributes
+      #
+      # The value of the `attributes` key **MUST** be an object (an "attributes
+      # object"). Members of the attributes object ("attributes") represent information
+      # about the [resource object][resource objects] in which it's defined.
+      #
+      # Attributes may contain any valid JSON value.
+      #
+      # Complex data structures involving JSON objects and arrays are allowed as
+      # attribute values. However, any object that constitutes or is contained in an
+      # attribute **MUST NOT** contain a `relationships` or `links` member, as those
+      # members are reserved by this specification for future use.
+      #
+      # Although has-one foreign keys (e.g. `author_id`) are often stored internally
+      # alongside other information to be represented in a resource object, these keys
+      # **SHOULD NOT** appear as attributes.
+      #
+      # > Note: See [fields] and [member names] for more restrictions on this container.
+
+    end
+
+    describe RelationshipsObject do
+
+      # #### Relationships
+      # The value of the `relationships` key **MUST** be an object (a "relationships
+      # object"). Members of the relationships object ("relationships") represent
+      # references from the [resource object][resource objects] in which it's defined to other resource
+      # objects.
+      #
+      # Relationships may be to-one or to-many.
+
+    end
+
+    describe RelationshipObject do
+      # A "relationship object" **MUST** contain at least one of the following:
+      #
+      # * `links`: a [links object][links] containing at least one of the following:
+      #   * `self`: a link for the relationship itself (a "relationship link"). This
+      #     link allows the client to directly manipulate the relationship. For example,
+      #     it would allow a client to remove an `author` from an `article` without
+      #     deleting the `people` resource itself.
+      #   * `related`: a [related resource link]
+      # * `data`: [resource linkage]
+      # * `meta`: a [meta object][meta] that contains non-standard meta-information about the
+      #   relationship.
+      #
+      # A relationship object that represents a to-many relationship **MAY** also contain
+      # [pagination] links under the `links` member, as described below.
+      #
+      # > Note: See [fields] and [member names] for more restrictions on this container.
+    end
+    # #### Related Resource Links
     #
     # A "related resource link" provides access to [resource objects] [linked][links]
     # in a [relationship][relationships]. When fetched, the related resource object(s)

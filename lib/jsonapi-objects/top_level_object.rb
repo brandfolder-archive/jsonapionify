@@ -38,9 +38,21 @@ module JSONAPIObjects
     implements :links, as: TopLevelLinksObject
     collects :included, as: IncludedResourcesCollection
     implements :jsonapi, as: JSONAPIObject
-    is_resource_identifier = ->(obj){ obj.is_a?(Hash) && obj.keys.sort == %i{id type}.sort }
-    collects_or_implements(:data, collects: ResourcesCollection, implements: ResourceObject, unless: is_resource_identifier)
-    collects_or_implements(:data, collects: ResourceIdentifiersCollection, implements: ResourceIdentifierObject, if: is_resource_identifier)
+    is_resource_identifier = ->(obj) { obj.keys.sort == %i{id type}.sort }
+    collects_or_implements(
+      :data,
+      collects:   ResourcesCollection,
+      implements: ResourceObject,
+      if:         ->(obj) {
+        obj.is_a?(ResourceObject) || (obj.is_a?(Hash) && !is_resource_identifier[obj])
+      })
+    collects_or_implements(
+      :data,
+      collects:   ResourceIdentifiersCollection,
+      implements: ResourceIdentifierObject,
+      if:         ->(obj) {
+        obj.is_a?(ResourceIdentifierObject) || (obj.is_a?(Hash) && is_resource_identifier[obj])
+      })
 
     # If a document does not contain a top-level `data` key, the `included` member
     # **MUST NOT** be present either.

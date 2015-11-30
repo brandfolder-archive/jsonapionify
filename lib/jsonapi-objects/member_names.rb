@@ -3,6 +3,7 @@ module JSONAPIObjects
     extend self
 
     def valid?(value)
+      return false if value.nil?
       value = value.to_s if value.is_a? Symbol
       [
         value.present?,
@@ -19,7 +20,6 @@ module JSONAPIObjects
     end
 
     def valid_ends?(value)
-      value.to_s
       ['-', '_', ' '].map do |char|
         !value.start_with?(char) & !value.end_with?(char)
       end.reduce(:&)

@@ -3,7 +3,7 @@ require 'active_support/concern'
 module JSONAPIObjects
   module ObjectDefaults
     extend ActiveSupport::Concern
-    using UnstrictProc
+    include EnumerableObserver
 
     module ClassMethods
       # Forces the setter to a type
@@ -65,8 +65,11 @@ module JSONAPIObjects
       if has_key? k
         super
       elsif collections[k]
-        value     = coerce_collection(k, [])
-        @unset[k] ||= value unless value.instance_of? Array
+        @unset[k] ||= [].tap do |ary|
+          observe ary, added: -> {
+            self[k] = ary
+          }
+        end
       else
         nil
       end
