@@ -543,18 +543,60 @@ module JSONAPIObjects
       end
     end
 
+    # Fields
+    # ======
+    # A resource object's [attributes] and its [relationships] are collectively called
+    # its "[fields]".
     describe 'Fields' do
-
-      # #### Fields
-      #
-      # A resource object's [attributes] and its [relationships] are collectively called
-      # its "[fields]".
-      #
       # Fields for a ResourceObjects **MUST** share a common namespace with each
       # other and with `type` and `id`. In other words, a resource can not have an
-      # attribute and relationship with the same name, nor can it have an attribute
-      # or relationship named `type` or `id`.
+      # attribute and relationship with the same name
+      describe 'must not have an attribute and relationship with the same name' do
+        let(:resource) do
+          ResourceObject.new(
+            type:          "stuff",
+            id:            "1",
+            attributes:    {
+              foo: nil
+            },
+            relationships: {
+              foo: {
+                data: {}
+              }
+            }
+          )
+        end
+        it 'attributes should not be a valid jsonapi object' do
+          expect { resource[:attributes].compile }.to raise_error ValidationError
+        end
 
+        it 'relationships should not be a valid jsonapi object' do
+          expect { resource[:relationships].compile }.to raise_error ValidationError
+        end
+      end
+
+      # Nor can it have an attribute
+      # or relationship named `type` or `id`.
+      describe 'must not contain `type` or `id`' do
+        [AttributesObject, RelationshipsObject].each do |klass|
+          context klass do
+            context 'when containing `type` and `id`' do
+              data = { type: 'stuff', id: '1'}
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+
+            context 'when containing `type`' do
+              data = { type: 'stuff'}
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+
+            context 'when containing `id`' do
+              data = { id: 1 }
+              it_should_behave_like 'an invalid jsonapi object', data
+            end
+          end
+        end
+      end
     end
 
     describe AttributesObject do

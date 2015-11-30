@@ -12,7 +12,7 @@ module JSONAPIObjects
     # or relationship named `type` or `id`.
     must_not_contain! :type, :id
     validate_each! message: 'conflicts with a resource_key' do |obj, key, _|
-      !obj.parent.attribute_keys.include? key
+      !obj.parent || !obj.parent.attribute_keys.include?(key)
     end
 
     value_is RelationshipObject, strict: true

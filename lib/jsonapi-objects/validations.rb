@@ -33,7 +33,7 @@ module JSONAPIObjects
             invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
             if invalid_keys.present?
               invalid_keys.each do |k|
-                errors.add(k, 'is not permitted.')
+                errors.add(k, 'is not permitted')
               end
             end
           end
@@ -44,7 +44,7 @@ module JSONAPIObjects
         before_compile do
           Continuation.new(**options).check(self) do
             if has_key?(key) && !has_key?(without)
-              errors.add(key, "may not exist without: `#{without}`.")
+              errors.add(key, "may not exist without: `#{without}`")
             end
           end
         end
@@ -58,7 +58,7 @@ module JSONAPIObjects
             invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
             if invalid_keys.present?
               invalid_keys.each do |key|
-                errors.add(key, 'is not permitted.')
+                errors.add(key, 'is not permitted')
               end
             end
           end
@@ -74,7 +74,7 @@ module JSONAPIObjects
             invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
             if invalid_keys.present?
               invalid_keys.each do |key|
-                errors.add(key, 'is not permitted.')
+                errors.add(key, 'is not permitted')
               end
             end
           end
@@ -92,7 +92,7 @@ module JSONAPIObjects
               invalid_keys.present? | children.map { |c| is_invalid(c) }.reduce(:|)
             end
             if is_invalid.call(self)
-              errors.add('*', "cannot contain keys #{keys_to_sentence *invalid_keys}.")
+              errors.add('*', "cannot contain keys #{keys_to_sentence *invalid_keys}")
             end
           end
         end
@@ -106,7 +106,7 @@ module JSONAPIObjects
             keys       += self.keys.select(&block) if block_given?
             valid_keys = keys.map(&:to_sym) & self.keys.map(&:to_sym)
             unless valid_keys.present?
-              errors.add('*', "must contain one of: #{keys_to_sentence *valid_keys}.")
+              errors.add('*', "must contain one of: #{keys_to_sentence *valid_keys}")
             end
           end
         end
@@ -143,7 +143,7 @@ module JSONAPIObjects
       end
 
       # Validates key using a provided method or block
-      def validate!(key, with: nil, message: 'is not valid.', **options, &block)
+      def validate!(key, with: nil, message: 'is not valid', **options, &block)
         before_compile do
           if has_key? key
             Continuation.new(**options).check(self, key, self[key]) do
@@ -154,7 +154,7 @@ module JSONAPIObjects
         end
       end
 
-      def validate_object!(with: nil, message: 'is not valid.', **options, &block)
+      def validate_object!(with: nil, message: 'is not valid', **options, &block)
         before_compile do
           Continuation.new(**options).check(self) do
             real_block = get_block_from_options(with, &block)
@@ -164,7 +164,7 @@ module JSONAPIObjects
       end
 
       # Validates the object using a provided method or block
-      def validate_each!(with: nil, message: 'not valid.', **options, &block)
+      def validate_each!(with: nil, message: 'not valid', **options, &block)
         before_compile do
           real_block = get_block_from_options(with, &block)
           keys.each do |key|
@@ -235,7 +235,7 @@ module JSONAPIObjects
         missing_keys = keys.map(&:to_sym) - self.keys.map(&:to_sym)
         if (origin.nil? || origin == self.origin) && missing_keys.present?
           missing_keys.each do |key|
-            errors.add key, 'must be provided.'
+            errors.add key, 'must be provided'
           end
         end
       end
@@ -244,10 +244,6 @@ module JSONAPIObjects
         MemberNames.valid? key
       end
 
-      # Setup Errors
-      set_callback :initialize, :before do
-        @errors = Errors.new
-      end
     end
 
     def all_errors
@@ -269,9 +265,8 @@ module JSONAPIObjects
       self.class.allowed_type_map.dup.tap do |hash|
         wildcard_types = hash.delete('*')
         keys.each do |k|
-          hash[k] ||= []
+          hash[k] ||= {}
           hash[k].deep_merge wildcard_types
-          hash[k].uniq!
         end if wildcard_types.present?
       end
     end
@@ -285,8 +280,8 @@ module JSONAPIObjects
     end
 
     def get_block_from_options(symbol, &block)
-      raise ArgumentError, 'cannot pass symbol and block.' if symbol && block
-      raise ArgumentError, 'must pass symbol or block.' unless symbol || block
+      raise ArgumentError, 'cannot pass symbol and block' if symbol && block
+      raise ArgumentError, 'must pass symbol or block' unless symbol || block
       (block || method(symbol).to_proc).unstrict
     end
 

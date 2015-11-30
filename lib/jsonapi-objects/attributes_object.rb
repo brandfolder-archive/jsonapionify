@@ -14,8 +14,8 @@ module JSONAPIObjects
     # attribute and relationship with the same name, nor can it have an attribute
     # or relationship named `type` or `id`.
     must_not_contain! :type, :id
-    validate_each! message: 'conflicts with a relationship key.' do |obj, key, _|
-      !obj.parent.relationship_keys.include? key
+    validate_each! message: 'conflicts with a relationship key' do |obj, key, _|
+      !obj.parent || !obj.parent.relationship_keys.include?(key)
     end
 
     # Although has-one foreign keys (e.g. `author_id`) are often stored internally

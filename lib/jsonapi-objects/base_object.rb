@@ -56,11 +56,17 @@ module JSONAPIObjects
 
     # Compile as json
     def as_json(*args)
+      @errors = Errors.new
       run_callbacks :compile do
-        if (errs = all_errors).present?
-          raise validation_error errs.all_messages.to_sentence
-        end
         object.as_json(*args)
+      end
+    end
+
+    def compile
+      as_json.tap do
+        if (errs = all_errors).present?
+          raise validation_error errs.all_messages.to_sentence + '.'
+        end
       end
     end
 
@@ -68,7 +74,6 @@ module JSONAPIObjects
       JSON.pretty_generate as_json(*args)
     end
 
-    alias_method :compile, :as_json
     alias_method :to_hash, :object
 
   end
