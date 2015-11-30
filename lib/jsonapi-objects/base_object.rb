@@ -55,8 +55,10 @@ module JSONAPIObjects
     end
 
     # Compile as json
+    attr_reader :errors, :warnings
     def as_json(*args)
       @errors = Errors.new
+      @warnings = Errors.new
       run_callbacks :compile do
         object.as_json(*args)
       end
@@ -64,6 +66,9 @@ module JSONAPIObjects
 
     def compile
       as_json.tap do
+        if (wrns = all_warnings).present?
+          warn validation_error wrns.all_messages.to_sentence + '.'
+        end
         if (errs = all_errors).present?
           raise validation_error errs.all_messages.to_sentence + '.'
         end

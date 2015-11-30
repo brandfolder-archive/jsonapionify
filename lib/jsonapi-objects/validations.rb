@@ -58,7 +58,7 @@ module JSONAPIObjects
             invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
             if invalid_keys.present?
               invalid_keys.each do |key|
-                errors.add(key, 'is not permitted')
+                warnings.add(key, 'is not permitted')
               end
             end
           end
@@ -85,14 +85,16 @@ module JSONAPIObjects
       def must_not_contain_deep!(*keys, **options, &block)
         before_compile do
           Continuation.new(**options).check(self) do
+            all_invalid_keys = []
             keys       += self.keys.select(&block) if block_given?
             is_invalid = proc do |hash|
               invalid_keys = hash.keys.map(&:to_sym) & keys.map(&:to_sym)
+              all_invalid_keys += invalid_keys
               children     = hash.values.select { |v| v.respond_to?(:to_hash) }
               invalid_keys.present? | children.map { |c| is_invalid(c) }.reduce(:|)
             end
             if is_invalid.call(self)
-              errors.add('*', "cannot contain keys #{keys_to_sentence *invalid_keys}")
+              errors.add('*', "cannot contain keys #{keys_to_sentence *all_invalid_keys.uniq}")
             end
           end
         end
@@ -192,7 +194,6 @@ module JSONAPIObjects
     end
 
     included do
-      attr_reader :errors
       delegate :validation_error, to: :class
       class_attribute :required_keys, :allow_only_permitted, :implementations, :collections, instance_writer: false
       class_attribute :allowed_type_map, :permitted_keys, instance_accessor: false
@@ -252,6 +253,17 @@ module JSONAPIObjects
           next unless value.respond_to? :all_errors
           value.all_errors.each do |error_key, message|
             all_errors[[key, error_key].join('.')] = message
+          end
+        end
+      end
+    end
+
+    def all_warnings
+      warnings.dup.tap do |all_warnings|
+        object.each do |key, value|
+          next unless value.respond_to? :all_warnings
+          value.all_warnings.each do |warning_key, message|
+            all_warnings[[key, warning_key].join('.')] = message
           end
         end
       end
