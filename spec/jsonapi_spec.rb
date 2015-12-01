@@ -1,36 +1,36 @@
 require 'spec_helper'
 
-module JSONAPIObjects
+module JSONAPIonify::Structure::Objects
   describe 'jsonapi specificiation' do
     let(:origin) { :server }
 
-    def self.keycombos(keys)
-      1.upto(keys.length).map { |count| keys.combination(count).to_a }
-    end
-
-    def self.keystohash(keys, default=nil)
-      keys.each_with_object({}) { |k, h| h[k] = default }
-    end
-
-    def self.keynames(keys)
-      keys.map { |k| "`#{k}`" }.to_sentence
-    end
-
-    shared_examples "a valid jsonapi object" do |data|
-      it "should be a valid jsonapi object" do
-        object = described_class.new(data)
-        allow(object).to receive(:origin).and_return origin
-        expect { object.compile }.to_not raise_error
-      end
-    end
-
-    shared_examples "an invalid jsonapi object" do |data|
-      it "should not be a valid jsonapi object" do
-        object = described_class.new(data)
-        allow(object).to receive(:origin).and_return origin
-        expect { object.compile }.to raise_error(ValidationError)
-      end
-    end
+    # def self.keycombos(keys)
+    #   1.upto(keys.length).map { |count| keys.combination(count).to_a }
+    # end
+    #
+    # def self.keystohash(keys, default=nil)
+    #   keys.each_with_object({}) { |k, h| h[k] = default }
+    # end
+    #
+    # def self.keynames(keys)
+    #   keys.map { |k| "`#{k}`" }.to_sentence
+    # end
+    #
+    # shared_examples "a valid jsonapi object" do |data|
+    #   it "should be a valid jsonapi object" do
+    #     object = described_class.new(data)
+    #     allow(object).to receive(:origin).and_return origin
+    #     expect { object.compile }.to_not raise_error
+    #   end
+    # end
+    #
+    # shared_examples "an invalid jsonapi object" do |data|
+    #   it "should not be a valid jsonapi object" do
+    #     object = described_class.new(data)
+    #     allow(object).to receive(:origin).and_return origin
+    #     expect { object.compile }.to raise_error(JSONAPIonify::Structure::Helpers::ValidationError)
+    #   end
+    # end
 
     # ---
     # version: 1.0
@@ -94,955 +94,17 @@ module JSONAPIObjects
     # > Note: The content negotiation requirements exist to allow future versions
     # of this specification to use media type parameters for extension negotiation
     # and versioning.
-    #
-    # Document Structure
-    # ==================
-    #
-    # This section describes the structure of a JSON API document, which is identified
-    # by the media type [`application/vnd.api+json`]
-    # (http://www.iana.org/assignments/media-types/application/vnd.api+json).
-    # JSON API documents are defined in JavaScript Object Notation (JSON)
-    # [[RFC4627](http://tools.ietf.org/html/rfc4627)].
-    #
-    # Although the same media type is used for both request and response documents,
-    # certain aspects are only applicable to one or the other. These differences are
-    # called out below.
-    #
-    # Unless otherwise noted, objects defined by this specification **MUST NOT**
-    # contain any additional members. Client and server implementations **MUST**
-    # ignore members not recognized by this specification.
-    #
-    # > Note: These conditions allow this specification to evolve through additive
-    # changes.
-    #
 
-    describe TopLevelObject do
-      schema =
-        {
-          data:     nil,
-          errors:   [],
-          meta:     nil,
-          links:    {},
-          included: [],
-          jsonapi:  {}
-        }
-      # Top Level
-      # ---------
-      #
-      # A JSON object **MUST** be at the root of every JSON API request and response
-      # containing data. This object defines a document's "top level".
-      #
-      # A document **MUST** contain at least one of the following top-level members:
-      #
-      # * `data`: the document's "primary data"
-      # * `errors`: an array of [error objects](#errors)
-      # * `meta`: a [meta object][meta] that contains non-standard meta-information.
-      describe 'must contain one of: data, errors, meta' do
-        %i{data errors meta}.each do |key|
-          context "when containing `#{key}`" do
-            it_should_behave_like 'a valid jsonapi object', key => schema[key]
-          end
-        end
-
-        context 'when not containing any' do
-          it_should_behave_like 'an invalid jsonapi object', {}
-        end
-      end
-
-      # The members `data` and `errors` **MUST NOT** coexist in the same document.
-      describe '`data` and `errors` must not coexist' do
-        context 'when both exist' do
-          it_should_behave_like 'an invalid jsonapi object', errors: [], data: nil
-        end
-
-        %i{data errors}.each do |key|
-          context "when only `#{key}` exists" do
-            it_should_behave_like 'a valid jsonapi object', key => schema[key]
-          end
-        end
-      end
-
-      # A document **MAY** contain any of these top-level members:
-      #
-      # * `jsonapi`: an object describing the server's implementation
-      # * `links`: a [links object][links] related to the primary data.
-      # * `included`: an array of [resource objects] that are related to the primary
-      #   data and/or each other ("included resources").
-
-      keys = %i{jsonapi links included}
-      describe "may contain #{keynames(keys)}" do
-        keycombos(keys).each do |combo|
-          combo.each do |keyset|
-            hash = schema.slice(*keyset)
-            context "when containing #{keynames(keyset)}" do
-              it_should_behave_like 'a valid jsonapi object', data: nil, **hash
-            end
-          end
-        end
-
-        context 'when not containing any' do
-          it_should_behave_like 'a valid jsonapi object', data: nil
-        end
-      end
-
-      # If a document does not contain a top-level `data` key, the `included` member
-      # **MUST NOT** be present either.
-
-      describe 'cannot contain `included` unless `data` is present' do
-        context 'when data is provided' do
-          it_should_behave_like 'a valid jsonapi object', data: [], included: []
-        end
-
-        context 'when data is not provided' do
-          it_should_behave_like 'an invalid jsonapi object', meta: {}, included: []
-        end
-      end
-
-      describe TopLevelLinksObject do
-        # The top-level [links object][links] **MAY** contain the following members:
-        #
-        # * `self`: the [link][links] that generated the current response document.
-        # * `related`: a [related resource link] when the primary data represents a
-        #    resource relationship.
-        # * [pagination] links for the primary data.
-        keys = [*%i{self related}, *JSONAPIObjects::PaginationLinks]
-        describe "may contain #{keynames(keys)}" do
-          keycombos(keys).each do |combo|
-            combo.each do |keyset|
-              hash = keystohash(keyset, 'http://google.com')
-              context "when containing #{keynames(keyset)}" do
-                it_should_behave_like 'a valid jsonapi object', hash
-              end
-            end
-          end
-
-          context 'when not containing any' do
-            it_should_behave_like 'an invalid jsonapi object', data: nil
-          end
-        end
-      end
-
-      # The document's "primary data" is a representation of the resource or collection
-      # of resources targeted by a request.
-      #
-      # Primary data **MUST** be either:
-      #
-      # * a single ResourceObject, a single ResourceIdentifierObject, or `null`,
-      #   for requests that target single resources
-      # * an array of ResourceObjects a.k.a. a ResourcesCollection, an array of
-      #   ResourceIdentifierObject a.k.a. ResourceIdentifiersCollection, or
-      #   an empty Array (`[]`), for requests that target resource collections
-      describe 'primary data representation' do
-
-        # For example, the following primary data is a single ResourceObject:
-        #
-        # ```javascript
-        # {
-        #   "data": {
-        #     "type": "articles",
-        #     "id": "1",
-        #     "attributes": {
-        #       // ... this article's attributes
-        #     },
-        #     "relationships": {
-        #       // ... this article's relationships
-        #     }
-        #   }
-        # }
-        # ```
-        context 'when a single resource object' do
-          obj  = { id: "1", type: 'stuff', attributes: { name: 'hello' } }
-          hash = { data: obj }
-
-          it_should_behave_like 'a valid jsonapi object', **hash
-
-          it 'should be a resource object' do
-            expect(described_class.new(hash)[:data]).to be_a JSONAPIObjects::ResourceObject
-          end
-        end
-
-        # The following primary data is a single ResourceIdentifierObject that
-        # references the same resource:
-        #
-        # ```javascript
-        # {
-        #   "data": {
-        #     "type": "articles",
-        #     "id": "1"
-        #   }
-        # }
-        # ```
-        context 'when a single resource identifier object' do
-          obj  = { id: "1", type: 'stuff' }
-          hash = { data: obj }
-
-          it_should_behave_like 'a valid jsonapi object', **hash
-
-          it 'should be a resource identifier object' do
-            $pry = true
-            expect(described_class.new(hash)[:data]).to be_a JSONAPIObjects::ResourceIdentifierObject
-          end
-        end
-
-        context 'when a collection of resource objects' do
-          ary  = 3.times.map do |i|
-            { id: (i + 1).to_s, type: 'stuff', attributes: { name: 'hello' } }
-          end
-          hash = { data: ary }
-
-          it_should_behave_like 'a valid jsonapi object', **hash
-
-          it 'should be a collection of resource objects' do
-            $pry = true
-            described_class.new(hash)[:data].each do |obj|
-              expect(obj).to be_a JSONAPIObjects::ResourceObject
-            end
-            $pry = false
-          end
-        end
-
-        context 'when a collection of resource identifier objects' do
-          ary  = 3.times.map do |i|
-            { id: (i + 1).to_s, type: 'stuff' }
-          end
-          hash = { data: ary }
-
-          it_should_behave_like 'a valid jsonapi object', **hash
-
-          it 'should be a collection of resource identifier objects' do
-            described_class.new(hash)[:data].each do |obj|
-              expect(obj).to be_a JSONAPIObjects::ResourceIdentifierObject
-            end
-          end
-        end
-
-        context 'when an empty array' do
-          hash = { data: [] }
-
-          it_should_behave_like 'a valid jsonapi object', **hash
-        end
-
-        context 'when null' do
-          hash = { data: nil }
-
-          it_should_behave_like 'a valid jsonapi object', **hash
-        end
-      end
-    end
-
-    describe ResourceObject do
-      # A logical collection of resources **MUST** be represented as an array, even if
-      # it only contains one item or is empty.
-      #
-      # ### <a href="#document-resource-objects" id="document-resource-objects" class="headerlink"></a> Resource Objects
-      #
-      # "Resource objects" appear in a JSON API document to represent resources.
-      #
-      # A resource object **MUST** contain at least the following top-level members:
-      #
-      # * `id`
-      # * `type`
-      describe 'must contain `id` and `type`' do
-        context 'with both keys' do
-          it_should_behave_like 'a valid jsonapi object', id: "1", type: "stuff"
-        end
-
-        %i{id type}.each do |key|
-          context "with only `#{key}`" do
-            it_should_behave_like 'an invalid jsonapi object', key => "value"
-          end
-        end
-      end
-
-      # Exception: The `id` member is not required when the resource object originates at
-      # the client and represents a new resource to be created on the server.
-      describe 'the client does not require id' do
-        let(:origin) { :client }
-
-        context 'with both keys' do
-          it_should_behave_like 'a valid jsonapi object', id: "1", type: "stuff"
-        end
-
-        context 'with only `type`' do
-          it_should_behave_like 'a valid jsonapi object', type: "stuff"
-        end
-
-        context 'with only `id`' do
-          it_should_behave_like 'an invalid jsonapi object', id: "1"
-        end
-      end
-
-      # In addition, a resource object **MAY** contain any of these top-level members:
-      #
-      # * `attributes`: an [attributes object][attributes] representing some of the resource's data.
-      # * `relationships`: a [relationships object][relationships] describing relationships between
-      #  the resource and other JSON API resources.
-      # * `links`: a [links object][links] containing links related to the resource.
-      # * `meta`: a [meta object][meta] containing non-standard meta-information about a
-      #   resource that can not be represented as an attribute or relationship.
-      keys          = %i{attributes relationships links meta}
-      required_info = { type: "stuff", id: "1" }
-      describe "may contain #{keynames(keys)}" do
-        keycombos(keys).each do |combo|
-          combo.each do |keyset|
-            hash = keystohash(keyset, {}).merge(required_info)
-            context "when containing #{keynames(keyset)}" do
-              it_should_behave_like 'a valid jsonapi object', hash
-            end
-          end
-        end
-
-        context 'when not containing any' do
-          it_should_behave_like 'a valid jsonapi object', required_info
-        end
-      end
-
-      # Here's how an article (i.e. a resource of type "articles") might appear in a document:
-      #
-      # ```javascript
-      # // ...
-      # {
-      #   "type": "articles",
-      #   "id": "1",
-      #   "attributes": {
-      #     "title": "Rails is Omakase"
-      #   },
-      #   "relationships": {
-      #     "author": {
-      #       "links": {
-      #         "self": "/articles/1/relationships/author",
-      #         "related": "/articles/1/author"
-      #       },
-      #       "data": { "type": "people", "id": "9" }
-      #     }
-      #   }
-      # }
-      # // ...
-      # ```
-      #
-      # #### <a href="#document-resource-object-identification" id="document-resource-object-identification" class="headerlink"></a> Identification
-    end
-
-    [ResourceObject, ResourceIdentifierObject].each do |klass|
-      describe klass do
-        describe 'identification' do
-          # Every ResourceObject **MUST** contain an `id` member and a `type` member.
-          describe '**MUST** contain an `id` member and a `type` member' do
-            context 'when `id` and `type` are provided' do
-              data = { id: "1", type: "stuff" }
-              it_should_behave_like 'a valid jsonapi object', data
-            end
-
-            context 'when only `id` is provided' do
-              data = { id: "1" }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-
-            context 'when only `type` is provided' do
-              data = { type: "stuff" }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-
-            context 'when `id` and `type` are not provided' do
-              data = {}
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-          end
-
-          # The values of the `id` and `type` members **MUST** be strings.
-          describe 'The values of the `id` and `type` members **MUST** be strings.' do
-            context 'when `id` is a string' do
-              data = { id: "1", type: "stuff" }
-              it_should_behave_like 'a valid jsonapi object', data
-            end
-
-            context 'when `id` is not a string' do
-              data = { id: nil, type: "stuff" }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-
-            context 'when `type` is a string' do
-              data = { id: "1", type: "stuff" }
-              it_should_behave_like 'a valid jsonapi object', data
-            end
-
-            context 'when `type` is not a string' do
-              data = { id: "1", type: nil }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-
-            context 'when both `id` and `type` are strings' do
-              data = { id: "1", type: "stuff" }
-              it_should_behave_like 'a valid jsonapi object', data
-            end
-
-            context 'when both `id` and `type` are not strings' do
-              data = { id: nil, type: nil }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-          end
-
-          # Within a given API, each resource object's `type` and `id` pair **MUST**
-          # identify a single, unique resource. (The set of URIs controlled by a server,
-          # or multiple servers acting as one, constitute an API.)
-          describe 'unique resources' do
-
-            context 'when all of the resources are unique' do
-              parent = TopLevelObject.new(
-                data:
-                  [
-                    described_class.new(id: "1", "type": "stuff"),
-                    described_class.new(id: "2", "type": "stuff"),
-                  ]
-              )
-              it 'should not be a valid jsonapi object' do
-                parent[:data].each do |resource|
-                  expect { resource.compile }.to_not raise_error
-                end
-              end
-            end
-
-
-            context 'when all of the resources are not unique' do
-              parent = TopLevelObject.new(
-                data:
-                  [
-                    described_class.new(id: "1", "type": "stuff"),
-                    described_class.new(id: "1", "type": "stuff"),
-                  ]
-              )
-              it 'should not be a valid jsonapi object' do
-                parent[:data].each do |resource|
-                  expect { resource.compile }.to raise_error ValidationError
-                end
-              end
-            end
-          end
-
-          # The `type` member is used to describe [resource objects] that share common
-          # attributes and relationships.
-          #
-          # The values of `type` members **MUST** adhere to the same constraints as
-          # [member names].
-          describe 'type must be a valid member name' do
-            context 'when a proper member name' do
-              data = { id: "1", type: "valid-name" }
-              it_should_behave_like 'a valid jsonapi object', data
-            end
-
-            context 'when an improper member name' do
-              data = { id: "1", type: "_an-valid-name" }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-          end
-
-          # > Note: This spec is agnostic about inflection rules, so the value of `type`
-          # can be either plural or singular. However, the same value should be used
-          # consistently throughout an implementation.
-        end
-      end
-    end
-
-    # Fields
-    # ======
-    # A resource object's [attributes] and its [relationships] are collectively called
-    # its "[fields]".
-    describe 'Fields' do
-      # Fields for a ResourceObjects **MUST** share a common namespace with each
-      # other and with `type` and `id`. In other words, a resource can not have an
-      # attribute and relationship with the same name
-      describe 'must not have an attribute and relationship with the same name' do
-        let(:resource) do
-          ResourceObject.new(
-            type:          "stuff",
-            id:            "1",
-            attributes:    {
-              foo: nil
-            },
-            relationships: {
-              foo: {
-                data: {}
-              }
-            }
-          )
-        end
-        it 'attributes should not be a valid jsonapi object' do
-          expect { resource[:attributes].compile }.to raise_error ValidationError
-        end
-
-        it 'relationships should not be a valid jsonapi object' do
-          expect { resource[:relationships].compile }.to raise_error ValidationError
-        end
-      end
-
-      # Nor can it have an attribute
-      # or relationship named `type` or `id`.
-      describe 'must not contain `type` or `id`' do
-        [AttributesObject, RelationshipsObject].each do |klass|
-          context klass do
-            context 'when containing `type` and `id`' do
-              data = { type: 'stuff', id: '1'}
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-
-            context 'when containing `type`' do
-              data = { type: 'stuff'}
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-
-            context 'when containing `id`' do
-              data = { id: 1 }
-              it_should_behave_like 'an invalid jsonapi object', data
-            end
-          end
-        end
-      end
-    end
-
-    describe AttributesObject do
-      # #### Attributes
-      #
-      # The value of the `attributes` key **MUST** be an object (an "attributes
-      # object"). Members of the attributes object ("attributes") represent information
-      # about the [resource object][resource objects] in which it's defined.
-      #
-      # Attributes may contain any valid JSON value.
-
-      describe "when valid json" do
-        data = { first_name: "jason", last_name: "smith", age: 41 }
-        it_should_behave_like 'a valid jsonapi object', data
-      end
-
-      # Complex data structures involving JSON objects and arrays are allowed as
-      # attribute values. However, any object that constitutes or is contained in an
-      # attribute **MUST NOT** contain a `relationships` or `links` member, as those
-      # members are reserved by this specification for future use.
-      describe 'must not contain `relationships` or `links`' do
-        keycombos(%i{relationships links}).each do |keyset|
-          keyset.each do |keys|
-            data = keystohash(keys)
-            it_should_behave_like 'an invalid jsonapi object', data
-          end
-        end
-      end
-
-      # Although has-one foreign keys (e.g. `author_id`) are often stored internally
-      # alongside other information to be represented in a resource object, these keys
-      # **SHOULD NOT** appear as attributes.
-      describe 'foreign keys should not appear in attributes' do
-        let(:data) do
-          { foo_id: 17 }
-        end
-        it 'should warn the developer' do
-          attributes_object = AttributesObject.new(data)
-          expect(attributes_object).to receive(:warn)
-          attributes_object.compile
-        end
-      end
-
-      # > Note: See [fields] and [member names] for more restrictions on this container.
-    end
-
-    describe RelationshipsObject do
-
-      # #### Relationships
-      # The value of the `relationships` key **MUST** be an object (a "relationships
-      # object"). Members of the relationships object ("relationships") represent
-      # references from the [resource object][resource objects] in which it's defined to other resource
-      # objects.
-      #
-      # Relationships may be to-one or to-many.
-
-    end
-
-    describe RelationshipObject do
-      # A "relationship object" **MUST** contain at least one of the following:
-      #
-      # * `links`: a [links object][links] containing at least one of the following:
-      #   * `self`: a link for the relationship itself (a "relationship link"). This
-      #     link allows the client to directly manipulate the relationship. For example,
-      #     it would allow a client to remove an `author` from an `article` without
-      #     deleting the `people` resource itself.
-      #   * `related`: a [related resource link]
-      # * `data`: [resource linkage]
-      # * `meta`: a [meta object][meta] that contains non-standard meta-information about the
-      #   relationship.
-      #
-      # A relationship object that represents a to-many relationship **MAY** also contain
-      # [pagination] links under the `links` member, as described below.
-      #
-      # > Note: See [fields] and [member names] for more restrictions on this container.
-    end
-    # #### Related Resource Links
-    #
-    # A "related resource link" provides access to [resource objects] [linked][links]
-    # in a [relationship][relationships]. When fetched, the related resource object(s)
-    # are returned as the response's primary data.
-    #
-    # For example, an `article`'s `comments` [relationship][relationships] could
-    # specify a [link][links] that returns a collection of comment [resource objects]
-    # when retrieved through a `GET` request.
-    #
-    # If present, a related resource link **MUST** reference a valid URL, even if the
-    # relationship isn't currently associated with any target resources. Additionally,
-    # a related resource link **MUST NOT** change because its relationship's content
-    # changes.
-    #
-    # #### <a href="#document-resource-object-linkage" id="document-resource-object-linkage" class="headerlink"></a> Resource Linkage
-    #
-    # Resource linkage in a [compound document] allows a client to link together all
-    # of the included [resource objects] without having to `GET` any URLs via [links].
-    #
-    # Resource linkage **MUST** be represented as one of the following:
-    #
-    # * `null` for empty to-one relationships.
-    # * an empty array (`[]`) for empty to-many relationships.
-    # * a single [resource identifier object] for non-empty to-one relationships.
-    # * an array of [resource identifier objects][resource identifier object] for non-empty to-many relationships.
-    #
-    # > Note: The spec does not impart meaning to order of resource identifier
-    # objects in linkage arrays of to-many relationships, although implementations
-    # may do that. Arrays of resource identifier objects may represent ordered
-    # or unordered relationships, and both types can be mixed in one response
-    # object.
-    #
-    # For example, the following article is associated with an `author`:
-    #
-    # ```javascript
-    # // ...
-    # {
-    #   "type": "articles",
-    #   "id": "1",
-    #   "attributes": {
-    #     "title": "Rails is Omakase"
-    #   },
-    #   "relationships": {
-    #     "author": {
-    #       "links": {
-    #         "self": "http://example.com/articles/1/relationships/author",
-    #         "related": "http://example.com/articles/1/author"
-    #       },
-    #       "data": { "type": "people", "id": "9" }
-    #     }
-    #   },
-    #   "links": {
-    #     "self": "http://example.com/articles/1"
-    #   }
-    # }
-    # // ...
-    # ```
-    #
-    # The `author` relationship includes a link for the relationship itself (which
-    # allows the client to change the related author directly), a related resource
-    # link to fetch the resource objects, and linkage information.
-    #
-    # #### <a href="#document-resource-object-links" id="document-resource-object-links" class="headerlink"></a> Resource Links
-    #
-    # The optional `links` member within each [resource object][resource objects] contains [links]
-    # related to the resource.
-    #
-    # If present, this links object **MAY** contain a `self` [link][links] that
-    # identifies the resource represented by the resource object.
-    #
-    # ```json
-    # // ...
-    # {
-    #   "type": "articles",
-    #   "id": "1",
-    #   "attributes": {
-    #     "title": "Rails is Omakase"
-    #   },
-    #   "links": {
-    #     "self": "http://example.com/articles/1"
-    #   }
-    # }
-    # // ...
-    # ```
-    #
-    # A server **MUST** respond to a `GET` request to the specified URL with a
-    # response that includes the resource as the primary data.
-    #
-    # ### <a href="#document-resource-identifier-objects" id="document-resource-identifier-objects" class="headerlink"></a> Resource Identifier Objects
-    #
-    # A "resource identifier object" is an object that identifies an individual
-    # resource.
-    #
-    # A "resource identifier object" **MUST** contain `type` and `id` members.
-    #
-    # A "resource identifier object" **MAY** also include a `meta` member, whose value is a [meta] object that
-    # contains non-standard meta-information.
-    #
-    # ### <a href="#document-compound-documents" id="document-compound-documents" class="headerlink"></a> Compound Documents
-    #
-    # To reduce the number of HTTP requests, servers **MAY** allow responses that
-    # include related resources along with the requested primary resources. Such
-    # responses are called "compound documents".
-    #
-    # In a compound document, all included resources **MUST** be represented as an
-    # array of [resource objects] in a top-level `included` member.
-    #
-    # Compound documents require "full linkage", meaning that every included
-    # resource **MUST** be identified by at least one [resource identifier object]
-    # in the same document. These resource identifier objects could either be
-    # primary data or represent resource linkage contained within primary or
-    # included resources. The only exception to the full linkage requirement is
-    # when relationship fields that would otherwise contain linkage data are
-    # excluded via [sparse fieldsets](#fetching-sparse-fieldsets).
-    #
-    # > Note: Full linkage ensures that included resources are related to either
-    # the primary data (which could be [resource objects] or [resource identifier
-    # objects][resource identifier object]) or to each other.
-    #
-    # A complete example document with multiple included relationships:
-    #
-    # ```json
-    # {
-    #   "data": [{
-    #     "type": "articles",
-    #     "id": "1",
-    #     "attributes": {
-    #       "title": "JSON API paints my bikeshed!"
-    #     },
-    #     "links": {
-    #       "self": "http://example.com/articles/1"
-    #     },
-    #     "relationships": {
-    #       "author": {
-    #         "links": {
-    #           "self": "http://example.com/articles/1/relationships/author",
-    #           "related": "http://example.com/articles/1/author"
-    #         },
-    #         "data": { "type": "people", "id": "9" }
-    #       },
-    #       "comments": {
-    #         "links": {
-    #           "self": "http://example.com/articles/1/relationships/comments",
-    #           "related": "http://example.com/articles/1/comments"
-    #         },
-    #         "data": [
-    #           { "type": "comments", "id": "5" },
-    #           { "type": "comments", "id": "12" }
-    #         ]
-    #       }
-    #     }
-    #   }],
-    #   "included": [{
-    #     "type": "people",
-    #     "id": "9",
-    #     "attributes": {
-    #       "first-name": "Dan",
-    #       "last-name": "Gebhardt",
-    #       "twitter": "dgeb"
-    #     },
-    #     "links": {
-    #       "self": "http://example.com/people/9"
-    #     }
-    #   }, {
-    #     "type": "comments",
-    #     "id": "5",
-    #     "attributes": {
-    #       "body": "First!"
-    #     },
-    #     "relationships": {
-    #       "author": {
-    #         "data": { "type": "people", "id": "2" }
-    #       }
-    #     },
-    #     "links": {
-    #       "self": "http://example.com/comments/5"
-    #     }
-    #   }, {
-    #     "type": "comments",
-    #     "id": "12",
-    #     "attributes": {
-    #       "body": "I like XML better"
-    #     },
-    #     "relationships": {
-    #       "author": {
-    #         "data": { "type": "people", "id": "9" }
-    #       }
-    #     },
-    #     "links": {
-    #       "self": "http://example.com/comments/12"
-    #     }
-    #   }]
-    # }
-    # ```
-    #
-    # A [compound document] **MUST NOT** include more than one [resource object][resource objects] for
-    # each `type` and `id` pair.
-    #
-    # > Note: In a single document, you can think of the `type` and `id` as a
-    # composite key that uniquely references [resource objects] in another part of
-    # the document.
-    #
-    # > Note: This approach ensures that a single canonical [resource object][resource objects] is
-    # returned with each response, even when the same resource is referenced
-    # multiple times.
-    #
-    # ### <a href="#document-meta" id="document-meta" class="headerlink"></a> Meta Information
-    #
-    # Where specified, a `meta` member can be used to include non-standard
-    # meta-information. The value of each `meta` member **MUST** be an object (a
-    # "meta object").
-    #
-    # Any members **MAY** be specified within `meta` objects.
-    #
-    # For example:
-    #
-    # ```javascript
-    # {
-    #   "meta": {
-    #     "copyright": "Copyright 2015 Example Corp.",
-    #     "authors": [
-    #       "Yehuda Katz",
-    #       "Steve Klabnik",
-    #       "Dan Gebhardt",
-    #       "Tyler Kellen"
-    #     ]
-    #   },
-    #   "data": {
-    #     // ...
-    #   }
-    # }
-    # ```
-    #
-    # ### <a href="#document-links" id="document-links" class="headerlink"></a> Links
-    #
-    # Where specified, a `links` member can be used to represent links. The value
-    # of each `links` member **MUST** be an object (a "links object").
-    #
-    # Each member of a links object is a "link". A link **MUST** be represented as
-    # either:
-    #
-    # * a string containing the link's URL.
-    # * an object ("link object") which can contain the following members:
-    #   * `href`: a string containing the link's URL.
-    #   * `meta`: a meta object containing non-standard meta-information about the
-    #     link.
-    #
-    # The following `self` link is simply a URL:
-    #
-    # ```json
-    # "links": {
-    #   "self": "http://example.com/posts",
-    # }
-    # ```
-    #
-    # The following `related` link includes a URL as well as meta-information
-    # about a related resource collection:
-    #
-    # ```json
-    # "links": {
-    #   "related": {
-    #     "href": "http://example.com/articles/1/comments",
-    #     "meta": {
-    #       "count": 10
-    #     }
-    #   }
-    # }
-    # ```
-    #
-    # > Note: Additional members may be specified for links objects and link
-    # objects in the future. It is also possible that the allowed values of
-    # additional members will be expanded (e.g. a `collection` link may support an
-    # array of values, whereas a `self` link does not).
-    #
-    # ### <a href="#document-jsonapi-object" id="document-jsonapi-object" class="headerlink"></a> JSON API Object
-    #
-    # A JSON API document **MAY** include information about its implementation
-    # under a top level `jsonapi` member. If present, the value of the `jsonapi`
-    # member **MUST** be an object (a "jsonapi object"). The jsonapi object **MAY**
-    # contain a `version` member whose value is a string indicating the highest JSON
-    # API version supported. This object **MAY** also contain a `meta` member, whose
-    # value is a [meta] object that contains non-standard meta-information.
-    #
-    # ```json
-    # {
-    #   "jsonapi": {
-    #     "version": "1.0"
-    #   }
-    # }
-    # ```
-    #
-    # If the `version` member is not present, clients should assume the server
-    # implements at least version 1.0 of the specification.
-    #
-    # > Note: Because JSON API is committed to making additive changes only, the
-    # version string primarily indicates which new features a server may support.
-    #
-    # ### <a href="#document-member-names" id="document-member-names" class="headerlink"></a> Member Names
-    #
-    # All member names used in a JSON API document **MUST** be treated as case sensitive
-    # by clients and servers, and they **MUST** meet all of the following conditions:
-    #
-    # - Member names **MUST** contain at least one character.
-    # - Member names **MUST** contain only the allowed characters listed below.
-    # - Member names **MUST** start and end with a "globally allowed character",
-    #   as defined below.
-    #
-    # To enable an easy mapping of member names to URLs, it is **RECOMMENDED** that
-    # member names use only non-reserved, URL safe characters specified in [RFC 3986](http://tools.ietf.org/html/rfc3986#page-13).
-    #
-    # #### <a href="#document-member-names-allowed-characters" id="document-member-names-allowed-characters" class="headerlink"></a> Allowed Characters
-    #
-    # The following "globally allowed characters" **MAY** be used anywhere in a member name:
-    #
-    # - U+0061 to U+007A, "a-z"
-    # - U+0041 to U+005A, "A-Z"
-    # - U+0030 to U+0039, "0-9"
-    # - any UNICODE character except U+0000 to U+007F _(not recommended, not URL safe)_
-    #
-    # Additionally, the following characters are allowed in member names, except as the
-    # first or last character:
-    #
-    # - U+002D HYPHEN-MINUS, "-"
-    # - U+005F LOW LINE, "_"
-    # - U+0020 SPACE, " " _(not recommended, not URL safe)_
-    #
-    # #### <a href="#document-member-names-reserved-characters" id="document-member-names-reserved-characters" class="headerlink"></a> Reserved Characters
-    #
-    # The following characters **MUST NOT** be used in member names:
-    #
-    # - U+002B PLUS SIGN, "+" _(used for ordering)_
-    # - U+002C COMMA, "," _(used as a separator between relationship paths)_
-    # - U+002E PERIOD, "." _(used as a separator within relationship paths)_
-    # - U+005B LEFT SQUARE BRACKET, "[" _(used in sparse fieldsets)_
-    # - U+005D RIGHT SQUARE BRACKET, "]" _(used in sparse fieldsets)_
-    # - U+0021 EXCLAMATION MARK, "!"
-    # - U+0022 QUOTATION MARK, '"'
-    # - U+0023 NUMBER SIGN, "#"
-    # - U+0024 DOLLAR SIGN, "$"
-    # - U+0025 PERCENT SIGN, "%"
-    # - U+0026 AMPERSAND, "&"
-    # - U+0027 APOSTROPHE, "'"
-    # - U+0028 LEFT PARENTHESIS, "("
-    # - U+0029 RIGHT PARENTHESIS, ")"
-    # - U+002A ASTERISK, "&#x2a;"
-    # - U+002F SOLIDUS, "/"
-    # - U+003A COLON, ":"
-    # - U+003B SEMICOLON, ";"
-    # - U+003C LESS-THAN SIGN, "<"
-    # - U+003D EQUALS SIGN, "="
-    # - U+003E GREATER-THAN SIGN, ">"
-    # - U+003F QUESTION MARK, "?"
-    # - U+0040 COMMERCIAL AT, "@"
-    # - U+005C REVERSE SOLIDUS, "\"
-    # - U+005E CIRCUMFLEX ACCENT, "^"
-    # - U+0060 GRAVE ACCENT, "&#x60;"
-    # - U+007B LEFT CURLY BRACKET, "{"
-    # - U+007C VERTICAL LINE, "|"
-    # - U+007D RIGHT CURLY BRACKET, "}"
-    # - U+007E TILDE, "~"
-    #
-    # ## <a href="#fetching" id="fetching" class="headerlink"></a> Fetching Data
+    # Fetching Data
+    # =============
     #
     # Data, including resources and relationships, can be fetched by sending a
     # `GET` request to an endpoint.
     #
     # Responses can be further refined with the optional features described below.
     #
-    # ### <a href="#fetching-resources" id="fetching-resources" class="headerlink"></a> Fetching Resources
+    # Fetching Resources
+    # ==================
     #
     # A server **MUST** support fetching resource data for every URL provided as:
     #
@@ -1071,9 +133,11 @@ module JSONAPIObjects
     # Accept: application/vnd.api+json
     # ```
     #
-    # #### <a href="#fetching-resources-responses" id="fetching-resources-responses" class="headerlink"></a> Responses
+    # Responses
+    # =========
     #
-    # ##### <a href="#fetching-resources-responses-200" id="fetching-resources-responses-200" class="headerlink"></a> 200 OK
+    # 200 OK
+    # ======
     #
     # A server **MUST** respond to a successful request to fetch an individual
     # resource or resource collection with a `200 OK` response.
@@ -1176,13 +240,15 @@ module JSONAPIObjects
     # }
     # ```
     #
-    # ##### <a href="#fetching-resources-responses-404" id="fetching-resources-responses-404" class="headerlink"></a> 404 Not Found
+    # 404 Not Found
+    # =============
     #
     # A server **MUST** respond with `404 Not Found` when processing a request to
     # fetch a single resource that does not exist, except when the request warrants a
     # `200 OK` response with `null` as the primary data (as described above).
     #
-    # ##### <a href="#fetching-resources-responses-other" id="fetching-resources-responses-other" class="headerlink"></a> Other Responses
+    # Other Responses
+    # ===============
     #
     # A server **MAY** respond with other HTTP status codes.
     #
@@ -1192,7 +258,8 @@ module JSONAPIObjects
     # responses, in accordance with
     # [`HTTP semantics`](http://tools.ietf.org/html/rfc7231).
     #
-    # ### <a href="#fetching-relationships" id="fetching-relationships" class="headerlink"></a> Fetching Relationships
+    # Fetching Relationships
+    # ======================
     #
     # A server **MUST** support fetching relationship data for every relationship URL
     # provided as a `self` link as part of a relationship's `links` object.
@@ -1211,9 +278,11 @@ module JSONAPIObjects
     # Accept: application/vnd.api+json
     # ```
     #
-    # #### <a href="#fetching-relationships-responses" id="fetching-relationships-responses" class="headerlink"></a> Responses
+    # Responses
+    # =========
     #
-    # ##### <a href="#fetching-relationships-responses-200" id="fetching-relationships-responses-200" class="headerlink"></a> 200 OK
+    # 200 OK
+    # ======
     #
     # A server **MUST** respond to a successful request to fetch a relationship
     # with a `200 OK` response.
@@ -1294,7 +363,8 @@ module JSONAPIObjects
     # }
     # ```
     #
-    # ##### <a href="#fetching-relationships-responses-404" id="fetching-relationships-responses-404" class="headerlink"></a> 404 Not Found
+    # 404 Not Found
+    # =============
     #
     # A server **MUST** return `404 Not Found` when processing a request to fetch
     # a relationship link URL that does not exist.
@@ -1306,7 +376,8 @@ module JSONAPIObjects
     # If a relationship link URL exists but the relationship is empty, then
     # `200 OK` **MUST** be returned, as described above.
     #
-    # ##### <a href="#fetching-relationships-responses-other" id="fetching-relationships-responses-other" class="headerlink"></a> Other Responses
+    # Other Responses
+    # ===============
     #
     # A server **MAY** respond with other HTTP status codes.
     #
@@ -1316,7 +387,8 @@ module JSONAPIObjects
     # responses, in accordance with
     # [`HTTP semantics`](http://tools.ietf.org/html/rfc7231).
     #
-    # ### <a href="#fetching-includes" id="fetching-includes" class="headerlink"></a> Inclusion of Related Resources
+    # Inclusion of Related Resources
+    # ==============================
     #
     # An endpoint **MAY** return resources related to the primary data by default.
     #
@@ -1393,7 +465,8 @@ module JSONAPIObjects
     # the inclusion of related resources along with a `POST` request to create a
     # resource or relationship.
     #
-    # ### <a href="#fetching-sparse-fieldsets" id="fetching-sparse-fieldsets" class="headerlink"></a> Sparse Fieldsets
+    # Sparse Fieldsets
+    # ================
     #
     # A client **MAY** request that an endpoint return only specific [fields] in the
     # response on a per-type basis by including a `fields[TYPE]` parameter.
@@ -1418,7 +491,8 @@ module JSONAPIObjects
     # server could support sparse fieldsets along with a `POST` request to create
     # a resource.
     #
-    # ### <a href="#fetching-sorting" id="fetching-sorting" class="headerlink"></a> Sorting
+    # Sorting
+    # =======
     #
     # A server **MAY** choose to support requests to sort resource collections
     # according to one or more criteria ("sort fields").
@@ -1473,7 +547,8 @@ module JSONAPIObjects
     # > Note: This section applies to any endpoint that responds with a resource
     # collection as primary data, regardless of the request type.
     #
-    # ### <a href="#fetching-pagination" id="fetching-pagination" class="headerlink"></a> Pagination
+    # Pagination
+    # ==========
     #
     # A server **MAY** choose to limit the number of resources returned in a response
     # to a subset ("page") of the whole set available.
@@ -1518,7 +593,8 @@ module JSONAPIObjects
     # > Note: This section applies to any endpoint that responds with a resource
     # collection as primary data, regardless of the request type.
     #
-    # ### <a href="#fetching-filtering" id="fetching-filtering" class="headerlink"></a> Filtering
+    # Filtering
+    # =========
     #
     # The `filter` query parameter is reserved for filtering data. Servers and clients
     # **SHOULD** use this key for filtering operations.
@@ -1527,7 +603,8 @@ module JSONAPIObjects
     # `filter` query parameter can be used as the basis for any number of filtering
     # strategies.
     #
-    # ## <a href="#crud" id="crud" class="headerlink"></a> Creating, Updating and Deleting Resources
+    # Creating, Updating and Deleting Resources
+    # =========================================
     #
     # A server **MAY** allow resources of a given type to be created. It **MAY**
     # also allow existing resources to be modified or deleted.
@@ -1543,7 +620,8 @@ module JSONAPIObjects
     # not. Therefore, to improve consistency and minimize confusion, `type` is
     # always required.
     #
-    # ### <a href="#crud-creating" id="crud-creating" class="headerlink"></a> Creating Resources
+    # Creating Resources
+    # ==================
     #
     # A resource can be created by sending a `POST` request to a URL that represents
     # a collection of resources. The request **MUST** include a single [resource object][resource objects]
@@ -1577,7 +655,8 @@ module JSONAPIObjects
     # member. The value of this key represents the linkage the new resource is to
     # have.
     #
-    # #### <a href="#crud-creating-client-ids" id="crud-creating-client-ids" class="headerlink"></a> Client-Generated IDs
+    # Client-Generated IDs
+    # ====================
     #
     # A server **MAY** accept a client-generated ID along with a request to create
     # a resource. An ID **MUST** be specified with an `id` key, the value of
@@ -1613,9 +692,11 @@ module JSONAPIObjects
     # A server **MUST** return `403 Forbidden` in response to an unsupported request
     # to create a resource with a client-generated ID.
     #
-    # #### <a href="#crud-creating-responses" id="crud-creating-responses" class="headerlink"></a> Responses
+    # Responses
+    # =========
     #
-    # ##### <a href="#crud-creating-responses-201" id="crud-creating-responses-201" class="headerlink"></a> 201 Created
+    # 201 Created
+    # ===========
     #
     # If a `POST` request did not include a [Client-Generated
     # ID](#crud-creating-client-ids) and the requested resource has been created
@@ -1651,13 +732,15 @@ module JSONAPIObjects
     # }
     # ```
     #
-    # ##### <a href="#crud-creating-responses-202" id="crud-creating-responses-202" class="headerlink"></a> 202 Accepted
+    # 202 Accepted
+    # ============
     #
     # If a request to create a resource has been accepted for processing, but the
     # processing has not been completed by the time the server responds, the
     # server **MUST** return a `202 Accepted` status code.
     #
-    # ##### <a href="#crud-creating-responses-204" id="crud-creating-responses-204" class="headerlink"></a> 204 No Content
+    # 204 No Content
+    # ==============
     #
     # If a `POST` request *did* include a [Client-Generated
     # ID](#crud-creating-client-ids) and the requested resource has been created
@@ -1669,12 +752,14 @@ module JSONAPIObjects
     # object sent in the request to be accepted by the server, as if the server
     # had returned it back in a `201` response.
     #
-    # ##### <a href="#crud-creating-responses-403" id="crud-creating-responses-403" class="headerlink"></a> 403 Forbidden
+    # 403 Forbidden
+    # =============
     #
     # A server **MAY** return `403 Forbidden` in response to an unsupported request
     # to create a resource.
     #
-    # ##### <a href="#crud-creating-responses-409" id="crud-creating-responses-409" class="headerlink"></a> 409 Conflict
+    # 409 Conflict
+    # ============
     #
     # A server **MUST** return `409 Conflict` when processing a `POST` request to
     # create a resource with a client-generated ID that already exists.
@@ -1686,7 +771,8 @@ module JSONAPIObjects
     # A server **SHOULD** include error details and provide enough information to
     # recognize the source of the conflict.
     #
-    # ##### <a href="#crud-creating-responses-other" id="crud-creating-responses-other" class="headerlink"></a> Other Responses
+    # Other Responses
+    # ===============
     #
     # A server **MAY** respond with other HTTP status codes.
     #
@@ -1696,7 +782,8 @@ module JSONAPIObjects
     # responses, in accordance with
     # [`HTTP semantics`](http://tools.ietf.org/html/rfc7231).
     #
-    # ### <a href="#crud-updating" id="crud-updating" class="headerlink"></a> Updating Resources
+    # Updating Resources
+    # ==================
     #
     # A resource can be updated by sending a `PATCH` request to the URL that
     # represents the resource.
@@ -1726,7 +813,8 @@ module JSONAPIObjects
     # }
     # ```
     #
-    # #### <a href="#crud-updating-resource-attributes" id="crud-updating-resource-attributes" class="headerlink"></a> Updating a Resource's Attributes
+    # Updating a Resource's Attributes
+    # ================================
     #
     # Any or all of a resource's [attributes] **MAY** be included in the resource
     # object included in a `PATCH` request.
@@ -1756,7 +844,8 @@ module JSONAPIObjects
     # }
     # ```
     #
-    # #### <a href="#crud-updating-resource-relationships" id="crud-updating-resource-relationships" class="headerlink"></a> Updating a Resource's Relationships
+    # Updating a Resource's Relationships
+    # ===================================
     #
     # Any or all of a resource's [relationships] **MAY** be included in the resource
     # object included in a `PATCH` request.
@@ -1823,15 +912,18 @@ module JSONAPIObjects
     # it has not provided the client with the full list of associated objects, and
     # does not want to allow deletion of records the client has not seen.
     #
-    # #### <a href="#crud-updating-responses" id="crud-updating-responses" class="headerlink"></a> Responses
+    # Responses
+    # =========
     #
-    # ##### <a href="#crud-updating-responses-202" id="crud-updating-responses-202" class="headerlink"></a> 202 Accepted
+    # 202 Accepted
+    # ============
     #
     # If an update request has been accepted for processing, but the processing
     # has not been completed by the time the server responds, the server **MUST**
     # return a `202 Accepted` status code.
     #
-    # ##### <a href="#crud-updating-responses-200" id="crud-updating-responses-200" class="headerlink"></a> 200 OK
+    # 200 OK
+    # ======
     #
     # If a server accepts an update but also changes the resource(s) in ways other
     # than those specified by the request (for example, updating the `updated-at`
@@ -1844,19 +936,22 @@ module JSONAPIObjects
     # only with top-level [meta] data. In this case the server **MUST NOT**
     # include a representation of the updated resource(s).
     #
-    # ##### <a href="#crud-updating-responses-204" id="crud-updating-responses-204" class="headerlink"></a> 204 No Content
+    # 204 No Content
+    # ==============
     #
     # If an update is successful and the server doesn't update any attributes besides
     # those provided, the server **MUST** return either a `200 OK` status code and
     # response document (as described above) or a `204 No Content` status code with no
     # response document.
     #
-    # ##### <a href="#crud-updating-relationship-responses-403" id="crud-updating-relationship-responses-403" class="headerlink"></a> 403 Forbidden
+    # 403 Forbidden
+    # =============
     #
     # A server **MUST** return `403 Forbidden` in response to an unsupported request
     # to update a resource or relationship.
     #
-    # ##### <a href="#crud-updating-responses-404" id="crud-updating-responses-404" class="headerlink"></a> 404 Not Found
+    # 404 Not Found
+    # =============
     #
     # A server **MUST** return `404 Not Found` when processing a request to modify
     # a resource that does not exist.
@@ -1864,7 +959,8 @@ module JSONAPIObjects
     # A server **MUST** return `404 Not Found` when processing a request that
     # references a related resource that does not exist.
     #
-    # ##### <a href="#crud-updating-responses-409" id="crud-updating-responses-409" class="headerlink"></a> 409 Conflict
+    # 409 Conflict
+    # ============
     #
     # A server **MAY** return `409 Conflict` when processing a `PATCH` request to
     # update a resource if that update would violate other server-enforced
@@ -1876,7 +972,8 @@ module JSONAPIObjects
     # A server **SHOULD** include error details and provide enough information to
     # recognize the source of the conflict.
     #
-    # ##### <a href="#crud-updating-responses-other" id="crud-updating-responses-other" class="headerlink"></a> Other Responses
+    # Other Responses
+    # ===============
     #
     # A server **MAY** respond with other HTTP status codes.
     #
@@ -1886,7 +983,8 @@ module JSONAPIObjects
     # responses, in accordance with
     # [`HTTP semantics`](http://tools.ietf.org/html/rfc7231).
     #
-    # ### <a href="#crud-updating-relationships" id="crud-updating-relationships" class="headerlink"></a> Updating Relationships
+    # Updating Relationships
+    # ======================
     #
     # Although relationships can be modified along with resources (as described
     # above), JSON API also supports updating of relationships independently at
@@ -1905,7 +1003,8 @@ module JSONAPIObjects
     # > Note: A server may choose to delete the underlying resource if a
     # relationship is deleted (as a garbage collection measure).
     #
-    # #### <a href="#crud-updating-to-one-relationships" id="crud-updating-to-one-relationships" class="headerlink"></a> Updating To-One Relationships
+    # Updating To-One Relationships
+    # =============================
     #
     # A server **MUST** respond to `PATCH` requests to a URL from a to-one
     # [relationship link][relationships] as described below.
@@ -1943,7 +1042,8 @@ module JSONAPIObjects
     # If the relationship is updated successfully then the server **MUST** return
     # a successful response.
     #
-    # #### <a href="#crud-updating-to-many-relationships" id="crud-updating-to-many-relationships" class="headerlink"></a> Updating To-Many Relationships
+    # Updating To-Many Relationships
+    # ==============================
     #
     # A server **MUST** respond to `PATCH`, `POST`, and `DELETE` requests to a
     # URL from a to-many [relationship link][relationships] as described below.
@@ -2046,15 +1146,18 @@ module JSONAPIObjects
     # that a server may reject the request. This spec defines the semantics of a
     # server, and we are defining its semantics for JSON API.
     #
-    # #### <a href="#crud-updating-relationship-responses" id="crud-updating-relationship-responses" class="headerlink"></a> Responses
+    # Responses
+    # =========
     #
-    # ##### <a href="#crud-updating-relationship-responses-202" id="crud-updating-relationship-responses-202" class="headerlink"></a> 202 Accepted
+    # 202 Accepted
+    # ============
     #
     # If a relationship update request has been accepted for processing, but the
     # processing has not been completed by the time the server responds, the
     # server **MUST** return a `202 Accepted` status code.
     #
-    # ##### <a href="#crud-updating-relationship-responses-204" id="crud-updating-relationship-responses-204" class="headerlink"></a> 204 No Content
+    # 204 No Content
+    # ==============
     #
     # A server **MUST** return a `204 No Content` status code if an update is
     # successful and the representation of the resource in the request matches the
@@ -2066,7 +1169,8 @@ module JSONAPIObjects
     # from a to-many [relationship link][relationships] when that relationship does
     # not exist.
     #
-    # ##### <a href="#crud-updating-relationship-responses-200" id="crud-updating-relationship-responses-200" class="headerlink"></a> 200 OK
+    # 200 OK
+    # ======
     #
     # If a server accepts an update but also changes the targeted relationship(s)
     # in other ways than those specified by the request, it **MUST** return a `200
@@ -2078,12 +1182,14 @@ module JSONAPIObjects
     # only with top-level [meta] data. In this case the server **MUST NOT**
     # include a representation of the updated relationship(s).
     #
-    # ##### <a href="#crud-updating-relationship-responses-403" id="crud-updating-relationship-responses-403" class="headerlink"></a> 403 Forbidden
+    # 403 Forbidden
+    # =============
     #
     # A server **MUST** return `403 Forbidden` in response to an unsupported request
     # to update a relationship.
     #
-    # ##### <a href="#crud-updating-relationship-responses-other" id="crud-updating-relationship-responses-other" class="headerlink"></a> Other Responses
+    # Other Responses
+    # ===============
     #
     # A server **MAY** respond with other HTTP status codes.
     #
@@ -2093,7 +1199,8 @@ module JSONAPIObjects
     # responses, in accordance with
     # [`HTTP semantics`](http://tools.ietf.org/html/rfc7231).
     #
-    # ### <a href="#crud-deleting" id="crud-deleting" class="headerlink"></a> Deleting Resources
+    # Deleting Resources
+    # ==================
     #
     # An individual resource can be *deleted* by making a `DELETE` request to the
     # resource's URL:
@@ -2103,25 +1210,30 @@ module JSONAPIObjects
     # Accept: application/vnd.api+json
     # ```
     #
-    # #### <a href="#crud-deleting-responses" id="crud-deleting-responses" class="headerlink"></a> Responses
+    # Responses
+    # =========
     #
-    # ##### <a href="#crud-deleting-responses-202" id="crud-deleting-responses-202" class="headerlink"></a> 202 Accepted
+    # 202 Accepted
+    # ============
     #
     # If a deletion request has been accepted for processing, but the processing has
     # not been completed by the time the server responds, the server **MUST**
     # return a `202 Accepted` status code.
     #
-    # ##### <a href="#crud-deleting-responses-204" id="crud-deleting-responses-204" class="headerlink"></a> 204 No Content
+    # 204 No Content
+    # ==============
     #
     # A server **MUST** return a `204 No Content` status code if a deletion
     # request is successful and no content is returned.
     #
-    # ##### <a href="#crud-deleting-responses-200" id="crud-deleting-responses-200" class="headerlink"></a> 200 OK
+    # 200 OK
+    # ======
     #
     # A server **MUST** return a `200 OK` status code if a deletion request is
     # successful and the server responds with only top-level [meta] data.
     #
-    # ##### <a href="#crud-deleting-responses-other" id="crud-deleting-responses-other" class="headerlink"></a> Other Responses
+    # Other Responses
+    # ===============
     #
     # A server **MAY** respond with other HTTP status codes.
     #
@@ -2131,7 +1243,8 @@ module JSONAPIObjects
     # responses, in accordance with
     # [`HTTP semantics`](http://tools.ietf.org/html/rfc7231).
     #
-    # ## <a href="#query-parameters" id="query-parameters" class="headerlink"></a> Query Parameters
+    # Query Parameters
+    # ================
     #
     # Implementation specific query parameters **MUST** adhere to the same constraints
     # as [member names] with the additional requirement that they **MUST** contain at
@@ -2146,9 +1259,11 @@ module JSONAPIObjects
     # > Note: This is to preserve the ability of JSON API to make additive additions
     # to standard query parameters without conflicting with existing implementations.
     #
-    # ## <a href="#errors" id="errors" class="headerlink"></a> Errors
+    # Errors
+    # ======
     #
-    # ### <a href="#errors-processing" id="errors-processing" class="headerlink"></a> Processing Errors
+    # Processing Errors
+    # =================
     #
     # A server **MAY** choose to stop processing as soon as a problem is encountered,
     # or it **MAY** continue processing and encounter multiple problems. For instance,
@@ -2159,50 +1274,5 @@ module JSONAPIObjects
     # generally applicable HTTP error code **SHOULD** be used in the response. For
     # instance, `400 Bad Request` might be appropriate for multiple 4xx errors
     # or `500 Internal Server Error` might be appropriate for multiple 5xx errors.
-    #
-    # ### <a href="#error-objects" id="error-objects" class="headerlink"></a> Error Objects
-    #
-    # Error objects provide additional information about problems encountered while
-    # performing an operation. Error objects **MUST** be returned as an array
-    # keyed by `errors` in the top level of a JSON API document.
-    #
-    # An error object **MAY** have the following members:
-    #
-    # * `id`: a unique identifier for this particular occurrence of the problem.
-    # * `links`: a [links object][links] containing the following members:
-    #   * `about`: a [link][links] that leads to further details about this
-    #     particular occurrence of the problem.
-    # * `status`: the HTTP status code applicable to this problem, expressed as a
-    #   string value.
-    # * `code`: an application-specific error code, expressed as a string value.
-    # * `title`: a short, human-readable summary of the problem that **SHOULD NOT**
-    #   change from occurrence to occurrence of the problem, except for purposes of
-    #   localization.
-    # * `detail`: a human-readable explanation specific to this occurrence of the
-    #   problem.
-    # * `source`: an object containing references to the source of the error,
-    #   optionally including any of the following members:
-    #   * `pointer`: a JSON Pointer [[RFC6901](https://tools.ietf.org/html/rfc6901)]
-    #     to the associated entity in the request document [e.g. `"/data"` for a
-    #     primary data object, or `"/data/attributes/title"` for a specific attribute].
-    #   * `parameter`: a string indicating which URI query parameter caused
-    #     the error.
-    # * `meta`: a [meta object][meta] containing non-standard meta-information about the
-    #   error.
-    #
-    # [resource objects]: #document-resource-objects
-    # [attributes]: #document-resource-object-attributes
-    # [relationships]: #document-resource-object-relationships
-    # [fields]: #document-resource-object-fields
-    # [related resource link]: #document-resource-object-related-resource-links
-    # [resource linkage]: #document-resource-object-linkage
-    # [resource links]: #document-resource-object-links
-    # [resource identifier object]: #document-resource-identifier-objects
-    # [compound document]: #document-compound-documents
-    # [meta]: #document-meta
-    # [links]: #document-links
-    # [error details]: #errors
-    # [member names]: #document-member-names
-    # [pagination]: #fetching-pagination
   end
 end
