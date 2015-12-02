@@ -202,6 +202,9 @@ module JSONAPIonify::Structure::Objects
           )
         )
       end
+      it 'should only include errors if compile errors exist' do
+        expect(object.compile.keys).to eq ['errors']
+      end
     end
   end
 end

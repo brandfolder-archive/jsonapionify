@@ -1,4 +1,5 @@
 require 'pry'
+require 'core_ext/boolean_object'
 require "active_support/core_ext/string/inflections"
 require "active_support/core_ext/hash/keys"
 
@@ -12,6 +13,7 @@ module JSONAPIonify
   end
 
   def self.parse(hash)
-    Structure::Objects::TopLevel.new(hash.deep_symbolize_keys)
+    hash = JSON.parse(hash) if hash.is_a? String
+    Structure::Objects::TopLevel.from_hash(hash)
   end
 end

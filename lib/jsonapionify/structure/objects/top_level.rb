@@ -76,9 +76,13 @@ module JSONAPIonify::Structure
                                ]
 
       def compile
-        super.tap do |object|
-          object['errors'] ||= []
-          object['errors'] |= errors.as_collection.compile
+        compiled = super
+        compiled_errors = compiled['errors'] || []
+        all_errors = compiled_errors | errors.as_collection.compile
+        if all_errors.present?
+          { errors: all_errors }.as_json
+        else
+          compiled
         end
       end
 
