@@ -161,5 +161,47 @@ module JSONAPIonify::Structure::Objects
         it_should_behave_like 'an invalid jsonapi object', **hash
       end
     end
+
+    describe 'error collection' do
+      let(:object) do
+        described_class.new(
+          data: [
+                  { id: "1" },
+                  { id: "1", type: "stuff" }
+                ],
+          links: {
+            foo: "foo",
+            self: "bar"
+          }
+        )
+      end
+      it 'should collect errors into an error object' do
+        expect(object.compile['errors']).to(
+          include(
+            {
+              source: {
+                pointer: 'data/0/type'
+              },
+              detail: 'type must be provided.',
+              status: '422'
+            }.as_json,
+            {
+              source: {
+                pointer: 'links/foo'
+              },
+              detail: 'foo is not permitted.',
+              status: '422'
+            }.as_json,
+            {
+              source: {
+                pointer: 'links/self'
+              },
+              detail: 'self must be url string or valid link object.',
+              status: '422'
+            }.as_json
+          )
+        )
+      end
+    end
   end
 end
