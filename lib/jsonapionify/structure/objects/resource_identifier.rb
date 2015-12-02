@@ -21,15 +21,18 @@ module JSONAPIonify::Structure
       def duplicate_exists?
         return false unless parent.is_a?(Array)
         peers = parent - [self]
-        peers.any? do |peer|
-          matches_id   = peer.has_key?(:id) && has_key?(:id) && peer[:id] == self[:id]
-          matches_type = peer[:type] == self[:type]
-          matches_type && matches_id
-        end
+        peers.any? { |peer| same_as? peer }
       end
 
       def duplicate_does_not_exist?
         !duplicate_exists?
+      end
+
+      def same_as?(other)
+        return false unless other.is_a? ResourceIdentifier
+        matches_id   = other.has_key?(:id) && has_key?(:id) && other[:id] == self[:id]
+        matches_type = other[:type] == self[:type]
+        matches_type && matches_id
       end
 
     end

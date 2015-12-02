@@ -26,6 +26,8 @@ module JSONAPIonify::Structure
         end
       end
 
+      private
+
       def top_level_referenced
         return [] unless parent
         reduce([]) { |a, i| a << i }.select do |resource|

@@ -31,42 +31,57 @@ module JSONAPIonify::Structure::Objects
       # * an empty array (`[]`) for empty to-many relationships.
       # * a single [resource identifier object] for non-empty to-one relationships.
       # * an array of [resource identifier objects][resource identifier object] for non-empty to-many relationships.
-      #
+
+
+      context 'when a single resource identifier object' do
+        obj  = { id: "1", type: 'stuff' }
+        hash = { data: obj }
+
+        it_should_behave_like 'a valid jsonapi object', **hash
+
+        it 'should be a resource identifier object' do
+          $pry = true
+          expect(described_class.new(hash)[:data]).to be_a ResourceIdentifier
+        end
+      end
+
+      context 'when a collection of resource identifier objects' do
+        ary  = 3.times.map do |i|
+          { id: (i + 1).to_s, type: 'stuff' }
+        end
+        hash = { data: ary }
+
+        it_should_behave_like 'a valid jsonapi object', **hash
+
+        it 'should be a collection of resource identifier objects' do
+          described_class.new(hash)[:data].each do |obj|
+            expect(obj).to be_a ResourceIdentifier
+          end
+        end
+      end
+
+      context 'when an empty array' do
+        hash = { data: [] }
+
+        it_should_behave_like 'a valid jsonapi object', **hash
+      end
+
+      context 'when null' do
+        hash = { data: nil }
+
+        it_should_behave_like 'a valid jsonapi object', **hash
+      end
+
+      context 'when something else' do
+        hash = { data: 1 }
+        it_should_behave_like 'an invalid jsonapi object', **hash
+      end
+
       # > Note: The spec does not impart meaning to order of resource identifier
       # objects in linkage arrays of to-many relationships, although implementations
       # may do that. Arrays of resource identifier objects may represent ordered
       # or unordered relationships, and both types can be mixed in one response
       # object.
-      #
-      # For example, the following article is associated with an `author`:
-      #
-      # ```javascript
-      # // ...
-      # {
-      #   "type": "articles",
-      #   "id": "1",
-      #   "attributes": {
-      #     "title": "Rails is Omakase"
-      #   },
-      #   "relationships": {
-      #     "author": {
-      #       "links": {
-      #         "self": "http://example.com/articles/1/relationships/author",
-      #         "related": "http://example.com/articles/1/author"
-      #       },
-      #       "data": { "type": "people", "id": "9" }
-      #     }
-      #   },
-      #   "links": {
-      #     "self": "http://example.com/articles/1"
-      #   }
-      # }
-      # // ...
-      # ```
-      #
-      # The `author` relationship includes a link for the relationship itself (which
-      # allows the client to change the related author directly), a related resource
-      # link to fetch the resource objects, and linkage information.
     end
   end
 end

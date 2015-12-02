@@ -9,7 +9,12 @@ module JSONAPIonify::Structure
       implements :links, as: Maps::Links
       implements :meta, as: Meta
 
-      collects_or_implements :data, collects: Collections::ResourceIdentifiers, implements: ResourceIdentifier
+      collects_or_implements(
+        :data,
+        collects:   Collections::ResourceIdentifiers,
+        implements: ResourceIdentifier,
+        allow_nil:  true
+      )
     end
   end
 end

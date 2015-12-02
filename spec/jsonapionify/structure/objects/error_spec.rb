@@ -20,13 +20,7 @@ module JSONAPIonify::Structure::Objects
         source: {}, # an object containing references to the source of the error.
         meta:   {} # a [meta object][meta] containing non-standard meta-information about the
       }
-      comboset = keycombos(schema.keys)
-      comboset.each do |combos|
-        combos.each do |keys|
-          data = schema.slice(*keys)
-          it_should_behave_like 'a valid jsonapi object', data
-        end
-      end
+      it_should_behave_like 'valid jsonapi object given schema', schema
     end
 
     context 'invalid key' do

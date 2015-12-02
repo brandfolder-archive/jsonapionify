@@ -13,13 +13,7 @@ module JSONAPIonify::Structure::Objects
         pointer: 'data/1/id',
         parameter: 'something'
       }
-      comboset = keycombos(schema.keys)
-      comboset.each do |combos|
-        combos.each do |keys|
-          data = schema.slice(*keys)
-          it_should_behave_like 'a valid jsonapi object', data
-        end
-      end
+      it_should_behave_like 'valid jsonapi object given schema', schema
     end
 
     describe 'invalid key' do

@@ -54,17 +54,9 @@ module JSONAPIonify::Structure::Objects
     # * `links`: a [links object][links] related to the primary data.
     # * `included`: an array of [resource objects] that are related to the primary
     #   data and/or each other ("included resources").
-
-    keys = %i{jsonapi links included}
-    describe "may contain #{keynames(keys)}" do
-      keycombos(keys).each do |combo|
-        combo.each do |keyset|
-          hash = schema.slice(*keyset)
-          context "when containing #{keynames(keyset)}" do
-            it_should_behave_like 'a valid jsonapi object', data: nil, **hash
-          end
-        end
-      end
+    describe "may contain" do
+      keys = %i{jsonapi links included}
+      it_should_behave_like 'valid jsonapi object given schema', schema.slice(*keys), data: nil
 
       context 'when not containing any' do
         it_should_behave_like 'a valid jsonapi object', data: nil
@@ -84,30 +76,6 @@ module JSONAPIonify::Structure::Objects
       end
     end
 
-    describe TopLevelLinks do
-      # The top-level [links object][links] **MAY** contain the following members:
-      #
-      # * `self`: the [link][links] that generated the current response document.
-      # * `related`: a [related resource link] when the primary data represents a
-      #    resource relationship.
-      # * [pagination] links for the primary data.
-      keys = [*%i{self related}, *JSONAPIonify::Structure::Helpers::PaginationLinks]
-      describe "may contain #{keynames(keys)}" do
-        keycombos(keys).each do |combo|
-          combo.each do |keyset|
-            hash = keystohash(keyset, 'http://google.com')
-            context "when containing #{keynames(keyset)}" do
-              it_should_behave_like 'a valid jsonapi object', hash
-            end
-          end
-        end
-
-        context 'when not containing any' do
-          it_should_behave_like 'an invalid jsonapi object', data: nil
-        end
-      end
-    end
-
     # The document's "primary data" is a representation of the resource or collection
     # of resources targeted by a request.
     #
@@ -123,22 +91,6 @@ module JSONAPIonify::Structure::Objects
     # it only contains one item or is empty.
     describe 'primary data representation' do
 
-      # For example, the following primary data is a single ResourceObject:
-      #
-      # ```javascript
-      # {
-      #   "data": {
-      #     "type": "articles",
-      #     "id": "1",
-      #     "attributes": {
-      #       // ... this article's attributes
-      #     },
-      #     "relationships": {
-      #       // ... this article's relationships
-      #     }
-      #   }
-      # }
-      # ```
       context 'when a single resource object' do
         obj  = { id: "1", type: 'stuff', attributes: { name: 'hello' } }
         hash = { data: obj }
@@ -150,17 +102,6 @@ module JSONAPIonify::Structure::Objects
         end
       end
 
-      # The following primary data is a single ResourceIdentifierObject that
-      # references the same resource:
-      #
-      # ```javascript
-      # {
-      #   "data": {
-      #     "type": "articles",
-      #     "id": "1"
-      #   }
-      # }
-      # ```
       context 'when a single resource identifier object' do
         obj  = { id: "1", type: 'stuff' }
         hash = { data: obj }
@@ -213,6 +154,11 @@ module JSONAPIonify::Structure::Objects
         hash = { data: nil }
 
         it_should_behave_like 'a valid jsonapi object', **hash
+      end
+
+      context 'when something else' do
+        hash = { data: 1 }
+        it_should_behave_like 'an invalid jsonapi object', **hash
       end
     end
   end

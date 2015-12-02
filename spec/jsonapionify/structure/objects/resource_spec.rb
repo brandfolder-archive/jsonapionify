@@ -49,17 +49,11 @@ module JSONAPIonify::Structure::Objects
     # * `links`: a [links object][links] containing links related to the resource.
     # * `meta`: a [meta object][meta] containing non-standard meta-information about a
     #   resource that can not be represented as an attribute or relationship.
-    keys          = %i{attributes relationships links meta}
-    required_info = { type: "stuff", id: "1" }
-    describe "may contain #{keynames(keys)}" do
-      keycombos(keys).each do |combo|
-        combo.each do |keyset|
-          hash = keystohash(keyset, {}).merge(required_info)
-          context "when containing #{keynames(keyset)}" do
-            it_should_behave_like 'a valid jsonapi object', hash
-          end
-        end
-      end
+
+    describe "may contain" do
+      keys          = %i{attributes relationships links meta}
+      required_info = { type: "stuff", id: "1" }
+      it_should_behave_like 'valid jsonapi object given keys', keys, {}, required_info
 
       context 'when not containing any' do
         it_should_behave_like 'a valid jsonapi object', required_info

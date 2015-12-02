@@ -33,6 +33,8 @@ module JSONAPIonify::Structure
         end
       end
 
+      private
+
       def backtick_key(key)
         "`#{key}`"
       end

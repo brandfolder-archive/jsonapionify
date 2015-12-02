@@ -11,6 +11,8 @@ module JSONAPIonify::Structure
         end
       end
 
+      value_is Objects::Base
+
       def initialize(array = [])
         observe(added: ->(_, items) {
           items.each do |item|
@@ -30,6 +32,8 @@ module JSONAPIonify::Structure
         self << attributes
       end
 
+      alias_method :append, :new
+
       def <<(instance)
         new_instance =
           case instance
@@ -43,10 +47,6 @@ module JSONAPIonify::Structure
           end
         super new_instance
       end
-
-      alias_method :append, :new
-
-      value_is Objects::Base
 
       def errors
         map.each_with_index.each_with_object({}) do |(value, key), errors|
@@ -67,14 +67,6 @@ module JSONAPIonify::Structure
         end
       end
       alias_method :all_warnings, :warnings
-
-      private
-
-      def items_added(items)
-        items.each do |item|
-          item.instance_variable_set(:@parent, self)
-        end
-      end
 
     end
   end

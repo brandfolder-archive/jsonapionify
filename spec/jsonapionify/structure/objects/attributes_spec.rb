@@ -6,7 +6,6 @@ module JSONAPIonify::Structure::Objects
     include JSONAPIObjects
     include_context 'fields object'
 
-
     # The value of the `attributes` key **MUST** be an object (an "attributes
     # object"). Members of the attributes object ("attributes") represent information
     # about the [resource object][resource objects] in which it's defined.
@@ -22,12 +21,7 @@ module JSONAPIonify::Structure::Objects
     # attribute **MUST NOT** contain a `relationships` or `links` member, as those
     # members are reserved by this specification for future use.
     describe 'must not contain `relationships` or `links`' do
-      keycombos(%i{relationships links}).each do |keyset|
-        keyset.each do |keys|
-          data = keystohash(keys)
-          it_should_behave_like 'an invalid jsonapi object', data
-        end
-      end
+      it_should_behave_like 'invalid jsonapi object given keys', %i{relationships links}
     end
 
     # Although has-one foreign keys (e.g. `author_id`) are often stored internally

@@ -13,6 +13,8 @@ module JSONAPIonify::Structure
         type_of! '*', **opts
       end
 
+      private
+
       def coerce_value(_, v)
         return v unless v.is_a? Hash
         type_class.new v

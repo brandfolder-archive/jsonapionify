@@ -279,7 +279,7 @@ module JSONAPIonify::Structure
           wildcard_types = hash.delete('*')
           keys.each do |k|
             hash[k] ||= {}
-            hash[k].deep_merge wildcard_types
+            hash[k].deep_merge! wildcard_types
           end if wildcard_types.present?
         end
       end

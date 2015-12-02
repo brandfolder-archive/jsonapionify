@@ -54,12 +54,19 @@ module JSONAPIonify::Structure
         self.class.from_hash to_hash
       end
 
+      def ==(other)
+        return unless other.respond_to? :[]
+        object.all? do |k, v|
+          other[k] == v
+        end
+      end
+
+      def ===(other)
+        other.class == self.class && self == other
+      end
+
       # Compile as json
       attr_reader :errors, :warnings
-
-      def as_json(*args)
-        compile(*args)
-      end
 
       def compile(*args)
         @errors   = Helpers::Errors.new
@@ -68,6 +75,8 @@ module JSONAPIonify::Structure
           object.as_json(*args)
         end
       end
+
+      alias_method :as_json, :compile
 
       def compile!(*args)
         compile(*args).tap do

@@ -3,6 +3,7 @@ module JSONAPIonify::Structure::Maps
   # Links
   # =====
   describe Links do
+    include JSONAPIObjects
     # Where specified, a `links` member can be used to represent links. The value
     # of each `links` member **MUST** be an object (a "links object").
     #
@@ -10,36 +11,19 @@ module JSONAPIonify::Structure::Maps
     # either:
     #
     # * a string containing the link's URL.
-    # * an object ("link object") which can contain the following members:
-    #   * `href`: a string containing the link's URL.
-    #   * `meta`: a meta object containing non-standard meta-information about the
-    #     link.
-    #
-    # The following `self` link is simply a URL:
-    #
-    # ```json
-    # "links": {
-    #   "self": "http://example.com/posts",
-    # }
-    # ```
-    #
-    # The following `related` link includes a URL as well as meta-information
-    # about a related resource collection:
-    #
-    # ```json
-    # "links": {
-    #   "related": {
-    #     "href": "http://example.com/articles/1/comments",
-    #     "meta": {
-    #       "count": 10
-    #     }
-    #   }
-    # }
-    # ```
-    #
-    # > Note: Additional members may be specified for links objects and link
-    # objects in the future. It is also possible that the allowed values of
-    # additional members will be expanded (e.g. a `collection` link may support an
-    # array of values, whereas a `self` link does not).
+    # * an object ("link object").
+    describe 'must be a string or link object' do
+      context 'when a string' do
+        it_should_behave_like 'a valid jsonapi object', foo: 'http://google.com'
+      end
+
+      context 'when a links object' do
+        it_should_behave_like 'a valid jsonapi object', foo: { href: 'http://google.com' }
+      end
+
+      context 'when a something else' do
+        it_should_behave_like 'an invalid jsonapi object', foo: 1
+      end
+    end
   end
 end
