@@ -1,5 +1,6 @@
 module JSONAPIonify
   module EnumerableObserver
+    using UnstrictProc
     extend self
 
     def observe(obj = self, added: proc {}, removed: proc {})
@@ -14,8 +15,8 @@ module JSONAPIonify
           after   = each.to_a
           added   = after - before
           removed = before - after
-          add_proc.call(obj, added) unless added.empty?
-          remove_proc.call(obj, removed) unless removed.empty?
+          add_proc.unstrict.call(obj, added) unless added.empty?
+          remove_proc.unstrict.call(obj, removed) unless removed.empty?
           val
         end
       end

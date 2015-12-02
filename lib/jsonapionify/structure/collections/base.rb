@@ -1,9 +1,13 @@
+require 'active_support/core_ext/object/json'
+
 module JSONAPIonify::Structure
   module Collections
     class Base < Array
       include JSONAPIonify::EnumerableObserver
       include Helpers::InheritsOrigin
       attr_reader :parent
+
+      alias_method :compile, :as_json
 
       def self.value_is(type_class)
         define_method(:type_class) do
@@ -50,13 +54,12 @@ module JSONAPIonify::Structure
 
       def errors
         map.each_with_index.each_with_object({}) do |(value, key), errors|
-          next unless value.respond_to? :all_errors
-          value.all_errors.each do |error_key, message|
+          next unless value.respond_to? :errors
+          value.errors.each do |error_key, message|
             errors[[key, error_key].join('/')] = message
           end
         end
       end
-      alias_method :all_errors, :errors
 
       def warnings
         map.each_with_index.each_with_object({}) do |(value, key), warnings|

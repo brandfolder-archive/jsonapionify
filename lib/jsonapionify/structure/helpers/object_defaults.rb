@@ -34,7 +34,7 @@ module JSONAPIonify::Structure
 
         # Defaults
         def default(key, &block)
-          set_callback :initialize, :after do
+          after_initialize do
             self[key] ||= instance_eval(&block)
           end
         end
@@ -57,7 +57,7 @@ module JSONAPIonify::Structure
         self.implementations = {}
         self.collections     = {}
 
-        set_callback :initialize, :before do
+        before_initialize do
           @unset = {}
         end
       end

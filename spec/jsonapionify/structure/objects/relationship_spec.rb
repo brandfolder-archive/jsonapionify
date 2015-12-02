@@ -4,20 +4,21 @@ module JSONAPIonify::Structure::Objects
     include JSONAPIObjects
     # A "relationship object" **MUST** contain at least one of the following:
     #
-    # * `links`: a [links object][links] containing at least one of the following:
-    #   * `self`: a link for the relationship itself (a "relationship link"). This
-    #     link allows the client to directly manipulate the relationship. For example,
-    #     it would allow a client to remove an `author` from an `article` without
-    #     deleting the `people` resource itself.
-    #   * `related`: a [related resource link]
-    # * `data`: [resource linkage]
-    # * `meta`: a [meta object][meta] that contains non-standard meta-information about the
-    #   relationship.
-    #
-    # A relationship object that represents a to-many relationship **MAY** also contain
-    # [pagination] links under the `links` member, as described below.
-    #
-    # > Note: See [fields] and [member names] for more restrictions on this container.
+    # * `links`: a links object
+    # * `data`: resource linkage
+    # * `meta`: a meta object that contains non-standard meta-information about the relationship.
+    describe 'must contain one of' do
+      schema = {
+        links: {},
+        data: nil,
+        meta: {}
+      }
+      schema.each do |key, value|
+        data = { key => value }
+        it_should_behave_like 'a valid jsonapi object', data
+      end
+    end
+    # > Note: See fields and member names for more restrictions on this container.
 
     # Resource Linkage
     # ================

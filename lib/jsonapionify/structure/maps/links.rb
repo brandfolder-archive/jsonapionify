@@ -4,7 +4,7 @@ module JSONAPIonify::Structure
 
       value_is Objects::Link
 
-      validate_each! message: 'must be url string or valid link object' do |*, value|
+      validate_each! message: 'must be url string or valid link object' do |obj, key, value|
         case value
         when String
           uri = URI.parse(value)
@@ -13,7 +13,7 @@ module JSONAPIonify::Structure
           true
         else
           false
-        end
+        end || !obj.permitted_key?(key)
       end
 
     end

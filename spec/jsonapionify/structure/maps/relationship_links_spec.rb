@@ -8,6 +8,8 @@ module JSONAPIonify::Structure::Maps
     describe 'must contain one of' do
       it_should_behave_like 'valid jsonapi object given keys', %i{self related}, 'http://self.me'
 
+      # A relationship object that represents a to-many relationship **MAY** also contain
+      # pagination links under the `links` member, as described below.
       describe 'may contain' do
         it_should_behave_like 'valid jsonapi object given keys',
                               JSONAPIonify::Structure::Helpers::PaginationLinks,

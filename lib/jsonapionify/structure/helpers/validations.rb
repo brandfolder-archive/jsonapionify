@@ -29,7 +29,7 @@ module JSONAPIonify::Structure
         # Fails if this key doesn't exist and the `given` does.
         def may_not_exist!(key, without: nil, **options)
           return may_not_exist_without! key, without if without
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
               if invalid_keys.present?
@@ -42,7 +42,7 @@ module JSONAPIonify::Structure
         end
 
         def may_not_exist_without!(key, without, **options)
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               if has_key?(key) && !has_key?(without)
                 errors.add(key, "may not exist without: `#{without}`")
@@ -53,7 +53,7 @@ module JSONAPIonify::Structure
 
         # Warn but do not fail if keys present
         def should_not_contain!(*keys, **options, &block)
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               keys         += self.keys.select(&block) if block_given?
               invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
@@ -69,7 +69,7 @@ module JSONAPIonify::Structure
         # Fails if these keys exist
         def must_not_contain!(*keys, deep: false, **options, &block)
           return must_not_contain_deep!(*keys, **options) if deep === true
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               keys         += self.keys.select(&block) if block_given?
               invalid_keys = self.keys.map(&:to_sym) & keys.map(&:to_sym)
@@ -84,7 +84,7 @@ module JSONAPIonify::Structure
 
         # Fails if these keys exist deeply
         def must_not_contain_deep!(*keys, **options, &block)
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               all_invalid_keys = []
               keys             += self.keys.select(&block) if block_given?
@@ -104,7 +104,7 @@ module JSONAPIonify::Structure
         # Fails if one of these keys does not exist
         def must_contain_one_of!(*keys, **options, &block)
           self.permitted_keys = [*permitted_keys, *keys].uniq
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               keys       += self.keys.select(&block) if block_given?
               valid_keys = keys.map(&:to_sym) & self.keys.map(&:to_sym)
@@ -131,7 +131,7 @@ module JSONAPIonify::Structure
 
         # Fails is more than one of the keys exists.
         def must_not_coexist!(*keys, **options)
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               keys             = expand_keys(*keys)
               conflicting_keys = keys & self.keys
@@ -147,7 +147,7 @@ module JSONAPIonify::Structure
 
         # Validates key using a provided method or block
         def validate!(key, with: nil, message: 'is not valid', **options, &block)
-          before_compile do
+          before_validation do
             if has_key? key
               JSONAPIonify::Continuation.new(**options).check(self, key, self[key]) do
                 real_block = get_block_from_options(with, &block)
@@ -158,7 +158,7 @@ module JSONAPIonify::Structure
         end
 
         def validate_object!(with: nil, message: 'is not valid', **options, &block)
-          before_compile do
+          before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
               real_block = get_block_from_options(with, &block)
               errors.add '*', message unless real_block.call(self)
@@ -168,7 +168,7 @@ module JSONAPIonify::Structure
 
         # Validates the object using a provided method or block
         def validate_each!(with: nil, message: 'not valid', **options, &block)
-          before_compile do
+          before_validation do
             real_block = get_block_from_options(with, &block)
             keys.each do |key|
               JSONAPIonify::Continuation.new(**options).check(self, key, self[key]) do
@@ -186,57 +186,40 @@ module JSONAPIonify::Structure
           allowed_type_map[key][options] ||= []
           allowed_type_map[key][options] += types
         end
-
-        private
-
-        def before_compile(&block)
-          set_callback :compile, :before, &block
-        end
       end
 
       included do
         delegate :validation_error, to: :class
-        class_attribute :required_keys, :allow_only_permitted, :implementations, :collections, instance_writer: false
-        class_attribute :allowed_type_map, :permitted_keys, instance_accessor: false
+        class_attribute :allow_only_permitted, :implementations, :collections, instance_writer: false
+        class_attribute :allowed_type_map, :permitted_keys, :required_keys, instance_accessor: false
         self.allow_only_permitted = false
         self.permitted_keys       = []
         self.allowed_type_map     = {}
         self.required_keys        = {}
 
         # Check Permitted Keys
-        before_compile do
-          unpermitted_keys = self.keys.map(&:to_sym) - permitted_keys.map(&:to_sym)
-          if allow_only_permitted && unpermitted_keys.present?
-            unpermitted_keys.each do |key|
-              errors.add(key, "is not permitted")
-            end
+        before_validation do
+          self.keys.each do |key|
+            errors.add(key, "is not permitted") unless permitted_key? key
           end
         end
 
         # Check Permitted Types
-        before_compile do
-          allowed_type_map.each do |key, options_and_types|
-            next unless has_key? key
-            options_and_types.each do |options, types|
-              JSONAPIonify::Continuation.new(**options).check(self) do
-                value   = self[key]
-                message = "must be a #{keys_to_sentence *types.map(&:name)}."
-                unless types.any? { |type| value.is_a? type }
-                  errors.add(key, message)
-                end
-              end
+        before_validation do
+          keys.each do |key|
+            next unless permitted_key?(key)
+            unless permitted_type_for?(key)
+              types   = permitted_types_for(key).map(&:name)
+              message = "must be a #{keys_to_sentence *types}."
+              errors.add(key, message)
             end
           end
         end
 
         # Check Required Keys
-        before_compile do
-          keys         = required_keys.select do |_, options|
-            JSONAPIonify::Continuation.new(**options).check(self) { true }
-          end.keys
-          missing_keys = keys.map(&:to_sym) - self.keys.map(&:to_sym)
-          if (origin.nil? || origin == self.origin) && missing_keys.present?
-            missing_keys.each do |key|
+        before_validation do
+          required_keys.each do |key|
+            unless has_key? key
               errors.add key, 'must be provided'
             end
           end
@@ -248,26 +231,32 @@ module JSONAPIonify::Structure
 
       end
 
-      def all_errors
-        errors.dup.tap do |all_errors|
-          object.each do |key, value|
-            next unless value.respond_to? :all_errors
-            value.all_errors.each do |error_key, messages|
-              all_errors.replace [key, error_key].join('/'), messages
-            end
-          end
-        end
+      def permitted_key?(key)
+        !allow_only_permitted || permitted_keys.map(&:to_sym).include?(key.to_sym)
       end
 
-      def all_warnings
-        warnings.dup.tap do |all_warnings|
-          object.each do |key, value|
-            next unless value.respond_to? :all_warnings
-            value.all_warnings.each do |warning_key, message|
-              all_warnings[[key, warning_key].join('.')] = message
-            end
+      def required_key?(key)
+        required_keys.include? key
+      end
+
+      def required_keys
+        self.class.required_keys.select do |_, options|
+          JSONAPIonify::Continuation.new(**options).check(self) { true }
+        end.keys
+      end
+
+      def permitted_type_for?(key)
+        types = permitted_types_for(key)
+        types.empty? || permitted_types_for(key).any? { |type| self[key].is_a? type }
+      end
+
+      def permitted_types_for(key)
+        options_and_types = allowed_type_map[key] || {}
+        options_and_types.each_with_object([]) do |(options, types), permitted_types|
+          JSONAPIonify::Continuation.new(**options).check(self) do
+            permitted_types.concat types
           end
-        end
+        end.uniq
       end
 
       def permitted_keys

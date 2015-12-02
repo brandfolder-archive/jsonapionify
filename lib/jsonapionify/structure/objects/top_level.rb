@@ -39,20 +39,20 @@ module JSONAPIonify::Structure
       implements :links, as: Maps::TopLevelLinks
       collects :included, as: Collections::IncludedResources
       implements :jsonapi, as: Jsonapi
-      is_resource_identifier = ->(obj) { obj.keys.sort == %i{id type}.sort }
+      is_resource = ->(obj) { (obj.keys - %i{id type}).present? }
       collects_or_implements(
         :data,
         collects:   Collections::Resources,
         implements: Resource,
         if:         ->(obj) {
-          obj.is_a?(Resource) || (obj.is_a?(Hash) && !is_resource_identifier[obj])
+          obj.is_a?(Resource) || (obj.is_a?(Hash) && is_resource[obj])
         })
       collects_or_implements(
         :data,
         collects:   Collections::ResourceIdentifiers,
         implements: ResourceIdentifier,
         if:         ->(obj) {
-          obj.is_a?(ResourceIdentifier) || (obj.is_a?(Hash) && is_resource_identifier[obj])
+          obj.is_a?(ResourceIdentifier) || (obj.is_a?(Hash) && !is_resource[obj])
         })
 
       # If a document does not contain a top-level `data` key, the `included` member
@@ -75,13 +75,20 @@ module JSONAPIonify::Structure
                                  Collections::ResourceIdentifiers
                                ]
 
+      def compile
+        super.tap do |object|
+          object['errors'] ||= []
+          object['errors'] |= errors.as_collection.compile
+        end
+      end
+
       def as(origin)
         copy.tap do |obj|
           obj.instance_variable_set :@origin, origin
         end
       end
 
-      set_callback :initialize, :after do
+      after_initialize do
         @origin = :server
       end
     end

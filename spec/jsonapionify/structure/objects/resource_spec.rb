@@ -60,29 +60,6 @@ module JSONAPIonify::Structure::Objects
       end
     end
 
-    # Here's how an article (i.e. a resource of type "articles") might appear in a document:
-    #
-    # ```javascript
-    # // ...
-    # {
-    #   "type": "articles",
-    #   "id": "1",
-    #   "attributes": {
-    #     "title": "Rails is Omakase"
-    #   },
-    #   "relationships": {
-    #     "author": {
-    #       "links": {
-    #         "self": "/articles/1/relationships/author",
-    #         "related": "/articles/1/author"
-    #       },
-    #       "data": { "type": "people", "id": "9" }
-    #     }
-    #   }
-    # }
-    # // ...
-    # ```
-    #
     # Fields
     # ======
     # A resource object's [attributes] and its [relationships] are collectively called

@@ -9,11 +9,12 @@ require 'active_support/core_ext/hash/keys'
 module JSONAPIonify::Structure
   module Objects
     class Base
+      include JSONAPIonify::Callbacks
       include Enumerable
       include JSONAPIonify::EnumerableObserver
-      include ActiveSupport::Callbacks
       include Helpers::InheritsOrigin
-      define_callbacks :compile, :initialize
+
+      define_callbacks :initialize, :validation
 
       include Helpers::ObjectSetters
       include Helpers::Validations
@@ -24,7 +25,7 @@ module JSONAPIonify::Structure
 
       delegate :select, :has_key?, :keys, :values, :each, :present?, :blank?, :empty?, to: :object
 
-      set_callback :initialize, :before do
+      before_initialize do
         @object = {}
         observe(@object, added: ->(_, items) {
           items.each do |_, value|
@@ -69,24 +70,40 @@ module JSONAPIonify::Structure
       attr_reader :errors, :warnings
 
       def compile(*args)
-        @errors   = Helpers::Errors.new
-        @warnings = Helpers::Errors.new
-        run_callbacks :compile do
-          object.as_json(*args)
-        end
+        object.as_json(*args)
+        validate
+        object.as_json(*args)
       end
 
       alias_method :as_json, :compile
 
       def compile!(*args)
         compile(*args).tap do
-          if (wrns = all_warnings).present?
+          if (wrns = warnings).present?
             warn validation_error wrns.all_messages.to_sentence + '.'
           end
-          if (errs = all_errors).present?
+          if (errs = errors).present?
             raise validation_error errs.all_messages.to_sentence + '.'
           end
         end
+      end
+
+      def validate
+        [errors, warnings].each(&:clear)
+        run_callbacks :validation do
+          collect_child_errors
+          collect_child_warnings
+        end
+        errors.present?
+      end
+
+
+      def errors
+        @errors ||= Helpers::Errors.new
+      end
+
+      def warnings
+        @warnings ||= Helpers::Errors.new
       end
 
       def pretty_json(*args)
@@ -95,6 +112,26 @@ module JSONAPIonify::Structure
 
       def to_hash
         compile.deep_symbolize_keys
+      end
+
+      private
+
+      def collect_child_errors
+        object.each do |key, value|
+          next unless value.respond_to? :errors
+          value.errors.each do |error_key, messages|
+            errors.replace [key, error_key].join('/'), messages
+          end
+        end
+      end
+
+      def collect_child_warnings
+        object.each do |key, value|
+          next unless value.respond_to? :warnings
+          value.warnings.each do |warning_key, messages|
+            warnings.replace [key, warning_key].join('/'), messages
+          end
+        end
       end
 
     end
