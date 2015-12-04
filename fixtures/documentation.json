@@ -127,6 +127,15 @@
             "write"
           ]
         }
+      },
+      "relationships": {
+        "brandfolders": {
+          "resource": "brandfolders",
+          "type": "many",
+          "allow": [
+            "read"
+          ]
+        }
       }
     },
     "sections": {
@@ -227,6 +236,55 @@
         "privacy": {
           "description": "The privacy of the Brandfolder, this can be `public`, `private` or `stealth`.",
           "required": false,
+          "allow": [
+            "read",
+            "write"
+          ]
+        }
+      },
+      "relationships": {
+        "brandfolder": {
+          "resource": "brandfolders",
+          "type": "one",
+          "allow": [
+            "read"
+          ]
+        },
+        "assets": {
+          "resource": "assets",
+          "type": "many",
+          "allow": [
+            "read",
+            "write"
+          ]
+        },
+        "sections": {
+          "resource": "sections",
+          "type": "many",
+          "allow": [
+            "read",
+            "write"
+          ]
+        },
+        "admins": {
+          "resource": "users",
+          "type": "many",
+          "allow": [
+            "read",
+            "write"
+          ]
+        },
+        "collaborators": {
+          "resource": "users",
+          "type": "many",
+          "allow": [
+            "read",
+            "write"
+          ]
+        },
+        "guests": {
+          "resource": "users",
+          "type": "many",
           "allow": [
             "read",
             "write"

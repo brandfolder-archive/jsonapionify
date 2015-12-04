@@ -3,18 +3,23 @@
     font-family: sans-serif;
     margin: 0;
   }
+
   ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
   }
+
   li {
     margin: 5px 0;
   }
+
   a[href] {
     text-decoration: none;
     color: #2BA2D6;
   }
 </style>
-<div style="padding: 25px 10px; float: left; width: 300px; position: fixed; height: 100%; background-color: #dde2e6">
+<div style="padding: 22px 30px; float: left; width: 300px; position: fixed; height: 100%; background-color: #dde2e6">
   <ul>
     <li>
       <strong style="font-size: 1.2em; text-transform: uppercase">
@@ -30,7 +35,7 @@
     <% end %>
   </ul>
 </div>
-<div style="padding: 25px 10px; float: left; width: 300px">
+<div style="padding: 22px 30px; float: left; width: 300px">
   &nbsp;
 </div>
 <div style="float: left; padding: 20px; ">
@@ -49,11 +54,27 @@
               <strong><%= attribute_name %></strong>
               <small>
                 <%= "(required)" if attribute.required %>
-                <%= "(allow: #{attribute.allow.to_sentence})" %>
+                <%= "(allow: #{attribute.allow.to_sentence  rescue binding.pry})" %>
               </small>
             </dt>
             <dd><%= attribute.description %></dd>
           </dl>
+      <% end %>
+
+      <h3>Relationships</h3>
+      <% resource.relationships.each do |relationship_name, relationship| %>
+          <ul>
+            <li>
+              <strong>
+                <a href="#resource/<%= relationship.resource %>">
+                  <%= relationship_name %>
+                </a>
+              </strong>
+              <small>
+                <%= "(allow: #{relationship.allow.to_sentence})" %>
+              </small>
+            </li>
+          </ul>
       <% end %>
   <% end %>
 </div>
