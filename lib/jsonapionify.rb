@@ -1,4 +1,4 @@
-require 'pry'
+require 'pry' rescue nil
 require 'core_ext/boolean_object'
 require "active_support/core_ext/string/inflections"
 require "active_support/core_ext/hash/keys"

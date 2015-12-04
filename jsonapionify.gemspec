@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", "~> 4.2"
   spec.add_dependency "faraday", "~> 0.9"
   spec.add_dependency "typhoeus", "~> 0.8"
+  spec.add_dependency "rack"
 
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rocco"
@@ -30,4 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "simplecov"
+  spec.add_development_dependency "navigable_hash"
+  spec.add_development_dependency "shotgun"
 end
