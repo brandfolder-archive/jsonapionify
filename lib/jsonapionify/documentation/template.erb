@@ -11,6 +11,8 @@
 
     <!-- Bootstrap -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/agate.min.css">    
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
     <style>
@@ -211,7 +213,7 @@
       code.inline {
         display: inline-block;
         padding: 0 5px;
-        background: white;
+        background: whiteSmoke;
         border: 1px solid #e7e7e7;
         -webkit-border-radius: 4px;
         border-radius: 4px;
@@ -227,22 +229,21 @@
         border-radius: 0px;
         position: relative;
         margin: 10px 0px;
-        padding: 10px 15px;
-        background: whiteSmoke;
+        padding: 0px;
         border: 1px solid #e1e8ed;
         font-size: 12px;
         line-height: 16px;        
       }
 
       pre.nostyle code {
-        padding: 0px;
-        margin: 0px;
-        background-color: transparent;
-        border-color: transparent;
+        padding: 10px 15px;
       }
-    </style>    
 
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+      .hljs {
+        background-color: #4c555a;
+      }
+
+    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -311,21 +312,35 @@
                 <h4 id="<%= resource_name %>-examples">Examples</h4>
                 <br>
                 Basic Request:
-                <pre class="nostyle"><code>GET /articles?include=author HTTP/1.1</code></pre>
-                <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1 422 Unprocessable Entity
+                <pre class="nostyle"><code>GET <%= api.base_url %>/<%= resource_name %>?slug=mapmyfitness HTTP/1.1</code></pre>
+                <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/vnd.api+json
 
 {
-  "errors": [
-    {
-      "source": { "pointer": "/data/attributes/first-name" },
-      "title": "Invalid Attribute",
-      "detail": "First name must contain at least three characters."
+  "data": [{
+    "type": "articles",
+    "id": "1",
+    "attributes": {
+      "title": "JSON API paints my bikeshed!",
+      "body": "The shortest article. Ever.",
+      "created": "2015-05-22T14:56:29.000Z",
+      "updated": "2015-05-22T14:56:28.000Z"
     },
+    "relationships": {
+      "author": {
+        "data": {"id": "42", "type": "people"}
+      }
+    }
+  }],
+  "included": [
     {
-      "source": { "pointer": "/data/attributes/first-name" },
-      "title": "Invalid Attribute",
-      "detail": "First name must contain an emoji."
+      "type": "people",
+      "id": "42",
+      "attributes": {
+        "name": "John",
+        "age": 80,
+        "gender": "male"
+      }
     }
   ]
 }</code></pre></div>
@@ -376,7 +391,8 @@ Content-Type: application/vnd.api+json
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/languages/http.min.js"></script>
     <script>
       $('body').scrollspy({
         target: '.bs-docs-sidebar',
