@@ -10,9 +10,9 @@
     <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAABU1BMVEUAAAAzerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerfsspsqAAAAcHRSTlMAAQIDBAYHCAkKCwwNDg8QERIUFRcYGxweICIjJSgqLC0vMDEyNjc6PD5AQUJDREVGR05PVFVXWVthYmZnaGltcHN4fH+AgoiPkZSXmJqdnqKoq62wtbm8vsHDxcfOz9HV19rc4Obo6evt8fX3+fv9oZ9KRwAAAeFJREFUWMPt1NdT1FAYhvE3YRFWLAsWxIYoIkWlCHZQmiCoIIIFFFFAl/78/1deGJ1NOCV4Zrza7y7fOc9vZjczkapTnZxzGXbvhwBjwNcQYBMYCegbAVoCgAFgPwoAloDXuW8XFt/EmQ1ApySp9G3Y23+Cd2mhFaAoSaUyjPp7GE/tJoBVSYp+gEf43XMvtSwDj//+GU4h6Z+klk0AzZKkmvduwdhrENhNXqJbMPf6ALz88+ASLH0tQIf8gqXXDYA6eYXCsrnXFPC5cmEWrL22gYfyCfb+LMA5eQR7rwfAdnaZFQor1l4rwJTcgqs/BtAup+DqdROgVi4hWnb0mgY+Gk8SYVgnANgrGm9FO8CQ2e4CYE3qB+B7venSeYAzxr4NgHJJTuERsOXrXcIXYNLbS30WoR7gmr+3CrcACjl6qdcozAJL1v50amkSoj1g4FB/3dRLdwFYrxQuADTm7E3CU2Azdy/dyQprwJjpC2fuDwnHAa4coZdup4RugJqj9BlhDlgw/P6f9l7qAWBGkuJ9oL/yMD7w9olwVZIuApxKHU76e6kb2iRJz4CNzOELfy+1JB/xdeB59rC9qLxzEuCS/n16gYM4AHgLzAf0MUBPANAA0BAAqHlk9ZWqU53/Nb8AOJAKnq/8xU4AAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
 
     <!-- Bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
     <style>
       body {
         font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
@@ -150,11 +150,10 @@
         list-style-type: none;
         font-size: 14px;
         padding-left: 0px;
-        background-color: whiteSmoke;
       }
 
       ul.attributes .row-attribute {
-        border-bottom: 1px solid #e1e8ed;
+        border-bottom: 1px solid #f0f4f7;
         padding: 15px 0px;
       }
 
@@ -209,7 +208,7 @@
         color: white;
       }
 
-      code {
+      code.inline {
         display: inline-block;
         padding: 0 5px;
         background: white;
@@ -221,7 +220,29 @@
         font-size: 12px;
         line-height: 20px;
       }
+
+      pre.nostyle {
+        padding: 0px;
+        margin: 0px;
+        border-radius: 0px;
+        position: relative;
+        margin: 10px 0px;
+        padding: 10px 15px;
+        background: whiteSmoke;
+        border: 1px solid #e1e8ed;
+        font-size: 12px;
+        line-height: 16px;        
+      }
+
+      pre.nostyle code {
+        padding: 0px;
+        margin: 0px;
+        background-color: transparent;
+        border-color: transparent;
+      }
     </style>    
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -278,7 +299,7 @@
                           <p class="optional"><%= "optional" if !attribute.required %></p>
                         </div>
                         <div class="col-xs-8 attribute-description">
-                          <p><%= attribute.description.gsub(/`(.*?)`/, "<code>\\1</code>") %></p>
+                          <p><%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %></p>
                           <p class="allowed">Allowed: <%= "#{attribute.allow.to_sentence}" %></p>                        
                         </div>
                         <div style="clear: both;"></div>
@@ -287,7 +308,28 @@
                   <% end %>
                 </ul>
 
-                <h4>Relationships</h4>
+                <h4 id="<%= resource_name %>-examples">Examples</h4>
+                <br>
+                Basic Request:
+                <pre class="nostyle"><code>GET /articles?include=author HTTP/1.1</code></pre>
+                <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/vnd.api+json
+
+{
+  "errors": [
+    {
+      "source": { "pointer": "/data/attributes/first-name" },
+      "title": "Invalid Attribute",
+      "detail": "First name must contain at least three characters."
+    },
+    {
+      "source": { "pointer": "/data/attributes/first-name" },
+      "title": "Invalid Attribute",
+      "detail": "First name must contain an emoji."
+    }
+  ]
+}</code></pre></div>
+                <h4 id="<%= resource_name %>-relationships">Relationships</h4>
                 <ul class="relationships">
                   <% resource.relationships.each do |relationship_name, relationship| %>
                     <li id="<%= resource_name %>-<%= relationship_name %>" class="subgroup">
@@ -309,10 +351,9 @@
                 <% api.resources.each do |resource_name, resource| %>
                     <li>
                       <a href="#<%= resource_name %>"><%= resource_name.titleize %></a>
-                        <ul class="nav nav-stacked hide">
-                            <% resource.relationships.each do |relationship_name, relationship| %>
-                              <li><a href="#<%= resource_name %>-<%= relationship_name %>"><%= relationship_name %></a></li>
-                            <% end %>
+                        <ul class="nav nav-stacked">
+                          <li><a href="#<%= resource_name %>-examples">Examples</a></li>
+                          <li><a href="#<%= resource_name %>-relationships">Relationships</a></li>
                         </ul>
                     </li>
                 <% end %>
@@ -332,9 +373,10 @@
     </footer>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>    
     <script>
       $('body').scrollspy({
         target: '.bs-docs-sidebar',
@@ -346,6 +388,8 @@
               top: $('#sidebar').offset().top
           }
       });
+
+      hljs.initHighlightingOnLoad();
 
       $("a[href^='#']").on('click', function(e) {
 
@@ -366,6 +410,6 @@
            });
 
       });
-    </script>    
+    </script>
   </body>
 </html>
