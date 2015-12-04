@@ -1,8 +1,10 @@
 {
   "title": "Brandfolder API",
   "base_url": "https://api.brandfolder.com",
+  "description": "Our API is awesome.",
   "resources": {
     "brandfolders": {
+      "description": "Good stuff here.",
       "attributes": {
         "name": {
           "description": "The name of the Brandfolder.",
