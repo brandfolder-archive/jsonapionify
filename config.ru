@@ -4,8 +4,8 @@ require 'jsonapionify'
 require 'navigable_hash'
 require 'json'
 
-hash = NavigableHash.new JSON.load File.read 'fixtures/documentation.json'
-docs = JSONAPIonify::Documentation.new(hash)
+api = NavigableHash.new JSON.load File.read 'fixtures/documentation.json'
+docs = JSONAPIonify::Documentation.new(api)
 result = docs.result
 
 run ->(_) {
