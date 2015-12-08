@@ -51,7 +51,7 @@ module JSONAPIonify::Api
 
       delete do
         collection.delete instance
-        self.destroyed = !collection.include? instance
+        self.destroyed = !collection.include?(instance)
       end
     end
 

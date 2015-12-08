@@ -7,7 +7,8 @@ module JSONAPIonify
 
     attr_reader :api
 
-    def initialize(api, template: File.join(__dir__, 'documentation/template.erb'))
+    def initialize(api, template: nil)
+      template ||= File.join(__dir__, 'documentation/template.erb')
       @api = api
       @erb = ERB.new File.read(template)
     end

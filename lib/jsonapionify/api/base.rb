@@ -1,3 +1,4 @@
+require 'redcarpet'
 require 'active_support/core_ext/module/delegation'
 
 module JSONAPIonify::Api
@@ -18,12 +19,49 @@ module JSONAPIonify::Api
         subclass.const_set(:ResourceBase, Class.new(Resource).set_api(subclass))
       end
 
-      def call(env)
-        server.call(env)
+      def title(title)
+        @title = title
       end
 
-      def server
+      def description(description)
+        @description = description
+      end
+
+      def api_server
         @server ||= Server.new(self)
+      end
+
+      def doc_server(template: nil)
+        ->(env) {
+          request  = Server::Request.new env
+          response = Rack::Response.new
+          response.write JSONAPIonify::Documentation.new(documentation_object(request), template: template).result
+          response.finish
+        }
+      end
+
+      def documentation_object(request)
+        title = @title || self.name
+        description = @description || ''
+        @documentation_object ||= Class.new(SimpleDelegator) do
+          define_method(:base_url) do
+            request.host
+          end
+
+          define_method(:title) do
+            title
+          end
+
+          define_method(:description) do
+            description
+          end
+
+          define_method(:resources) do
+            defined_resources.each_with_object({}) do |(name, _), hash|
+              hash[name.to_s] = resource(name).documentation_object(request)
+            end
+          end
+        end.new(self)
       end
 
       def defined_resources
@@ -31,7 +69,7 @@ module JSONAPIonify::Api
       end
 
       def resource(type)
-        type = type.to_sym
+        type       = type.to_sym
         const_name = type.to_s.camelcase
         return const_get(const_name) if const_defined? const_name
         raise ResourceNotDefined, "Resource not defined: #{type}" unless resource_defined?(type)

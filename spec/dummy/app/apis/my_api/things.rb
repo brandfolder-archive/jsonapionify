@@ -3,6 +3,10 @@ MyApi.define_resource :things do
 
   description <<-markdown
     Describes this resource
+
+    | a | b | c |
+    |---|---|---|
+    | 1 | 2 | 3 |
   markdown
 
   # DATA STUBS
@@ -22,8 +26,7 @@ MyApi.define_resource :things do
 
   id :id
   attribute :name, String, "The name of the things."
-  attribute :secret, String, "The name of the things.", read: false
-  #attribute :id, String, "The name of the things."
+  attribute :secret, String, "A super secret.", read: false
 
   scope do
     instances

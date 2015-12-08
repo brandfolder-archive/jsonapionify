@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday", "~> 0.9"
   spec.add_dependency "typhoeus", "~> 0.8"
   spec.add_dependency "rack"
+  spec.add_dependency "redcarpet"
 
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rocco"

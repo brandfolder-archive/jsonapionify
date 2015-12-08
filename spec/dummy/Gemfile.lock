@@ -5,6 +5,7 @@ PATH
       activesupport (~> 4.2)
       faraday (~> 0.9)
       rack
+      redcarpet
       typhoeus (~> 0.8)
 
 GEM
@@ -34,6 +35,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.6.4)
+    redcarpet (3.3.3)
     shotgun (0.9.1)
       rack (>= 1.0)
     slop (3.6.0)

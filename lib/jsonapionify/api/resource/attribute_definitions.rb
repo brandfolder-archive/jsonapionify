@@ -24,6 +24,13 @@ module JSONAPIonify::Api
       def write?
         !!@write
       end
+
+      def allow
+        Array.new.tap do |ary|
+          ary << 'read' if read?
+          ary << 'write' if write?
+        end
+      end
     end
 
     def self.extended(klass)

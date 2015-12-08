@@ -1,5 +1,5 @@
 module JSONAPIonify::Api
-  module Resource::RelationshipToMany
+  module Resource::RelationshipToOne
 
     def associate
 
