@@ -1,5 +1,5 @@
 module JSONAPIonify::Api::Actions
-  module Associate
+  module Disassociate
     extend ActiveSupport::Concern
 
     included do

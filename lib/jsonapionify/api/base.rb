@@ -5,7 +5,9 @@ module JSONAPIonify::Api
     class << self
       delegate :context, :header, :helper, :rescue_from, :error, to: :resource_class
 
-      def inherited(_)
+      ResourceNotDefined = Class.new StandardError
+
+      def inherited(subclass)
         super
         file     = caller[0].split(/\:\d/)[0]
         dir      = File.expand_path File.dirname(file)
@@ -13,6 +15,7 @@ module JSONAPIonify::Api
         Dir.glob(File.join(dir, basename, '**/*.rb')).each do |file|
           require file
         end
+        subclass.const_set(:ResourceBase, Class.new(Resource).set_api(subclass))
       end
 
       def call(env)
@@ -23,23 +26,20 @@ module JSONAPIonify::Api
         @server ||= Server.new(self)
       end
 
-      def description(string)
-      end
-
       def defined_resources
         @defined_resources ||= {}
       end
 
-      def resource_classes
-        @resource_classes ||= {}
+      def resource(type)
+        type = type.to_sym
+        const_name = type.to_s.camelcase
+        return const_get(const_name) if const_defined? const_name
+        raise ResourceNotDefined, "Resource not defined: #{type}" unless resource_defined?(type)
+        const_set const_name, Class.new(const_get(:ResourceBase), &defined_resources[type]).set_type(type)
       end
 
-      def resource_class
-        @resource_class ||= Class.new(Resource).set_api(self)
-      end
-
-      def resource(name)
-        resource_classes[name] ||= Class.new(resource_class, &defined_resources[name])
+      def resource_defined?(name)
+        !!defined_resources[name]
       end
 
       def resources
@@ -49,6 +49,8 @@ module JSONAPIonify::Api
       end
 
       def define_resource(name, &block)
+        const_name = name.to_s.camelcase
+        remove_const(const_name) if const_defined? const_name
         defined_resources[name.to_sym] = block
       end
 

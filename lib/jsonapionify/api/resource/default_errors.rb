@@ -2,22 +2,12 @@ module JSONAPIonify::Api
   module Resource::DefaultErrors
     extend ActiveSupport::Concern
     included do
-      error :not_found do
-        title 'Not Found'
-        detail 'The resource could not be found'
-        status '404'
-      end
-
-      error :method_not_allowed do
-        title 'Method Not Allowed'
-        detail 'The provided method is not allowed'
-        status '405'
-      end
-
-      error :unknown_error do
-        title 'Unknown Error'
-        detail 'An unknown error occurred'
-        status '500'
+      Rack::Utils::SYMBOL_TO_STATUS_CODE.each do |symbol, code|
+        message = Rack::Utils::HTTP_STATUS_CODES[code]
+        error symbol do
+          title message
+          status code.to_s
+        end
       end
 
       error :missing_data do
@@ -31,8 +21,15 @@ module JSONAPIonify::Api
         detail 'missing attributes member'
       end
 
+      error :input_error do
+        set input.errors
+      end
+
+      error :output_error do
+      end
+
       error :invalid_resource do
-        title 'invalid resource'
+        title 'Invalid Resource'
         status '404'
       end
     end

@@ -18,11 +18,11 @@ module JSONAPIonify::Structure
       value_is Objects::Base
 
       def initialize(array = [])
-        observe(added: ->(_, items) {
+        observe.added do |items|
           items.each do |item|
             item.instance_variable_set(:@parent, self) unless item.frozen?
           end
-        })
+        end
         array.each do |instance|
           self << instance
         end
@@ -30,6 +30,12 @@ module JSONAPIonify::Structure
 
       def original_method(method)
         Array.instance_method(method).bind(self)
+      end
+
+      def validate
+        each do |member|
+          member.validate if member.respond_to? :validate
+        end
       end
 
       def new(**attributes)
@@ -69,6 +75,7 @@ module JSONAPIonify::Structure
           end
         end
       end
+
       alias_method :all_warnings, :warnings
 
     end

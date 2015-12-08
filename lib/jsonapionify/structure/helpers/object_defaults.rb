@@ -67,9 +67,7 @@ module JSONAPIonify::Structure
           super
         elsif collections[k]
           @unset[k] ||= [].tap do |ary|
-            observe ary, added: -> {
-              self[k] = ary
-            }
+            observe(ary).added { self[k] = ary }
           end
         else
           nil

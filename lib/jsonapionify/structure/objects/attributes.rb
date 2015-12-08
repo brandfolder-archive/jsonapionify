@@ -16,7 +16,7 @@ module JSONAPIonify::Structure
       # or relationship named `type` or `id`.
       must_not_contain! :type, :id
       validate_each! message: 'conflicts with a relationship key' do |obj, key, _|
-        !obj.parent || !obj.parent.relationship_keys.include?(key)
+        !obj.parent || !obj.parent.relationship_keys.include?(key) rescue binding.pry
       end
 
       # Although has-one foreign keys (e.g. `author_id`) are often stored internally

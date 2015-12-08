@@ -16,4 +16,8 @@ module JSONAPIonify
     hash = JSON.parse(hash) if hash.is_a? String
     Structure::Objects::TopLevel.from_hash(hash)
   end
+
+  def self.new_object
+    Structure::Objects::TopLevel.new
+  end
 end

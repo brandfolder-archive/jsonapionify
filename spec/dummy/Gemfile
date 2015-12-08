@@ -2,4 +2,5 @@ source 'https://rubygems.org'
 
 gem 'jsonapionify', path: '../..'
 gem 'shotgun'
+gem 'faker'
 gem 'pry'

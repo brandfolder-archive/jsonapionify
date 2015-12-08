@@ -11,10 +11,15 @@ module JSONAPIonify::Api
     end
 
     extend ClassMethods
-    include ActiveSupport::Rescuable
+    extend ActionDefinitions
+    extend AttributeDefinitions
+    extend ScopeDefinitions
+    extend HelperDefinitions
+    extend RelationshipDefinitions
+
+    include ErrorHandling
     include DefaultContexts
     include DefaultErrors
-    include DefaultActions
     include DefaultHelpers
 
     def initialize(req)
@@ -28,46 +33,14 @@ module JSONAPIonify::Api
       @headers ||= {}
     end
 
-    def process(&block)
-      instance_eval(&block) if block_given?
-      return error_response if context.errors.present?
-      response
+    def process(action_block = nil, response_block = nil)
+      action_block   ||= proc {}
+      response_block ||= proc {}
+      instance_eval(&action_block)
+      return error_response if errors.present?
+      instance_eval(&response_block)
     rescue error_exception
       error_response
-    end
-
-    def error(name, **options)
-      error = self.class.error_definitions[name]
-      raise ArgumentError, "Error does not exist: #{error}" unless error
-      context.errors.evaluate(**options, &self.class.error_definitions[name])
-    end
-
-    def error_now(*args)
-      error(*args)
-      raise error_exception
-    end
-
-    private
-
-    def error_exception
-      @error_exception ||= Class.new(StandardError)
-    end
-
-    def error_response
-      Rack::Response.new.tap do |response|
-        error_collection = context.errors.collection
-        status_codes     = error_collection.map { |error| error[:status] }.compact.uniq.sort
-        response.status  =
-          if status_codes.length == 1
-            status_codes[0].to_i
-          elsif status_codes.blank?
-            500
-          else
-            (status_codes.last[0] + "00").to_i
-          end
-        headers.each { |k, v| response.headers[k] = v }
-        response.write({ errors: error_collection }.to_json)
-      end.finish
     end
 
   end

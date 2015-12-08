@@ -16,7 +16,7 @@ module JSONAPIonify
         options.each do |k, v|
           public_send(k, v)
         end
-        new(self).instance_eval(&block)
+        instance_eval(&block)
       end
 
       Structure::Objects::Error.permitted_keys.each do |key|
@@ -37,6 +37,10 @@ module JSONAPIonify
       def parameter(value)
         latest_error[:source]             ||= {}
         latest_error[:source][:parameter] = value
+      end
+
+      def set(collection)
+        @collection = collection
       end
 
       private

@@ -27,11 +27,11 @@ module JSONAPIonify::Structure
 
       before_initialize do
         @object = {}
-        observe(@object, added: ->(_, items) {
+        observe(@object).added do |items|
           items.each do |_, value|
             value.instance_variable_set(:@parent, self) unless value.frozen?
           end
-        })
+        end
       end
 
       def self.from_hash(hash)
@@ -89,12 +89,13 @@ module JSONAPIonify::Structure
       end
 
       def validate
+        object.values.each { |val| val.validate if val.respond_to? :validate }
         [errors, warnings].each(&:clear)
         run_callbacks :validation do
           collect_child_errors
           collect_child_warnings
         end
-        errors.present?
+        errors.blank?
       end
 
 

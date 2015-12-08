@@ -5,13 +5,7 @@ module JSONAPIonify::Structure
       using JSONAPIonify::UnstrictProc
 
       module ClassMethods
-        # Raise the validation errors
-        def validation_error(message)
-          message = "#{name}: #{message}"
-          Helpers::ValidationError.new(message)
-        end
-
-        def inherited(subclass)
+        private def inherited(subclass)
           vars = %i{
           required_keys
           permitted_keys
@@ -22,6 +16,12 @@ module JSONAPIonify::Structure
           vars.each do |var|
             subclass.send "#{var}=", send(var).dup
           end
+        end
+
+        # Raise the validation errors
+        def validation_error(message)
+          message = "#{name}: #{message}"
+          Helpers::ValidationError.new(message)
         end
 
         # Validations
@@ -189,7 +189,7 @@ module JSONAPIonify::Structure
       end
 
       included do
-        delegate :validation_error, to: :class
+        delegate *ClassMethods.instance_methods, to: :class
         class_attribute :allow_only_permitted, :implementations, :collections, instance_writer: false
         class_attribute :allowed_type_map, :permitted_keys, :required_keys, instance_accessor: false
         self.allow_only_permitted = false
