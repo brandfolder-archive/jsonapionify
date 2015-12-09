@@ -3,12 +3,13 @@ require 'active_support/core_ext/module/delegation'
 module JSONAPIonify
   module Api
     class ErrorsObject
-      attr_reader :context
 
       delegate :present?, to: :collection
 
-      def initialize(context)
-        @context = context
+      Structure::Objects::Error.permitted_keys.each do |key|
+        define_method(key) do |value|
+          latest_error[key] = value
+        end
       end
 
       def evaluate(**options, &block)
@@ -19,10 +20,14 @@ module JSONAPIonify
         instance_eval(&block)
       end
 
-      Structure::Objects::Error.permitted_keys.each do |key|
-        define_method(key) do |value|
-          latest_error[key] = value
+      def top_level
+        JSONAPIonify.new_object.tap do |obj|
+          obj[:errors] = collection
         end
+      end
+
+      def meta
+        JSONAPIonify::Structure::Helpers::MetaDelegate.new latest_error
       end
 
       def collection

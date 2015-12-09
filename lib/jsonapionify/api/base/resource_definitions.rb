@@ -11,9 +11,9 @@ module JSONAPIonify::Api
       raise ArgumentError, 'type required' if type.nil?
       type       = type.to_sym
       const_name = type.to_s.camelcase
-      return const_get(const_name) if const_defined? const_name
+      return const_get(const_name, false) if const_defined?(const_name, false)
       raise ResourceNotDefined, "Resource not defined: #{type}" unless resource_defined?(type)
-      const_set const_name, Class.new(const_get(:ResourceBase), &defined_resources[type]).set_type(type)
+      const_set const_name, Class.new(resource_class, &defined_resources[type]).set_type(type)
     end
 
     def resource_defined?(name)

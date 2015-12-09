@@ -2,23 +2,6 @@ module JSONAPIonify::Api
   module Resource::DefaultContexts
     extend ActiveSupport::Concern
 
-    class MetaDelegate
-      attr_reader :object
-
-      def initialize(object)
-        @object = object
-      end
-
-      def []=(k, v)
-        object[:meta]    ||= {}
-        object[:meta][k] = v
-      end
-
-      def [](k)
-        object[:meta] && object[:meta][k]
-      end
-    end
-
     included do
       context(:id, readonly: true) do |request|
         request.env['jsonapionify.id']
@@ -33,11 +16,11 @@ module JSONAPIonify::Api
       end
 
       context(:links, readonly: true) do |_, context|
-        context.output_object[:links]
+        context[:output_object][:links]
       end
 
       context(:meta, readonly: true) do |_, context|
-        MetaDelegate.new context.output_object
+        JSONAPIonify::Structure::Helpers::MetaDelegate.new context[:output_object]
       end
 
       context(:request, readonly: true) do |request|
@@ -50,8 +33,8 @@ module JSONAPIonify::Api
         end
       end
 
-      context(:input_attributes, readonly: true) do |request, context|
-        context.input_resource.fetch(:attributes) { error_now :missing_attributes }.tap do |attributes|
+      context(:input_attributes, readonly: true) do |_, context|
+        context[:input_resource].fetch(:attributes) { error_now :missing_attributes }.tap do |attributes|
           writable_attributes = self.class.attributes.select(:write?)
           required_attributes = writable_attributes.select(&:required?)
           optional_attributes = writable_attributes.select(&:optional?)
@@ -79,7 +62,7 @@ module JSONAPIonify::Api
       end
 
       context(:input_resource, readonly: true) do |_, context|
-        item = context.input.fetch(:data) {
+        item = context[:input].fetch(:data) {
           error_now :missing_data
         }
         find_resource item, pointer: 'data'
@@ -89,14 +72,15 @@ module JSONAPIonify::Api
         request.params
       end
 
-      context(:errors, readonly: true) do |_, context|
-        ErrorsObject.new(context)
+      context(:errors, readonly: true) do
+        ErrorsObject.new
       end
 
       id :id
-      collection { [] }
-      instance { nil }
-      new_instance { nil }
+      scope { raise NotImplementedError, 'scope not implemented' }
+      collection { raise NotImplementedError, 'collection not implemented' }
+      instance { raise NotImplementedError, 'instance not implemented' }
+      new_instance { raise NotImplementedError, 'new instance not implemented' }
 
     end
 

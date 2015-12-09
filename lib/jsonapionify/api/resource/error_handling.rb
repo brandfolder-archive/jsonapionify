@@ -42,6 +42,10 @@ module JSONAPIonify::Api
       raise error_exception
     end
 
+    def error_meta
+      errors.meta
+    end
+
     private
 
     def error_exception
@@ -62,7 +66,7 @@ module JSONAPIonify::Api
           end
         headers.each { |k, v| response.headers[k] = v }
         response.headers['content-type'] = 'application/vnd.api+json'
-        response.write(JSONAPIonify.parse(errors: error_collection).to_json)
+        response.write(errors.top_level.to_json)
       end.finish
     end
 

@@ -15,8 +15,8 @@ module JSONAPIonify::Api
           links:         JSONAPIonify::Structure::Objects::Links.new(
             self: resource_url
           ),
-          relationships: relationship_definitions.each_with_object(JSONAPIonify::Structure::Maps::Relationships.new) do |(name, _), hash|
-            hash[name] = build_relationship(request, instance, name)
+          relationships: relationship_definitions.each_with_object(JSONAPIonify::Structure::Maps::Relationships.new) do |rel, hash|
+            hash[rel.name] = build_relationship(request, instance, rel.name)
           end
         )
       end

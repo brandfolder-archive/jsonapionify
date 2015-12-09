@@ -5,7 +5,7 @@ module JSONAPIonify::Api
     def initialize(name, content_type: 'application/vnd.api+json', &block)
       @name          = name
       @content_type  = content_type
-      @request_block = block
+      @request_block = block || proc {}
       @responses     = []
     end
 
@@ -51,6 +51,14 @@ module JSONAPIonify::Api
               error_now(:not_acceptable)
           response_definition.call(self)
         rescue error_exception
+          error_response
+        rescue Exception => e
+          error(:internal_server_error)
+          if ENV['RACK_ENV'] = 'development'
+            errors.detail e.message
+            errors.meta[:error_class] = e.class.name
+            errors.meta[:backtrace]   = e.backtrace
+          end
           error_response
         end
       end

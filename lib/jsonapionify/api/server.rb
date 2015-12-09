@@ -63,7 +63,15 @@ module JSONAPIonify::Api
       end
 
       def response
-        resource && more.blank? ? call_resource : call_api_index
+        if resource && more.blank?
+          call_resource
+        elsif resource.nil?
+          call_api_index
+        else
+          Resource::Http.process(:not_found, request)
+        end
+      rescue ResourceNotDefined
+        Resource::Http.process(:not_found, request)
       end
 
       private
@@ -82,7 +90,7 @@ module JSONAPIonify::Api
         elsif request.delete?
           resource.process(:delete, request)
         else
-          call_method_not_allowed
+          Resource::Http.process(:method_not_allowed, request)
         end
       end
 
@@ -92,7 +100,7 @@ module JSONAPIonify::Api
         elsif request.post?
           resource.process(:create, request)
         else
-          call_method_not_allowed
+          Resource::Http.process(:method_not_allowed, request)
         end
       end
 
@@ -107,43 +115,33 @@ module JSONAPIonify::Api
       def call_resource_relationship
         return call_not_found unless relationship
         if request.get?
-          relationship.process(:related_ids, request)
-        elsif request.patch? && relationship < Resource::RelationshipToOne
-          relationship.process(:update_association, request)
-        elsif request.patch? && relationship < Resource::RelationshipToMany
-          relationship.process(:update_all_associations, request)
-        elsif request.put? && relationship < Resource::RelationshipToMany
-          relationship.process(:associate_many, request)
-        elsif request.delete? && relationship < Resource::RelationshipToMany
-          relationship.process(:disassociate, request)
+          relationship.process(:show_relationship, request)
+        elsif request.patch?
+          relationship.process(:replace_relationship, request)
+        elsif request.put? && relationship.rel.is_a?(Relationship::Many)
+          relationship.process(:update_relationship, request)
+        elsif request.delete? && relationship.rel.is_a?(Relationship::Many)
+          relationship.process(:remove_relationship, request)
         else
-          call_method_not_allowed
+          Resource::Http.process(:method_not_allowed, request)
         end
       end
 
       def call_resource_related
         return call_not_found unless relationship
-        if request.get?
-          relationship.process(:related, request)
-        elsif request.post? && relationship < Resource::RelationshipToMany
+        if request.get? && relationship.rel.is_a?(Relationship::Many)
+          relationship.process(:index, request)
+        elsif request.get? && relationship.rel.is_a?(Relationship::One)
+          relationship.process(:read, request)
+        elsif request.post? && relationship.rel.is_a?(Relationship::Many)
           relationship.process(:create, request)
-        elsif request.delete? && relationship < Resource::RelationshipToMany
-          relationship.process(:delete, request)
         else
-          call_method_not_allowed
+          Resource::Http.process(:method_not_allowed, request)
         end
       end
 
       def call_api_index
         api.process_index(request)
-      end
-
-      def call_not_found
-        api.resource_class.process(nil, request)
-      end
-
-      def call_method_not_allowed
-        api.resource_class.process(nil, request)
       end
 
       def relationship

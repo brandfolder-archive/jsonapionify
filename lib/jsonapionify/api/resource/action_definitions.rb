@@ -10,7 +10,7 @@ module JSONAPIonify::Api
     end
 
     def index(**options, &block)
-      action(:index, **options, &block).response status: 200 do
+      define_action(:index, **options, &block).response status: 200 do
         output_object[:data] = paginated_collection.map do |instance|
           build_resource instance
         end
@@ -20,7 +20,7 @@ module JSONAPIonify::Api
     end
 
     def create(**options, &block)
-      action(:create, **options, &block).response status: 201 do
+      define_action(:create, **options, &block).response status: 201 do
         JSONAPIonify.new_object.tap do |json|
           json[:data] = attributes.select(&:read?).each_with_object({}) do |field, attributes|
             attributes[field] = instance.public_send(value)
@@ -30,15 +30,15 @@ module JSONAPIonify::Api
     end
 
     def read(**options, &block)
-      action(:read, **options, &block).response status: 200 do
+      define_action(:read, **options, &block).response status: 200 do
         output_object[:data] = build_resource(instance)
-        meta[:collection] = self.class.get_url request.root_url
+        meta[:collection]    = self.class.get_url request.root_url
         output_object.to_json
       end
     end
 
     def update(**options, &block)
-      action(:update, **options, &block).response status: 200 do
+      define_action(:update, **options, &block).response status: 200 do
         JSONAPIonify.new_object.tap do |json|
           json[:data] = attributes.select(&:read?).each_with_object({}) do |field, attributes|
             attributes[field] = instance.public_send(value)
@@ -48,23 +48,31 @@ module JSONAPIonify::Api
     end
 
     def delete(**options, &block)
-      action(:delete, **options, &block).response status: 204
+      define_action(:delete, **options, &block).response status: 204
     end
 
     def process(action_name, request)
-      action_definition = action_definitions.find do |action_definition|
-        action_definition.name == action_name && action_definition.supports?(request)
-      end || Action::NotFound
-
-      action_definition.call(self, request)
+      find_supported_action(action_name, request).call(self, request)
     end
 
     private
 
-    def action(name, content_type: nil, &block)
+    def define_action(name, content_type: nil, &block)
       Action.new(name, content_type: content_type, &block).tap do |new_action|
-        action_definitions.delete new_action
+        remove_action name, content_type: content_type
         action_definitions << new_action
+      end
+    end
+
+    def find_supported_action(action_name, request)
+      action_definitions.find do |action_definition|
+        action_definition.name == action_name && action_definition.supports?(request)
+      end || Action::NotFound
+    end
+
+    def remove_action(*names)
+      action_definitions.delete_if do |action_defintion|
+        names.include? action_defintion.name
       end
     end
   end

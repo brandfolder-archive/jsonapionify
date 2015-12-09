@@ -10,14 +10,16 @@ module JSONAPIonify::Api
     end
 
     def context(name, readonly: false, &block)
-      self.context_definitions = self.context_definitions.merge name.to_sym => block
+      self.context_definitions[name.to_sym] = block
       define_method(name) do
-        @context.public_send(name)
+        @context[name]
       end
 
       define_method("#{name}=") do |value|
-        @context.public_send("#{name}=", value)
+        @context[name] = value
       end unless readonly
+    rescue
+      binding.pry
     end
 
     def header(name, &block)

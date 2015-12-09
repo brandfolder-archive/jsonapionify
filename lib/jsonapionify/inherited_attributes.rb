@@ -12,7 +12,7 @@ module JSONAPIonify
 
         # Define Setter
         define_singleton_method setter do |value|
-          instance_variable_get(ivar).replace(value)
+          instance_variable_get(ivar).tap(&:clear).merge! value
         end
 
         # Define Getter
@@ -21,24 +21,25 @@ module JSONAPIonify
         end
 
         # Define Inheritor
-        existing_inheritor = method(:inherited)
-        define_singleton_method :inherited do |subclass|
-          # Call previous inheritor
-          existing_inheritor.call(subclass)
+        mod = Module.new do
+          define_method :inherited do |subclass|
+            super(subclass)
 
-          # Set subclass variable
-          subclass.instance_variable_set(ivar, Hash.new)
-          parent_var   = instance_variable_get(ivar)
-          subclass_var = subclass.instance_variable_get(ivar)
+            # Set subclass variable
+            subclass.instance_variable_set(ivar, Hash.new)
+            parent_var   = instance_variable_get(ivar)
+            subclass_var = subclass.instance_variable_get(ivar)
 
-          # Merge changes from parent
-          subclass_var.deep_merge!(parent_var)
+            # Merge changes from parent
+            subclass_var.deep_merge!(parent_var)
 
-          # Observe
-          observer = EnumerableObserver.observe(parent_var)
-          observer.added { |items| subclass_var.deep_merge! items.to_h }
-          observer.removed { |items| subclass_var.delete_if { |k, v| items.to_h[k] == v } }
+            # Observe
+            observer = EnumerableObserver.observe(parent_var)
+            observer.added { |items| subclass_var.deep_merge! items.to_h }
+            observer.removed { |items| subclass_var.delete_if { |k, v| items.to_h[k] == v } }
+          end
         end
+        extend mod
       end
     end
 
@@ -62,24 +63,25 @@ module JSONAPIonify
         end
 
         # Define Inheritor
-        existing_inheritor = method(:inherited)
-        define_singleton_method :inherited do |subclass|
-          # Call previous inheritor
-          existing_inheritor.call(subclass)
+        mod = Module.new do
+          define_method :inherited do |subclass|
+            super(subclass)
 
-          # Set subclass variable
-          subclass.instance_variable_set(ivar, Array.new)
-          parent_var   = instance_variable_get(ivar)
-          subclass_var = subclass.instance_variable_get(ivar)
+            # Set subclass variable
+            subclass.instance_variable_set(ivar, Array.new)
+            parent_var   = instance_variable_get(ivar)
+            subclass_var = subclass.instance_variable_get(ivar)
 
-          # Merge changes from parent
-          subclass_var.concat(parent_var)
+            # Merge changes from parent
+            subclass_var.concat(parent_var)
 
-          # Observe
-          observer = EnumerableObserver.observe(parent_var)
-          observer.added { |items| subclass_var.concat items }
-          observer.removed { |items| items.each { |item| subclass_var.delete item } }
+            # Observe
+            observer = EnumerableObserver.observe(parent_var)
+            observer.added { |items| subclass_var.concat items }
+            observer.removed { |items| items.each { |item| subclass_var.delete item } }
+          end
         end
+        extend mod
       end
     end
 

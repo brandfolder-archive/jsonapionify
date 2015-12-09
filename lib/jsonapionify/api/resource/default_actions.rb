@@ -2,20 +2,11 @@ module JSONAPIonify::Api
   module Resource::DefaultActions
     extend ActiveSupport::Concern
     included do
-      index do
-      end
-
-      create do
-      end
-
-      read do
-      end
-
-      update do
-      end
-
-      delete do
-      end
+      index
+      create
+      read
+      update
+      delete
     end
   end
 end
