@@ -75,12 +75,17 @@ module JSONAPIonify::Structure
                                  Collections::ResourceIdentifiers
                                ]
 
-      def compile
-        compiled = super
+      def compile(*)
+        compiled        = super
         compiled_errors = compiled['errors'] || []
-        all_errors = compiled_errors | errors.as_collection.compile
+        all_errors      = compiled_errors | errors.as_collection.compile
         if all_errors.present?
-          { errors: all_errors }.as_json
+          self.class.new(
+            errors: all_errors,
+            meta:   {
+              invalid_object: to_hash
+            }
+          ).compile
         else
           compiled
         end

@@ -3,7 +3,7 @@ class JSONAPIonify::Api::Resource
 
     def self.extended(klass)
       klass.class_eval do
-        extend JSONAPIonify::InheritedHashAttributes
+        extend JSONAPIonify::InheritedAttributes
         inherited_hash_attribute :relationship_definitions
       end
     end
@@ -13,6 +13,13 @@ class JSONAPIonify::Api::Resource
       relationship_definitions[name] = [resource, proc do
         include RelationshipToMany
         instance_eval(&block) if block_given?
+
+        define_singleton_method(:build_links) do |base_url|
+          JSONAPIonify::Structure::Maps::RelationshipLinks.new(
+            self:    File.join(base_url, 'relationships', name.to_s),
+            related: File.join(base_url, name.to_s)
+          )
+        end
 
         define_singleton_method(:allow) do
           Array.new.tap do |ary|
@@ -28,6 +35,13 @@ class JSONAPIonify::Api::Resource
       relationship_definitions[name] = [resource, proc do
         include RelationshipToOne
         instance_eval(&block) if block_given?
+
+        define_singleton_method(:build_links) do |base_url|
+          JSONAPIonify::Structure::Maps::RelationshipLinks.new(
+            self:    File.join(base_url, 'relationships', name.to_s),
+            related: File.join(base_url, name.to_s)
+          )
+        end
 
         define_singleton_method(:allow) do
           Array.new.tap do |ary|
@@ -45,8 +59,6 @@ class JSONAPIonify::Api::Resource
       raise RelationshipNotDefined, "Relationship not defined: #{name}" unless relationship_defined?(name)
       resource, class_proc = relationship_definitions[name]
       const_set const_name, Class.new(api.resource(resource), &class_proc)
-    rescue
-      binding.pry
     end
 
     def relationship_defined?(name)

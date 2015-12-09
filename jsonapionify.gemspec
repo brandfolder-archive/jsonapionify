@@ -23,6 +23,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "typhoeus", "~> 0.8"
   spec.add_dependency "rack"
   spec.add_dependency "redcarpet"
+  spec.add_dependency "oj"
+  spec.add_dependency "parallel"
+  spec.add_dependency "ruby-progressbar"
 
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rocco"
@@ -33,5 +36,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "navigable_hash"
-  spec.add_development_dependency "shotgun"
 end

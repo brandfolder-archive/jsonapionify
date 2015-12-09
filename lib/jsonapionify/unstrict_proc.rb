@@ -10,7 +10,7 @@ module JSONAPIonify
           elsif req_count < arguments.count
             arguments = req_count == 0 ? [] : arguments[0..(req_count - 1)]
           end
-          call(*arguments) rescue puts "failed" && raise
+          call(*arguments)
         end
       end
 

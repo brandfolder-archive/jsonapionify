@@ -312,7 +312,7 @@
                 <h4 id="<%= resource_name %>-examples">Examples</h4>
                 <br>
                 Basic Request:
-                <pre class="nostyle"><code>GET <%= api.base_url %>/<%= resource_name %>?slug=mapmyfitness HTTP/1.1</code></pre>
+                <pre class="nostyle"><code>GET <%= api.base_url %>/<%= resource_name %>/:id HTTP/1.1</code></pre>
                 <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/vnd.api+json
 

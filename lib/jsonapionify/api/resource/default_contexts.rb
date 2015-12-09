@@ -2,21 +2,55 @@ module JSONAPIonify::Api
   module Resource::DefaultContexts
     extend ActiveSupport::Concern
 
+    class MetaDelegate
+      attr_reader :object
+
+      def initialize(object)
+        @object = object
+      end
+
+      def []=(k, v)
+        object[:meta]    ||= {}
+        object[:meta][k] = v
+      end
+
+      def [](k)
+        object[:meta] && object[:meta][k]
+      end
+    end
+
     included do
-      context(:id) do |request|
+      context(:id, readonly: true) do |request|
         request.env['jsonapionify.id']
       end
 
-      context(:input) do |request|
+      context(:output_object, readonly: true) do |request|
+        JSONAPIonify.parse(
+          links: {
+            self: request.url
+          }
+        )
+      end
+
+      context(:links, readonly: true) do |_, context|
+        context.output_object[:links]
+      end
+
+      context(:meta, readonly: true) do |_, context|
+        MetaDelegate.new context.output_object
+      end
+
+      context(:request, readonly: true) do |request|
+        request
+      end
+
+      context(:input, readonly: true) do |request|
         JSONAPIonify.parse(request.body.read).tap do |input|
-          input.validate
-          if input.errors.present?
-            error_now :input_errors
-          end
+          error_now :input_errors unless input.validate
         end
       end
 
-      context :input_attributes do |request, context|
+      context(:input_attributes, readonly: true) do |request, context|
         context.input_resource.fetch(:attributes) { error_now :missing_attributes }.tap do |attributes|
           writable_attributes = self.class.attributes.select(:write?)
           required_attributes = writable_attributes.select(&:required?)
@@ -28,7 +62,7 @@ module JSONAPIonify::Api
         end
       end
 
-      context :input_resources do
+      context(:input_resources, readonly: true) do
         should_error = false
         data         = input.fetch(:data) {
           error_now :missing_data
@@ -44,20 +78,25 @@ module JSONAPIonify::Api
         instances
       end
 
-      context :input_resource do |request, context|
+      context(:input_resource, readonly: true) do |_, context|
         item = context.input.fetch(:data) {
           error_now :missing_data
         }
         find_resource item, pointer: 'data'
       end
 
-      context(:params) do |request|
+      context(:params, readonly: true) do |request|
         request.params
       end
 
-      context(:errors) do |_, context|
+      context(:errors, readonly: true) do |_, context|
         ErrorsObject.new(context)
       end
+
+      id :id
+      collection { [] }
+      instance { nil }
+      new_instance { nil }
 
     end
 

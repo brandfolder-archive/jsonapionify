@@ -4,6 +4,9 @@
   "description": "Our API is awesome.",
   "resources": {
     "brandfolders": {
+      "actions": {
+
+      },
       "description": "Good stuff here.",
       "attributes": {
         "name": {

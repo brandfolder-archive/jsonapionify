@@ -32,6 +32,13 @@ module JSONAPIonify::Api
       def has_body?
         body.read(1).present?
       end
+
+      def root_url
+        URI.parse(url).tap do |uri|
+          uri.query = nil
+          uri.path.chomp! path_info
+        end.to_s
+      end
     end
 
     attr_reader :api
@@ -50,13 +57,13 @@ module JSONAPIonify::Api
       def initialize(env, api)
         @api     = api
         @request = Request.new(env)
-        request.path.split('/').tap(&:shift).tap do |parts|
+        request.path_info.split('/').tap(&:shift).tap do |parts|
           @resource, @id, @relationship, @relationship_name, *@more = parts
         end
       end
 
       def response
-        resource && more.blank? ? call_resource : call_not_found
+        resource && more.blank? ? call_resource : call_api_index
       end
 
       private
@@ -127,12 +134,16 @@ module JSONAPIonify::Api
         end
       end
 
+      def call_api_index
+        api.process_index(request)
+      end
+
       def call_not_found
-        api.resource_class.process_not_found(request)
+        api.resource_class.process(nil, request)
       end
 
       def call_method_not_allowed
-        api.resource_class.process_method_not_allowed(request)
+        api.resource_class.process(nil, request)
       end
 
       def relationship
@@ -144,7 +155,7 @@ module JSONAPIonify::Api
       end
 
       def resource
-        api.resource(@resource)
+        @resource && api.resource(@resource)
       end
     end
   end

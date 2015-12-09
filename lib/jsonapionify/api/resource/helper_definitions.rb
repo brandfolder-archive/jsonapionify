@@ -1,6 +1,15 @@
 module JSONAPIonify::Api
   module Resource::HelperDefinitions
-    def context(name, &block)
+
+    def self.extended(klass)
+      klass.class_eval do
+        extend JSONAPIonify::InheritedAttributes
+
+        inherited_hash_attribute :header_definitions, :context_definitions
+      end
+    end
+
+    def context(name, readonly: false, &block)
       self.context_definitions = self.context_definitions.merge name.to_sym => block
       define_method(name) do
         @context.public_send(name)
@@ -8,7 +17,7 @@ module JSONAPIonify::Api
 
       define_method("#{name}=") do |value|
         @context.public_send("#{name}=", value)
-      end
+      end unless readonly
     end
 
     def header(name, &block)
@@ -16,34 +25,8 @@ module JSONAPIonify::Api
     end
 
     def helper(name, &block)
-      # self.context_definitions = self.context_definitions.merge name.to_sym => block
       define_method(name, &block)
     end
 
-    def context_definitions=(hash)
-      @context_definitions = hash
-    end
-
-    def context_definitions
-      @context_definitions ||= {}
-      if superclass.respond_to?(:context_definitions)
-        superclass.context_definitions.merge(@context_definitions)
-      else
-        @context_definitions
-      end
-    end
-
-    def header_definitions=(hash)
-      @header_definitions = hash
-    end
-
-    def header_definitions
-      @header_definitions ||= {}
-      if superclass.respond_to?(:header_definitions)
-        superclass.header_definitions.merge(@header_definitions)
-      else
-        @header_definitions
-      end
-    end
   end
 end

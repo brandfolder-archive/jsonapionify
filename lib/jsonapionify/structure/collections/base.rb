@@ -7,8 +7,6 @@ module JSONAPIonify::Structure
       include Helpers::InheritsOrigin
       attr_reader :parent
 
-      alias_method :compile, :as_json
-
       def self.value_is(type_class)
         define_method(:type_class) do
           type_class
@@ -36,6 +34,21 @@ module JSONAPIonify::Structure
         each do |member|
           member.validate if member.respond_to? :validate
         end
+      end
+
+      def collect_hashes
+        map do |member|
+          case member
+          when Objects::Base, Hash
+            member.to_hash
+          else
+            member
+          end
+        end
+      end
+
+      def compile
+        collect_hashes
       end
 
       def new(**attributes)

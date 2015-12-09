@@ -1,14 +1,15 @@
+require 'oj'
+require 'parallel'
 require 'active_support/core_ext/module/delegation'
-require 'active_support/callbacks'
 require 'active_support/core_ext/array/wrap'
 require 'active_support/core_ext/hash'
-require 'active_support/core_ext/object/json'
 require 'active_support/core_ext/array/conversions'
 require 'active_support/core_ext/hash/keys'
 
 module JSONAPIonify::Structure
   module Objects
     class Base
+
       include JSONAPIonify::Callbacks
       include Enumerable
       include JSONAPIonify::EnumerableObserver
@@ -39,7 +40,7 @@ module JSONAPIonify::Structure
       end
 
       def self.from_json(json)
-        from_hash JSON.load json
+        from_hash Oj.load json
       end
 
       # Initialize the object
@@ -69,13 +70,39 @@ module JSONAPIonify::Structure
       # Compile as json
       attr_reader :errors, :warnings
 
-      def compile(*args)
-        object.as_json(*args)
+      def compile
         validate
-        object.as_json(*args)
+        to_hash
       end
 
-      alias_method :as_json, :compile
+      def as_json
+        compile.deep_stringify_keys
+      end
+
+      def to_json
+        Oj.dump(as_json)
+      end
+
+      def signature
+        "#{self.class.name}:#{Digest::SHA2.hexdigest to_hash.to_s}"
+      end
+
+      def to_hash
+        object.reduce({}) do |hash, (k, v)|
+          hash[k] =
+            case v
+            when Objects::Base
+              v.to_hash
+            when Hash
+              v.deep_stringify_keys
+            when Collections::Base
+              v.collect_hashes
+            else
+              v
+            end
+          hash
+        end
+      end
 
       def compile!(*args)
         compile(*args).tap do
@@ -91,13 +118,15 @@ module JSONAPIonify::Structure
       def validate
         object.values.each { |val| val.validate if val.respond_to? :validate }
         [errors, warnings].each(&:clear)
-        run_callbacks :validation do
-          collect_child_errors
-          collect_child_warnings
+        @errors, @warnings = JSONAPIonify.cache_store.fetch signature do
+          run_callbacks :validation do
+            collect_child_errors
+            collect_child_warnings
+          end
+          [errors, warnings]
         end
         errors.blank?
       end
-
 
       def errors
         @errors ||= Helpers::Errors.new
@@ -107,12 +136,8 @@ module JSONAPIonify::Structure
         @warnings ||= Helpers::Errors.new
       end
 
-      def pretty_json(*args)
-        JSON.pretty_generate as_json(*args)
-      end
-
-      def to_hash
-        compile.deep_symbolize_keys
+      def pretty_json
+        JSON.pretty_generate as_json
       end
 
       private

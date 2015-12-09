@@ -1,0 +1,21 @@
+require 'bundler/setup'
+Bundler.require :default
+
+namespace :db do
+  task :connect do
+    ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: 'db/data.sqlite3'
+  end
+
+  task :migrate => :connect do
+    ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+  end
+
+  task :seed => :connect do
+    seedtime = Benchmark.realtime do
+      require_relative("lib/models")
+      ActiveRecord::Base.descendants.each(&:delete_all)
+      require_relative("db/seed.rb")
+    end
+    puts "Seeded: took #{seedtime}"
+  end
+end

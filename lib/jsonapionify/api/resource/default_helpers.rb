@@ -4,9 +4,7 @@ module JSONAPIonify::Api
 
     included do
 
-
     end
-
 
   end
 end

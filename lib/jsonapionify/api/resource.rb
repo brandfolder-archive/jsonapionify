@@ -16,11 +16,14 @@ module JSONAPIonify::Api
     extend ScopeDefinitions
     extend HelperDefinitions
     extend RelationshipDefinitions
+    extend PaginationDefinitions
 
     include ErrorHandling
     include DefaultContexts
     include DefaultErrors
     include DefaultHelpers
+    include DefaultActions
+    include Builders
 
     def initialize(req)
       @context = Context.new(req, self.class.context_definitions)
@@ -31,16 +34,6 @@ module JSONAPIonify::Api
 
     def headers
       @headers ||= {}
-    end
-
-    def process(action_block = nil, response_block = nil)
-      action_block   ||= proc {}
-      response_block ||= proc {}
-      instance_eval(&action_block)
-      return error_response if errors.present?
-      instance_eval(&response_block)
-    rescue error_exception
-      error_response
     end
 
   end

@@ -30,6 +30,10 @@ module JSONAPIonify::Api
       nil
     end
 
+    def get_url(base)
+      File.join base, type.to_s
+    end
+
     def documentation_object(request)
       description           = @description || ''
       @documentation_object ||= Class.new(SimpleDelegator) do
