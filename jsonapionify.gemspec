@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "activesupport", "~> 4.2"
   spec.add_dependency "faraday", "~> 0.9"
-  spec.add_dependency "typhoeus", "~> 0.8"
   spec.add_dependency "rack"
   spec.add_dependency "redcarpet"
   spec.add_dependency "oj"
