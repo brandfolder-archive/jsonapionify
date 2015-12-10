@@ -27,9 +27,10 @@ module JSONAPIonify::Api
           page_size   = Integer(params['size'] || 50)
           first_page  = 1
           last_page   = (collection.count / page_size).ceil
+          last_page = 1 if last_page == 0
 
-          links.first number: 1
-          links.last number: last_page
+          links.first number: 1 unless page_number == first_page
+          links.last number: last_page unless page_number == last_page
           links.prev number: page_number - 1 unless page_number <= first_page
           links.next number: page_number + 1 unless page_number >= last_page
 

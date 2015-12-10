@@ -3,6 +3,11 @@ MyApi.define_resource :users do
 
   scope { User }
 
+  attribute :email, String, "The email address"
+  attribute :first_name, String, "The last name"
+  attribute :last_name, String, "The last name"
+  attribute :password, String, "The password", read: false
+
   collection do |scope|
     scope.all
   end
