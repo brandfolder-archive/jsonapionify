@@ -73,5 +73,17 @@ module JSONAPIonify::Api
       end.new(self)
     end
 
+    def cache(store, *args)
+      self.cache_store = ActiveSupport::Cache.lookup_store(store, *args)
+    end
+
+    def cache_store=(store)
+      @cache_store = store
+    end
+
+    def cache_store
+      @cache_store ||= api.cache_store
+    end
+
   end
 end
