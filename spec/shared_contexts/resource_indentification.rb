@@ -91,7 +91,7 @@ shared_context 'resource identification' do
         )
         it 'should not be a valid jsonapi object' do
           parent[:data].each do |resource|
-            expect { resource.compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+            expect { resource.compile! }.to raise_error JSONAPIonify::Structure::ValidationError
           end
         end
       end

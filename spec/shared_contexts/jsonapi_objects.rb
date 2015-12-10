@@ -28,7 +28,7 @@ module JSONAPIObjects
       it "should not be a valid jsonapi object" do
         object = described_class.new(data)
         allow(object).to receive(:origin).and_return origin
-        expect { object.compile! }.to raise_error(JSONAPIonify::Structure::Helpers::ValidationError)
+        expect { object.compile! }.to raise_error(JSONAPIonify::Structure::ValidationError)
       end
     end
 
