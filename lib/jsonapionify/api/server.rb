@@ -38,7 +38,7 @@ module JSONAPIonify::Api
         else
           Resource::Http.process(:not_found, request)
         end
-      rescue ResourceNotDefined
+      rescue Errors::ResourceNotFound
         Resource::Http.process(:not_found, request)
       end
 

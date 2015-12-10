@@ -20,6 +20,10 @@ module JSONAPIonify::Api
       !!@required
     end
 
+    def optional?
+      !required?
+    end
+
     def read?
       !!@read
     end

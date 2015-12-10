@@ -10,13 +10,13 @@ module JSONAPIonify::Api
       autoload basename.camelize.to_sym, fullpath
     end
 
-    extend ClassMethods
     extend ActionDefinitions
     extend AttributeDefinitions
     extend ScopeDefinitions
     extend HelperDefinitions
     extend RelationshipDefinitions
     extend PaginationDefinitions
+    extend ClassMethods
 
     include ErrorHandling
     include DefaultContexts

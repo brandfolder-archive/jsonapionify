@@ -2,9 +2,9 @@ module JSONAPIonify::Api
   class Action
     attr_reader :name, :request_block, :content_type, :responses
 
-    def initialize(name, content_type: 'application/vnd.api+json', &block)
+    def initialize(name, content_type: nil, &block)
       @name          = name
-      @content_type  = content_type
+      @content_type  = content_type || 'application/vnd.api+json'
       @request_block = block || proc {}
       @responses     = []
     end

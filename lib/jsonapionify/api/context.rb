@@ -6,7 +6,7 @@ module JSONAPIonify::Api
     def initialize(request, definitions)
       @request     = request
       @definitions = definitions.dup
-      @memo = {}
+      @memo        = {}
     end
 
     def [](k)

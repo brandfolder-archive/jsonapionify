@@ -1,6 +1,4 @@
 module JSONAPIonify::Api
-  ResourceNotDefined = Class.new StandardError
-
   module Base::ResourceDefinitions
 
     def defined_resources
@@ -12,7 +10,7 @@ module JSONAPIonify::Api
       type       = type.to_sym
       const_name = type.to_s.camelcase
       return const_get(const_name, false) if const_defined?(const_name, false)
-      raise ResourceNotDefined, "Resource not defined: #{type}" unless resource_defined?(type)
+      raise Errors::ResourceNotFound, "Resource not defined: #{type}" unless resource_defined?(type)
       const_set const_name, Class.new(resource_class, &defined_resources[type]).set_type(type)
     end
 
