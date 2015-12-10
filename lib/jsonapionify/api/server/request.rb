@@ -14,7 +14,7 @@ module JSONAPIonify::Api
     end
 
     def accept
-      accepts = headers['accept'] && headers['accept'].split(',')
+      accepts = (headers['accept'] || '*/*').split(',')
       accepts.to_a.sort_by! do |accept|
         _, *media_type_params = accept.split(';')
         rqf                   = media_type_params.find { |mtp| mtp.start_with? 'q=' }
