@@ -31,6 +31,6 @@ module JSONAPIonify
   end
 
   def self.cache_store
-    @cache_store ||= ActiveSupport::Cache.lookup_store :file_store, 'tmp/jsonapionify/object-cache'
+    @cache_store ||= ActiveSupport::Cache.lookup_store :null_store
   end
 end

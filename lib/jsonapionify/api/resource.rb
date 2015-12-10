@@ -10,6 +10,8 @@ module JSONAPIonify::Api
       autoload basename.camelize.to_sym, fullpath
     end
 
+    delegate :cache, to: JSONAPIonify
+
     extend ClassMethods
     extend ActionDefinitions
     extend AttributeDefinitions
