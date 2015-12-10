@@ -52,14 +52,8 @@ module JSONAPIonify::Api
           response_definition.call(self)
         rescue error_exception
           error_response
-        rescue Exception => e
-          error(:internal_server_error)
-          if ENV['RACK_ENV'] = 'development'
-            errors.detail e.message
-            errors.meta[:error_class] = e.class.name
-            errors.meta[:backtrace]   = e.backtrace
-          end
-          error_response
+        rescue Exception => exception
+          rescued_response exception
         end
       end
     end

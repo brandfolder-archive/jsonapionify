@@ -2,18 +2,19 @@ module JSONAPIonify::Api
   module Resource::ErrorHandling
     extend ActiveSupport::Concern
 
+    included do
+      include ActiveSupport::Rescuable
+    end
+
     module ClassMethods
-      def self.extended(klass)
-        klass.include ActiveSupport::Rescuable
-      end
 
       def error(name, &block)
         self.error_definitions = self.error_definitions.merge name.to_sym => block
       end
 
       def rescue_from(*klasses, error:)
-        super *klasses do |exception|
-          error(error, exception.message)
+        super(*klasses) do
+          error_now error
         end
       end
 
@@ -47,6 +48,19 @@ module JSONAPIonify::Api
     end
 
     private
+
+    def rescued_response(exception)
+      rescue_with_handler(exception) || begin
+        error(:internal_server_error)
+        if ENV['RACK_ENV'] == 'development'
+          errors.detail exception.message
+          errors.meta[:error_class] = exception.class.name
+          errors.meta[:backtrace]   = exception.backtrace
+        end
+      end
+    ensure
+      return error_response
+    end
 
     def error_exception
       @error_exception ||= Class.new(StandardError)

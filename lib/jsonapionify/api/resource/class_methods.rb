@@ -1,9 +1,13 @@
+require 'active_support/rescuable'
 require 'redcarpet'
 
 module JSONAPIonify::Api
   module Resource::ClassMethods
     using JSONAPIonify::IndentedString
-    include JSONAPIonify::EnumerableObserver
+
+    def self.extended(klass)
+      klass.include ActiveSupport::Rescuable
+    end
 
     def description(description)
       @description = description.deindent
