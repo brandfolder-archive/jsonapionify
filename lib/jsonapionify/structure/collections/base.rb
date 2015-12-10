@@ -1,4 +1,4 @@
-require 'active_support/core_ext/object/json'
+require 'active_support/core_ext/module/delegation'
 
 module JSONAPIonify::Structure
   module Collections
@@ -6,6 +6,8 @@ module JSONAPIonify::Structure
       include JSONAPIonify::EnumerableObserver
       include Helpers::InheritsOrigin
       attr_reader :parent
+
+      delegate :cache_store, to: JSONAPIonify
 
       def self.value_is(type_class)
         define_method(:type_class) do
@@ -30,10 +32,17 @@ module JSONAPIonify::Structure
         Array.instance_method(method).bind(self)
       end
 
-      def validate
-        each do |member|
-          member.validate if member.respond_to? :validate
+      def validate(cache: true)
+        fetcher = proc do
+          each do |member|
+            member.validate(cache: cache) if member.respond_to? :validate
+          end
         end
+        cache ? cache_store.fetch(signature, &fetcher) : fetcher.call
+      end
+
+      def signature
+        "#{self.class.name}:#{Digest::SHA2.hexdigest map(&:signature).join}"
       end
 
       def collect_hashes
@@ -65,8 +74,8 @@ module JSONAPIonify::Structure
           when type_class
             instance
           else
-            raise Helpers::ValidationError,
-                  "Can't initialize collection `#{self.class.name}` with a type of `#{instance.class.name}`"
+            raise ValidationError,
+                  " Can 't initialize collection `#{self.class.name}` with a type of `#{instance.class.name}`"
           end
         super new_instance
       end
@@ -84,12 +93,14 @@ module JSONAPIonify::Structure
         map.each_with_index.each_with_object({}) do |(value, key), warnings|
           next unless value.respond_to? :all_warnings
           value.all_warnings.each do |warning_key, message|
-            warnings[[key, warning_key].join('.')] = message
+            warnings[[key, warning_key].join('. ')] = message
           end
         end
       end
 
       alias_method :all_warnings, :warnings
+
+      private
 
     end
   end

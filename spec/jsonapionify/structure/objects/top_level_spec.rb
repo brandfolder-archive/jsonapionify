@@ -165,18 +165,18 @@ module JSONAPIonify::Structure::Objects
     describe 'error collection' do
       let(:object) do
         described_class.new(
-          data: [
-                  { id: "1" },
-                  { id: "1", type: "stuff" }
-                ],
+          data:  [
+                   { id: "1" },
+                   { id: "1", type: "stuff" }
+                 ],
           links: {
-            foo: "foo",
+            foo:  "foo",
             self: "bar"
           }
         )
       end
       it 'should collect errors into an error object' do
-        expect(object.compile['errors']).to(
+        expect(object.compile[:errors].as_json).to(
           include(
             {
               source: {
@@ -202,8 +202,10 @@ module JSONAPIonify::Structure::Objects
           )
         )
       end
-      it 'should only include errors if compile errors exist' do
-        expect(object.compile.keys).to eq ['errors']
+      it 'should be a compilable errors object' do
+        compiled = object.compile
+        expect(compiled.keys).to include :errors
+        expect { JSONAPIonify.parse(compiled).compile! }.to_not raise_error
       end
     end
   end

@@ -1,6 +1,8 @@
 module JSONAPIonify
   module Structure
 
+    ValidationError = Class.new StandardError
+
     module Collections
       Dir.glob("#{__dir__}/structure/collections/*.rb").each do |file|
         basename = File.basename file, File.extname(file)

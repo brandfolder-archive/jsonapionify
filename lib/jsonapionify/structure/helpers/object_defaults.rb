@@ -51,11 +51,11 @@ module JSONAPIonify::Structure
       end
 
       included do
+        include JSONAPIonify::InheritedAttributes
         # Class Attributes
         attr_reader :unset
-        class_attribute :implementations, :collections, instance_writer: false
-        self.implementations = {}
-        self.collections     = {}
+
+        inherited_hash_attribute :implementations, :collections
 
         before_initialize do
           @unset = {}

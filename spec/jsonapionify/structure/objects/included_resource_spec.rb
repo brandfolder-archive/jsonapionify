@@ -114,7 +114,7 @@ module JSONAPIonify::Structure::Objects
             }
           end
           it "should behave like a valid jsonapi object" do
-            expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+            expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::ValidationError
           end
         end
 
@@ -145,7 +145,7 @@ module JSONAPIonify::Structure::Objects
             }
           end
           it "should behave like an invalid jsonapi object" do
-            expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+            expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::ValidationError
           end
         end
       end
@@ -280,7 +280,7 @@ module JSONAPIonify::Structure::Objects
                 }
               end
               it "should behave like an invalid jsonapi object" do
-                expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+                expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::ValidationError
               end
             end
 
@@ -323,7 +323,7 @@ module JSONAPIonify::Structure::Objects
                 }
               end
               it "should behave like an invalid jsonapi object" do
-                expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+                expect { TopLevel.new(document).compile! }.to raise_error JSONAPIonify::Structure::ValidationError
               end
             end
           end

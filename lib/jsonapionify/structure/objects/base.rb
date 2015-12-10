@@ -24,7 +24,8 @@ module JSONAPIonify::Structure
       # Attributes
       attr_reader :object, :parent
 
-      delegate :select, :has_key?, :keys, :values, :each, :present?, :blank?, :empty?, to: :object
+      delegate :fetch, :select, :has_key?, :keys, :values, :each, :present?, :blank?, :empty?, to: :object
+      delegate :cache_store, to: JSONAPIonify
 
       before_initialize do
         @object = {}
@@ -115,16 +116,18 @@ module JSONAPIonify::Structure
         end
       end
 
-      def validate
-        object.values.each { |val| val.validate if val.respond_to? :validate }
-        [errors, warnings].each(&:clear)
-        @errors, @warnings = JSONAPIonify.cache_store.fetch signature do
+      def validate(cache: true)
+        fetcher = proc do
           run_callbacks :validation do
             collect_child_errors
             collect_child_warnings
           end
           [errors, warnings]
         end
+        object.values.each { |val| val.validate(cache: cache) if val.respond_to? :validate }
+        [errors, warnings].each(&:clear)
+        @errors, @warnings =
+          cache ? cache_store.fetch(signature, &fetcher) : fetcher.call
         errors.blank?
       end
 

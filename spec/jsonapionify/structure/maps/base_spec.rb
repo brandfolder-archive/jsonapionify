@@ -26,7 +26,7 @@ module JSONAPIonify::Structure::Maps
 
         context 'given the value is not a hash' do
           it 'should not compile' do
-            expect { klass.new({ a: 'b' }).compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+            expect { klass.new({ a: 'b' }).compile! }.to raise_error JSONAPIonify::Structure::ValidationError
           end
         end
       end
@@ -49,7 +49,7 @@ module JSONAPIonify::Structure::Maps
 
       context 'given the value is not a hash' do
         it 'should not compile' do
-          expect { klass.new({ a: 'b' }).compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+          expect { klass.new({ a: 'b' }).compile! }.to raise_error JSONAPIonify::Structure::ValidationError
         end
       end
     end

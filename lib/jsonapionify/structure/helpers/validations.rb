@@ -1,3 +1,5 @@
+require 'active_support/core_ext/class/attribute'
+
 module JSONAPIonify::Structure
   module Helpers
     module Validations
@@ -5,23 +7,11 @@ module JSONAPIonify::Structure
       using JSONAPIonify::UnstrictProc
 
       module ClassMethods
-        private def inherited(subclass)
-          vars = %i{
-          required_keys
-          permitted_keys
-          allowed_type_map
-          implementations
-          collections
-        }
-          vars.each do |var|
-            subclass.send "#{var}=", send(var).dup
-          end
-        end
 
         # Raise the validation errors
         def validation_error(message)
           message = "#{name}: #{message}"
-          Helpers::ValidationError.new(message)
+          ValidationError.new(message)
         end
 
         # Validations
@@ -92,7 +82,7 @@ module JSONAPIonify::Structure
                 invalid_keys     = hash.keys.map(&:to_sym) & keys.map(&:to_sym)
                 all_invalid_keys += invalid_keys
                 children         = hash.values.select { |v| v.respond_to?(:to_hash) }
-                invalid_keys.present? | children.map { |c| is_invalid(c) }.reduce(:|)
+                invalid_keys.present? | children.map { |c| is_invalid.call c }.reduce(:|)
               end
               if is_invalid.call(self)
                 errors.add('*', "cannot contain keys #{keys_to_sentence *all_invalid_keys.uniq}")
@@ -188,10 +178,14 @@ module JSONAPIonify::Structure
         end
       end
 
+      # Included Stuff
+
       included do
+        extend JSONAPIonify::InheritedAttributes
         delegate *ClassMethods.instance_methods, to: :class
-        class_attribute :allow_only_permitted, :implementations, :collections, instance_writer: false
-        class_attribute :allowed_type_map, :permitted_keys, :required_keys, instance_accessor: false
+        class_attribute :allow_only_permitted, instance_writer: false
+        inherited_hash_attribute :allowed_type_map, :required_keys, instance_accessor: false
+        inherited_array_attribute :permitted_keys, instance_accessor: false
         self.allow_only_permitted = false
         self.permitted_keys       = []
         self.allowed_type_map     = {}
@@ -230,6 +224,8 @@ module JSONAPIonify::Structure
         end
 
       end
+
+      # Instance Methods
 
       def permitted_key?(key)
         !allow_only_permitted || permitted_keys.map(&:to_sym).include?(key.to_sym)

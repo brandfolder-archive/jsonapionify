@@ -84,11 +84,11 @@ module JSONAPIonify::Structure::Objects
         )
       end
       it 'attributes should not be a valid jsonapi object' do
-        expect { resource[:attributes].compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+        expect { resource[:attributes].compile! }.to raise_error JSONAPIonify::Structure::ValidationError
       end
 
       it 'relationships should not be a valid jsonapi object' do
-        expect { resource[:relationships].compile! }.to raise_error JSONAPIonify::Structure::Helpers::ValidationError
+        expect { resource[:relationships].compile! }.to raise_error JSONAPIonify::Structure::ValidationError
       end
     end
   end
