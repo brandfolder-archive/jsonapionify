@@ -11,6 +11,7 @@ module JSONAPIonify::Api
       api = self
       Rack::Builder.new do
         use Rack::ShowExceptions
+        use Rack::CommonLogger
         use Base::Reloader if ENV['RACK_ENV'] == 'development'
         map "/docs" do
           run ->(env) {
