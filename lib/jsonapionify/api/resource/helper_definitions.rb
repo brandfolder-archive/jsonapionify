@@ -18,8 +18,6 @@ module JSONAPIonify::Api
       define_method("#{name}=") do |value|
         @context[name] = value
       end unless readonly
-    rescue
-      binding.pry
     end
 
     def header(name, &block)

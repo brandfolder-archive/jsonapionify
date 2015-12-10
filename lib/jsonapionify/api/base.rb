@@ -1,3 +1,4 @@
+require 'active_support/descendants_tracker'
 require 'redcarpet'
 require 'active_support/core_ext/module/delegation'
 

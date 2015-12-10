@@ -1,4 +1,5 @@
 module JSONAPIonify::Api
+  RelationshipNotDefined = Class.new StandardError
   module Resource::RelationshipDefinitions
 
     def self.extended(klass)
@@ -26,8 +27,7 @@ module JSONAPIonify::Api
     end
 
     def relationship(name)
-      c = caller
-      name       = name.to_sym rescue binding.pry
+      name       = name.to_sym
       const_name = name.to_s.camelcase + 'Relationship'
       return const_get(const_name, false) if const_defined? const_name
       relationship_definition = relationship_definitions.find { |rel| rel.name == name }
