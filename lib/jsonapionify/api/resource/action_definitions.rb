@@ -6,6 +6,14 @@ module JSONAPIonify::Api
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
         inherited_array_attribute :action_definitions
+        inherited_hash_attribute :callbacks
+
+        def self.inherited(subclass)
+          super
+          callbacks.each do |action_name, klass|
+            subclass.callbacks[action_name] = Class.new klass
+          end
+        end
       end
     end
 
@@ -47,6 +55,26 @@ module JSONAPIonify::Api
 
     def process(action_name, request)
       find_supported_action(action_name, request).call(self, request)
+    end
+
+    def before(action_name, &block)
+      callbacks_for(action_name).before_request(&block)
+    end
+
+    def callbacks_for(action_name)
+      resource               = self
+      callbacks[action_name] ||= Class.new do
+        def self.context(*)
+        end
+        include Resource::ErrorHandling
+
+        define_singleton_method(:error_definitions) do
+          resource.error_definitions
+        end
+
+        include JSONAPIonify::Callbacks
+        define_callbacks :request
+      end
     end
 
     private

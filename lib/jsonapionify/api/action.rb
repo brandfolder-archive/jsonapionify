@@ -41,8 +41,11 @@ module JSONAPIonify::Api
       cache_hit_exception = Class.new StandardError
       cache_options       = {}
       resource.new.instance_eval do
-        context = ContextDelegate.new(request, self, self.class.context_definitions)
+        # Bootstrap the Action
+        callbacks = resource.callbacks_for(action.name).new
+        context   = ContextDelegate.new(request, self, self.class.context_definitions)
 
+        # Define Singletons
         define_singleton_method :response do |*args, &block|
           action.response(*args, &block)
         end
@@ -59,19 +62,32 @@ module JSONAPIonify::Api
           raise cache_hit_exception, cache_options[:key] if self.class.cache_store.exist?(cache_options[:key])
         end if request.get?
 
-        define_singleton_method :errors do
-          context.errors
-        end
+        # Define Shared Singletons
+        [self, callbacks].each do |target|
+          target.define_singleton_method :errors do
+            context.errors
+          end
 
-        define_singleton_method :headers do
-          context.headers
-        end
+          target.define_singleton_method :headers do
+            context.headers
+          end
 
-        define_singleton_method :error_exception do
-          context.error_exception
+          target.define_singleton_method :error_exception do
+            context.error_exception
+          end
         end
 
         begin
+          # Run Callbacks
+          unless callbacks.run_callbacks(:request, context) { true }
+            if errors.present?
+              raise error_exception
+            else
+              error_now :internal_server_error
+            end
+          end
+
+          # Start the request
           instance_exec(context, &action.request_block)
           fail error_exception if errors.present?
           response_definition =

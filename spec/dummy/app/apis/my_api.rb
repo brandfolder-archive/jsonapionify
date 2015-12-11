@@ -11,6 +11,10 @@ class MyApi < JSONAPIonify::Api::Base
     }
   )
 
+  before :index do |context|
+    error :not_found
+  end
+
   pagination do |collection, params, links|
     page_number = Integer(params['number'] || 1)
     page_number = 1 if page_number < 1
