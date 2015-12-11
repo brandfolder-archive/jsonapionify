@@ -37,13 +37,26 @@ module JSONAPIonify::Api
     end
 
     def call(resource, request)
-      action = dup
+      action              = dup
+      cache_hit_exception = Class.new StandardError
+      cache_options       = {}
       resource.new.instance_eval do
         context = ContextDelegate.new(request, self, self.class.context_definitions)
 
         define_singleton_method :response do |*args, &block|
           action.response(*args, &block)
         end
+
+        define_singleton_method :cache do |key, **options|
+          cache_options.merge! options
+          cache_options[:key] = [*{
+            api:          self.class.api.name,
+            resource:     self.class.type,
+            content_type: request.content_type || '*',
+            accept:       request.accept.join(',')
+          }.map { |kv| kv.join(':') }, key].join('|')
+          raise cache_hit_exception, cache_options[:key] if self.class.cache_store.exist?(cache_options[:key])
+        end if request.get?
 
         define_singleton_method :errors do
           context.errors
@@ -63,9 +76,17 @@ module JSONAPIonify::Api
           response_definition =
             action.responses.find { |response| response.accept? request } ||
               error_now(:not_acceptable)
-          response_definition.call(self, context)
+          response_definition.call(self, context).tap do |status, headers, body|
+            self.class.cache_store.write(
+              cache_options[:key],
+              [status, headers, body.body],
+              **cache_options.except(:key)
+            )
+          end
         rescue error_exception
           error_response
+        rescue cache_hit_exception
+          self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
           rescued_response exception
         end

@@ -31,6 +31,11 @@ MyApi.define_resource :things do
     scope.new
   end
 
+  index do |context|
+    cache Digest::SHA2.hexdigest context.collection.map(&:cache_key).join
+    puts "cache miss!!"
+  end
+
   create do |context|
     context.instance.update context.request_attributes
   end
