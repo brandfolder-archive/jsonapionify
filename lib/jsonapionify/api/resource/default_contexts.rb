@@ -74,7 +74,7 @@ module JSONAPIonify::Api
             extra_attributes.each { |attr| error :unpermitted_attribute, attr }
             raise error_exception
           end
-          request_object.validate(cache: false)
+          request_object.validate
           error_now(:request_object_invalid, context) if request_object.errors.present?
         end.to_hash
       end
