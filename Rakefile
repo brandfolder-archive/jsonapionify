@@ -16,4 +16,18 @@ task :missing_tests do
   end
 end
 
+STATS_DIRECTORIES = [
+  %w(Structure        lib/jsonapionify/structure),
+  %w(Server           lib/jsonapionify/api),
+  %w(Specs            spec),
+].collect do |name, dir|
+  [name, "#{File.dirname(Rake.application.rakefile_location)}/#{dir}"]
+end.select { |name, dir| File.directory?(dir) }
+
+desc "Report code statistics (KLOCs, etc)"
+task :stats do
+  require_relative './vendor/code_statistics'
+  CodeStatistics.new(*STATS_DIRECTORIES).to_s
+end
+
 task :default => :spec
