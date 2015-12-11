@@ -32,8 +32,11 @@ MyApi.define_resource :things do
   end
 
   index do |context|
-    cache Digest::SHA2.hexdigest context.collection.map(&:cache_key).join
-    puts "cache miss!!"
+    cache Digest::SHA2.hexdigest context.paginated_collection.map(&:cache_key).join
+  end
+
+  read do |context|
+    cache context.instance.cache_key
   end
 
   create do |context|
