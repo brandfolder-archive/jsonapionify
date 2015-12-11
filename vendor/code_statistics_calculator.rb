@@ -24,7 +24,7 @@ class CodeStatisticsCalculator #:nodoc:
     }
   }
 
-  PATTERNS[:minitest] = PATTERNS[:rb].merge method: /^\s*(def|test)\s+['"_a-z]/
+  PATTERNS[:rspec] = PATTERNS[:rb].merge method: /^\s*(def|it)\s+['"_a-z]/
   PATTERNS[:rake] = PATTERNS[:rb]
 
   def initialize(lines = 0, code_lines = 0, classes = 0, methods = 0)
@@ -77,8 +77,8 @@ class CodeStatisticsCalculator #:nodoc:
 
   private
   def file_type(file_path)
-    if file_path.end_with? '_test.rb'
-      :minitest
+    if file_path.end_with? '_spec.rb'
+      :rspec
     else
       File.extname(file_path).sub(/\A\./, '').downcase.to_sym
     end
