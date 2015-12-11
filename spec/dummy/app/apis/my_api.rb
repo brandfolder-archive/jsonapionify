@@ -12,7 +12,7 @@ class MyApi < JSONAPIonify::Api::Base
   )
 
   before :index do |context|
-    error :not_found
+    # Before actions here
   end
 
   pagination do |collection, params, links|

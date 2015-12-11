@@ -32,11 +32,11 @@ MyApi.define_resource :things do
   end
 
   index do |context|
-    # cache context.paginated_collection.cache_key
+    cache context.paginated_collection.cache_key
   end
 
   read do |context|
-    # cache context.instance.cache_key
+    cache context.instance.cache_key
   end
 
   create do |context|
