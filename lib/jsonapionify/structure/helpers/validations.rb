@@ -183,6 +183,7 @@ module JSONAPIonify::Structure
       included do
         extend JSONAPIonify::InheritedAttributes
         class_attribute :allow_only_permitted, instance_writer: false
+        delegate :validation_error, to: :class
         inherited_hash_attribute :allowed_type_map, :required_keys, instance_accessor: false
         inherited_array_attribute :permitted_keys, instance_accessor: false
         self.allow_only_permitted = false
