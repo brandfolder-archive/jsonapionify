@@ -10,40 +10,31 @@ module JSONAPIonify::Api
     end
 
     def index(**options, &block)
-      define_action(:index, **options, &block).response status: 200 do
-        output_object[:data] = paginated_collection.map do |instance|
-          build_resource instance
-        end
-        meta[:total_count]   = collection.count
-        output_object.to_json
+      define_action(:index, **options, &block).response status: 200 do |context|
+        context.response_object[:data] = build_collection(context.request, context.paginated_collection, fields: context.fields)
+        context.meta[:total_count]     = context.collection.count
+        context.response_object.to_json
       end
     end
 
     def create(**options, &block)
-      define_action(:create, **options, &block).response status: 201 do
-        JSONAPIonify.new_object.tap do |json|
-          json[:data] = attributes.select(&:read?).each_with_object({}) do |field, attributes|
-            attributes[field] = instance.public_send(value)
-          end
-        end.to_json
+      define_action(:create, **options, &block).response status: 201 do |context|
+        context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+        context.response_object.to_json
       end
     end
 
     def read(**options, &block)
-      define_action(:read, **options, &block).response status: 200 do
-        output_object[:data] = build_resource(instance)
-        meta[:collection]    = self.class.get_url request.root_url
-        output_object.to_json
+      define_action(:read, **options, &block).response status: 200 do |context|
+        context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+        context.response_object.to_json
       end
     end
 
     def update(**options, &block)
-      define_action(:update, **options, &block).response status: 200 do
-        JSONAPIonify.new_object.tap do |json|
-          json[:data] = attributes.select(&:read?).each_with_object({}) do |field, attributes|
-            attributes[field] = instance.public_send(value)
-          end
-        end
+      define_action(:update, **options, &block).response status: 200 do |context|
+        context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+        context.response_object.to_json
       end
     end
 

@@ -41,7 +41,7 @@ module JSONAPIonify::Api
     end
 
     def process_index(request)
-      headers                    = resource_class.new(request).headers
+      headers                    = ContextDelegate.new(request, resource_class.new, resource_class.context_definitions).headers
       obj                        = JSONAPIonify.new_object
       obj[:meta]                 = { resources: {} }
       obj[:links]                = { self: request.root_url }
@@ -55,6 +55,12 @@ module JSONAPIonify::Api
         response['content-type'] = 'application/vnd.api+json'
         response.write obj.to_json
       end.finish
+    end
+
+    def fields
+      resources.each_with_object({}) do |(type, klass), fields|
+        fields[type] = klass.attributes.select(&:read?).map(&:name)
+      end
     end
 
     def cache(store, *args)

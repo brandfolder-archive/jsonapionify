@@ -22,10 +22,10 @@ module JSONAPIonify::Api
       end
     end
 
-    def call(instance)
+    def call(instance, context)
       response = self
       instance.instance_eval do
-        body = instance_eval(&response.response_block)
+        body = instance_exec(context, &response.response_block)
         Rack::Response.new.tap do |rack_response|
           rack_response.status = response.status
           headers.each { |k, v| rack_response.headers[k] = v }

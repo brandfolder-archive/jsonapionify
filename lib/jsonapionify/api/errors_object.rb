@@ -6,18 +6,40 @@ module JSONAPIonify
 
       delegate :present?, to: :collection
 
-      Structure::Objects::Error.permitted_keys.each do |key|
-        define_method(key) do |value|
-          latest_error[key] = value
+      class Evaluator
+        Structure::Objects::Error.permitted_keys.each do |key|
+          define_method(key) do |value|
+            @error[key] = value
+          end
+        end
+
+        def initialize(error)
+          @error = error
+          freeze
+        end
+
+        def meta
+          JSONAPIonify::Structure::Helpers::MetaDelegate.new @error
+        end
+
+        def pointer(value)
+          @error[:source]           ||= {}
+          @error[:source][:pointer] = value
+        end
+
+        def parameter(value)
+          @error[:source]             ||= {}
+          @error[:source][:parameter] = value
         end
       end
 
-      def evaluate(**options, &block)
-        new_error
-        options.each do |k, v|
-          public_send(k, v)
+      def evaluate(*args, error_block:, runtime_block:)
+        error     = Structure::Objects::Error.new
+        evaluator = Evaluator.new(error)
+        collection << error
+        [runtime_block, error_block].each do |block|
+          evaluator.instance_exec(*args, &block) if block
         end
-        instance_eval(&block)
       end
 
       def top_level
@@ -26,36 +48,12 @@ module JSONAPIonify
         end
       end
 
-      def meta
-        JSONAPIonify::Structure::Helpers::MetaDelegate.new latest_error
-      end
-
       def collection
         @collection ||= Structure::Collections::Errors.new
       end
 
-      def pointer(value)
-        latest_error[:source]           ||= {}
-        latest_error[:source][:pointer] = value
-      end
-
-      def parameter(value)
-        latest_error[:source]             ||= {}
-        latest_error[:source][:parameter] = value
-      end
-
       def set(collection)
         @collection = collection
-      end
-
-      private
-
-      def latest_error
-        collection.last || new_error
-      end
-
-      def new_error
-        (collection << Structure::Objects::Error.new).last
       end
 
     end

@@ -9,6 +9,14 @@ module JSONAPIonify::Api
       klass.include ActiveSupport::Rescuable
     end
 
+    def inherited(subclass)
+      super
+      subclass.class_eval do
+        context(:api, readonly: true) { api }
+        context(:resource, readonly: true) { self }
+      end
+    end
+
     def description(description)
       @description = description.deindent
     end
@@ -63,10 +71,10 @@ module JSONAPIonify::Api
         end
 
         define_method(:relationships) do
-          relationship_definitions.each_with_object({}) do |(name, (resource, _)), hash|
-            hash[name.to_s] = OpenStruct.new(
-              resource: resource,
-              allow:    relationship(name).allow
+          relationship_definitions.each_with_object({}) do |relationship, hash|
+            hash[relationship.name.to_s] = OpenStruct.new(
+              resource: relationship.resource,
+              allow:    relationship.allow
             )
           end
         end

@@ -25,16 +25,5 @@ module JSONAPIonify::Api
     include DefaultActions
     include Builders
 
-    def initialize(req)
-      @context = Context.new(req, self.class.context_definitions)
-      self.class.header_definitions.each do |name, block|
-        headers[name.to_s] = block.call(context)
-      end
-    end
-
-    def headers
-      @headers ||= {}
-    end
-
   end
 end

@@ -4,6 +4,7 @@ module JSONAPIonify::Api
 
     included do
       include ActiveSupport::Rescuable
+      context(:error_exception) { Class.new(StandardError) }
     end
 
     module ClassMethods
@@ -32,15 +33,19 @@ module JSONAPIonify::Api
       end
     end
 
-    def error(name, **options)
+    def error(name, *args, &block)
       error = self.class.error_definitions[name]
       raise ArgumentError, "Error does not exist: #{name}" unless error
-      errors.evaluate(**options, &self.class.error_definitions[name])
+      errors.evaluate(*args, error_block: self.class.error_definitions[name], runtime_block: block)
     end
 
-    def error_now(*args)
-      error(*args)
+    def error_now(*args, &block)
+      error(*args, &block)
       raise error_exception
+    end
+
+    def set_errors(collection)
+      errors.set collection
     end
 
     def error_meta
@@ -51,19 +56,16 @@ module JSONAPIonify::Api
 
     def rescued_response(exception)
       rescue_with_handler(exception) || begin
-        error(:internal_server_error)
-        if ENV['RACK_ENV'] == 'development'
-          errors.detail exception.message
-          errors.meta[:error_class] = exception.class.name
-          errors.meta[:backtrace]   = exception.backtrace
+        error :internal_server_error do
+          if ENV['RACK_ENV'] == 'development'
+            detail exception.message
+            meta[:error_class] = exception.class.name
+            meta[:backtrace]   = exception.backtrace
+          end
         end
       end
     ensure
       return error_response
-    end
-
-    def error_exception
-      @error_exception ||= Class.new(StandardError)
     end
 
     def error_response

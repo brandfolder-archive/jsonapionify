@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "navigable_hash"
+  spec.add_development_dependency "code-statistics"
 end

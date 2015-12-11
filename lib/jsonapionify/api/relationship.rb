@@ -21,21 +21,27 @@ module JSONAPIonify::Api
     append_class do
       remove_action :delete, :update
 
+      owner_context_proc = Proc.new do |request|
+        ContextDelegate.new(request, rel.owner.new, rel.owner.context_definitions)
+      end
+      context(:owner_context) do |context|
+        owner_context_proc.call(context.request)
+      end
+
       define_singleton_method(:build_links) do |base_url|
         JSONAPIonify::Structure::Maps::RelationshipLinks.new(
           self:    File.join(base_url, 'relationships', rel.name.to_s),
           related: File.join(base_url, rel.name.to_s)
         )
       end
-
-      define_singleton_method(:allow) do
-        Array.new.tap do |ary|
-          ary << 'read'
-          ary << 'write' if rel.associate
-        end
-      end
     end
 
+    def allow
+      Array.new.tap do |ary|
+        ary << 'read'
+        ary << 'write' if @associate
+      end
+    end
 
     def build_class
       rel = self

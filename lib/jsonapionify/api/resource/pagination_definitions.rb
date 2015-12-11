@@ -27,7 +27,7 @@ module JSONAPIonify::Api
           page_size   = Integer(params['size'] || 50)
           first_page  = 1
           last_page   = (collection.count / page_size).ceil
-          last_page = 1 if last_page == 0
+          last_page   = 1 if last_page == 0
 
           links.first number: 1 unless page_number == first_page
           links.last number: last_page unless page_number == last_page
@@ -42,8 +42,13 @@ module JSONAPIonify::Api
     end
 
     def pagination(&block)
-      define_method :paginated_collection do
-        block.call(collection, request.params['page'] || {}, PaginationLinksDelegate.new(request, links))
+      context :paginated_collection do |context|
+        Object.new.instance_exec(
+          context.collection,
+          context.request.params['page'] || {},
+          PaginationLinksDelegate.new(context.request, context.links),
+          &block
+        )
       end
     end
 

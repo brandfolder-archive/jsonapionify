@@ -1,27 +1,35 @@
 module JSONAPIonify::Api
   module Resource::ScopeDefinitions
     def scope(&block)
+      define_singleton_method(:current_scope) do
+        Object.new.instance_eval(&block)
+      end
       context :scope do
-        block.call
+        self.class.current_scope
       end
     end
 
+    alias_method :resource_class, :scope
+
     def instance(&block)
-      context :instance do |_, context|
-        block.call(context[:scope], context[:id])
+      define_singleton_method(:find_instance) do |id|
+        Object.new.instance_exec(current_scope, id, &block)
+      end
+      context :instance do |context|
+        self.class.find_instance(context.id)
       end
     end
 
     def collection(&block)
-      context :collection do |_, context|
-        block.call(context[:scope], context)
+      context :collection do |context|
+        Object.new.instance_exec(context.scope, context, &block)
       end
     end
 
     def new_instance(&block)
-      context :new_instance do |_, context|
+      context :new_instance do |context|
         proc do |*args|
-          block.call(context[:scope], context, *args)
+          Object.new.instance_exec(context.scope, context, *args, &block)
         end
       end
     end

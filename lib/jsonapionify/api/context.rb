@@ -1,20 +1,13 @@
 module JSONAPIonify::Api
-  class Context
+  class Context < Struct.new :block, :readonly
 
-    attr_reader :definitions
-
-    def initialize(request, definitions)
-      @request     = request
-      @definitions = definitions.dup
-      @memo        = {}
+    def call(instance, delegate)
+      block = self.block || proc {}
+      instance.instance_exec(delegate, &block)
     end
 
-    def [](k)
-      @memo[k] ||= @definitions[k].call(@request, self)
-    end
-
-    def []=(k, v)
-      @memo[k] = v
+    def readonly?
+      !!readonly
     end
 
   end

@@ -27,7 +27,7 @@ module JSONAPIonify::Api
     end
 
     def supports?(request)
-      @content_type == request.content_type
+      @content_type == request.content_type || request.content_type.nil?
     end
 
     def response(status: nil, accept: nil, &block)
@@ -38,18 +38,32 @@ module JSONAPIonify::Api
 
     def call(resource, request)
       action = dup
-      resource.new(request).instance_eval do
+      resource.new.instance_eval do
+        context = ContextDelegate.new(request, self, self.class.context_definitions)
+
         define_singleton_method :response do |*args, &block|
           action.response(*args, &block)
         end
 
+        define_singleton_method :errors do
+          context.errors
+        end
+
+        define_singleton_method :headers do
+          context.headers
+        end
+
+        define_singleton_method :error_exception do
+          context.error_exception
+        end
+
         begin
-          instance_eval(&action.request_block)
+          instance_exec(context, &action.request_block)
           fail error_exception if errors.present?
           response_definition =
             action.responses.find { |response| response.accept? request } ||
               error_now(:not_acceptable)
-          response_definition.call(self)
+          response_definition.call(self, context)
         rescue error_exception
           error_response
         rescue Exception => exception
