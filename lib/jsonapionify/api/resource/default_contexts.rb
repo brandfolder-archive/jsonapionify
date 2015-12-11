@@ -13,12 +13,17 @@ module JSONAPIonify::Api
         JSONAPIonify::Structure::Helpers::MetaDelegate.new context.response_object
       end
 
+      context(:includes, readonly: true) do |context|
+        context.params['includes'].to_s.split('.')
+      end
+
       context(:fields, readonly: true) do |context|
         should_error = false
         fields       = (context.request.params['fields'] || {}).each_with_object(self.class.api.fields) do |(type, fields), field_map|
-          field_map[type.to_sym] =
+          type_sym            = type.to_sym
+          field_map[type_sym] =
             fields.to_s.split(',').map(&:to_sym).each_with_object([]) do |field, field_list|
-              attribute = self.class.attributes.find do |attribute|
+              attribute = self.class.api.resource(type_sym).attributes.find do |attribute|
                 attribute.read? && attribute.name == field
               end
               attribute ? field_list << attribute.name : error(:invalid_field_param, type, field) && (should_error = true)

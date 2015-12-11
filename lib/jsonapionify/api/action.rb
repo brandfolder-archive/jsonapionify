@@ -53,7 +53,8 @@ module JSONAPIonify::Api
             api:          self.class.api.name,
             resource:     self.class.type,
             content_type: request.content_type || '*',
-            accept:       request.accept.join(',')
+            accept:       request.accept.join(','),
+            params:       context.params.to_param
           }.map { |kv| kv.join(':') }, key].join('|')
           raise cache_hit_exception, cache_options[:key] if self.class.cache_store.exist?(cache_options[:key])
         end if request.get?
@@ -81,7 +82,7 @@ module JSONAPIonify::Api
               cache_options[:key],
               [status, headers, body.body],
               **cache_options.except(:key)
-            )
+            ) if request.get?
           end
         rescue error_exception
           error_response

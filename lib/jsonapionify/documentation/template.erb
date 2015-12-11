@@ -1,298 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Brandfolder API</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title><%= api.title %>></title>
 
-    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAABU1BMVEUAAAAzerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerfsspsqAAAAcHRSTlMAAQIDBAYHCAkKCwwNDg8QERIUFRcYGxweICIjJSgqLC0vMDEyNjc6PD5AQUJDREVGR05PVFVXWVthYmZnaGltcHN4fH+AgoiPkZSXmJqdnqKoq62wtbm8vsHDxcfOz9HV19rc4Obo6evt8fX3+fv9oZ9KRwAAAeFJREFUWMPt1NdT1FAYhvE3YRFWLAsWxIYoIkWlCHZQmiCoIIIFFFFAl/78/1deGJ1NOCV4Zrza7y7fOc9vZjczkapTnZxzGXbvhwBjwNcQYBMYCegbAVoCgAFgPwoAloDXuW8XFt/EmQ1ApySp9G3Y23+Cd2mhFaAoSaUyjPp7GE/tJoBVSYp+gEf43XMvtSwDj//+GU4h6Z+klk0AzZKkmvduwdhrENhNXqJbMPf6ALz88+ASLH0tQIf8gqXXDYA6eYXCsrnXFPC5cmEWrL22gYfyCfb+LMA5eQR7rwfAdnaZFQor1l4rwJTcgqs/BtAup+DqdROgVi4hWnb0mgY+Gk8SYVgnANgrGm9FO8CQ2e4CYE3qB+B7venSeYAzxr4NgHJJTuERsOXrXcIXYNLbS30WoR7gmr+3CrcACjl6qdcozAJL1v50amkSoj1g4FB/3dRLdwFYrxQuADTm7E3CU2Azdy/dyQprwJjpC2fuDwnHAa4coZdup4RugJqj9BlhDlgw/P6f9l7qAWBGkuJ9oL/yMD7w9olwVZIuApxKHU76e6kb2iRJz4CNzOELfy+1JB/xdeB59rC9qLxzEuCS/n16gYM4AHgLzAf0MUBPANAA0BAAqHlk9ZWqU53/Nb8AOJAKnq/8xU4AAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+  <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAABU1BMVEUAAAAzerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerczerfsspsqAAAAcHRSTlMAAQIDBAYHCAkKCwwNDg8QERIUFRcYGxweICIjJSgqLC0vMDEyNjc6PD5AQUJDREVGR05PVFVXWVthYmZnaGltcHN4fH+AgoiPkZSXmJqdnqKoq62wtbm8vsHDxcfOz9HV19rc4Obo6evt8fX3+fv9oZ9KRwAAAeFJREFUWMPt1NdT1FAYhvE3YRFWLAsWxIYoIkWlCHZQmiCoIIIFFFFAl/78/1deGJ1NOCV4Zrza7y7fOc9vZjczkapTnZxzGXbvhwBjwNcQYBMYCegbAVoCgAFgPwoAloDXuW8XFt/EmQ1ApySp9G3Y23+Cd2mhFaAoSaUyjPp7GE/tJoBVSYp+gEf43XMvtSwDj//+GU4h6Z+klk0AzZKkmvduwdhrENhNXqJbMPf6ALz88+ASLH0tQIf8gqXXDYA6eYXCsrnXFPC5cmEWrL22gYfyCfb+LMA5eQR7rwfAdnaZFQor1l4rwJTcgqs/BtAup+DqdROgVi4hWnb0mgY+Gk8SYVgnANgrGm9FO8CQ2e4CYE3qB+B7venSeYAzxr4NgHJJTuERsOXrXcIXYNLbS30WoR7gmr+3CrcACjl6qdcozAJL1v50amkSoj1g4FB/3dRLdwFYrxQuADTm7E3CU2Azdy/dyQprwJjpC2fuDwnHAa4coZdup4RugJqj9BlhDlgw/P6f9l7qAWBGkuJ9oL/yMD7w9olwVZIuApxKHU76e6kb2iRJz4CNzOELfy+1JB/xdeB59rC9qLxzEuCS/n16gYM4AHgLzAf0MUBPANAA0BAAqHlk9ZWqU53/Nb8AOJAKnq/8xU4AAAAASUVORK5CYII=" rel="icon" type="image/x-icon"/>
 
-    <!-- Bootstrap -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/agate.min.css">
-    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
-    <style>
-      body {
-        font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-        color: #4c555a;
-      }
+  <!-- Bootstrap -->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/agate.min.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+  <style>
+    body {
+      font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+      color: #4c555a;
+    }
 
-      .affix {
-        top: 20px;
-      }
+    .affix {
+      top: 20px;
+    }
 
-      .navbar-default {
-        border-radius: 0px;
-        background-color: #4c555a;
-        border: 0px;
-      }
+    .navbar-default {
+      border-radius: 0px;
+      background-color: #4c555a;
+      border: 0px;
+    }
 
-      .navbar-default .navbar-collapse, .navbar-default .navbar-form {
-        border-color: transparent;
-      }
+    .navbar-default .navbar-collapse, .navbar-default .navbar-form {
+      border-color: transparent;
+    }
 
-      .navbar-default .navbar-brand {
-        color: #e1e8ed;
-      }
+    .navbar-default .navbar-brand {
+      color: #e1e8ed;
+    }
 
-      .navbar-default .navbar-brand:hover {
-        color: white;
-      }
+    .navbar-default .navbar-brand:hover {
+      color: white;
+    }
 
-      .navbar-default .navbar-nav>li>span {
-        color: #e1e8ed;
-        display: inline-block;
-        padding: 15px;
-        font-size: 14px;
-        font-weight: 300;
-        letter-spacing: 0.3px;
-      }
+    .navbar-default .navbar-nav > li > span {
+      color: #e1e8ed;
+      display: inline-block;
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+    }
 
-      /* sidebar */
-      .bs-docs-sidebar {
-        padding-left: 20px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-      }
+    /* sidebar */
+    #sidebar {
+      padding-left: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
 
-      .bs-docs-sidebar li.title {
-        color: #939da3;
-        border-left: 2px solid transparent;
-        padding: 4px 20px;
-        font-weight: 300;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 15px;
-      }
+    #sidebar li.nav-H2 {
+      padding-left: 20px;
+      padding-top: 10px;
+    }
 
-      /* all links */
-      .bs-docs-sidebar .nav>li>a {
-        color: #4c555a;
-        border-left: 2px solid transparent;
-        padding: 4px 20px;
-        font-size: 15px;
-        font-weight: 400;
-      }
+    #sidebar li.nav-H2 > a {
+      color: #939da3;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 15px;
+    }
 
-      /* nested links */
-      .bs-docs-sidebar .nav .nav>li>a {
-        padding-top: 1px;
-        padding-bottom: 1px;
-        padding-left: 30px;
-        font-size: 13px;
-      }
+    #sidebar li.nav-H2 > ul {
+      margin-left: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
 
-      /* active & hover links */
-      .bs-docs-sidebar .nav>.active>a,
-      .bs-docs-sidebar .nav>li>a:hover,
-      .bs-docs-sidebar .nav>li>a:focus {
-        color: #337ab7;
-        text-decoration: none;
-        background-color: transparent;
-        border-left-color: #337ab7;
-      }
-      /* all active links */
-      .bs-docs-sidebar .nav>.active>a,
-      .bs-docs-sidebar .nav>.active:hover>a,
-      .bs-docs-sidebar .nav>.active:focus>a {
-        font-weight: 700;
-      }
-      /* nested active links */
-      .bs-docs-sidebar .nav .nav>.active>a,
-      .bs-docs-sidebar .nav .nav>.active:hover>a,
-      .bs-docs-sidebar .nav .nav>.active:focus>a {
-        font-weight: 500;
-      }
+    #sidebar li.nav-H3 > ul {
+      margin-left: 10px;
+      margin-bottom: 5px;
+      margin-top: 5px;
+    }
 
-      /* hide inactive nested list */
-      .bs-docs-sidebar .nav ul.nav {
-        display: none;
-      }
-      /* show active nested list */
-      .bs-docs-sidebar .nav>.active>ul.nav {
-        display: block;
-      }
+    #sidebar li.nav-H4 > a {
+      font-size: 0.9em;
+    }
 
-      section {
-        margin-top: 40px;
-        padding-bottom: 40px;
-        border-bottom: 2px solid #e1e8ed;
-      }
+    /* all links */
+    #sidebar li > a {
+      padding: 0 5px;
+      color: #4c555a;
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      font-size: 15px;
+      font-weight: 400;
+    }
 
-      section:first-child {
-        margin-top: 0px;
-      }
+    /* active & hover links */
+    #sidebar .nav-H2.active > a,
+    .bs-docs-sidebar .nav li > a:hover,
+    .bs-docs-sidebar .nav li > a:focus {
+      color: #337ab7;
+      text-decoration: none;
+      background-color: transparent;
+      border-left-color: #337ab7;
+    }
 
-      section:last-child {
-        border-bottom: 0px;
-      }
+    /* all active links */
+    .bs-docs-sidebar .nav > .active > a,
+    .bs-docs-sidebar .nav > .active:hover > a,
+    .bs-docs-sidebar .nav > .active:focus > a {
+      font-weight: 700;
+    }
 
-      section.group h3 {
-        margin-bottom: 15px;
-        margin-top: 30px;
-      }
+    /* nested active links */
+    .bs-docs-sidebar .nav .nav > .active > a,
+    .bs-docs-sidebar .nav .nav > .active:hover > a,
+    .bs-docs-sidebar .nav .nav > .active:focus > a {
+      font-weight: 500;
+    }
 
-      section.group h4 {
-        margin-top: 30px;
-        font-weight: 300;
-        color: #939da3;
-        text-transform: uppercase;
-        font-size: 13px;
-        letter-spacing: 1px;
-        padding-bottom: 10px;
-        margin-bottom: 0px;
-        border-bottom: 1px solid #e1e8ed;
-      }
+    /* hide inactive nested list */
+    #sidebar .nav-H3 ul {
+      display: none;
+    }
 
-      ul.attributes {
-        list-style-type: none;
-        font-size: 14px;
-        padding-left: 0px;
-      }
+    #sidebar .nav-H3:before {
+      content: '>';
+      font-family: "Source Code Pro", Monaco, monospace;
+      position: absolute;
+      left: -5px;
+      color: #e1e8ed;
+    }
 
-      ul.attributes .row-attribute {
-        border-bottom: 1px solid #f0f4f7;
-        padding: 15px 0px;
-      }
+    #sidebar .nav-H3.active:before {
+      color: #6f7579;
+      content: '>';
+      font-family: "Source Code Pro", Monaco, monospace;
+      position: absolute;
+      left: -5px;
+    }
 
-      ul.relationships {
-        margin-top: 10px;
-        list-style-type: none;
-        padding-left: 0px;
-      }
+    /* show active nested list */
+    #sidebar .nav-H3.active > ul {
+      display: block;
+    }
 
-      ul.attributes > li:last-child > p {
-        margin-bottom: 0px;
-      }
+    section {
+      margin-top: 40px;
+      padding-bottom: 40px;
+      border-bottom: 2px solid #e1e8ed;
+    }
 
-      .attribute-name strong {
-        font-family: 'Source Code Pro', Helvetica, Arial, sans-serif;
-        font-weight: 600;
-        font-size: 13px;
-      }
+    section:first-child {
+      margin-top: 0px;
+    }
 
-      .attribute-description {
-        font-size: 14px;
-      }
+    section:last-child {
+      border-bottom: 0px;
+    }
 
-      ul.attributes .optional, ul.attributes .allowed {,
-        color: #939da3;
-        font-size: 13px;
-        font-weight: 300;
-        margin-bottom: 0px;
-      }
+    section.group h3 {
+      margin-bottom: 15px;
+      margin-top: 30px;
+    }
 
-      ul.attributes .allowed {
-        font-style: italic;
-      }
+    section.group h4 {
+      margin-top: 30px;
+      font-weight: 300;
+      color: #939da3;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 1px;
+      padding-bottom: 10px;
+      margin-bottom: 0px;
+      border-bottom: 1px solid #e1e8ed;
+    }
 
-      ul.attributes .optional {
-        margin-top: 5px;
-      }
+    ul.attributes {
+      list-style-type: none;
+      font-size: 14px;
+      padding-left: 0px;
+    }
 
-      footer {
-        margin-top: 60px;
-        padding: 10px 0px;
-        border-top: 1px solid #e7e7e7;
-        background-color: #4c555a;
-        text-align: center;
-      }
+    ul.attributes .row-attribute {
+      border-bottom: 1px solid #f0f4f7;
+      padding: 15px 0px;
+    }
 
-      footer a {
-        color: #e1e8ed;
-      }
+    ul.relationships {
+      margin-top: 10px;
+      list-style-type: none;
+      padding-left: 0px;
+    }
 
-      footer a:hover {
-        color: white;
-      }
+    ul.attributes > li:last-child > p {
+      margin-bottom: 0px;
+    }
 
-      code.inline {
-        display: inline-block;
-        padding: 0 5px;
-        background: whiteSmoke;
-        border: 1px solid #e7e7e7;
-        -webkit-border-radius: 4px;
-        border-radius: 4px;
-        color: #b93d6a;
-        font-family: 'Source Code Pro',Menlo,monospace;
-        font-size: 12px;
-        line-height: 20px;
-      }
+    .attribute-name strong {
+      font-family: 'Source Code Pro', Helvetica, Arial, sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+    }
 
-      pre.nostyle {
-        padding: 0px;
-        margin: 0px;
-        border-radius: 0px;
-        position: relative;
-        margin: 10px 0px;
-        padding: 0px;
-        border: 1px solid #e1e8ed;
-        font-size: 12px;
-        line-height: 16px;
-      }
+    .attribute-description {
+      font-size: 14px;
+    }
 
-      pre.nostyle code {
-        padding: 10px 15px;
-      }
+    ul.attributes .optional, ul.attributes .allowed {,
+    color: #939da3;
+      font-size: 13px;
+      font-weight: 300;
+      margin-bottom: 0px;
+    }
 
-      .hljs {
-        background-color: #4c555a;
-      }
+    ul.attributes .allowed {
+      font-style: italic;
+    }
 
-    </style>
+    ul.attributes .optional {
+      margin-top: 5px;
+    }
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle Description</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="<%= api.base_url %>">
-                <%= api.title %>
-            </a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li>
-                    <span><%= api.description %></span>
-                </li>
-            </ul>
-        </div>
-      </div>
-    </nav>
+    footer {
+      margin-top: 60px;
+      padding: 10px 0px;
+      border-top: 1px solid #e7e7e7;
+      background-color: #4c555a;
+      text-align: center;
+    }
 
-    <div class="container">
-      <div class="row">
+    footer a {
+      color: #e1e8ed;
+    }
 
-        <!--Main Content -->
-        <div class="col-md-9">
-          <% api.resources.each do |resource_name, resource| %>
-            <section id="<%= resource_name %>" class="group">
-              <h3><%= resource_name.titleize %></h3>
+    footer a:hover {
+      color: white;
+    }
 
-              <p><%= resource.description %></p>
+    code.inline {
+      display: inline-block;
+      padding: 0 5px;
+      background: whiteSmoke;
+      border: 1px solid #e7e7e7;
+      -webkit-border-radius: 4px;
+      border-radius: 4px;
+      color: #b93d6a;
+      font-family: 'Source Code Pro', Menlo, monospace;
+      font-size: 12px;
+      line-height: 20px;
+    }
 
-              <div class="details">
-                <h4>Attributes</h4>
-                <ul class="attributes">
-                  <% resource.attributes.each do |attribute_name, attribute| %>
+    pre.nostyle {
+      padding: 0px;
+      margin: 0px;
+      border-radius: 0px;
+      position: relative;
+      margin: 10px 0px;
+      padding: 0px;
+      border: 1px solid #e1e8ed;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    pre.nostyle code {
+      padding: 10px 15px;
+    }
+
+    .hljs {
+      background-color: #4c555a;
+    }
+
+  </style>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script
+      src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle Description</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<%= api.base_url %>">
+        <%= api.title %>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="row">
+
+    <!--Main Content -->
+    <div class="col-md-9" id="_main">
+      <section id="api">
+        <h1><%= api.title %></h1>
+        <p><%= api.description %></p>
+      </section>
+
+      <h2>Resources</h2>
+      <% api.resources.each do |resource_name, resource| %>
+          <section id="<%= resource_name %>" class="group">
+            <h3><%= resource_name.titleize %></h3>
+
+            <p><%= resource.description %></p>
+
+            <div class="details">
+              <h4>Attributes</h4>
+              <ul class="attributes">
+                <% resource.attributes.each do |attribute_name, attribute| %>
                     <li>
                       <div class="row-attribute">
                         <div class="col-xs-4 attribute-name">
@@ -306,126 +336,172 @@
                         <div style="clear: both;"></div>
                       </div>
                     </li>
-                  <% end %>
-                </ul>
+                <% end %>
+              </ul>
 
-                <h4 id="<%= resource_name %>-examples">Examples</h4>
-                <br>
-                Basic Request:
-                <pre class="nostyle"><code>GET <%= api.base_url %>/<%= resource_name %>/:id HTTP/1.1</code></pre>
-                <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/vnd.api+json
+              <h4 id="<%= resource_name %>-examples">Examples</h4>
+              <br>
+              Basic Request:
+              <pre class="nostyle"><code>GET <%= api.base_url %>
+                /<%= resource_name %>/:id HTTP/1.1</code></pre>
+              <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1
+                200 OK
+                Content-Type: application/vnd.api+json
 
-{
-  "data": [{
-    "type": "articles",
-    "id": "1",
-    "attributes": {
-      "title": "JSON API paints my bikeshed!",
-      "body": "The shortest article. Ever.",
-      "created": "2015-05-22T14:56:29.000Z",
-      "updated": "2015-05-22T14:56:28.000Z"
-    },
-    "relationships": {
-      "author": {
-        "data": {"id": "42", "type": "people"}
-      }
-    }
-  }],
-  "included": [
-    {
-      "type": "people",
-      "id": "42",
-      "attributes": {
-        "name": "John",
-        "age": 80,
-        "gender": "male"
-      }
-    }
-  ]
-}</code></pre></div>
-                <h4 id="<%= resource_name %>-relationships">Relationships</h4>
-                <ul class="relationships">
-                  <% resource.relationships.each do |relationship_name, relationship| %>
+                {
+                "data": [{
+                "type": "articles",
+                "id": "1",
+                "attributes": {
+                "title": "JSON API paints my bikeshed!",
+                "body": "The shortest article. Ever.",
+                "created": "2015-05-22T14:56:29.000Z",
+                "updated": "2015-05-22T14:56:28.000Z"
+                },
+                "relationships": {
+                "author": {
+                "data": {"id": "42", "type": "people"}
+                }
+                }
+                }],
+                "included": [
+                {
+                "type": "people",
+                "id": "42",
+                "attributes": {
+                "name": "John",
+                "age": 80,
+                "gender": "male"
+                }
+                }
+                ]
+                }</code></pre>
+              </div>
+              <h4 id="<%= resource_name %>-relationships">Relationships</h4>
+              <ul class="relationships">
+                <% resource.relationships.each do |relationship_name, relationship| %>
                     <li id="<%= resource_name %>-<%= relationship_name %>" class="subgroup">
                       <strong><a href="#<%= relationship.resource %>"><%= relationship_name %></a></strong>
                       <small class="allowed"><%= "&middot; #{relationship.allow.to_sentence}" %></small>
                     </li>
-                  <% end %>
-                </ul>
-              </div>
-            </section>
-          <% end %>
-
-        </div>
-
-        <!--Side Bar -->
-        <nav class="col-md-3 bs-docs-sidebar hidden-sm hidden-xs scrollspy">
-            <ul id="sidebar" class="nav nav-stacked" data-spy="affix">
-                <li class="title">Resources</li>
-                <% api.resources.each do |resource_name, resource| %>
-                    <li>
-                      <a href="#<%= resource_name %>"><%= resource_name.titleize %></a>
-                        <ul class="nav nav-stacked">
-                          <li><a href="#<%= resource_name %>-examples">Examples</a></li>
-                          <li><a href="#<%= resource_name %>-relationships">Relationships</a></li>
-                        </ul>
-                    </li>
                 <% end %>
-            </ul>
-        </nav>
+              </ul>
+            </div>
+          </section>
+      <% end %>
 
-      </div>
     </div>
 
-    <footer>
-        <div class="container">
-          <div class="row">
-            <div class="col-xs-12">
-              <a href="https://github.com/brandfolder/jsonapionify">Powered by JSONAPIonify</a>
-          </div>
-        </div>
-    </footer>
+    <!--Side Bar -->
+    <nav class="col-md-3 bs-docs-sidebar hidden-sm hidden-xs scrollspy">
+      <ul id="sidebar" class="nav" data-spy="affix"></ul>
+    </nav>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/languages/http.min.js"></script>
-    <script>
-      $('body').scrollspy({
-        target: '.bs-docs-sidebar',
-        offset: 40
-      });
+  </div>
+</div>
 
-      $('#sidebar').affix({
-          offset: {
-              top: $('#sidebar').offset().top
-          }
-      });
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <a href="https://github.com/brandfolder/jsonapionify">
+          Powered by JSONAPIonify
+        </a>
+      </div>
+    </div>
+</footer>
 
-      hljs.initHighlightingOnLoad();
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/languages/http.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+<script>
+  var $sidebar = $('#sidebar');
 
-      $("a[href^='#']").on('click', function(e) {
+  var nav = function () {
+    var $e, $prevE;
+    var currentH2 = {}, currentH3 = {}, currentH4 = {};
+    var nav = {};
+    $('#_main h2, #_main h3, #_main h4').each(function (i, e) {
+      var key = 'nav-' + i;
+      $prevE = $e;
+      $e = $(e);
+      switch (e.tagName) {
+        case 'H2':
+          nav[key] = {};
+          nav[key]['_element'] = $e;
+          currentH2 = nav[key];
+          break;
+        case 'H3':
+          currentH2[key] = {};
+          currentH2[key]['_element'] = $e;
+          currentH3 = currentH2[key];
+          break;
+        case 'H4':
+          currentH3[key] = {};
+          currentH3[key]['_element'] = $e;
+          currentH4 = currentH3[key];
+          break;
+      }
+    });
+    return nav
+  }();
 
-         // prevent default anchor click behavior
-         e.preventDefault();
+  function buildNavigation(map, $list) {
+    $.each(map, function (id, sublist) {
+      if (id == '_element') {
+        return
+      }
+      $e = $(sublist._element);
+      $e.attr('id', id);
+      var $listItem = $('<li class="nav-' + $e[0].tagName + '"></li>');
+      $listItem.append($('<a href="#' + id + '">' + $e.text() + '</a>'));
+      var $subList = $('<ul class="nav"></ul>');
+      buildNavigation(sublist, $subList);
+      if ($subList.find('li').length) {
+        $listItem.append($subList)
+      }
+      $list.append($listItem)
+    })
+  }
+  buildNavigation(nav, $sidebar);
+  $sidebar.find('.nav-H3 ul').addClass('nav-stacked');
 
-         // store hash
-         var hash = this.hash;
+  $('body').scrollspy({
+    target: '.bs-docs-sidebar',
+    offset: 40
+  });
 
-         // animate
-         $('html, body').animate({
-             scrollTop: $(hash).offset().top - 20
-           }, 300, function(){
+  $sidebar.affix({
+    offset: {
+      top: $sidebar.offset().top
+    }
+  });
 
-             // when done, add hash to url
-             // (default click behaviour)
-             window.location.hash = hash;
-           });
+  hljs.initHighlightingOnLoad();
 
-      });
-    </script>
-  </body>
+  $("a[href^='#']").on('click', function (e) {
+
+    // prevent default anchor click behavior
+    e.preventDefault();
+
+    // store hash
+    var hash = this.hash;
+
+    // animate
+    $('html, body').animate({
+      scrollTop: $(hash).offset().top - 20
+    }, 300, function () {
+
+      // when done, add hash to url
+      // (default click behaviour)
+      window.location.hash = hash;
+    });
+
+  });
+</script>
+</body>
 </html>

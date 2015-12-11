@@ -4,10 +4,11 @@ require 'active_support/core_ext/array'
 
 module JSONAPIonify
   class Documentation
+    using JSONAPIonify::IndentedString
     RENDERER = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
 
     def self.render_markdown(string)
-      RENDERER.render(string)
+      RENDERER.render(string.deindent)
     end
 
     attr_reader :api

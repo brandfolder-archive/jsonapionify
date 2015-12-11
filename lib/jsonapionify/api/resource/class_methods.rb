@@ -3,7 +3,6 @@ require 'redcarpet'
 
 module JSONAPIonify::Api
   module Resource::ClassMethods
-    using JSONAPIonify::IndentedString
 
     def self.extended(klass)
       klass.include ActiveSupport::Rescuable
@@ -18,7 +17,7 @@ module JSONAPIonify::Api
     end
 
     def description(description)
-      @description = description.deindent
+      @description = description
     end
 
     def set_api(api)

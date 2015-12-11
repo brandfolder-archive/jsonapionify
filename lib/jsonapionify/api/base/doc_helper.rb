@@ -9,13 +9,22 @@ module JSONAPIonify::Api
     end
 
     def documentation_output(request)
-      @documentation_output ||= JSONAPIonify::Documentation.new(documentation_object(request)).result
+      # @documentation_output ||=
+      JSONAPIonify::Documentation.new(documentation_object(request)).result
+    end
+
+    def resources_in_order
+      ordered_names = (@documentation_order || [])
+      names = ordered_names + (defined_resources.keys - ordered_names)
+      names.map do |name|
+        [name, resource(name)]
+      end
     end
 
     def documentation_object(request)
-      title                 = @title || self.name
-      description           = JSONAPIonify::Documentation.render_markdown description(@description || '')
-      @documentation_object ||= Class.new(SimpleDelegator) do
+      title       = @title || self.name
+      description = JSONAPIonify::Documentation.render_markdown description(@description || '')
+      Class.new(SimpleDelegator) do
         define_method(:base_url) do
           URI.parse(request.url).tap do |uri|
             uri.query = nil
@@ -33,8 +42,8 @@ module JSONAPIonify::Api
         end
 
         define_method(:resources) do
-          defined_resources.each_with_object({}) do |(name, _), hash|
-            hash[name.to_s] = resource(name).documentation_object(request)
+          resources_in_order.each_with_object({}) do |(name, resource), hash|
+            hash[name.to_s] = resource.documentation_object(request)
           end
         end
       end.new(self)

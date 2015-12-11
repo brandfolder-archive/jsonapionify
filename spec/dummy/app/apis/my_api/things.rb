@@ -32,7 +32,7 @@ MyApi.define_resource :things do
   end
 
   index do |context|
-    cache Digest::SHA2.hexdigest context.paginated_collection.map(&:cache_key).join
+    cache context.paginated_collection.cache_key
   end
 
   read do |context|

@@ -41,6 +41,10 @@ module JSONAPIonify::Api
       const_get(:ResourceBase, false)
     end
 
+    def documentation_order(resources)
+      @documentation_order = resources
+    end
+
     def process_index(request)
       headers                    = ContextDelegate.new(request, resource_class.new, resource_class.context_definitions).headers
       obj                        = JSONAPIonify.new_object
