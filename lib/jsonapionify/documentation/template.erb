@@ -12,7 +12,7 @@
     <!-- Bootstrap -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/agate.min.css">    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/agate.min.css">
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
     <style>
@@ -87,8 +87,8 @@
       }
 
       /* active & hover links */
-      .bs-docs-sidebar .nav>.active>a, 
-      .bs-docs-sidebar .nav>li>a:hover, 
+      .bs-docs-sidebar .nav>.active>a,
+      .bs-docs-sidebar .nav>li>a:hover,
       .bs-docs-sidebar .nav>li>a:focus {
         color: #337ab7;
         text-decoration: none;
@@ -96,13 +96,13 @@
         border-left-color: #337ab7;
       }
       /* all active links */
-      .bs-docs-sidebar .nav>.active>a, 
+      .bs-docs-sidebar .nav>.active>a,
       .bs-docs-sidebar .nav>.active:hover>a,
       .bs-docs-sidebar .nav>.active:focus>a {
         font-weight: 700;
       }
       /* nested active links */
-      .bs-docs-sidebar .nav .nav>.active>a, 
+      .bs-docs-sidebar .nav .nav>.active>a,
       .bs-docs-sidebar .nav .nav>.active:hover>a,
       .bs-docs-sidebar .nav .nav>.active:focus>a {
         font-weight: 500;
@@ -180,7 +180,7 @@
       }
 
       ul.attributes .optional, ul.attributes .allowed {,
-        color: #939da3;  
+        color: #939da3;
         font-size: 13px;
         font-weight: 300;
         margin-bottom: 0px;
@@ -232,7 +232,7 @@
         padding: 0px;
         border: 1px solid #e1e8ed;
         font-size: 12px;
-        line-height: 16px;        
+        line-height: 16px;
       }
 
       pre.nostyle code {
@@ -301,7 +301,7 @@
                         </div>
                         <div class="col-xs-8 attribute-description">
                           <p><%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %></p>
-                          <p class="allowed">Allowed: <%= "#{attribute.allow.to_sentence}" %></p>                        
+                          <p class="allowed">Allowed: <%= "#{attribute.allow.to_sentence}" %></p>
                         </div>
                         <div style="clear: both;"></div>
                       </div>

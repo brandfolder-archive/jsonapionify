@@ -227,8 +227,7 @@ module JSONAPIonify::Structure
       # Instance Methods
 
       def permitted_key?(key)
-        c = caller
-        !allow_only_permitted || permitted_keys.map(&:to_sym).include?(key.to_sym) rescue binding.pry
+        !allow_only_permitted || permitted_keys.map(&:to_sym).include?(key.to_sym)
       end
 
       def required_key?(key)
