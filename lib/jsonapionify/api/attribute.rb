@@ -5,7 +5,7 @@ module JSONAPIonify::Api
     def initialize(name, type, description, read: true, write: true, required: false)
       @name        = name
       @type        = type
-      @description = description
+      @description = JSONAPIonify::Documentation.render_markdown description
       @read        = read
       @write       = write
       @required    = required

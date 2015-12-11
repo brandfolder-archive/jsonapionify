@@ -47,15 +47,14 @@ module JSONAPIonify::Api
     end
 
     def documentation_object(request)
-      description           = @description || ''
+      description           = JSONAPIonify::Documentation.render_markdown @description || ''
       @documentation_object ||= Class.new(SimpleDelegator) do
         define_method(:url) do
           File.join request.host, type
         end
 
         define_method(:description) do
-          markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-          markdown.render(description)
+          description
         end
 
         define_method(:resources) do

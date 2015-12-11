@@ -28,7 +28,8 @@ module JSONAPIonify::Api
     def load_resources
       return unless load_path
       if @last_digest != resource_file_digest
-        @last_digest = resource_file_digest
+        @documentation_output = nil
+        @last_digest          = resource_file_digest
         $".delete_if { |s| s.start_with? load_path }
         resource_files.each do |file|
           require file

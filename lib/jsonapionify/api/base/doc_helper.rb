@@ -8,9 +8,13 @@ module JSONAPIonify::Api
       @description = description
     end
 
+    def documentation_output(request)
+      @documentation_output ||= JSONAPIonify::Documentation.new(documentation_object(request)).result
+    end
+
     def documentation_object(request)
       title                 = @title || self.name
-      description           = @description || ''
+      description           = JSONAPIonify::Documentation.render_markdown description(@description || '')
       @documentation_object ||= Class.new(SimpleDelegator) do
         define_method(:base_url) do
           URI.parse(request.url).tap do |uri|

@@ -1,5 +1,6 @@
 require_relative '../../lib/models'
 class MyApi < JSONAPIonify::Api::Base
+  title "My Awesome API"
   cache :memory_store
 
   rescue_from ActiveRecord::RecordNotFound, error: :not_found

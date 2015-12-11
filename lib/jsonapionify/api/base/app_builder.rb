@@ -21,8 +21,7 @@ module JSONAPIonify::Api
               return [301, { 'location' => request.path.chomp(request.path_info) }, []]
             end
             response   = Rack::Response.new
-            doc_object = api.documentation_object(request)
-            response.write JSONAPIonify::Documentation.new(doc_object).result
+            response.write api.documentation_output(request)
             response.finish
           }
         end
