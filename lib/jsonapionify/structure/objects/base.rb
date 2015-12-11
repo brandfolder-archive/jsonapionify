@@ -116,18 +116,17 @@ module JSONAPIonify::Structure
         end
       end
 
-      def validate(cache: true)
-        fetcher = proc do
-          run_callbacks :validation do
-            collect_child_errors
-            collect_child_warnings
-          end
-          [errors, warnings]
-        end
-        object.values.each { |val| val.validate(cache: cache) if val.respond_to? :validate }
+      def validate
+        object.values.each { |val| val.validate if val.respond_to? :validate }
         [errors, warnings].each(&:clear)
         @errors, @warnings =
-          cache ? cache_store.fetch(signature, &fetcher) : fetcher.call
+          cache_store.fetch(signature) do
+            run_callbacks :validation do
+              collect_child_errors
+              collect_child_warnings
+            end
+            [errors, warnings]
+          end
         errors.blank?
       end
 

@@ -32,13 +32,10 @@ module JSONAPIonify::Structure
         Array.instance_method(method).bind(self)
       end
 
-      def validate(cache: true)
-        fetcher = proc do
-          each do |member|
-            member.validate(cache: cache) if member.respond_to? :validate
-          end
+      def validate
+        each do |member|
+          member.validate if member.respond_to? :validate
         end
-        cache ? cache_store.fetch(signature, &fetcher) : fetcher.call
       end
 
       def signature
