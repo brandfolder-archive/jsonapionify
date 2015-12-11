@@ -28,9 +28,7 @@ module JSONAPIonify::Api
 
     def new_instance(&block)
       context :new_instance do |context|
-        proc do |*args|
-          Object.new.instance_exec(context.scope, context, *args, &block)
-        end
+        Object.new.instance_exec(context.scope, context, &block)
       end
     end
   end

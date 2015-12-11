@@ -18,7 +18,10 @@ module JSONAPIonify::Api
     end
 
     def create(**options, &block)
-      define_action(:create, **options, &block).response status: 201 do |context|
+      define_action(:create, **options) do |context|
+        context.instance = context.new_instance
+        instance_exec(context, &block)
+      end.response status: 201 do |context|
         context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
         context.response_object.to_json
       end

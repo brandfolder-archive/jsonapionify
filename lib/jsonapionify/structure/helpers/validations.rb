@@ -182,7 +182,6 @@ module JSONAPIonify::Structure
 
       included do
         extend JSONAPIonify::InheritedAttributes
-        delegate *ClassMethods.instance_methods, to: :class
         class_attribute :allow_only_permitted, instance_writer: false
         inherited_hash_attribute :allowed_type_map, :required_keys, instance_accessor: false
         inherited_array_attribute :permitted_keys, instance_accessor: false
@@ -228,7 +227,8 @@ module JSONAPIonify::Structure
       # Instance Methods
 
       def permitted_key?(key)
-        !allow_only_permitted || permitted_keys.map(&:to_sym).include?(key.to_sym)
+        c = caller
+        !allow_only_permitted || permitted_keys.map(&:to_sym).include?(key.to_sym) rescue binding.pry
       end
 
       def required_key?(key)

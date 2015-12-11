@@ -59,19 +59,24 @@ module JSONAPIonify::Api
 
       context(:request_attributes, readonly: true) do |context|
         request_object = context.request_object
-        error_now :invalid_type if context.request_resource <= self.class
+        error_now :wrong_type unless context.request_resource <= self.class
         request_attributes = context.request_data.fetch(:attributes) do
           error_now :attributes_missing
         end
         request_attributes.tap do |attributes|
           writable_attributes = self.class.attributes.select(&:write?)
-          required_attributes = writable_attributes.select(&:required?)
-          optional_attributes = writable_attributes.select(&:optional?)
-          attributes.must_contain!(required_attributes.map(&:name))
-          attributes.may_contain!(optional_attributes.map(&:name))
-          request_object.validate!(cache: false)
+          required_attributes = writable_attributes.select(&:required?).map(&:name)
+          optional_attributes = writable_attributes.select(&:optional?).map(&:name)
+          if (missing_attributes = required_attributes - attributes.keys).present?
+            error_now :missing_required_attributes, missing_attributes
+          end
+          if (extra_attributes = attributes.keys - (optional_attributes + required_attributes)).present?
+            extra_attributes.each { |attr| error :unpermitted_attribute, attr }
+            raise error_exception
+          end
+          request_object.validate(cache: false)
           error_now(:request_object_invalid, context) if request_object.errors.present?
-        end
+        end.to_hash
       end
 
       context(:request_resources, readonly: true) do |context|
@@ -90,12 +95,12 @@ module JSONAPIonify::Api
 
       context(:request_resource, readonly: true) do |context|
         item = context.request_data
-        find_resource_with_context item, context, pointer: 'data'
+        find_resource item, pointer: 'data'
       end
 
-      context(:request_data) do |_, context|
+      context(:request_data) do |context|
         context.request_object.fetch(:data) {
-          error_now_with_context(:missing_data, context)
+          error_now(:missing_data)
         }
       end
 

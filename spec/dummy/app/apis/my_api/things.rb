@@ -31,7 +31,16 @@ MyApi.define_resource :things do
     scope.new
   end
 
-  index do
+  create do |context|
+    context.instance.update context.request_attributes
+  end
+
+  update do |context|
+    context.instance.update context.request_attributes
+  end
+
+  delete do |context|
+    context.instance.destroy
   end
 
 end

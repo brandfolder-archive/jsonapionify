@@ -2,6 +2,8 @@ require_relative '../../lib/models'
 class MyApi < JSONAPIonify::Api::Base
   cache :memory_store
 
+  rescue_from ActiveRecord::RecordNotFound, error: :not_found
+
   pagination do |collection, params, links|
     page_number = Integer(params['number'] || 1)
     page_number = 1 if page_number < 1

@@ -25,6 +25,23 @@ module JSONAPIonify::Api
         status '400'
       end
 
+      error :missing_required_attributes do |attributes|
+        pointer 'data/attributes'
+        title 'Missing Required Attributes'
+        detail "Missing attributes: #{attributes.to_sentence}"
+      end
+
+      error :unpermitted_attribute do |attribute|
+        pointer "data/attributes/#{attribute}"
+        title 'Attribute not permitted'
+        detail "Attribute not permitted: #{attribute}"
+      end
+
+      error :wrong_type do
+        title 'Wrong type for request'
+        status '400'
+      end
+
       error :missing_attributes do
         title 'Missing Member'
         detail 'missing attributes member'
