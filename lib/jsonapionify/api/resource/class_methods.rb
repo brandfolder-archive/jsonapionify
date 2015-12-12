@@ -57,7 +57,7 @@ module JSONAPIonify::Api
         end
 
         define_method(:resources) do
-          defined_resources.each_with_object({}) do |(name, _), hash|
+          resource_definitions.each_with_object({}) do |(name, _), hash|
             hash[name.to_s] = resource(name).documentation_object
           end
         end

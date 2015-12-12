@@ -51,7 +51,7 @@ module JSONAPIonify::Api
       obj[:meta]                 = { resources: {} }
       obj[:links]                = { self: request.root_url }
       obj[:meta][:documentation] = File.join(request.root_url, 'docs')
-      obj[:meta][:resources]     = defined_resources.each_with_object({}) do |(name, _), hash|
+      obj[:meta][:resources]     = resource_definitions.each_with_object({}) do |(name, _), hash|
         hash[name] = resource(name).get_url(request.root_url)
       end
       Rack::Response.new.tap do |response|

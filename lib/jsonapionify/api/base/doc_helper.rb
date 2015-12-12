@@ -15,7 +15,7 @@ module JSONAPIonify::Api
 
     def resources_in_order
       ordered_names = (@documentation_order || [])
-      names = ordered_names + (defined_resources.keys - ordered_names)
+      names = ordered_names + (resource_definitions.keys - ordered_names)
       names.map do |name|
         [name, resource(name)]
       end
