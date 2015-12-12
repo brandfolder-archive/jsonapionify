@@ -1,4 +1,6 @@
 language: ruby
+env:
+  CODECLIMATE_REPO_TOKEN: d336aed8adb82f0667fd8a71aad1cfce03883101fe97cccc3cad7598928d391b
 rvm:
   - 2.2.3
 before_install: gem install bundler -v 1.10.6
