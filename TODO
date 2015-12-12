@@ -6,3 +6,4 @@
 * Rename defined_resources to resource_definitions
 * Handle includes
 * TESTS
+* Logger
