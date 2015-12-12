@@ -1,3 +1,5 @@
+require 'oj'
+
 module JSONAPIonify::Api
   module Resource::DefaultErrors
     extend ActiveSupport::Concern
