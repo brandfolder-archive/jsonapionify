@@ -1,3 +1,4 @@
+require "active_support/json"
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
