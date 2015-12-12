@@ -1,8 +1,8 @@
 # JSONAPIonify
 [![Version](http://allthebadges.io/brandfolder/jsonapionify/badge_fury.png)](http://allthebadges.io/brandfolder/jsonapionify/badge_fury)
 [![Build Status](http://allthebadges.io/brandfolder/jsonapionify/travis.png)](http://allthebadges.io/brandfolder/jsonapionify/travis)
-[![Coverage](http://allthebadges.io/brandfolder/jsonapionify/coveralls.png)](http://allthebadges.io/brandfolder/jsonapionify/coveralls)
 [![Code Climate](http://allthebadges.io/brandfolder/jsonapionify/code_climate.png)](http://allthebadges.io/brandfolder/jsonapionify/code_climate)
+[![Test Coverage](https://codeclimate.com/github/brandfolder/jsonapionify/badges/coverage.svg)](https://codeclimate.com/github/brandfolder/jsonapionify/coverage)
 
 TODO: Write Description
 
