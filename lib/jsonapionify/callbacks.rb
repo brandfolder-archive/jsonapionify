@@ -26,8 +26,9 @@ module JSONAPIonify
               outer_block = (outer_block || sym).to_proc
               prev_chain  = instance_method(chains[timing])
               define_method chains[timing] do |*args, &block|
-                prev_chain.bind(self).call(*args, &block)
-                instance_exec(*args, &outer_block)
+                if prev_chain.bind(self).call(*args, &block) != false
+                  instance_exec(*args, &outer_block)
+                end
               end
             end
           end
