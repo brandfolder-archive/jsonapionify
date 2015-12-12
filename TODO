@@ -1,0 +1,8 @@
+* Build out association interface.
+* Resource class instead of scope (resource class defines the first scope)
+** Lookup type by resource class for association rather than making it explicit.
+* Polymorphic relationships
+* Documentation Examples
+* Rename defined_resources to resource definitions
+* Handle includes
+
