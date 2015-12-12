@@ -46,11 +46,6 @@ module JSONAPIonify::Api
         detail "Attribute not permitted: #{attribute}"
       end
 
-      error :wrong_type do
-        title 'Wrong type for request'
-        status '400'
-      end
-
       error :missing_attributes do
         title 'Missing Member'
         detail 'missing attributes member'
