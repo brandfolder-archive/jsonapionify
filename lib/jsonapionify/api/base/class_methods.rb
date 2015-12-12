@@ -21,15 +21,15 @@ module JSONAPIonify::Api
       Dir.glob File.join(load_path, '**/*.rb')
     end
 
-    def resource_file_digest
+    def resource_signature
       Digest::SHA2.hexdigest resource_files.map { |file| File.read file }.join
     end
 
     def load_resources
       return unless load_path
-      if @last_digest != resource_file_digest
+      if @last_signature != resource_signature
         @documentation_output = nil
-        @last_digest          = resource_file_digest
+        @last_signature       = resource_signature
         $".delete_if { |s| s.start_with? load_path }
         resource_files.each do |file|
           require file
