@@ -64,12 +64,11 @@ module JSONAPIonify::Api
 
       context(:request_attributes, readonly: true) do |context|
         request_object = context.request_object
-        error_now :wrong_type unless context.request_resource <= self.class
         request_attributes = context.request_data.fetch(:attributes) do
           error_now :attributes_missing
         end
         request_attributes.tap do |attributes|
-          writable_attributes = self.class.attributes.select(&:write?)
+          writable_attributes = context.request_resource.attributes.select(&:write?)
           required_attributes = writable_attributes.select(&:required?).map(&:name)
           optional_attributes = writable_attributes.select(&:optional?).map(&:name)
           if (missing_attributes = required_attributes - attributes.keys).present?
