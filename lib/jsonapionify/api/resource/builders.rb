@@ -4,6 +4,7 @@ module JSONAPIonify::Api
 
     module ClassMethods
       def build_resource(request, instance, fields: api.fields, relationships: true)
+        return nil unless instance
         resource_url = build_url(request, instance)
         id           = build_id(instance)
         JSONAPIonify::Structure::Objects::Resource.new.tap do |resource|
