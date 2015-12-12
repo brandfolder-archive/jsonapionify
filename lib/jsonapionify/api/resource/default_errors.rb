@@ -3,6 +3,7 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
     included do
       rescue_from JSONAPIonify::Structure::ValidationError, error: :jsonapi_validation_error
+      rescue_from Oj::ParseError, error: :json_parse_error
 
       Rack::Utils::SYMBOL_TO_STATUS_CODE.each do |symbol, code|
         message = Rack::Utils::HTTP_STATUS_CODES[code]
@@ -16,6 +17,13 @@ module JSONAPIonify::Api
         pointer ''
         title 'Missing Member'
         detail 'missing data member'
+        status '422'
+      end
+
+      error :json_parse_error do
+        title 'Parse Error'
+        detail 'Could not parse JSON object'
+        status '422'
       end
 
       error :invalid_field_param do |type, field|
@@ -29,6 +37,7 @@ module JSONAPIonify::Api
         pointer 'data/attributes'
         title 'Missing Required Attributes'
         detail "Missing attributes: #{attributes.to_sentence}"
+        status '422'
       end
 
       error :unpermitted_attribute do |attribute|
