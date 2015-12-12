@@ -79,12 +79,11 @@ module JSONAPIonify::Api
 
         begin
           # Run Callbacks
-          unless callbacks.run_callbacks(:request, context) { true }
-            if errors.present?
-              raise error_exception
-            else
-              error_now :internal_server_error
-            end
+          case callbacks.run_callbacks(:request, context) { errors.present? }
+          when true # Boolean true means errors
+            raise error_exception
+          when nil # nil means no result, callback failed
+            error_now :internal_server_error
           end
 
           # Start the request
