@@ -4,7 +4,8 @@ require 'fileutils'
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :missing_tests do
+desc 'Generate missing specs'
+task :missing_specs do
   specs = Dir.glob("./lib/**/*.rb").map do |f|
     f.gsub(/\.\/lib(.*)\.rb/, "./spec\\1_spec.rb")
   end
