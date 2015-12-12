@@ -2,7 +2,7 @@ module JSONAPIonify::Api
   module Resource::DefaultActions
     extend ActiveSupport::Concern
     included do
-      before(:index) { |context| context.instance = context.new_instance }
+      before(:create) { |context| context.instance = context.new_instance }
       index
       create
       read

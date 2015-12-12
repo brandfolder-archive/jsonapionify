@@ -5,35 +5,40 @@ module JSONAPIonify
 
       def self.define_callbacks(*names)
         names.each do |name|
-          chain_name = "__#{name}_callback_chain"
-          define_method chain_name do |*args, &block|
-            instance_exec(*args, &block)
-          end
-
-          define_singleton_method "before_#{name}" do |sym = nil, &outer_block|
-            outer_block = (outer_block || sym).to_proc
-            prev_chain  = instance_method(chain_name)
-            define_method chain_name do |*args, &block|
-              instance_exec(*args, &outer_block) != false &&
-                prev_chain.bind(self).call(&block)
+          chains = {
+            main:   "__#{name}_callback_chain",
+            before: "__#{name}_before_callback_chain",
+            after:  "__#{name}_after_callback_chain"
+          }
+          define_method chains[:main] do |*args, &block|
+            if send(chains[:before], *args) != false
+              value = instance_exec(*args, &block)
+              value if send(chains[:after], *args) != false
             end
           end
 
-          define_singleton_method "after_#{name}" do |sym = nil, &outer_block|
-            outer_block = (outer_block || sym).to_proc
-            prev_chain  = instance_method(chain_name)
-            define_method chain_name do |*args, &block|
-              prev_chain.bind(self).call(&block)
-              instance_exec(*args, &outer_block)
+          # Define before and after chains
+          %i{after before}.each do |timing|
+            define_method chains[timing] do |*|
+            end
+
+            define_singleton_method "#{timing}_#{name}" do |sym = nil, &outer_block|
+              outer_block = (outer_block || sym).to_proc
+              prev_chain  = instance_method(chains[timing])
+              define_method chains[timing] do |*args, &block|
+                prev_chain.bind(self).call(*args, &block)
+                instance_exec(*args, &outer_block)
+              end
             end
           end
+
+          private *chains.values
 
         end
       end
     end
 
     def run_callbacks(name, *args, &block)
-      block ||= proc {}
       send("__#{name}_callback_chain", *args, &block)
     end
 
