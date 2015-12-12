@@ -1,4 +1,9 @@
 # JSONAPIonify
+[![Version](http://allthebadges.io/brandfolder/jsonapionify/badge_fury.png)](http://allthebadges.io/brandfolder/jsonapionify/badge_fury)
+[![Dependencies](http://allthebadges.io/brandfolder/jsonapionify/gemnasium.png)](http://allthebadges.io/brandfolder/jsonapionify/gemnasium)
+[![Build Status](http://allthebadges.io/brandfolder/jsonapionify/travis.png)](http://allthebadges.io/brandfolder/jsonapionify/travis)
+[![Coverage](http://allthebadges.io/brandfolder/jsonapionify/coveralls.png)](http://allthebadges.io/brandfolder/jsonapionify/coveralls)
+[![Code Climate](http://allthebadges.io/brandfolder/jsonapionify/code_climate.png)](http://allthebadges.io/brandfolder/jsonapionify/code_climate)
 
 TODO: Write Description
 
