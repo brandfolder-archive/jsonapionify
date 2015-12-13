@@ -48,6 +48,7 @@ module JSONAPIonify
         basename   = File.basename file, File.extname(file)
         fullpath   = File.expand_path file
         const_name = basename.camelize.to_sym
+        puts [const_name, fullpath]
         autoload const_name, fullpath
       end
     end
