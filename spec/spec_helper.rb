@@ -4,6 +4,7 @@ CodeClimate::TestReporter.start
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'jsonapionify'
+puts JSONAPIonify::Autoload.unloaded
 JSONAPIonify::Autoload.eager_load!
 require 'active_support/core_ext/object/json'
 

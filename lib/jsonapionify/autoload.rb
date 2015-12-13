@@ -23,6 +23,7 @@ module JSONAPIonify
     end
 
     def self.unloaded
+      puts __dir__
       modules = ObjectSpace.each_object.select do |o|
         o.is_a?(Module)
       end
@@ -32,7 +33,9 @@ module JSONAPIonify
             ary << const
           end
         end
-        hash[mod]              = autoloadable_constants if autoloadable_constants.present?
+        if autoloadable_constants.present?
+          hash[mod] = autoloadable_constants
+        end
       end
     end
 
