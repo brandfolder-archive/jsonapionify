@@ -10,7 +10,6 @@ module JSONAPIonify
             tracker = [mod.name, const].join('::')
             begin
               mod.const_get(const, false)
-              puts "loaded #{tracker}"
             rescue NameError => e
               load_tracker[tracker] = load_tracker[tracker].to_i + 1
               if !e.message.include?('uninitialized constant') || load_tracker[tracker] > 50
@@ -23,13 +22,11 @@ module JSONAPIonify
     end
 
     def self.unloaded
-      puts __dir__, '------------------------------------------'
       modules = ObjectSpace.each_object.select do |o|
         o.is_a?(Module)
       end
       modules.each_with_object({}) do |mod, hash|
         autoloadable_constants = mod.constants.each_with_object([]) do |const, ary|
-          puts mod.autoload?(const) if mod.autoload?(const)
           if mod.autoload?(const) && mod.autoload?(const).include?(__dir__)
             ary << const
           end
@@ -43,13 +40,11 @@ module JSONAPIonify
     def autoload_all(dir=nil)
       file     = caller[0].split(/\:\d/)[0]
       base_dir = File.expand_path File.dirname(file)
-      dir      ||= name.split('::').last.camelize
-      puts '*' * 10,  dir, '*' * 10
+      dir      ||= name.split('::').last.underscore
       Dir.glob("#{base_dir}/#{dir}/*.rb").each do |file|
         basename   = File.basename file, File.extname(file)
         fullpath   = File.expand_path file
         const_name = basename.camelize.to_sym
-        puts [const_name, fullpath]
         autoload const_name, fullpath
       end
     end

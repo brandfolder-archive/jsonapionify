@@ -4,8 +4,6 @@ require 'codeclimate-test-reporter'
 CodeClimate::TestReporter.start
 
 require 'jsonapionify'
-puts *$:
-puts JSONAPIonify::Autoload.unloaded
 JSONAPIonify::Autoload.eager_load!
 require 'active_support/core_ext/object/json'
 

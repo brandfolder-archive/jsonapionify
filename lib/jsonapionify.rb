@@ -8,7 +8,7 @@ require 'jsonapionify/autoload'
 module JSONAPIonify
   autoload :VERSION, 'jsonapi-objects/version'
   extend JSONAPIonify::Autoload
-  autoload_all
+  autoload_all 'jsonapionify'
 
   def self.parse(hash)
     hash = JSON.parse(hash) if hash.is_a? String
