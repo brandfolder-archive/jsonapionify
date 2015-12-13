@@ -10,9 +10,10 @@ module JSONAPIonify
             tracker = [mod.name, const].join('::')
             begin
               mod.const_get(const, false)
+              puts "loaded #{tracker}"
             rescue NameError => e
               load_tracker[tracker] = load_tracker[tracker].to_i + 1
-              if !e.message.include?('uninitialized constant') || load_tracker[tracker] > 10
+              if !e.message.include?('uninitialized constant') || load_tracker[tracker] > 50
                 raise e
               end
             end
