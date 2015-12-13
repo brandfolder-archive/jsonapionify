@@ -29,7 +29,7 @@ module JSONAPIonify
       end
       modules.each_with_object({}) do |mod, hash|
         autoloadable_constants = mod.constants.each_with_object([]) do |const, ary|
-          puts mod.autoload?(const)
+          puts mod.autoload?(const) if mod.autoload?(const)
           if mod.autoload?(const) && mod.autoload?(const).include?(__dir__)
             ary << const
           end
