@@ -23,7 +23,7 @@ module JSONAPIonify
     end
 
     def self.unloaded
-      puts __dir__
+      puts __dir__, '------------------------------------------'
       modules = ObjectSpace.each_object.select do |o|
         o.is_a?(Module)
       end
