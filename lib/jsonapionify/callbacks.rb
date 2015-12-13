@@ -1,3 +1,5 @@
+require 'active_support/concern'
+
 module JSONAPIonify
   module Callbacks
     extend ActiveSupport::Concern

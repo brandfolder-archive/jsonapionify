@@ -3,7 +3,7 @@ module JSONAPIonify::Api
 
     def self.extended(klass)
       klass.class_eval do
-        include JSONAPIonify::InheritedAttributes
+        extend JSONAPIonify::InheritedAttributes
         inherited_hash_attribute :resource_definitions
       end
     end

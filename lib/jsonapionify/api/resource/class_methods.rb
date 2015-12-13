@@ -1,5 +1,4 @@
 require 'active_support/rescuable'
-require 'redcarpet'
 
 module JSONAPIonify::Api
   module Resource::ClassMethods

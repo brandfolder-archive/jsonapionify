@@ -3,11 +3,8 @@ require 'active_support/core_ext/object/blank'
 
 module JSONAPIonify::Api
   class Server
-    Dir.glob("#{__dir__}/server/*.rb").each do |file|
-      basename = File.basename file, File.extname(file)
-      fullpath = File.expand_path file
-      autoload basename.camelize.to_sym, fullpath
-    end
+    extend JSONAPIonify::Autoload
+    autoload_all
 
     attr_reader :api
 

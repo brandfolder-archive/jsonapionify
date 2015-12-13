@@ -1,4 +1,5 @@
 require 'erb'
+require 'redcarpet'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array'
 

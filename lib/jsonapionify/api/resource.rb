@@ -4,11 +4,8 @@ require 'active_support/json'
 
 module JSONAPIonify::Api
   class Resource
-    Dir.glob("#{__dir__}/resource/*.rb").each do |file|
-      basename = File.basename file, File.extname(file)
-      fullpath = File.expand_path file
-      autoload basename.camelize.to_sym, fullpath
-    end
+    extend JSONAPIonify::Autoload
+    autoload_all
 
     extend ActionDefinitions
     extend AttributeDefinitions

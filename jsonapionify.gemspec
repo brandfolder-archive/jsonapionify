@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/brandfolder/jsonapionify"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(vendor|spec)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
@@ -23,8 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rack"
   spec.add_dependency "redcarpet"
   spec.add_dependency "oj"
-  spec.add_dependency "parallel"
-  spec.add_dependency "ruby-progressbar"
+  spec.add_dependency "rack-test"
 
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rocco"

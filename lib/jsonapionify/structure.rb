@@ -4,36 +4,24 @@ module JSONAPIonify
     ValidationError = Class.new StandardError
 
     module Collections
-      Dir.glob("#{__dir__}/structure/collections/*.rb").each do |file|
-        basename = File.basename file, File.extname(file)
-        fullpath = File.expand_path file
-        autoload basename.camelize.to_sym, fullpath
-      end
+      extend JSONAPIonify::Autoload
+      autoload_all 'structure/collections'
     end
 
     module Maps
-      Dir.glob("#{__dir__}/structure/maps/*.rb").each do |file|
-        basename = File.basename file, File.extname(file)
-        fullpath = File.expand_path file
-        autoload basename.camelize.to_sym, fullpath
-      end
+      extend JSONAPIonify::Autoload
+      autoload_all 'structure/maps'
     end
 
     module Objects
       include Maps
-      Dir.glob("#{__dir__}/structure/objects/*.rb").each do |file|
-        basename = File.basename file, File.extname(file)
-        fullpath = File.expand_path file
-        autoload basename.camelize.to_sym, fullpath
-      end
+      extend JSONAPIonify::Autoload
+      autoload_all 'structure/objects'
     end
 
     module Helpers
-      Dir.glob("#{__dir__}/structure/helpers/*.rb").each do |file|
-        basename = File.basename file, File.extname(file)
-        fullpath = File.expand_path file
-        autoload basename.camelize.to_sym, fullpath
-      end
+      extend JSONAPIonify::Autoload
+      autoload_all 'structure/helpers'
     end
   end
 end

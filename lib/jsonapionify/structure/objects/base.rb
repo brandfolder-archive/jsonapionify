@@ -1,5 +1,4 @@
 require 'oj'
-require 'parallel'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/array/wrap'
 require 'active_support/core_ext/hash'
