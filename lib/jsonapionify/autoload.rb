@@ -44,6 +44,7 @@ module JSONAPIonify
       file     = caller[0].split(/\:\d/)[0]
       base_dir = File.expand_path File.dirname(file)
       dir      ||= name.split('::').last.camelize
+      puts '*' * 10,  dir, '*' * 10
       Dir.glob("#{base_dir}/#{dir}/*.rb").each do |file|
         basename   = File.basename file, File.extname(file)
         fullpath   = File.expand_path file
