@@ -26,12 +26,16 @@ module JSONAPIonify::Api
       end
     end
 
+    def build_path(base, name, include_path)
+      File.join(*[base].tap do |parts|
+        parts << prepend if prepend
+        parts << name
+        parts << path if path.present? && include_path
+      end)
+    end
+
     def path_regex(base, name, include_path)
-      parts = [base]
-      parts << prepend if prepend
-      parts << name
-      parts << path if path.present? && include_path
-      raw_reqexp = File.join(*parts).gsub(':id', '(?<id>[^\/]+)')
+      raw_reqexp = build_path(base, name, include_path).gsub(':id', '(?<id>[^\/]+)')
       Regexp.new('^' + raw_reqexp + '$')
     end
 
