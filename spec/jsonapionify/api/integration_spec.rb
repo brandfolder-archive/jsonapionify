@@ -44,7 +44,7 @@ module JSONAPIonify
 
       it 'should list all the resources' do
         get '/'
-        expect(last_response_json['meta']['resources'].keys).to eq app.resources.keys.map(&:to_s)
+        expect(last_response_json['meta']['resources'].keys).to eq app.resources.map { |r| r.type.to_s }
       end
     end
 
