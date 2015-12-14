@@ -18,7 +18,7 @@ module JSONAPIonify::Api
 
     def accept?(request)
       request.accept.any? do |accept|
-        @accept == accept || accept == '*/*'
+        @accept == accept || accept == '*/*' || self.accept == '*/*'
       end
     end
 
@@ -29,7 +29,7 @@ module JSONAPIonify::Api
         Rack::Response.new.tap do |rack_response|
           rack_response.status = response.status
           headers.each { |k, v| rack_response.headers[k] = v }
-          rack_response.headers['content-type'] = response.accept
+          rack_response.headers['content-type'] = response.accept unless response.accept == '*/*'
           rack_response.write(body) unless body.nil?
         end.finish
       end

@@ -63,12 +63,18 @@ module JSONAPIonify::Api
     end
 
     def process(request)
-      if (action = find_supported_action(request))
+      path_actions = self.path_actions(request)
+      if request.options? && path_actions.present?
+        Action.stub do
+          headers['Allow'] = path_actions.map(&:request_method).join(', ')
+          response(status: 200, accept: '*/*')
+        end.call(self, request)
+      elsif (action = find_supported_action(request))
         action.call(self, request)
       elsif (rel = find_supported_relationship(request))
         relationship(rel.name).process(request)
       else
-        Action::NotFound.call(self, request)
+        no_action_response(request).call(self, request)
       end
     end
 
@@ -106,9 +112,34 @@ module JSONAPIonify::Api
       end
     end
 
+    def no_action_response(request)
+      if request_method_actions(request).present?
+        Action.stub { error_now :unsupported_media_type }
+      elsif (path_actions = self.path_actions(request)).present?
+        Action.stub do
+          headers['Allow'] = path_actions.map(&:request_method).join(', ')
+          error_now :method_not_allowed
+        end
+      else
+        Action.stub { error_now :not_found }
+      end
+    end
+
+    def path_actions(request)
+      action_definitions.select do |action_definition|
+        action_definition.supports_path?(request, base_path, path_name, supports_path?)
+      end
+    end
+
+    def request_method_actions(request)
+      path_actions(request).select do |action_definition|
+        action_definition.supports_request_method?(request)
+      end
+    end
+
     def find_supported_relationship(request)
       relationship_definitions.find do |rel|
-        relationship(rel.name).find_supported_action(request)
+        relationship(rel.name).path_actions(request).present?
       end
     end
 

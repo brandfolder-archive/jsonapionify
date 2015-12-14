@@ -1,6 +1,10 @@
 module JSONAPIonify::Api
   class Action
-    attr_reader :name, :request_block, :content_type, :responses, :prepend, :path
+    attr_reader :name, :request_block, :content_type, :responses, :prepend, :path, :request_method
+
+    def self.stub(&block)
+      new(nil, nil, &block)
+    end
 
     def initialize(name, request_method, path = nil, content_type: nil, prepend: nil, &block)
       @request_method = request_method
@@ -38,10 +42,23 @@ module JSONAPIonify::Api
         end
     end
 
+    def supports_path?(request, base, name, include_path)
+      request.path_info.match(path_regex(base, name, include_path))
+    end
+
+    def supports_content_type?(request)
+      @content_type == request.content_type ||
+        (request.content_type.nil? && !request.has_body?)
+    end
+
+    def supports_request_method?(request)
+      request.request_method == @request_method
+    end
+
     def supports?(request, base, name, include_path)
-      (@content_type == request.content_type || (request.content_type.nil? && !request.has_body?)) &&
-        request.request_method == @request_method &&
-        request.path_info.match(path_regex(base, name, include_path))
+      supports_path?(request, base, name, include_path) &&
+        supports_request_method?(request) &&
+        supports_content_type?(request)
     end
 
     def response(status: nil, accept: nil, &block)
@@ -122,8 +139,5 @@ module JSONAPIonify::Api
         end
       end
     end
-  end
-  Action::NotFound = Action.new(nil, nil) do
-    error_now :not_found
   end
 end
