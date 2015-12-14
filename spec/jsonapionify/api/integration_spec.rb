@@ -144,7 +144,16 @@ module JSONAPIonify
 
       describe 'POST /:resource/:id/relationships/:name' do
         it 'should add new relationships' do
-
+          body = json(data: [{ id: Thing.last.id, type: 'things' }])
+          expect { post "/users/#{User.first.id}/relationships/things", body }.to change { User.first.things.count }.by(1)
+          last_response_json['data'].each do |item|
+            expect { User.first.things.find(item['id']) }.to_not raise_error
+            identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+              item.deep_symbolize_keys
+            )
+            expect { identifier.compile! }.to_not raise_error
+          end
+          expect(last_response.status).to eq 200
         end
       end
 
