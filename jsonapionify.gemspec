@@ -37,7 +37,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'navigable_hash'
   spec.add_development_dependency 'code-statistics'
   spec.add_development_dependency 'codeclimate-test-reporter'
-  spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-rack'
   spec.add_development_dependency 'guard-rake'
   spec.add_development_dependency 'guard-bundler'
