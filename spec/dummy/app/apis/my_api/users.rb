@@ -3,9 +3,6 @@ MyApi.define_resource :users do
     update do |context|
       # Set each request related instance's user to the owner instance
       context.request_instances.each { |instance| instance.update user: context.owner_context.instance }
-
-      # Tell active records relation to reload
-      context.collection.reload
     end
 
     replace do |context|
@@ -14,9 +11,11 @@ MyApi.define_resource :users do
 
       # Set each request related instance's user to the owner instance
       context.request_instances.each { |instance| instance.update user: context.owner_context.instance }
+    end
 
-      # Tell active records relation to reload
-      context.collection.reload
+    remove do |context|
+      # Set the request instances to nil
+      context.request_instances.each { |instance| instance.update user: nil }
     end
   end
 

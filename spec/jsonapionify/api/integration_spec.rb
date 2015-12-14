@@ -7,6 +7,7 @@ module JSONAPIonify
     set_api(MyApi)
 
     before do
+      ActiveRecord::Base.descendants.each(&:delete_all)
       users = 5.times.map do
         User.new(
           first_name: Faker::Name.first_name,
@@ -159,14 +160,34 @@ module JSONAPIonify
       end
 
       describe 'PATCH /:resource/:id/relationships/:name' do
-        it 'should replace all relationships' do
-
+        it 'should add new relationships' do
+          body = json(data: [{ id: Thing.last.id.to_s, type: 'things' }])
+          content_type 'application/vnd.api+json'
+          expect { patch "/users/#{User.first.id}/relationships/things", body }.to change { User.first.things.count }.to(1)
+          last_response_json['data'].each do |item|
+            expect { User.first.things.find(item['id']) }.to_not raise_error
+            identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+              item.deep_symbolize_keys
+            )
+            expect { identifier.compile! }.to_not raise_error
+          end
+          expect(last_response.status).to eq 200
         end
       end
 
       describe 'DELETE /:resource/:id/relationships/:name' do
         it 'should add new relationships' do
-
+          body = json(data: [{ id: User.first.things.first.id.to_s, type: 'things' }])
+          content_type 'application/vnd.api+json'
+          expect { delete "/users/#{User.first.id}/relationships/things", body }.to change { User.first.things.count }.by(-1)
+          last_response_json['data'].each do |item|
+            expect { User.first.things.find(item['id']) }.to_not raise_error
+            identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+              item.deep_symbolize_keys
+            )
+            expect { identifier.compile! }.to_not raise_error
+          end
+          expect(last_response.status).to eq 200
         end
       end
     end
