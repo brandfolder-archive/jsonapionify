@@ -24,6 +24,10 @@ module JSONAPIonify::Api
 
     append_class do
 
+      def self.supports_path?
+        false
+      end
+
       owner_context_proc = Proc.new do |request|
         ContextDelegate.new(request, rel.owner.new, rel.owner.context_definitions)
       end

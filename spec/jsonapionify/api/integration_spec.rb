@@ -66,7 +66,10 @@ module JSONAPIonify
 
     describe '.relates_to_one' do
       describe 'GET /:resource/:id/:name' do
-
+        it 'should fetch the related object' do
+          get "/things/#{Thing.first.id}/user"
+          expect(last_response_json['data']['attributes']['first_name']).to eq Thing.first.user.first_name
+        end
       end
 
       describe 'GET /:resource/:id/relationships/:name' do

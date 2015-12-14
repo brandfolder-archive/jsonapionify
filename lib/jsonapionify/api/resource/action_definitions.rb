@@ -102,7 +102,7 @@ module JSONAPIonify::Api
 
     def find_supported_action(request)
       action_definitions.find do |action_definition|
-        action_definition.supports?(request, base_path, path_name)
+        action_definition.supports?(request, base_path, path_name, supports_path?)
       end
     end
 
@@ -122,6 +122,10 @@ module JSONAPIonify::Api
 
     def base_path
       ''
+    end
+
+    def supports_path?
+      true
     end
 
     def path_name

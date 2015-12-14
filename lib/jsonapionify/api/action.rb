@@ -22,8 +22,12 @@ module JSONAPIonify::Api
       end
     end
 
-    def path_regex(base, name)
-      raw_reqexp = File.join(base, *[prepend, name, path].reject(&:blank?)).gsub(':id', '(?<id>[^\/]+)')
+    def path_regex(base, name, include_path)
+      parts = [base]
+      parts << prepend if prepend
+      parts << name
+      parts << path if path.present? && include_path
+      raw_reqexp = File.join(*parts).gsub(':id', '(?<id>[^\/]+)')
       Regexp.new('^' + raw_reqexp + '$')
     end
 
@@ -34,10 +38,10 @@ module JSONAPIonify::Api
         end
     end
 
-    def supports?(request, base, name)
+    def supports?(request, base, name, include_path)
       (@content_type == request.content_type || request.content_type.nil?) &&
         request.request_method == @request_method &&
-        request.path_info.match(path_regex(base, name))
+        request.path_info.match(path_regex(base, name, include_path))
     end
 
     def response(status: nil, accept: nil, &block)
