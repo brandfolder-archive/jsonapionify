@@ -22,8 +22,8 @@ module JSONAPIonify::Api
     end
 
     def resources
-      resource_definitions.each_with_object({}) do |(name, _), hash|
-        hash[name] = resource(name)
+      resource_definitions.map do |name, _|
+        resource(name)
       end
     end
 
