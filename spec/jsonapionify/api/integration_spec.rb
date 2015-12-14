@@ -29,6 +29,13 @@ module JSONAPIonify
       Thing.import things
     end
 
+    describe 'GET /docs' do
+      it 'should not error' do
+        get '/docs'
+        expect(last_response).to be_ok
+      end
+    end
+
     describe 'GET /:resource' do
       it 'should return the list of resource instances' do
         get '/things'
