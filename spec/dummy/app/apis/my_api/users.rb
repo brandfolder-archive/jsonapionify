@@ -1,6 +1,6 @@
 MyApi.define_resource :users do
   relates_to_many :things do
-    update do |context|
+    add do |context|
       # Set each request related instance's user to the owner instance
       context.request_instances.each { |instance| instance.update user: context.owner_context.instance }
     end

@@ -30,9 +30,9 @@ module JSONAPIonify::Api
           end
         end
 
-        define_singleton_method(:update) do |**options, &block|
+        define_singleton_method(:add) do |**options, &block|
           options[:prepend] = 'relationships'
-          define_action(:update, 'POST', **options, &block).response status: 200 do |context|
+          define_action(:add, 'POST', **options, &block).response status: 200 do |context|
             context.owner_context.reset(:instance)
             context.reset(:collection)
             context.response_object[:data] = build_identifier_collection(context.collection)
