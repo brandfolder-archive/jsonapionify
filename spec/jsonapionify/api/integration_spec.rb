@@ -32,6 +32,7 @@ module JSONAPIonify
       it 'should return the list of resource instances' do
         get '/things'
         expect(last_response_json['data'].count).to eq Thing.count
+        expect(last_response.status).to eq 200
       end
     end
 
@@ -40,6 +41,7 @@ module JSONAPIonify
         body = json(data: { type: 'things', attributes: { name: 'Card', color: 'blue' } })
         content_type 'application/vnd.api+json'
         expect { post '/things', body }.to change { Thing.count }.by 1
+        expect(last_response.status).to eq 201
       end
     end
 
@@ -47,6 +49,7 @@ module JSONAPIonify
       it 'should fetch a resource instance' do
         get "/things/#{Thing.first.id}"
         expect(last_response_json['data']['attributes']['name']).to eq(Thing.first.name)
+        expect(last_response.status).to eq 200
       end
     end
 
@@ -55,12 +58,15 @@ module JSONAPIonify
         body = json(data: { id: Thing.first.id.to_s, type: 'things', attributes: { name: 'New Name' } })
         content_type 'application/vnd.api+json'
         expect { patch "/things/#{Thing.first.id}", body }.to change { Thing.first.name }.to 'New Name'
+        expect(last_response.status).to eq 200
       end
     end
 
     describe 'DELETE /:resource/:id' do
       it 'should delete a resource instance' do
         expect { delete "/things/#{Thing.first.id}" }.to change { Thing.count }.by -1
+        expect(last_response.status).to eq 204
+        expect(last_response.body).to be_blank
       end
     end
 
@@ -69,6 +75,7 @@ module JSONAPIonify
         it 'should fetch the related object' do
           get "/things/#{Thing.first.id}/user"
           expect(last_response_json['data']['attributes']['first_name']).to eq Thing.first.user.first_name
+          expect(last_response.status).to eq 200
         end
       end
 
@@ -81,6 +88,7 @@ module JSONAPIonify
             last_response_json['data'].deep_symbolize_keys
           )
           expect { identifier.compile! }.to_not raise_error
+          expect(last_response.status).to eq 200
         end
       end
 
@@ -95,27 +103,61 @@ module JSONAPIonify
             last_response_json['data'].deep_symbolize_keys
           )
           expect { identifier.compile! }.to_not raise_error
+          expect(last_response.status).to eq 200
         end
       end
     end
 
     describe '.relates_to_many' do
       describe 'GET /:resource/:id/:name' do
+        it 'should fetch the related objects' do
+          get "/users/#{User.first.id}/things"
+          last_response_json['data'].each do |item|
+            expect(item['attributes']['name']).to eq User.first.things.find(item['id']).name
+          end
+          expect(last_response.status).to eq 200
+        end
       end
 
       describe 'POST /:resource/:id/:name' do
+        it 'should create and associate new resources' do
+          body = json(data: { type: 'things', attributes: { name: 'Card', color: 'blue' } })
+          content_type 'application/vnd.api+json'
+          expect { post "/users/#{User.first.id}/things", body }.to change { User.first.things.count }.by 1
+          expect(last_response.status).to eq 201
+        end
       end
 
       describe 'GET /:resource/:id/relationships/:name' do
-
+        it 'should fetch the related object ids' do
+          get "/users/#{User.first.id}/things"
+          last_response_json['data'].each do |item|
+            expect { User.first.things.find(item['id']) }.to_not raise_error
+            identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+              item.deep_symbolize_keys
+            )
+            expect { identifier.compile! }.to_not raise_error
+          end
+          expect(last_response.status).to eq 200
+        end
       end
 
       describe 'POST /:resource/:id/relationships/:name' do
+        it 'should add new relationships' do
 
+        end
       end
 
       describe 'PATCH /:resource/:id/relationships/:name' do
+        it 'should replace all relationships' do
 
+        end
+      end
+
+      describe 'DELETE /:resource/:id/relationships/:name' do
+        it 'should add new relationships' do
+
+        end
       end
     end
 

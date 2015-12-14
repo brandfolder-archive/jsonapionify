@@ -28,6 +28,10 @@ module JSONAPIonify::Api
         false
       end
 
+      def self.relationship(name)
+        rel.resource.relationship(name)
+      end
+
       owner_context_proc = Proc.new do |request|
         ContextDelegate.new(request, rel.owner.new, rel.owner.context_definitions)
       end
