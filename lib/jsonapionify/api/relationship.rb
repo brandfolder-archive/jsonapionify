@@ -40,6 +40,10 @@ module JSONAPIonify::Api
         owner_context_proc.call(context.request)
       end
 
+      context(:id) do
+        nil
+      end
+
       define_singleton_method :base_path do
         "/#{rel.owner.type}/:id"
       end
