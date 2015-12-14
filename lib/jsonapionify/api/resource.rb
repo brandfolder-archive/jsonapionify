@@ -22,5 +22,13 @@ module JSONAPIonify::Api
     include DefaultActions
     include Builders
 
+    def self.inherited(subclass)
+      super(subclass)
+      subclass.class_eval do
+        context(:api, readonly: true) { api }
+        context(:resource, readonly: true) { self }
+      end
+    end
+
   end
 end

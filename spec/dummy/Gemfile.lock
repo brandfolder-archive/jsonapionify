@@ -5,10 +5,9 @@ PATH
       activesupport (~> 4.2)
       faraday (~> 0.9)
       oj
-      parallel
       rack
+      rack-test
       redcarpet
-      ruby-progressbar
 
 GEM
   remote: https://rubygems.org/
@@ -75,19 +74,19 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     oj (2.14.0)
-    parallel (1.6.1)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rack (1.6.4)
+    rack-test (0.6.3)
+      rack (>= 1.0)
     rake (10.4.2)
     rb-fsevent (0.9.6)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     redcarpet (3.3.3)
     ruby-prof (0.15.8)
-    ruby-progressbar (1.7.5)
     shellany (0.0.1)
     slop (3.6.0)
     spoon (0.0.4)

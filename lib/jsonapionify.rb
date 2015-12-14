@@ -10,6 +10,10 @@ module JSONAPIonify
   extend JSONAPIonify::Autoload
   autoload_all 'jsonapionify'
 
+  def self.path
+    __dir__
+  end
+
   def self.parse(hash)
     hash = JSON.parse(hash) if hash.is_a? String
     Structure::Objects::TopLevel.from_hash(hash)

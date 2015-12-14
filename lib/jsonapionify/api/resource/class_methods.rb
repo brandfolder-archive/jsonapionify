@@ -7,14 +7,6 @@ module JSONAPIonify::Api
       klass.include ActiveSupport::Rescuable
     end
 
-    def inherited(subclass)
-      super
-      subclass.class_eval do
-        context(:api, readonly: true) { api }
-        context(:resource, readonly: true) { self }
-      end
-    end
-
     def description(description)
       @description = description
     end
