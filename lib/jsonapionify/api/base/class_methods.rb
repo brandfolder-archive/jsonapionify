@@ -31,8 +31,8 @@ module JSONAPIonify::Api
       const_get(:ResourceBase, false)
     end
 
-    def documentation_order(resources)
-      @documentation_order = resources
+    def documentation_order(resources_in_order)
+      @documentation_order = resources_in_order
     end
 
     def process_index(request)
