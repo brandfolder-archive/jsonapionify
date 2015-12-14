@@ -41,8 +41,8 @@ module JSONAPIonify::Api
       obj[:meta]                 = { resources: {} }
       obj[:links]                = { self: request.root_url }
       obj[:meta][:documentation] = File.join(request.root_url, 'docs')
-      obj[:meta][:resources]     = resource_definitions.each_with_object({}) do |(name, _), hash|
-        hash[name] = resource(name).get_url(request.root_url)
+      obj[:meta][:resources]     = resources.each_with_object({}) do |resource, hash|
+        hash[resource.type] = resource.get_url(request.root_url)
       end
       Rack::Response.new.tap do |response|
         response.status = 200
@@ -53,8 +53,8 @@ module JSONAPIonify::Api
     end
 
     def fields
-      resources.each_with_object({}) do |(type, klass), fields|
-        fields[type] = klass.attributes.select(&:read?).map(&:name)
+      resources.each_with_object({}) do |resource, fields|
+        fields[resource.type.to_sym] = resource.attributes.select(&:read?).map(&:name)
       end
     end
 
