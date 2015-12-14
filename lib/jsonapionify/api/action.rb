@@ -39,7 +39,7 @@ module JSONAPIonify::Api
     end
 
     def supports?(request, base, name, include_path)
-      (@content_type == request.content_type || request.content_type.nil?) &&
+      (@content_type == request.content_type || (request.content_type.nil? && !request.has_body?)) &&
         request.request_method == @request_method &&
         request.path_info.match(path_regex(base, name, include_path))
     end

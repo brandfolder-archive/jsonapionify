@@ -31,6 +31,14 @@ module JSONAPIonify
       super
     end
 
+    def content_type(value)
+      header('content-type', value)
+    end
+
+    def accept(*values)
+      header('accept', values.join(','))
+    end
+
     def delete(*args, &block)
       header('content-type', set_headers['content-type'].to_s)
       super

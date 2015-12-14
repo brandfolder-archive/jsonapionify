@@ -15,7 +15,7 @@ MyApi.define_resource :things do
   attribute :secret, String, "A super secret.", read: false
   relates_to_one :user, resource: :users do
     replace do |context|
-      binding.pry
+      context.owner_context.instance.update! user: context.request_instance
     end
   end
 

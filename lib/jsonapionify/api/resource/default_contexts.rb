@@ -97,6 +97,10 @@ module JSONAPIonify::Api
         instances
       end
 
+      context(:request_instance, readonly: true) do |context|
+        find_instance(context.request_data, pointer: 'data')
+      end
+
       context(:request_resource, readonly: true) do |context|
         item = context.request_data
         find_resource item, pointer: 'data'

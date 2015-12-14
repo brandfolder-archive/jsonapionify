@@ -33,8 +33,8 @@ module JSONAPIonify::Structure
       def relates_to?(other)
         relationships = self[:relationships]
         return false unless relationships
-        relationships.any? do |_, resource_indentifier|
-          Array.wrap(resource_indentifier[:data]).any? do |rel|
+        relationships.any? do |_, resource_identifier|
+          Array.wrap(resource_identifier[:data]).any? do |rel|
             rel[:id] == other[:id] && rel[:type] == other[:type]
           end
         end

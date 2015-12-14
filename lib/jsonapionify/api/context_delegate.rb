@@ -19,6 +19,10 @@ module JSONAPIonify::Api
         end
       end
 
+      define_singleton_method(:reset) do |key|
+        memo.delete(key)
+      end
+
       definitions.each do |name, context|
         define_singleton_method name do
           memo[name] ||= context.call(instance, delegate)

@@ -38,7 +38,7 @@ module JSONAPIonify
     describe 'POST /:resource' do
       it 'should add a resource instance' do
         body = json(data: { type: 'things', attributes: { name: 'Card', color: 'blue' } })
-        header 'content-type', 'application/vnd.api+json'
+        content_type 'application/vnd.api+json'
         expect { post '/things', body }.to change { Thing.count }.by 1
       end
     end
@@ -53,7 +53,7 @@ module JSONAPIonify
     describe 'PATCH /:resource/:id' do
       it 'should change a resource instance' do
         body = json(data: { id: Thing.first.id.to_s, type: 'things', attributes: { name: 'New Name' } })
-        header 'content-type', 'application/vnd.api+json'
+        content_type 'application/vnd.api+json'
         expect { patch "/things/#{Thing.first.id}", body }.to change { Thing.first.name }.to 'New Name'
       end
     end
@@ -85,7 +85,17 @@ module JSONAPIonify
       end
 
       describe 'PATCH /:resource/:id/relationships/:name' do
-
+        it 'should replace the relationship' do
+          content_type 'application/vnd.api+json'
+          body = json(data: { type: 'users', id: User.last.id.to_s })
+          expect { patch "/things/#{Thing.first.id}/relationships/user", body }.to change { Thing.first.user }
+          expect(last_response_json['data']['type']).to eq 'users'
+          expect(last_response_json['data']['id']).to eq Thing.first.user.id.to_s
+          identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+            last_response_json['data'].deep_symbolize_keys
+          )
+          expect { identifier.compile! }.to_not raise_error
+        end
       end
     end
 
