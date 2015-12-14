@@ -36,6 +36,18 @@ module JSONAPIonify
       end
     end
 
+    describe 'GET /' do
+      it 'should not error' do
+        get '/'
+        expect(last_response).to be_ok
+      end
+
+      it 'should list all the resources' do
+        get '/'
+        expect(last_response_json['meta']['resources'].keys).to eq app.resources.keys.map(&:to_s)
+      end
+    end
+
     describe 'GET /:resource' do
       it 'should return the list of resource instances' do
         get '/things'
