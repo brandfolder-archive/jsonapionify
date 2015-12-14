@@ -73,7 +73,15 @@ module JSONAPIonify
       end
 
       describe 'GET /:resource/:id/relationships/:name' do
-
+        it 'should fetch the related object ids' do
+          get "/things/#{Thing.first.id}/user"
+          expect(last_response_json['data']['type']).to eq 'users'
+          expect(last_response_json['data']['id']).to eq Thing.first.user.id.to_s
+          identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+            last_response_json['data'].deep_symbolize_keys
+          )
+          expect { identifier.compile! }.to_not raise_error
+        end
       end
 
       describe 'PATCH /:resource/:id/relationships/:name' do
