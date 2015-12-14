@@ -149,6 +149,10 @@ module JSONAPIonify::Api
       end
     end
 
+    def actions
+      action_definitions
+    end
+
     private
 
     def base_path

@@ -26,6 +26,10 @@ module JSONAPIonify::Api
       end
     end
 
+    def relationships
+      relationship_definitions
+    end
+
     def relationship(name)
       name       = name.to_sym
       const_name = name.to_s.camelcase + 'Relationship'
