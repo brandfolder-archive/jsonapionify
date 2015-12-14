@@ -1,8 +1,4 @@
-require 'bundler/setup'
-Bundler.require(:default)
-require './app/apis/my_api'
-
-ActiveRecord::Base.logger = Logger.new STDOUT
+require_relative 'config/environment'
 
 app = Rack::Builder.new do
   map "/v2" do

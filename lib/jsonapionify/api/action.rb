@@ -1,12 +1,15 @@
 module JSONAPIonify::Api
   class Action
-    attr_reader :name, :request_block, :content_type, :responses
+    attr_reader :name, :request_block, :content_type, :responses, :prepend, :path
 
-    def initialize(name, content_type: nil, &block)
-      @name          = name
-      @content_type  = content_type || 'application/vnd.api+json'
-      @request_block = block || proc {}
-      @responses     = []
+    def initialize(name, request_method, path = nil, content_type: nil, prepend: nil, &block)
+      @request_method = request_method
+      @path           = path || ''
+      @prepend        = prepend
+      @name           = name
+      @content_type   = content_type || 'application/vnd.api+json'
+      @request_block  = block || proc {}
+      @responses      = []
     end
 
     def initialize_copy(new_instance)
@@ -19,15 +22,22 @@ module JSONAPIonify::Api
       end
     end
 
+    def path_regex(base, name)
+      raw_reqexp = File.join(base, *[prepend, name, path].reject(&:blank?)).gsub(':id', '(?<id>[^\/]+)')
+      Regexp.new('^' + raw_reqexp + '$')
+    end
+
     def ==(other)
       self.class == other.class &&
-        %i{@name @content_type}.all? do |ivar|
+        %i{@request_method @path @content_type @prepend}.all? do |ivar|
           instance_variable_get(ivar) == other.instance_variable_get(ivar)
         end
     end
 
-    def supports?(request)
-      @content_type == request.content_type || request.content_type.nil?
+    def supports?(request, base, name)
+      (@content_type == request.content_type || request.content_type.nil?) &&
+        request.request_method == @request_method &&
+        request.path_info.match(path_regex(base, name))
     end
 
     def response(status: nil, accept: nil, &block)
@@ -109,7 +119,7 @@ module JSONAPIonify::Api
       end
     end
   end
-  Action::NotFound = Action.new(:not_found) do
+  Action::NotFound = Action.new(nil, nil) do
     error_now :not_found
   end
 end

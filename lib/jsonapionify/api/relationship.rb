@@ -15,14 +15,29 @@ module JSONAPIonify::Api
       @associate  = associate.nil? ? true : associate
     end
 
-    append_class do
+    prepend_class do
       remove_action :delete, :update
+      class << self
+        undef_method :delete, :update
+      end
+    end
+
+    append_class do
 
       owner_context_proc = Proc.new do |request|
         ContextDelegate.new(request, rel.owner.new, rel.owner.context_definitions)
       end
+
       context(:owner_context) do |context|
         owner_context_proc.call(context.request)
+      end
+
+      define_singleton_method :base_path do
+        "/#{rel.owner.type}/:id"
+      end
+
+      define_singleton_method :path_name do
+        rel.name.to_s
       end
 
       define_singleton_method(:build_links) do |base_url|

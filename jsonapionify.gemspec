@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = '~> 2.2'
+
   spec.add_dependency "activesupport", "~> 4.2"
   spec.add_dependency "faraday", "~> 0.9"
   spec.add_dependency "rack"
@@ -25,14 +27,25 @@ Gem::Specification.new do |spec|
   spec.add_dependency "oj"
   spec.add_dependency "rack-test"
 
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "rocco"
-  spec.add_development_dependency "bundler", "~> 1.10"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec"
-  spec.add_development_dependency "guard"
-  spec.add_development_dependency "guard-rspec"
-  spec.add_development_dependency "navigable_hash"
-  spec.add_development_dependency "code-statistics"
-  spec.add_development_dependency "codeclimate-test-reporter"
+  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'rocco'
+  spec.add_development_dependency 'bundler', '~> 1.10'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rspec'
+  spec.add_development_dependency 'navigable_hash'
+  spec.add_development_dependency 'code-statistics'
+  spec.add_development_dependency 'codeclimate-test-reporter'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rack'
+  spec.add_development_dependency 'guard-rake'
+  spec.add_development_dependency 'guard-bundler'
+  spec.add_development_dependency 'faker'
+  spec.add_development_dependency 'activerecord'
+  spec.add_development_dependency 'activerecord-import'
+  spec.add_development_dependency 'sqlite3'
+  spec.add_development_dependency 'ruby-prof'
+  spec.add_development_dependency 'bcrypt'
+  spec.add_development_dependency 'thin'
 end

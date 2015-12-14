@@ -1,8 +1,4 @@
 #!/usr/bin/env ruby
-
-require 'bundler/setup'
-Bundler.require(:default)
-require './app/apis/my_api'
-require 'pry'
+require_relative '../config/environment'
 
 Pry.start

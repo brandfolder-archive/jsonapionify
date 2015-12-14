@@ -33,16 +33,17 @@ module JSONAPIonify
         end
       end
 
-      def evaluate(*args, error_block:, runtime_block:, called_from:)
+      def evaluate(*args, error_block:, runtime_block:, backtrace: nil)
+        backtrace ||= caller
         error     = Structure::Objects::Error.new
         evaluator = Evaluator.new(error)
         collection << error
         [runtime_block, error_block].each do |block|
           evaluator.instance_exec(*args, &block) if block
         end
-        if ENV['RACK_ENV'] == 'development'
+        unless ENV['RACK_ENV'] == 'production'
           error[:meta]   ||= {}
-          error[:meta][:called_from] = called_from
+          error[:meta][:backtrace] = backtrace
         end
       end
 

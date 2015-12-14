@@ -1,0 +1,9 @@
+config: &config
+  adapter: 'sqlite3'
+
+development:
+  <<: *config
+  database: db/data.sqlite3
+test:
+  <<: *config
+  database: ':memory:'

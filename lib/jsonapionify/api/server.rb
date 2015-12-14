@@ -24,17 +24,24 @@ module JSONAPIonify::Api
         @request = Request.new(env)
         request.path_info.split('/').tap(&:shift).tap do |parts|
           @resource, @id, @relationship, @relationship_name, *@more = parts
+          request.env['jsonapionify.resource_name']                 = @resource if @resource
+          request.env['jsonapionify.resource']                      = resource if @resource
+          request.env['jsonapionify.id']                            = @id if @id
+          request.env['jsonapionify.relationship_request_type']     = @relationship == 'relationships' ? :full : :ids if @relationship
+          request.env['jsonapionify.relationship_name']             = @relationship == 'relationships' ? @relationship_name : @relationship if @relationship
+          request.env['jsonapionify.relationship']                  = @relationship = relationship if @relationship
         end
       end
 
       def response
-        if resource && more.blank?
-          call_resource
-        elsif resource.nil?
-          call_api_index
-        else
-          Resource::Http.process(:not_found, request)
-        end
+        resource.process(request)
+        # if resource && more.blank?
+        #   call_resource
+        # elsif resource.nil?
+        #   call_api_index
+        # else
+        #   Resource::Http.process(:not_found, request)
+        # end
       rescue Errors::ResourceNotFound
         Resource::Http.process(:not_found, request)
       end
@@ -83,7 +90,7 @@ module JSONAPIonify::Api
           relationship.process(:show_relationship, request)
         elsif request.patch?
           relationship.process(:replace_relationship, request)
-        elsif request.put? && relationship.rel.is_a?(Relationship::Many)
+        elsif request.post? && relationship.rel.is_a?(Relationship::Many)
           relationship.process(:update_relationship, request)
         elsif request.delete? && relationship.rel.is_a?(Relationship::Many)
           relationship.process(:remove_relationship, request)
@@ -110,7 +117,8 @@ module JSONAPIonify::Api
       end
 
       def relationship
-        if @relationship== 'relationships'
+        if @relationship == 'relationships'
+          raise Errors::RelationshipNotFound unless @relationship_name
           resource.relationship(@relationship_name)
         else
           resource.relationship(@relationship)

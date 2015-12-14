@@ -12,7 +12,7 @@ module JSONAPIonify::Api
       Rack::Builder.new do
         use Rack::ShowExceptions
         use Rack::CommonLogger
-        use Base::Reloader if ENV['RACK_ENV'] == 'development'
+        use Base::Reloader unless ENV['RACK_ENV'] == 'production'
         map "/docs" do
           run ->(env) {
             request    = JSONAPIonify::Api::Server::Request.new env

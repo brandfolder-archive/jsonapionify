@@ -5,3 +5,5 @@
 * Logger
 * TESTS
 * Documentations
+* Various top level objects for different requests
+* Fix required attributes on update

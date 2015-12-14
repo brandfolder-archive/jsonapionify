@@ -13,7 +13,11 @@ MyApi.define_resource :things do
   attribute :name, String, "The name of the things."
   attribute :color, String, "The color."
   attribute :secret, String, "A super secret.", read: false
-  relates_to_one :user, resource: :users
+  relates_to_one :user, resource: :users do
+    replace do |context|
+      binding.pry
+    end
+  end
 
   scope do
     Thing

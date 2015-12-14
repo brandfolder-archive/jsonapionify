@@ -53,8 +53,8 @@ module JSONAPIonify::Api
         detail 'missing attributes member'
       end
 
-      error :invalid_request_object do |context|
-        context.errors.set context.request_object.errors.as_collection
+      error :invalid_request_object do |context, request_object|
+        context.errors.set request_object.errors.as_collection
       end
 
       error :invalid_resource do

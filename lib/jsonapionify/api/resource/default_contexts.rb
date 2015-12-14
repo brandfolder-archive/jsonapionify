@@ -39,7 +39,7 @@ module JSONAPIonify::Api
 
       context(:request_object, readonly: true) do |context|
         JSONAPIonify.parse(context.request_body).as(:client).tap do |input|
-          error_now(:request_object_invalid, context) unless input.validate
+          error_now(:invalid_request_object, context, input) unless input.validate
         end
       end
 
@@ -63,7 +63,7 @@ module JSONAPIonify::Api
       end
 
       context(:request_attributes, readonly: true) do |context|
-        request_object = context.request_object
+        request_object     = context.request_object
         request_attributes = context.request_data.fetch(:attributes) do
           error_now :attributes_missing
         end
@@ -79,16 +79,16 @@ module JSONAPIonify::Api
             raise error_exception
           end
           request_object.validate
-          error_now(:request_object_invalid, context) if request_object.errors.present?
+          error_now(:invalid_request_object, context, request_object) if request_object.errors.present?
         end.to_hash
       end
 
-      context(:request_resources, readonly: true) do |context|
+      context(:request_instances, readonly: true) do |context|
         should_error = false
         data         = context.request_data
         instances    = data.map.each_with_index do |item, index|
           begin
-            find_resource item, pointer: "data/#{index}"
+            find_instance item, pointer: "data/#{index}"
           rescue error_exception
             should_error = true
           end

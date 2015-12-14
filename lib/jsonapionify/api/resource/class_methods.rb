@@ -28,6 +28,10 @@ module JSONAPIonify::Api
       end
     end
 
+    def type
+      nil
+    end
+
     def api
       nil
     end
