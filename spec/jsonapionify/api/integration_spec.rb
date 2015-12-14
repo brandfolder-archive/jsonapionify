@@ -144,7 +144,8 @@ module JSONAPIonify
 
       describe 'POST /:resource/:id/relationships/:name' do
         it 'should add new relationships' do
-          body = json(data: [{ id: Thing.last.id, type: 'things' }])
+          body = json(data: [{ id: Thing.last.id.to_s, type: 'things' }])
+          content_type 'application/vnd.api+json'
           expect { post "/users/#{User.first.id}/relationships/things", body }.to change { User.first.things.count }.by(1)
           last_response_json['data'].each do |item|
             expect { User.first.things.find(item['id']) }.to_not raise_error
