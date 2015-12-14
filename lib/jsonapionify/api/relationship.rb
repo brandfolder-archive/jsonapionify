@@ -5,16 +5,6 @@ module JSONAPIonify::Api
 
     extend Blocks
 
-    attr_reader :owner, :class_proc, :name, :associate
-
-    def initialize(owner, name, resource: nil, associate: true, &block)
-      @class_proc = block || proc {}
-      @owner      = owner
-      @name       = name
-      @resource   = resource || name
-      @associate  = associate.nil? ? true : associate
-    end
-
     prepend_class do
       remove_action :delete, :update
       class << self
@@ -60,6 +50,16 @@ module JSONAPIonify::Api
       end
     end
 
+    attr_reader :owner, :class_proc, :name, :associate
+
+    def initialize(owner, name, resource: nil, associate: true, &block)
+      @class_proc = block || proc {}
+      @owner      = owner
+      @name       = name
+      @resource   = resource || name
+      @associate  = associate.nil? ? true : associate
+    end
+
     def allow
       Array.new.tap do |ary|
         ary << 'read'
@@ -67,16 +67,19 @@ module JSONAPIonify::Api
       end
     end
 
-    def build_class
-      rel = self
-      Class.new(resource) do
-        define_singleton_method(:rel) do
-          rel
-        end
 
-        rel.class_prepends.each { |prepend| class_eval &prepend }
-        class_eval(&rel.class_proc)
-        rel.class_appends.each { |append| class_eval &append }
+    def resource_class
+      @resource_class ||= begin
+        rel = self
+        Class.new(resource) do
+          define_singleton_method(:rel) do
+            rel
+          end
+
+          rel.class_prepends.each { |prepend| class_eval &prepend }
+          class_eval(&rel.class_proc)
+          rel.class_appends.each { |append| class_eval &append }
+        end
       end
     end
 
