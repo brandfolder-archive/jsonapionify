@@ -71,9 +71,10 @@ module JSONAPIonify::Api
           writable_attributes = context.request_resource.attributes.select(&:write?)
           required_attributes = writable_attributes.select(&:required?).map(&:name)
           optional_attributes = writable_attributes.select(&:optional?).map(&:name)
-          if (missing_attributes = required_attributes - attributes.keys).present?
-            error_now :missing_required_attributes, missing_attributes
-          end
+          # Todo: let the backend handle this?
+          # if (missing_attributes = required_attributes - attributes.keys).present?
+          #   error_now :missing_required_attributes, missing_attributes
+          # end
           if (extra_attributes = attributes.keys - (optional_attributes + required_attributes)).present?
             extra_attributes.each { |attr| error :unpermitted_attribute, attr }
             raise error_exception
