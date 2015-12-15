@@ -1,9 +1,12 @@
-* Build out association interface.
-*? Resource class instead of scope (resource class defines the first scope)
-* Handle includes
-* Documentation Examples
-* Logger
+HIGH
+* Documentation
 * TESTS
-* Documentations
 * Various top level objects for different requests
-* Fix required attributes on update
+
+MED
+* Logger
+* Handle includes
+
+LOW
+*? Resource class instead of scope (resource class defines the first scope)
+*? Fix required attributes on update
