@@ -3,7 +3,7 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def build_resource(request, instance, fields: api.fields, relationships: true)
+      def build_resource(request, instance, fields: api.fields, relationships: true, links: true)
         return nil unless instance
         resource_url = build_url(request, instance)
         id           = build_id(instance)
@@ -15,7 +15,7 @@ module JSONAPIonify::Api
           end
           resource[:links]         = JSONAPIonify::Structure::Objects::Links.new(
             self: resource_url
-          )
+          ) if links
           resource[:relationships] = relationship_definitions.each_with_object(JSONAPIonify::Structure::Maps::Relationships.new) do |rel, hash|
             hash[rel.name] = build_relationship(request, instance, rel.name)
           end if relationships
