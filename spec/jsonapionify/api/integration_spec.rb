@@ -211,5 +211,23 @@ module JSONAPIonify
       end
     end
 
+    describe 'Errors' do
+      context 'request object error' do
+        it 'error if id is an integer' do
+          body = json(data: { id: 1, type: 'things' })
+          content_type 'application/vnd.api+json'
+          patch "/things/#{Thing.first.id}", body
+          expect(last_response.status).to eq 422
+        end
+      end
+
+      context 'rescued error' do
+        it 'error if id is an integer' do
+          get "/things/999999"
+          expect(last_response.status).to eq 404
+        end
+      end
+    end
+
   end
 end

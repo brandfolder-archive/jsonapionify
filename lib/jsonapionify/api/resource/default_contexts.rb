@@ -65,7 +65,7 @@ module JSONAPIonify::Api
       context(:request_attributes, readonly: true) do |context|
         request_object     = context.request_object
         request_attributes = context.request_data.fetch(:attributes) do
-          error_now :attributes_missing
+          error_now :missing_attributes
         end
         request_attributes.tap do |attributes|
           writable_attributes = context.request_resource.attributes.select(&:write?)

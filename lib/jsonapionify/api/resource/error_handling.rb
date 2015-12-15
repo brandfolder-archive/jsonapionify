@@ -15,9 +15,11 @@ module JSONAPIonify::Api
 
       def rescue_from(*klasses, error:, &block)
         super(*klasses) do |exception|
-          error_now error, backtrace: exception.backtrace do
-            instance_exec(exception, &block) if block_given?
-          end
+          errors.evaluate(
+            error_block:   lookup_error(error),
+            runtime_block: block || proc {},
+            backtrace:     exception.backtrace
+          )
         end
       end
 
@@ -35,14 +37,16 @@ module JSONAPIonify::Api
       end
     end
 
-    def error(name, *args, **options, &block)
-      error = self.class.error_definitions[name]
-      raise ArgumentError, "Error does not exist: #{name}" unless error
-      errors.evaluate(*args, error_block: self.class.error_definitions[name], runtime_block: block, **options)
+    def error(name, *args, &block)
+      errors.evaluate(
+        *args,
+        error_block:   lookup_error(name),
+        runtime_block: block
+      )
     end
 
-    def error_now(*args, **options, &block)
-      error(*args, **options, &block)
+    def error_now(name, *args, &block)
+      error(name, *args, &block)
       raise error_exception
     end
 
@@ -55,6 +59,12 @@ module JSONAPIonify::Api
     end
 
     private
+
+    def lookup_error(name)
+      self.class.error_definitions[name].tap do |error|
+        raise ArgumentError, "Error does not exist: #{name}" unless error
+      end
+    end
 
     def rescued_response(exception)
       rescue_with_handler(exception) || begin
