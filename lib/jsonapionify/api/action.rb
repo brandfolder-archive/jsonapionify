@@ -6,11 +6,13 @@ module JSONAPIonify::Api
       new(nil, nil, &block)
     end
 
-    def initialize(name, request_method, path = nil, content_type: nil, prepend: nil, &block)
+    def initialize(name, request_method, path = nil, require_body = nil, example_type = :resource, content_type: nil, prepend: nil, &block)
       @request_method = request_method
+      @require_body   = require_body.nil? ? %w{POST PUT PATCH}.include?(@request_method) : require_body
       @path           = path || ''
       @prepend        = prepend
       @name           = name
+      @example_type   = example_type
       @content_type   = content_type || 'application/vnd.api+json'
       @request_block  = block || proc {}
       @responses      = []
@@ -50,6 +52,39 @@ module JSONAPIonify::Api
       request.path_info.match(path_regex(base, name, include_path))
     end
 
+    def documentation_object(resource, base, name, include_path)
+      @documentation_object ||= begin
+        url = build_path(base, name, include_path)
+        OpenStruct.new(
+          name:            self.name.to_s,
+          sample_requests: example_requests(resource, url)
+        )
+      end
+    end
+
+
+    def example_requests(resource, url)
+      responses.map do |response|
+        opts                      = {}
+        opts['HTTP_CONTENT_TYPE'] = content_type if @require_body
+        opts['HTTP_ACCEPT']       = response.accept
+        request                   = Server::Request.env_for(url, request_method, opts)
+        opts[:input]              = case @example_type
+                                    when :resource
+                                      resource.build_resource(request, resource.example_instance).to_json
+                                    when :resource_identifier
+                                      resource.build_resource_identifier(resource.example_instance).to_json
+                                    end if @content_type == 'application/vnd.api+json'
+        request                   = Server::Request.env_for(url, request_method, opts)
+        response                  = Server::MockResponse.new *sample_request(resource, request)
+
+        OpenStruct.new(
+          request:  request.http_string,
+          response: response.http_string
+        )
+      end
+    end
+
     def supports_content_type?(request)
       @content_type == request.content_type ||
         (request.content_type.nil? && !request.has_body?)
@@ -69,6 +104,33 @@ module JSONAPIonify::Api
       new_response = Response.new(self, status: status, accept: accept, &block)
       @responses.delete new_response
       @responses << new_response
+    end
+
+    def sample_request(resource, request)
+      action = dup
+      resource.new.instance_eval do
+        sample_context                        = self.class.context_definitions.dup
+        sample_context[:collection]           =
+          Context.new proc { 3.times.map.each_with_index { |i| resource.example_instance(i + 1) } }, true
+        sample_context[:paginated_collection] = Context.new proc { |context| context.collection }
+        sample_context[:instance]             = Context.new proc { |context| context.collection.first }
+        if sample_context.has_key? :owner_context
+          sample_context[:owner_context] = Context.new proc { ContextDelegate::Mock.new }, true
+        end
+
+        # Bootstrap the Action
+        context = ContextDelegate.new(request, self, sample_context)
+
+        define_singleton_method :headers do
+          context.headers
+        end
+
+        # Render the response
+        response_definition =
+          action.responses.find { |response| response.accept? request } ||
+            error_now(:not_acceptable)
+        response_definition.call(self, context)
+      end
     end
 
     def call(resource, request)

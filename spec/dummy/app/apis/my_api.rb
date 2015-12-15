@@ -11,7 +11,7 @@ class MyApi < JSONAPIonify::Api::Base
     }
   )
 
-  before :index do |context|
+  before :list do |context|
     # Before actions here
   end
 

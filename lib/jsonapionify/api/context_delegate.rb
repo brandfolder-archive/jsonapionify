@@ -1,5 +1,10 @@
 module JSONAPIonify::Api
   class ContextDelegate
+    class Mock
+      def method_missing(*args, &block)
+        self
+      end
+    end
 
     attr_reader :definitions
 

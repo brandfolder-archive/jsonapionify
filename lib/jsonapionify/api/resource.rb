@@ -30,5 +30,14 @@ module JSONAPIonify::Api
       end
     end
 
+    def self.example_instance(id=1)
+      build_instance.tap do |instance|
+        instance.send "#{id_attribute}=", (id).to_s
+        attributes.select(&:read?).each do |attribute|
+          instance.send "#{attribute.name}=", attribute.example
+        end
+      end
+    end
+
   end
 end

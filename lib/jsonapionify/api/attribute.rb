@@ -2,10 +2,19 @@ module JSONAPIonify::Api
   class Attribute
     attr_reader :name, :type, :description, :read, :write, :required
 
+    ExampleMap = {
+      Array   => ['one', 'two', 'three'],
+      Hash    => { one: 1, two: 2, three: 3 },
+      String  => "Foo",
+      Fixnum  => 42,
+      Boolean => true,
+      Float   => 3.14
+    }
+
     def initialize(name, type, description, read: true, write: true, required: false)
       @name        = name
       @type        = type
-      @description = JSONAPIonify::Documentation.render_markdown description
+      @description = description
       @read        = read
       @write       = write
       @required    = required
@@ -30,6 +39,18 @@ module JSONAPIonify::Api
 
     def write?
       !!@write
+    end
+
+    def example
+      ExampleMap[@type]
+    end
+
+    def documentation_object
+      OpenStruct.new(
+        required:    required?,
+        description: JSONAPIonify::Documentation.render_markdown(description),
+        allow:       allow
+      )
     end
 
     def allow

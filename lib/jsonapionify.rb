@@ -1,5 +1,5 @@
 require 'pry' rescue nil
-require 'core_ext/boolean_object'
+require 'core_ext/boolean'
 require "active_support/core_ext/string/inflections"
 require "active_support/core_ext/hash/keys"
 require 'active_support/cache'

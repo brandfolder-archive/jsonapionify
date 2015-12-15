@@ -19,14 +19,19 @@ module JSONAPIonify::Api
       end
     end
 
-    def index(**options, &block)
-      define_action(:index, 'GET', **options, &block).tap do |action|
+    def list(**options, &block)
+      define_action(:list, 'GET', **options, &block).tap do |action|
         action.response status: 200 do |context|
           context.response_object[:data] = build_collection(context.request, context.paginated_collection, fields: context.fields)
           context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
       end
+    end
+
+    def index(**options, &block)
+      warn 'the `index` action will soon be deprecated, use `list` instead!'
+      list(**options, &block)
     end
 
     def create(**options, &block)
@@ -79,6 +84,10 @@ module JSONAPIonify::Api
     end
 
     def before(action_name, &block)
+      if action_name == :index
+        warn 'the `index` action will soon be deprecated, use `list` instead!'
+        action_name = :list
+      end
       callbacks_for(action_name).before_request(&block)
     end
 
@@ -144,6 +153,10 @@ module JSONAPIonify::Api
     end
 
     def remove_action(*names)
+      if names.include? :index
+        warn 'the `index` action will soon be deprecated, use `list` instead!'
+        names << :list
+      end
       action_definitions.delete_if do |action_definition|
         names.include? action_definition.name
       end

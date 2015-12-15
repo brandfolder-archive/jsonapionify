@@ -22,6 +22,14 @@ module JSONAPIonify::Api
       end
     end
 
+    def documentation_object
+      OpenStruct.new(
+        accept:       accept,
+        content_type: accept,
+        status:       status
+      )
+    end
+
     def call(instance, context)
       response = self
       instance.instance_eval do

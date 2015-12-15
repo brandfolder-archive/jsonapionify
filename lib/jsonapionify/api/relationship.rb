@@ -67,6 +67,13 @@ module JSONAPIonify::Api
       end
     end
 
+    def documentation_object(base_url)
+      OpenStruct.new(
+        name: name,
+        allow: allow,
+        actions: resource_class.actions.map { |a| a.documentation_object resource_class, base_url, name.to_s, false }
+      )
+    end
 
     def resource_class
       @resource_class ||= begin

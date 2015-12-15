@@ -21,7 +21,7 @@ module JSONAPIonify::Api
 
         define_singleton_method(:replace) do |**options, &block|
           options[:prepend] = 'relationships'
-          define_action(:replace, 'PATCH', **options, &block).response status: 200 do |context|
+          define_action(:replace, 'PATCH', '', true, :resource_identifier, **options, &block).response status: 200 do |context|
             context.owner_context.reset(:instance)
             context.reset(:collection)
             context.response_object[:data] = build_identifier_collection(context.collection)
@@ -32,7 +32,7 @@ module JSONAPIonify::Api
 
         define_singleton_method(:add) do |**options, &block|
           options[:prepend] = 'relationships'
-          define_action(:add, 'POST', **options, &block).response status: 200 do |context|
+          define_action(:add, 'POST', '', true, :resource_identifier, **options, &block).response status: 200 do |context|
             context.owner_context.reset(:instance)
             context.reset(:collection)
             context.response_object[:data] = build_identifier_collection(context.collection)
@@ -43,7 +43,7 @@ module JSONAPIonify::Api
 
         define_singleton_method(:remove) do |**options, &block|
           options[:prepend] = 'relationships'
-          define_action(:remove, 'DELETE', **options, &block).response status: 200 do |context|
+          define_action(:remove, 'DELETE', '', true, :resource_identifier, **options, &block).response status: 200 do |context|
             context.owner_context.reset(:instance)
             context.reset(:collection)
             context.response_object[:data] = build_identifier_collection(context.collection)

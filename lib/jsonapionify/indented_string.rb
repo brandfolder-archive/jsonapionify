@@ -1,5 +1,7 @@
 module JSONAPIonify
   module IndentedString
+    extend self
+
     refine String do
       def deindent
         shortest_line_length = lines.each_with_object([]) do |line, ary|
@@ -14,6 +16,12 @@ module JSONAPIonify
           end
         end.join("\n")
       end
+    end
+
+    using self
+
+    def deindent_string(string)
+      string.deindent
     end
   end
 end

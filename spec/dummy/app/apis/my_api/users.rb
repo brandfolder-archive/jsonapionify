@@ -38,7 +38,7 @@ MyApi.define_resource :users do
     scope.new
   end
 
-  index do |context|
+  list do |context|
     cache context.paginated_collection.cache_key
   end
 

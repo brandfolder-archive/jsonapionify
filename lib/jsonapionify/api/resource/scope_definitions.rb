@@ -27,6 +27,9 @@ module JSONAPIonify::Api
     end
 
     def new_instance(&block)
+      define_singleton_method(:build_instance) do
+        Object.new.instance_exec(current_scope, &block)
+      end
       context :new_instance do |context|
         Object.new.instance_exec(context.scope, context, &block)
       end

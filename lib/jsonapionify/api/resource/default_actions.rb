@@ -3,7 +3,7 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
     included do
       before(:create) { |context| context.instance = context.new_instance }
-      index
+      list
       read
     end
   end

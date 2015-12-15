@@ -87,9 +87,9 @@ module JSONAPIonify::Api
       context(:request_instances, readonly: true) do |context|
         should_error = false
         data         = context.request_data
-        instances    = data.map.each_with_index do |item, index|
+        instances    = data.map.each_with_index do |item, i|
           begin
-            find_instance item, pointer: "data/#{index}"
+            find_instance item, pointer: "data/#{i}"
           rescue error_exception
             should_error = true
           end

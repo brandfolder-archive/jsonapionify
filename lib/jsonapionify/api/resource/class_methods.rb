@@ -40,38 +40,20 @@ module JSONAPIonify::Api
       File.join base, type.to_s
     end
 
-    def documentation_object(request)
-      description           = JSONAPIonify::Documentation.render_markdown @description || ''
-      @documentation_object ||= Class.new(SimpleDelegator) do
-        define_method(:url) do
-          File.join request.host, type
-        end
+    def actions_in_order
+      indexes = %i{list create read update delete add replace remove}
+      actions.sort_by { |action| indexes.index(action.name) || indexes.length }
+    end
 
-        define_method(:description) do
-          description
-        end
-
-        define_method(:resources) do
-          resource_definitions.each_with_object({}) do |(name, _), hash|
-            hash[name.to_s] = resource(name).documentation_object
-          end
-        end
-
-        define_method(:attributes) do
-          super().each_with_object({}) do |attribute, hash|
-            hash[attribute.name] = attribute
-          end
-        end
-
-        define_method(:relationships) do
-          relationship_definitions.each_with_object({}) do |relationship, hash|
-            hash[relationship.name.to_s] = OpenStruct.new(
-              resource: relationship.resource,
-              allow:    relationship.allow
-            )
-          end
-        end
-      end.new(self)
+    def documentation_object(base_url)
+      url = File.join(base_url, type)
+      OpenStruct.new(
+        name:          type,
+        description:   JSONAPIonify::Documentation.render_markdown(@description || ''),
+        relationships: relationships.map { |r| r.documentation_object url },
+        attributes:    attributes.map(&:documentation_object),
+        actions:       actions_in_order.map { |a| a.documentation_object self, base_url, type, true }
+      )
     end
 
     def cache(store, *args)

@@ -127,7 +127,7 @@
       display: none;
     }
 
-    #sidebar .nav-H3:before {
+    #sidebar .nav-H3:before, .nav-H4:before {
       content: '>';
       font-family: "Source Code Pro", Monaco, monospace;
       position: absolute;
@@ -135,7 +135,7 @@
       color: #e1e8ed;
     }
 
-    #sidebar .nav-H3.active:before {
+    #sidebar .nav-H3.active:before, .nav-H4.active:before {
       color: #6f7579;
       content: '>';
       font-family: "Source Code Pro", Monaco, monospace;
@@ -313,21 +313,21 @@
       </section>
 
       <h2>Resources</h2>
-      <% api.resources.each do |resource_name, resource| %>
-          <section id="<%= resource_name %>" class="group">
-            <h3><%= resource_name.titleize %></h3>
+      <% api.resources.each do |resource| %>
+          <section id="<%= resource.name %>" class="group">
+            <h3><%= resource.name.titleize %></h3>
 
             <p><%= resource.description %></p>
 
             <div class="details">
               <h4>Attributes</h4>
               <ul class="attributes">
-                <% resource.attributes.each do |attribute_name, attribute| %>
+                <% resource.attributes.each do |attribute| %>
                     <li>
                       <div class="row-attribute">
                         <div class="col-xs-4 attribute-name">
-                          <strong><%= attribute_name %></strong>
-                          <p class="optional"><%= "optional" if !attribute.required %></p>
+                          <strong><%= attribute.name %></strong>
+                          <p class="optional"><%= "optional" unless attribute.required %></p>
                         </div>
                         <div class="col-xs-8 attribute-description">
                           <p><%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %></p>
@@ -339,49 +339,20 @@
                 <% end %>
               </ul>
 
-              <h4 id="<%= resource_name %>-examples">Examples</h4>
-              <br>
-              Basic Request:
-              <pre class="nostyle"><code>GET <%= api.base_url %>
-                /<%= resource_name %>/:id HTTP/1.1</code></pre>
-              <div class="highlight"><pre class="nostyle"><code class="language-http" data-lang="http">HTTP/1.1
-                200 OK
-                Content-Type: application/vnd.api+json
-
-                {
-                "data": [{
-                "type": "articles",
-                "id": "1",
-                "attributes": {
-                "title": "JSON API paints my bikeshed!",
-                "body": "The shortest article. Ever.",
-                "created": "2015-05-22T14:56:29.000Z",
-                "updated": "2015-05-22T14:56:28.000Z"
-                },
-                "relationships": {
-                "author": {
-                "data": {"id": "42", "type": "people"}
-                }
-                }
-                }],
-                "included": [
-                {
-                "type": "people",
-                "id": "42",
-                "attributes": {
-                "name": "John",
-                "age": 80,
-                "gender": "male"
-                }
-                }
-                ]
-                }</code></pre>
-              </div>
-              <h4 id="<%= resource_name %>-relationships">Relationships</h4>
+              <% resource.actions.each do |action| %>
+                  <h4><%= action.name.titleize %> <%= action.name == 'list' ? resource.name.pluralize : resource.name.singularize %></h4>
+                  <% action.sample_requests.each do |sample_request| %>
+                      <h5>Request</h5>
+                      <pre class="nostyle"><code class="language-http"><%= sample_request.request %></code></pre>
+                      <h5>Response</h5>
+                      <pre class="nostyle"><code class="language-http"><%= sample_request.response %></code></pre>
+                  <% end %>
+              <% end %>
+              <h4 id="<%= resource.name %>-relationships">Relationships</h4>
               <ul class="relationships">
-                <% resource.relationships.each do |relationship_name, relationship| %>
-                    <li id="<%= resource_name %>-<%= relationship_name %>" class="subgroup">
-                      <strong><a href="#<%= relationship.resource %>"><%= relationship_name %></a></strong>
+                <% resource.relationships.each do |relationship| %>
+                    <li id="<%= resource.name %>-<%= relationship.name %>" class="subgroup">
+                      <strong><a href="#<%= relationship.resource %>"><%= relationship.name %></a></strong>
                       <small class="allowed"><%= "&middot; #{relationship.allow.to_sentence}" %></small>
                     </li>
                 <% end %>
@@ -409,6 +380,7 @@
         </a>
       </div>
     </div>
+  </div>
 </footer>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
