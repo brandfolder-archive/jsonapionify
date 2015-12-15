@@ -71,9 +71,9 @@ module JSONAPIonify::Api
         request                   = Server::Request.env_for(url, request_method, opts)
         opts[:input]              = case @example_type
                                     when :resource
-                                      resource.build_resource(request, resource.example_instance).to_json
+                                      { 'data' => resource.build_resource(request, resource.example_instance, relationships: false, links: false).as_json }.to_json
                                     when :resource_identifier
-                                      resource.build_resource_identifier(resource.example_instance).to_json
+                                      { 'data' => resource.build_resource_identifier(resource.example_instance).as_json }.to_json
                                     end if @content_type == 'application/vnd.api+json'
         request                   = Server::Request.env_for(url, request_method, opts)
         response                  = Server::MockResponse.new *sample_request(resource, request)
