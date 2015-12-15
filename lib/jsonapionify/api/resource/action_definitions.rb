@@ -116,8 +116,8 @@ module JSONAPIonify::Api
     end
 
     def find_supported_action(request)
-      action_definitions.find do |action_definition|
-        action_definition.supports?(request, base_path, path_name, supports_path?)
+      actions.find do |action|
+        action.supports?(request, base_path, path_name, supports_path?)
       end
     end
 
@@ -135,14 +135,14 @@ module JSONAPIonify::Api
     end
 
     def path_actions(request)
-      action_definitions.select do |action_definition|
-        action_definition.supports_path?(request, base_path, path_name, supports_path?)
+      actions.select do |action|
+        action.supports_path?(request, base_path, path_name, supports_path?)
       end
     end
 
     def request_method_actions(request)
-      path_actions(request).select do |action_definition|
-        action_definition.supports_request_method?(request)
+      path_actions(request).select do |action|
+        action.supports_request_method?(request)
       end
     end
 
@@ -163,7 +163,10 @@ module JSONAPIonify::Api
     end
 
     def actions
-      action_definitions
+      action_definitions.select do |action|
+        action.only_associated == false ||
+          (respond_to?(:rel) && action.only_associated == true)
+      end
     end
 
     private

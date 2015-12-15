@@ -10,9 +10,9 @@ MyApi.define_resource :things do
   markdown
 
   id :id
-  attribute :name, String, "The name of the things."
-  attribute :color, String, "The color."
-  attribute :secret, String, "A super secret.", read: false
+  attribute :name, types.String, "The name of the things."
+  attribute :color, types.String, "The color."
+  attribute :secret, types.String, "A super secret.", read: false
   relates_to_one :user, resource: :users do
     replace do |context|
       context.owner_context.instance.update! user: context.request_instance

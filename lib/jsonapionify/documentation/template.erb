@@ -266,6 +266,10 @@
       line-height: 16px;
     }
 
+    .attribute-type {
+      color: #939da3
+    }
+
     pre.nostyle code {
       padding: 10px 15px;
     }
@@ -327,10 +331,15 @@
                       <div class="row-attribute">
                         <div class="col-xs-4 attribute-name">
                           <strong><%= attribute.name %></strong>
-                          <p class="optional"><%= "optional" unless attribute.required %></p>
+                          <i class="attribute-type"><%= attribute.type %></i>
+                          <% if attribute.required %>
+                              <p class="optional">required</p>
+                          <% else %>
+                              <p class="optional">optional</p>
+                          <% end %>
                         </div>
                         <div class="col-xs-8 attribute-description">
-                          <p><%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %></p>
+                          <%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %>
                           <p class="allowed">Allowed: <%= "#{attribute.allow.to_sentence}" %></p>
                         </div>
                         <div style="clear: both;"></div>
@@ -343,9 +352,9 @@
                   <h4><%= action.name.titleize %> <%= action.name == 'list' ? resource.name.pluralize : resource.name.singularize %></h4>
                   <% action.sample_requests.each do |sample_request| %>
                       <h5>Request</h5>
-                      <pre class="nostyle"><code class="language-http"><%= sample_request.request %></code></pre>
+                      <pre><code class="http"><%= sample_request.request %></code></pre>
                       <h5>Response</h5>
-                      <pre class="nostyle"><code class="language-http"><%= sample_request.response %></code></pre>
+                      <pre><code class="http"><%= sample_request.response %></code></pre>
                   <% end %>
               <% end %>
               <h4 id="<%= resource.name %>-relationships">Relationships</h4>
@@ -353,7 +362,6 @@
                 <% resource.relationships.each do |relationship| %>
                     <li id="<%= resource.name %>-<%= relationship.name %>" class="subgroup">
                       <strong><a href="#<%= relationship.resource %>"><%= relationship.name %></a></strong>
-                      <small class="allowed"><%= "&middot; #{relationship.allow.to_sentence}" %></small>
                     </li>
                 <% end %>
               </ul>

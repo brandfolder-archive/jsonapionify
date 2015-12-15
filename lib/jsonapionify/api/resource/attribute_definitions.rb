@@ -4,6 +4,7 @@ module JSONAPIonify::Api
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
+        extend JSONAPIonify::Types
         inherited_array_attribute :attributes
         delegate :attributes, to: :class
       end

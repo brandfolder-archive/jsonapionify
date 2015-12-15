@@ -12,6 +12,9 @@ module JSONAPIonify::Api
     }
 
     def initialize(name, type, description, read: true, write: true, required: false)
+      unless type.is_a? JSONAPIonify::Types::BaseType
+        raise TypeError, "#{type} is not a valid JSON type"
+      end
       @name        = name
       @type        = type
       @description = description
@@ -48,6 +51,7 @@ module JSONAPIonify::Api
     def documentation_object
       OpenStruct.new(
         name:        name,
+        type:        type.name,
         required:    required?,
         description: JSONAPIonify::Documentation.render_markdown(description),
         allow:       allow

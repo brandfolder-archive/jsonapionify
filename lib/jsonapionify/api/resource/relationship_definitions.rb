@@ -9,18 +9,18 @@ module JSONAPIonify::Api
       end
     end
 
-    def relates_to_many(name, associate: true, resource: nil, &block)
-      define_relationship(name, Relationship::Many, associate: associate, resource: resource, &block)
+    def relates_to_many(name, resource: nil, &block)
+      define_relationship(name, Relationship::Many, resource: resource, &block)
     end
 
-    def relates_to_one(name, associate: true, resource: nil, &block)
-      define_relationship(name, Relationship::One, associate: associate, resource: resource, &block)
+    def relates_to_one(name, resource: nil, &block)
+      define_relationship(name, Relationship::One, resource: resource, &block)
     end
 
-    def define_relationship(name, klass, associate: nil, resource: nil, &block)
+    def define_relationship(name, klass, resource: nil, &block)
       const_name = name.to_s.camelcase + 'Relationship'
       remove_const(const_name) if const_defined? const_name
-      klass.new(self, name, associate: associate, resource: resource, &block).tap do |new_relationship|
+      klass.new(self, name, resource: resource, &block).tap do |new_relationship|
         relationship_definitions.delete new_relationship
         relationship_definitions << new_relationship
       end

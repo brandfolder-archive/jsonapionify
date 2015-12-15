@@ -50,27 +50,18 @@ module JSONAPIonify::Api
       end
     end
 
-    attr_reader :owner, :class_proc, :name, :associate
+    attr_reader :owner, :class_proc, :name
 
-    def initialize(owner, name, resource: nil, associate: true, &block)
+    def initialize(owner, name, resource: nil, &block)
       @class_proc = block || proc {}
       @owner      = owner
       @name       = name
       @resource   = resource || name
-      @associate  = associate.nil? ? true : associate
-    end
-
-    def allow
-      Array.new.tap do |ary|
-        ary << 'read'
-        ary << 'write' if @associate
-      end
     end
 
     def documentation_object(base_url)
       OpenStruct.new(
         name: name,
-        allow: allow,
         actions: resource_class.actions.map { |a| a.documentation_object resource_class, base_url, name.to_s, false }
       )
     end

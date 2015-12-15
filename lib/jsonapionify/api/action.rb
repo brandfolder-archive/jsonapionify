@@ -1,21 +1,23 @@
 module JSONAPIonify::Api
   class Action
-    attr_reader :name, :request_block, :content_type, :responses, :prepend, :path, :request_method
+    attr_reader :name, :request_block, :content_type, :responses, :prepend,
+                :path, :request_method, :only_associated
 
     def self.stub(&block)
       new(nil, nil, &block)
     end
 
-    def initialize(name, request_method, path = nil, require_body = nil, example_type = :resource, content_type: nil, prepend: nil, &block)
-      @request_method = request_method
-      @require_body   = require_body.nil? ? %w{POST PUT PATCH}.include?(@request_method) : require_body
-      @path           = path || ''
-      @prepend        = prepend
-      @name           = name
-      @example_type   = example_type
-      @content_type   = content_type || 'application/vnd.api+json'
-      @request_block  = block || proc {}
-      @responses      = []
+    def initialize(name, request_method, path = nil, require_body = nil, example_type = :resource, content_type: nil, prepend: nil, only_associated: false, &block)
+      @request_method  = request_method
+      @require_body    = require_body.nil? ? %w{POST PUT PATCH}.include?(@request_method) : require_body
+      @path            = path || ''
+      @prepend         = prepend
+      @only_associated = only_associated
+      @name            = name
+      @example_type    = example_type
+      @content_type    = content_type || 'application/vnd.api+json'
+      @request_block   = block || proc {}
+      @responses       = []
     end
 
     def initialize_copy(new_instance)
