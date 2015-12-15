@@ -47,6 +47,7 @@ module JSONAPIonify::Api
 
     def documentation_object
       OpenStruct.new(
+        name:        name,
         required:    required?,
         description: JSONAPIonify::Documentation.render_markdown(description),
         allow:       allow
