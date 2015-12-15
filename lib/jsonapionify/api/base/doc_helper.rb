@@ -9,8 +9,7 @@ module JSONAPIonify::Api
     end
 
     def documentation_output(request)
-      # @documentation_output ||=
-      JSONAPIonify::Documentation.new(documentation_object(request)).result
+      @documentation_output ||= JSONAPIonify::Documentation.new(documentation_object(request)).result
     end
 
     def resources_in_order
