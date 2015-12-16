@@ -39,6 +39,7 @@ module JSONAPIonify::Api
     def example
       case @example
       when Proc
+        type.dump @example.call
       when nil
         type.dump type.sample(name)
       else
