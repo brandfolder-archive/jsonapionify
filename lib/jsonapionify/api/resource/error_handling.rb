@@ -68,12 +68,11 @@ module JSONAPIonify::Api
 
     def rescued_response(exception)
       rescue_with_handler(exception) || begin
-        error :internal_server_error, backtrace: exception.backtrace do
-          unless ENV['RACK_ENV'] == 'production'
-            detail exception.message
-            meta[:error_class] = exception.class.name
-          end
-        end
+        errors.evaluate(
+          error_block:   lookup_error(:internal_server_error),
+          runtime_block: proc {},
+          backtrace:     exception.backtrace
+        )
       end
     ensure
       return error_response
