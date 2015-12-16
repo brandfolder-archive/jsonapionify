@@ -36,7 +36,7 @@ module JSONAPIonify::Api
     end
 
     def process_index(request)
-      headers                    = ContextDelegate.new(request, resource_class.new, resource_class.context_definitions).headers
+      headers                    = ContextDelegate.new(request, resource_class.new, resource_class.context_definitions).response_headers
       obj                        = JSONAPIonify.new_object
       obj[:meta]                 = { resources: {} }
       obj[:links]                = { self: request.root_url }
@@ -54,7 +54,7 @@ module JSONAPIonify::Api
 
     def fields
       resources.each_with_object({}) do |resource, fields|
-        fields[resource.type.to_sym] = resource.attributes.select(&:read?).map(&:name)
+        fields[resource.type.to_sym] = resource.fields
       end
     end
 

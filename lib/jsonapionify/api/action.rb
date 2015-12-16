@@ -124,8 +124,8 @@ module JSONAPIonify::Api
         # Bootstrap the Action
         context = ContextDelegate.new(request, self, sample_context)
 
-        define_singleton_method :headers do
-          context.headers
+        define_singleton_method :response_headers do
+          context.response_headers
         end
 
         # Render the response
@@ -145,9 +145,8 @@ module JSONAPIonify::Api
         callbacks = resource.callbacks_for(action.name).new
         context   = ContextDelegate.new(request, self, self.class.context_definitions)
 
-        # Define Singletons
-        define_singleton_method :response do |*args, &block|
-          action.response(*args, &block)
+        define_singleton_method :action_name do
+          action.name
         end
 
         define_singleton_method :cache do |key, **options|
@@ -168,8 +167,8 @@ module JSONAPIonify::Api
             context.errors
           end
 
-          target.define_singleton_method :headers do
-            context.headers
+          define_singleton_method :response_headers do
+            context.response_headers
           end
 
           target.define_singleton_method :error_exception do

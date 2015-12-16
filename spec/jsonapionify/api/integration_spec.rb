@@ -229,5 +229,47 @@ module JSONAPIonify
       end
     end
 
+    describe 'Parameters' do
+      context 'sort params' do
+        it 'should not raise an error' do
+          get "/things?sort=name"
+          expect(last_response.status).to eq 200
+        end
+      end
+
+      context 'sparce field params' do
+        it 'should not raise an error' do
+          get "/things?fields[things]=name"
+          expect(last_response.status).to eq 200
+        end
+      end
+
+      context 'include' do
+        it 'should not raise an error' do
+          get "/things?include=user"
+          expect(last_response.status).to eq 200
+        end
+      end
+
+      context 'invalid parameter' do
+        it 'should error' do
+          get "/things?BADPARAM=1"
+          expect(last_response.status).to eq 400
+        end
+      end
+
+      context 'require parameters' do
+        it 'should error when missing' do
+          get "/places"
+          expect(last_response.status).to eq 400
+        end
+
+        it 'should not error when not missing' do
+          get "/places?foo=1"
+          expect(last_response.status).to eq 200
+        end
+      end
+
+    end
   end
 end

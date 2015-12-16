@@ -68,5 +68,15 @@ module JSONAPIonify::Api
       @cache_store ||= api.cache_store
     end
 
+    def default_strategy
+      if defined?(ActiveRecord) && current_scope.is_a?(Class) && current_scope < ActiveRecord::Base
+        :active_record
+      elsif Enumerable === current_scope || (current_scope.is_a?(Class) && current_scope < Enumerable)
+        :enumerable
+      end
+    rescue NotImplementedError
+      nil
+    end
+
   end
 end

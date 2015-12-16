@@ -4,7 +4,9 @@ module JSONAPIonify::Api
     def self.extended(klass)
       klass.class_eval do
         class << self
-          delegate :context, :header, :helper, :rescue_from, :error, :pagination, :before, to: :resource_class
+          delegate :context, :response_header, :helper, :rescue_from, :error,
+                   :pagination, :before, :param, :request_header, :sort,
+                   to: :resource_class
         end
       end
     end

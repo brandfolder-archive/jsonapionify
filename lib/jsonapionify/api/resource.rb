@@ -7,20 +7,12 @@ module JSONAPIonify::Api
     extend JSONAPIonify::Autoload
     autoload_all
 
-    extend ActionDefinitions
-    extend AttributeDefinitions
-    extend ScopeDefinitions
-    extend HelperDefinitions
-    extend RelationshipDefinitions
-    extend PaginationDefinitions
+    extend Definitions
     extend ClassMethods
 
     include ErrorHandling
-    include DefaultContexts
-    include DefaultErrors
-    include DefaultHelpers
-    include DefaultActions
     include Builders
+    include Defaults
 
     def self.inherited(subclass)
       super(subclass)

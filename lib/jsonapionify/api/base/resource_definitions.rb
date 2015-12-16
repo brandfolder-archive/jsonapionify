@@ -14,7 +14,9 @@ module JSONAPIonify::Api
       const_name = type.to_s.camelcase
       return const_get(const_name, false) if const_defined?(const_name, false)
       raise Errors::ResourceNotFound, "Resource not defined: #{type}" unless resource_defined?(type)
-      const_set const_name, Class.new(resource_class, &resource_definitions[type]).set_type(type)
+      klass = Class.new(resource_class, &resource_definitions[type]).set_type(type)
+      param(:fields, type)
+      const_set const_name, klass
     end
 
     def resource_defined?(name)

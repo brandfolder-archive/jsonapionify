@@ -5,6 +5,9 @@ module JSONAPIonify::Api
     included do
       include ActiveSupport::Rescuable
       context(:error_exception) { Class.new(StandardError) }
+      context(:errors, readonly: true) do
+        ErrorsObject.new
+      end
     end
 
     module ClassMethods
@@ -95,7 +98,7 @@ module JSONAPIonify::Api
           else
             (status_codes.last[0] + "00").to_i
           end
-        headers.each { |k, v| response.headers[k] = v }
+        response_headers.each { |k, v| response.headers[k] = v }
         response.headers['content-type'] = 'application/vnd.api+json'
         response.write(errors.top_level.to_json)
       end.finish

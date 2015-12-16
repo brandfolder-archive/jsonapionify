@@ -1,8 +1,9 @@
 require 'oj'
 
 module JSONAPIonify::Api
-  module Resource::DefaultErrors
+  module Resource::Defaults::Errors
     extend ActiveSupport::Concern
+
     included do
       rescue_from JSONAPIonify::Structure::ValidationError, error: :jsonapi_validation_error
       rescue_from Oj::ParseError, error: :json_parse_error
@@ -15,7 +16,7 @@ module JSONAPIonify::Api
         end
       end
 
-      error :missing_data do
+      error :data_missing do
         pointer ''
         title 'Missing Member'
         detail 'missing data member'
@@ -28,36 +29,56 @@ module JSONAPIonify::Api
         status '422'
       end
 
-      error :invalid_field_param do |type, field|
+      error :field_not_permitted do |type, field|
         parameter "fields[#{type}]"
         title 'Invalid Field'
         detail "type: `#{type}`, does not have field: `#{field}`"
         status '400'
       end
 
-      error :missing_required_attributes do |attributes|
-        pointer 'data/attributes'
-        title 'Missing Required Attributes'
-        detail "Missing attributes: #{attributes.to_sentence}"
-        status '422'
-      end
-
-      error :unpermitted_attribute do |attribute|
+      error :attribute_not_permitted do |attribute|
         pointer "data/attributes/#{attribute}"
         title 'Attribute not permitted'
         detail "Attribute not permitted: #{attribute}"
       end
 
-      error :missing_attributes do
+      error :attributes_missing do
+        pointer 'data'
         title 'Missing Member'
         detail 'missing attributes member'
+        status '422'
       end
 
-      error :invalid_request_object do |context, request_object|
+      error :include_parameter_invalid do
+        parameter 'sort'
+        title 'Sort parameter is invalid'
+        status '400'
+      end
+
+      error :parameters_missing do |parameters|
+        title 'Missing required parameters'
+        detail "missing: #{parameters.to_sentence}"
+        status '400'
+      end
+
+      error :parameter_not_permitted do |param|
+        parameter param
+        title 'Parameter Not Permitted'
+        detail "parameter not permitted: #{param}"
+        status '400'
+      end
+
+      error :sort_parameter_invalid do
+        parameter 'sort'
+        title 'Sort parameter is invalid'
+        status '400'
+      end
+
+      error :request_object_invalid do |context, request_object|
         context.errors.set request_object.errors.as_collection
       end
 
-      error :invalid_resource do
+      error :resource_invalid do
         title 'Invalid Resource'
         status '404'
       end

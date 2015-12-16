@@ -1,5 +1,17 @@
 module JSONAPIonify::Api
   module Base::DocHelper
+
+    def self.extended(klass)
+      klass.class_eval do
+        extend JSONAPIonify::InheritedAttributes
+        inherited_array_attribute :links
+      end
+    end
+
+    def link(href)
+      links << href
+    end
+
     def title(title)
       @title = title
     end
@@ -24,6 +36,7 @@ module JSONAPIonify::Api
         uri.path.chomp! '/docs'
       end.to_s
       OpenStruct.new(
+        links:       links,
         title:       @title || self.name,
         base_url:    base_url,
         description: JSONAPIonify::Documentation.render_markdown(@description || ''),

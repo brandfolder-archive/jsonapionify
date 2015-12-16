@@ -1,7 +1,7 @@
 require 'active_support/core_ext/array/wrap'
 
 module JSONAPIonify::Api
-  module Resource::ActionDefinitions
+  module Resource::Definitions::Actions
     ActionNotFound = Class.new StandardError
 
     def self.extended(klass)
@@ -22,7 +22,11 @@ module JSONAPIonify::Api
     def list(**options, &block)
       define_action(:list, 'GET', **options, &block).tap do |action|
         action.response status: 200 do |context|
-          context.response_object[:data] = build_collection(context.request, context.paginated_collection, fields: context.fields)
+          context.response_object[:data] = build_collection(
+            context.request,
+            context.response_collection,
+            fields: context.fields
+          )
           context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
@@ -83,17 +87,18 @@ module JSONAPIonify::Api
       end
     end
 
-    def before(action_name, &block)
+    def before(action_name = nil, &block)
       if action_name == :index
         warn 'the `index` action will soon be deprecated, use `list` instead!'
         action_name = :list
       end
+      return base_callbacks.before_request(&block) if action_name == nil
       callbacks_for(action_name).before_request(&block)
     end
 
-    def callbacks_for(action_name)
-      resource               = self
-      callbacks[action_name] ||= Class.new do
+    def base_callbacks
+      resource       = self
+      callbacks['*'] ||= Class.new do
         def self.context(*)
         end
 
@@ -106,6 +111,11 @@ module JSONAPIonify::Api
         include JSONAPIonify::Callbacks
         define_callbacks :request
       end
+    end
+
+    def callbacks_for(action_name)
+      resource               = self
+      callbacks[action_name] ||= Class.new(base_callbacks)
     end
 
     def define_action(*args, **options, &block)
