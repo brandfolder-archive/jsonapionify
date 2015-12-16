@@ -3,9 +3,6 @@ HIGH
 * TESTS
 * Various top level objects for different requests
 * Doc NavLinks
-* Type System
-* Remove associate
-* Only associated on action to avoid duplication
 
 MED
 * Logger
