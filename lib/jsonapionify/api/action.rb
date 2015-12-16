@@ -106,6 +106,7 @@ module JSONAPIonify::Api
       new_response = Response.new(self, status: status, accept: accept, &block)
       @responses.delete new_response
       @responses << new_response
+      self
     end
 
     def sample_request(resource, request)
