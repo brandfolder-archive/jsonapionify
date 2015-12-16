@@ -38,7 +38,7 @@ module JSONAPIonify::Types
     end
 
     def dump(ruby)
-      Oj.load Oj.dump ruby
+      JSON.load JSON.dump ruby
     end
 
     def verify(non_ruby)

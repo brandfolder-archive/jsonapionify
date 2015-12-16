@@ -22,6 +22,7 @@ module JSONAPIonify::Types
     end
 
     def sample(field_name)
+      field_name = field_name.to_s.singularize.to_sym
       3.times.map do
         (options[:of] || StringType.new).sample(field_name)
       end

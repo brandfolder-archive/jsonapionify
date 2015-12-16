@@ -1,15 +1,15 @@
 require 'faker'
 
 module JSONAPIonify::Types
-  class DateStringType < BaseType
+  class TimeStringType < BaseType
     def load(value)
-      Date.parse value
+      Time.parse value
     end
 
     def dump(value)
       case value
-      when Date
-        Oj.dump(value.to_date)
+      when Time
+        JSON.dump(value.to_time)
       else
         raise TypeError, "#{value} is not a valid JSON #{name}."
       end
@@ -18,9 +18,9 @@ module JSONAPIonify::Types
     def sample(field_name)
       field_name = field_name.to_s
       if field_name.to_s.end_with?('ed_at') || field_name.include?('start')
-        Faker::Date.backward
+        Faker::Time.backward
       elsif field_name.include?('end')
-        Faker::Date.forward
+        Faker::Time.forward
       end
     end
 

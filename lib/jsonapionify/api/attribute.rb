@@ -2,25 +2,17 @@ module JSONAPIonify::Api
   class Attribute
     attr_reader :name, :type, :description, :read, :write, :required
 
-    ExampleMap = {
-      Array   => ['one', 'two', 'three'],
-      Hash    => { one: 1, two: 2, three: 3 },
-      String  => "Foo",
-      Fixnum  => 42,
-      Boolean => true,
-      Float   => 3.14
-    }
-
-    def initialize(name, type, description, read: true, write: true, required: false)
+    def initialize(name, type, description, read: true, write: true, required: false, example: nil)
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
       end
       @name        = name
       @type        = type
       @description = description
+      @example     = example
       @read        = read
       @write       = write
-      @required    = required
+      @required    = write ? required : false
     end
 
     def ==(other)
@@ -45,7 +37,13 @@ module JSONAPIonify::Api
     end
 
     def example
-      ExampleMap[@type]
+      case @example
+      when Proc
+      when nil
+        type.dump type.sample(name)
+      else
+        type.dump @example
+      end
     end
 
     def documentation_object
