@@ -70,7 +70,12 @@ module JSONAPIonify::Api
       rescue_with_handler(exception) || begin
         errors.evaluate(
           error_block:   lookup_error(:internal_server_error),
-          runtime_block: proc {},
+          runtime_block: proc {
+            unless ENV['RACK_ENV'] == 'production'
+              detail exception.message
+              meta[:error_class] = exception.class.name
+            end
+          },
           backtrace:     exception.backtrace
         )
       end
