@@ -54,6 +54,10 @@ module JSONAPIonify::Api
         context.owner_context.instance.send(rel.name)
       end
 
+      collection do |scope|
+        scope
+      end
+
       show
       replace { error_now :forbidden }
     end
