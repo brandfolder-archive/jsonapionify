@@ -6,11 +6,10 @@ module JSONAPIonify::Api
       end
     end
 
-    attr_reader :definitions
-
     def initialize(request, instance, definitions)
       memo     = {}
       delegate = self
+      @definitions = definitions
 
       define_singleton_method :request do
         request
