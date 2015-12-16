@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "redcarpet"
   spec.add_dependency "oj"
   spec.add_dependency "rack-test"
+  spec.add_dependency 'faker'
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rocco'
@@ -40,7 +41,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-rack'
   spec.add_development_dependency 'guard-rake'
   spec.add_development_dependency 'guard-bundler'
-  spec.add_development_dependency 'faker'
   spec.add_development_dependency 'activerecord'
   spec.add_development_dependency 'activerecord-import'
   spec.add_development_dependency 'sqlite3'
