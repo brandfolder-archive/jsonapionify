@@ -27,6 +27,12 @@ module JSONAPIonify
     self.cache_store = ActiveSupport::Cache.lookup_store(store, *args)
   end
 
+  def self.digest
+    @digest ||= Digest::SHA2.hexdigest(
+      Dir.glob(File.join __dir__, '**/*.rb').map { |f| File.read f }.join
+    )
+  end
+
   def self.cache_store=(store)
     @cache_store = store
   end

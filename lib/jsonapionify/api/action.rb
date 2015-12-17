@@ -151,6 +151,7 @@ module JSONAPIonify::Api
         define_singleton_method :cache do |key, **options|
           cache_options.merge! options
           cache_options[:key] = [*{
+            dsl:          JSONAPIonify.digest,
             api:          [self.class.api.name, self.class.api.resource_signature].join('@'),
             resource:     self.class.type,
             content_type: request.content_type || '*',
