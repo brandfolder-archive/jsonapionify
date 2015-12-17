@@ -62,6 +62,7 @@ module JSONAPIonify
     end
 
     def inherited_array_attribute(*attrs, instance_reader: true, instance_writer: true, instance_accessor: true)
+      instance_reader, instance_writer = false, false unless instance_accessor
       attrs.each do |attr|
         ivar   = :"@#{attr}"
         setter = :"#{attr}="
