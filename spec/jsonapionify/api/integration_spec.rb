@@ -286,6 +286,47 @@ module JSONAPIonify
         end
       end
 
+      describe 'invalid header' do
+        it 'should error' do
+          header('BADHEADER', '1')
+          get "/things"
+          expect(last_response.status).to eq 400
+        end
+      end
+
+      describe 'require headers' do
+        it 'should error when missing' do
+          get "/parties"
+          expect(last_response.status).to eq 400
+        end
+
+        it 'should not error when not missing' do
+          header('required-header', '1')
+          get "/parties"
+          expect(last_response.status).to eq 200
+        end
+      end
+
+      describe 'action based headers' do
+        context 'when on an action with the header' do
+          it 'should not error' do
+            header('Required-Header', '1')
+            header('Action-Header', '1')
+            get "/parties"
+            expect(last_response.status).to eq 200
+          end
+        end
+
+        context 'when on an action without the header' do
+          it 'should error' do
+            header('Required-Header', '1')
+            header('Action-Header', '1')
+            get "/parties/1"
+            expect(last_response.status).to eq 400
+          end
+        end
+      end
+
     end
   end
 end

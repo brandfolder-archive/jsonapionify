@@ -68,6 +68,18 @@ module JSONAPIonify::Api
         status '400'
       end
 
+      error :headers_missing do |headers|
+        title 'Missing required headers'
+        detail "missing: #{headers.to_sentence}"
+        status '400'
+      end
+
+      error :header_not_permitted do |header|
+        title 'Header Not Permitted'
+        detail "header not permitted: #{header}"
+        status '400'
+      end
+
       error :sort_parameter_invalid do
         parameter 'sort'
         title 'Sort parameter is invalid'
