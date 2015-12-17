@@ -75,7 +75,7 @@ module JSONAPIonify::Api
       path_actions = self.path_actions(request)
       if request.options? && path_actions.present?
         Action.stub do
-          headers['Allow'] = path_actions.map(&:request_method).join(', ')
+          response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
           response(status: 200, accept: '*/*')
         end.call(self, request)
       elsif (action = find_supported_action(request))
@@ -136,7 +136,7 @@ module JSONAPIonify::Api
         Action.stub { error_now :unsupported_media_type }
       elsif (path_actions = self.path_actions(request)).present?
         Action.stub do
-          headers['Allow'] = path_actions.map(&:request_method).join(', ')
+          response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
           error_now :method_not_allowed
         end
       else
