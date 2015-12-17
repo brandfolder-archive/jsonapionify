@@ -1,6 +1,6 @@
 # JSONAPIonify
-[![Version](http://allthebadges.io/brandfolder/jsonapionify/badge_fury.png)](http://allthebadges.io/brandfolder/jsonapionify/badge_fury)
-[![Build Status](http://allthebadges.io/brandfolder/jsonapionify/travis.png)](http://allthebadges.io/brandfolder/jsonapionify/travis)
+[![Gem Version](https://badge.fury.io/rb/jsonapionify.svg)](https://badge.fury.io/rb/jsonapionify)
+[![Build Status](https://travis-ci.org/brandfolder/jsonapionify.svg?branch=master)](https://travis-ci.org/brandfolder/jsonapionify)
 [![Code Climate](https://codeclimate.com/repos/5672446f137f95309c0067c6/badges/a369f0a182ce111c8fcd/gpa.svg)](https://codeclimate.com/repos/5672446f137f95309c0067c6/feed)
 [![Test Coverage](https://codeclimate.com/repos/5672446f137f95309c0067c6/badges/a369f0a182ce111c8fcd/coverage.svg)](https://codeclimate.com/repos/5672446f137f95309c0067c6/coverage)
 
