@@ -67,7 +67,7 @@ module JSONAPIonify::Structure
         new_instance =
           case instance
           when Hash
-            type_class.new **instance
+            type_class.new(**instance)
           when type_class
             instance
           else

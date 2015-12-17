@@ -85,7 +85,7 @@ module JSONAPIonify::Structure
                 invalid_keys.present? | children.map { |c| is_invalid.call c }.reduce(:|)
               end
               if is_invalid.call(self)
-                errors.add('*', "cannot contain keys #{keys_to_sentence *all_invalid_keys.uniq}")
+                errors.add('*', "cannot contain keys #{keys_to_sentence(*all_invalid_keys.uniq)}")
               end
             end
           end
@@ -99,7 +99,7 @@ module JSONAPIonify::Structure
               keys       += self.keys.select(&block) if block_given?
               valid_keys = keys.map(&:to_sym) & self.keys.map(&:to_sym)
               unless valid_keys.present?
-                errors.add('*', "must contain one of: #{keys_to_sentence *valid_keys}")
+                errors.add('*', "must contain one of: #{keys_to_sentence(*valid_keys)}")
               end
             end
           end
@@ -128,7 +128,7 @@ module JSONAPIonify::Structure
               if conflicting_keys.length > 1
                 conflicting_keys.each do |key|
                   conflicts_with = conflicting_keys - [key]
-                  errors.add key, "conflicts with #{keys_to_sentence *conflicts_with}"
+                  errors.add key, "conflicts with #{keys_to_sentence(*conflicts_with)}"
                 end
               end
             end
@@ -204,7 +204,7 @@ module JSONAPIonify::Structure
             next unless permitted_key?(key)
             unless permitted_type_for?(key)
               types   = permitted_types_for(key).map(&:name)
-              message = "must be a #{keys_to_sentence *types}."
+              message = "must be a #{keys_to_sentence(*types)}."
               errors.add(key, message)
             end
           end

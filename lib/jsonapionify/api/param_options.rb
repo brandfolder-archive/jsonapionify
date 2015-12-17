@@ -39,7 +39,7 @@ module JSONAPIonify::Api
     end
 
     def string
-      self.class.keypath_to_string *@keypath
+      self.class.keypath_to_string(*@keypath)
     end
 
   end

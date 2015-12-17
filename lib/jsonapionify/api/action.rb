@@ -78,7 +78,7 @@ module JSONAPIonify::Api
                                       { 'data' => resource.build_resource_identifier(resource.example_instance).as_json }.to_json
                                     end if @content_type == 'application/vnd.api+json'
         request                   = Server::Request.env_for(url, request_method, opts)
-        response                  = Server::MockResponse.new *sample_request(resource, request)
+        response                  = Server::MockResponse.new(*sample_request(resource, request))
 
         OpenStruct.new(
           request:  request.http_string,
