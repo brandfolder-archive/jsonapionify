@@ -8,7 +8,7 @@ module JSONAPIonify::Api
       end
     end
 
-    def header(name, **options)
+    def request_header(name, **options)
       request_header_definitions[name] = HeaderOptions.new(name, **options)
     end
 
