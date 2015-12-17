@@ -1,5 +1,5 @@
 module JSONAPIonify::Api
-  module Resource::Definitions::Sort
+  module Resource::Definitions::Sorting
 
     class SortField
 
@@ -64,14 +64,14 @@ module JSONAPIonify::Api
       end
     end
 
-    def sort(strategy = nil, &block)
+    def sorting(strategy = nil, &block)
       param :sort
       context :sorted_collection do |context|
-        unless block
-          strategy ||= self.class.default_strategy
-          block    = strategy ? STRATEGIES[strategy] : DEFAULT
+        unless (actual_block = block)
+          actual_strategy = strategy || self.class.default_strategy
+          actual_block    = actual_strategy ? STRATEGIES[actual_strategy] : DEFAULT
         end
-        Object.new.instance_exec(context.collection, context.sort_params, &block)
+        Object.new.instance_exec(context.collection, context.sort_params, &actual_block)
       end
     end
 

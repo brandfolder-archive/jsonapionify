@@ -15,7 +15,7 @@ module JSONAPIonify::Api
 
           # Check for validity
           params          = self.class.param_definitions.select do |_, v|
-            v.action.nil? || v.action == action_name
+            v.actions.blank? || v.actions.include?(action_name)
           end
           required_params = params.select do |_, v|
             v.required

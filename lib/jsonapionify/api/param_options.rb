@@ -30,11 +30,11 @@ module JSONAPIonify::Api
       end
     end
 
-    attr_reader :keypath, :action, :required
+    attr_reader :keypath, :actions, :required
 
-    def initialize(*keys, action: nil, required: false)
+    def initialize(*keys, actions: nil, required: false)
       @keypath  = keys
-      @action   = action
+      @actions  = Array.wrap(actions)
       @required = required
     end
 

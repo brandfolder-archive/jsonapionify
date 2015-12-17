@@ -60,17 +60,17 @@ module JSONAPIonify::Api
 
     def pagination(*params, strategy: nil, &block)
       params = %i{number size} unless block
-      params.each { |p| param :page, p }
+      params.each { |p| param :page, p, actions: %i{list} }
       context :paginated_collection do |context|
-        unless block
-          strategy ||= self.class.default_strategy
-          block    = strategy ? STRATEGIES[strategy] : DEFAULT
+        unless (actual_block = block)
+          actual_strategy = strategy || self.class.default_strategy
+          actual_block    = actual_strategy ? STRATEGIES[actual_strategy] : DEFAULT
         end
         Object.new.instance_exec(
           context.respond_to?(:sorted_collection) ? context.sorted_collection : context.collection,
           context.request.params['page'] || {},
           PaginationLinksDelegate.new(context.request, context.links),
-          &block
+          &actual_block
         )
       end
     end

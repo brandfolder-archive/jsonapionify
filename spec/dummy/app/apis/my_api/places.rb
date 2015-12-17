@@ -5,12 +5,7 @@ MyApi.define_resource :places do
   instance { OpenStruct.new id: 1 }
   new_instance { OpenStruct.new }
 
-  param :foo, required: true
-
-  pagination do |collection|
-    collection
-  end
-
-  sort
+  param :'the-foo', required: true
+  param :'just-index', actions: :list
 
 end
