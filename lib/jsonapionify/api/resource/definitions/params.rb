@@ -32,7 +32,7 @@ module JSONAPIonify::Api
             error :parameters_missing, missing_params
           end
 
-          raise error_exception if should_error
+          raise Errors::RequestError if should_error
 
           # Return the params
           context.request.params

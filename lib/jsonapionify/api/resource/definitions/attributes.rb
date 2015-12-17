@@ -20,7 +20,7 @@ module JSONAPIonify::Api
                 attribute ? field_list << attribute.name : error(:field_not_permitted, type, field) && (should_error = true)
               end
           end
-          raise error_exception if should_error
+          raise Errors::RequestError if should_error
           fields
         end
       end

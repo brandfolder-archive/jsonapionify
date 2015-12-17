@@ -4,7 +4,6 @@ module JSONAPIonify::Api
 
     included do
       include ActiveSupport::Rescuable
-      context(:error_exception) { Class.new(StandardError) }
       context(:errors, readonly: true) do
         ErrorsObject.new
       end
@@ -50,7 +49,7 @@ module JSONAPIonify::Api
 
     def error_now(name, *args, &block)
       error(name, *args, &block)
-      raise error_exception
+      raise Errors::RequestError
     end
 
     def set_errors(collection)

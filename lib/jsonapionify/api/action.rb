@@ -137,9 +137,8 @@ module JSONAPIonify::Api
     end
 
     def call(resource, request)
-      action              = dup
-      cache_hit_exception = Class.new StandardError
-      cache_options       = {}
+      action        = dup
+      cache_options = {}
       resource.new.instance_eval do
         # Bootstrap the Action
         callbacks = resource.callbacks_for(action.name).new
@@ -158,7 +157,7 @@ module JSONAPIonify::Api
             accept:       request.accept.join(','),
             params:       context.params.to_param
           }.map { |kv| kv.join(':') }, key].join('|')
-          raise cache_hit_exception, cache_options[:key] if self.class.cache_store.exist?(cache_options[:key])
+          raise Errors::CacheHit, cache_options[:key] if self.class.cache_store.exist?(cache_options[:key])
         end if request.get?
 
         # Define Shared Singletons
@@ -170,24 +169,20 @@ module JSONAPIonify::Api
           define_singleton_method :response_headers do
             context.response_headers
           end
-
-          target.define_singleton_method :error_exception do
-            context.error_exception
-          end
         end
 
         begin
           # Run Callbacks
           case callbacks.run_callbacks(:request, context) { errors.present? }
           when true # Boolean true means errors
-            raise error_exception
+            raise Errors::RequestError
           when nil # nil means no result, callback failed
             error_now :internal_server_error
           end
 
           # Start the request
           instance_exec(context, &action.request_block)
-          fail error_exception if errors.present?
+          fail Errors::RequestError if errors.present?
           response_definition =
             action.responses.find { |response| response.accept? request } ||
               error_now(:not_acceptable)
@@ -198,9 +193,9 @@ module JSONAPIonify::Api
               **cache_options.except(:key)
             ) if request.get?
           end
-        rescue error_exception
+        rescue Errors::RequestError
           error_response
-        rescue cache_hit_exception
+        rescue Errors::CacheHit
           self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
           rescued_response exception

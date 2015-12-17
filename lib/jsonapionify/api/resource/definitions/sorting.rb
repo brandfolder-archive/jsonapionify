@@ -58,7 +58,7 @@ module JSONAPIonify::Api
               end
             end
           end.tap do
-            raise error_exception if should_error
+            raise Errors::RequestError if should_error
           end
         end
       end

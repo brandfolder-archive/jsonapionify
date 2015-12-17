@@ -28,7 +28,7 @@ module JSONAPIonify::Api
           optional_attributes = writable_attributes.select(&:optional?).map(&:name)
           if (extra_attributes = attributes.keys - (optional_attributes + required_attributes)).present?
             extra_attributes.each { |attr| error :attribute_not_permitted, attr }
-            raise error_exception
+            raise Errors::RequestError
           end
           request_object.validate
           error_now(:request_object_invalid, context, request_object) if request_object.errors.present?
@@ -41,11 +41,11 @@ module JSONAPIonify::Api
         instances    = data.map.each_with_index do |item, i|
           begin
             find_instance item, pointer: "data/#{i}"
-          rescue error_exception
+          rescue Errors::RequestError
             should_error = true
           end
         end
-        raise error_exception if should_error
+        raise Errors::RequestError if should_error
         instances
       end
 
@@ -75,7 +75,7 @@ module JSONAPIonify::Api
           self.detail "could not find resource: `#{item[:type]}` with id: #{item[:id]}"
         end
       end
-      raise error_exception if should_error
+      raise Errors::RequestError if should_error
       instance
     end
 
@@ -88,7 +88,7 @@ module JSONAPIonify::Api
           self.detail "could not find resource: `#{item[:type]}`"
         end
       end
-      raise error_exception if should_error
+      raise Errors::RequestError if should_error
       resource
     end
 

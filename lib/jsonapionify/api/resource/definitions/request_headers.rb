@@ -88,7 +88,7 @@ module JSONAPIonify::Api
             error :headers_missing, missing_keys
           end
 
-          raise error_exception if should_error
+          raise Errors::RequestError if should_error
 
           context.request.headers
         end
