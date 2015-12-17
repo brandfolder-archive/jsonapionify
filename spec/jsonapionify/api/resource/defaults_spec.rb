@@ -1,5 +1,5 @@
 require 'spec_helper'
 module JSONAPIonify::Api
-  describe Base::ResourceDefinitions do
+  describe Resource::Defaults do
   end
 end

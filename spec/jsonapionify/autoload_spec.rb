@@ -1,5 +1,5 @@
 require 'spec_helper'
 module JSONAPIonify
-  describe Api do
+  describe Autoload do
   end
 end
