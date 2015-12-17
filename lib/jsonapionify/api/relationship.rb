@@ -43,9 +43,17 @@ module JSONAPIonify::Api
       end
 
       define_singleton_method(:build_links) do |base_url|
+        build_url = ->(*paths) {
+          URI.parse(base_url).tap do |uri|
+            uri.path  = File.join uri.path, *paths
+            params = sticky_params(Rack::Utils.parse_nested_query(uri.query))
+            uri.query = params.to_param if params.present?
+          end.to_s
+        }
+
         JSONAPIonify::Structure::Maps::RelationshipLinks.new(
-          self:    File.join(base_url, 'relationships', rel.name.to_s),
-          related: File.join(base_url, rel.name.to_s)
+          self:    build_url['relationships', rel.name.to_s],
+          related: build_url[rel.name.to_s]
         )
       end
     end
@@ -61,7 +69,7 @@ module JSONAPIonify::Api
 
     def documentation_object(base_url)
       OpenStruct.new(
-        name: name,
+        name:    name,
         actions: resource_class.actions.map { |a| a.documentation_object resource_class, base_url, name.to_s, false }
       )
     end

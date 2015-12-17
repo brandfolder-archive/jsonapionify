@@ -61,11 +61,16 @@ module JSONAPIonify::Api
       end
 
       def build_url(request, instance = nil)
-        if instance
-          File.join(request.root_url, type, build_id(instance))
-        else
-          File.join(request.root_url, type)
-        end
+        URI.parse(request.root_url).tap do |uri|
+          uri.path      =
+            if instance
+              File.join(uri.path, type, build_id(instance))
+            else
+              File.join(request.root_url, type)
+            end
+          sticky_params = self.sticky_params(request.params)
+          uri.query     = sticky_params.to_param if sticky_params.present?
+        end.to_s
       end
 
       def build_id(instance)

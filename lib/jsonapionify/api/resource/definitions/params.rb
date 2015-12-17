@@ -45,5 +45,12 @@ module JSONAPIonify::Api
       param_definitions[keypath] = ParamOptions.new(*keypath, **options)
     end
 
+    def sticky_params(params)
+      sticky_param_paths = param_definitions.values.select(&:sticky).map(&:keypath)
+      params.select do |k, v|
+        sticky_param_paths.include? ParamOptions.hash_to_keypaths(k => v)[0]
+      end
+    end
+
   end
 end

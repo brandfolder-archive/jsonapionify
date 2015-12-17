@@ -6,6 +6,7 @@ module JSONAPIonify::Api
         class << self
           delegate :context, :response_header, :helper, :rescue_from, :error,
                    :pagination, :before, :param, :request_header, :sorting,
+                   :sticky_params,
                    to: :resource_class
         end
       end

@@ -35,14 +35,23 @@ module JSONAPIonify::Api
       @documentation_order = resources_in_order
     end
 
+    def root_url(request)
+      URI.parse(request.root_url).tap do |uri|
+        sticky_params = sticky_params(request.params)
+        uri.query     = sticky_params.to_param if sticky_params.present?
+      end.to_s
+    end
+
     def process_index(request)
       headers                    = ContextDelegate.new(request, resource_class.new, resource_class.context_definitions).response_headers
       obj                        = JSONAPIonify.new_object
       obj[:meta]                 = { resources: {} }
-      obj[:links]                = { self: request.root_url }
+      obj[:links]                = { self: request.url }
       obj[:meta][:documentation] = File.join(request.root_url, 'docs')
       obj[:meta][:resources]     = resources.each_with_object({}) do |resource, hash|
-        hash[resource.type] = resource.get_url(request.root_url)
+        if resource.actions.any? { |action| action.name == :list }
+          hash[resource.type] = resource.get_url(root_url(request))
+        end
       end
       Rack::Response.new.tap do |response|
         response.status = 200

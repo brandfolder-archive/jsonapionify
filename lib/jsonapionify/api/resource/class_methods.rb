@@ -37,7 +37,11 @@ module JSONAPIonify::Api
     end
 
     def get_url(base)
-      File.join base, type.to_s
+      URI.parse(base).tap do |uri|
+        uri.path  = File.join(uri.path, type)
+        params    = sticky_params(Rack::Utils.parse_nested_query(uri.query))
+        uri.query = params.to_param if params.present?
+      end.to_s
     end
 
     def actions_in_order
