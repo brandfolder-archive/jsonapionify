@@ -23,6 +23,8 @@ module JSONAPIonify::Api
           raise Errors::RequestError if should_error
           fields
         end
+
+        id :id
       end
     end
 

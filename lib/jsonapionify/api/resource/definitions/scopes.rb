@@ -3,7 +3,6 @@ module JSONAPIonify::Api
 
     def self.extended(klass)
       klass.class_eval do
-        id :id
         scope { raise NotImplementedError, 'scope not implemented' }
         collection { raise NotImplementedError, 'collection not implemented' }
         instance { raise NotImplementedError, 'instance not implemented' }
