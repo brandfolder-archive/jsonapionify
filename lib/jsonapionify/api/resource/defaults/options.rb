@@ -67,6 +67,10 @@ module JSONAPIonify::Api
         context.request_headers # pull request_headers so they verify
       end
 
+      before do |context|
+        context.params # pull params so they verify
+      end
+
 
     end
   end
