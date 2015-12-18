@@ -33,7 +33,7 @@ module JSONAPIonify::Api
       def response
         @resource ? resource.process(request) : api_index
       rescue Errors::ResourceNotFound
-        Resource::Http.process(:not_found, request)
+        api.http_error(:not_found, request)
       end
 
       private

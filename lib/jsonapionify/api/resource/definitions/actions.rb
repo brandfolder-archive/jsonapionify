@@ -74,7 +74,7 @@ module JSONAPIonify::Api
     def process(request)
       path_actions = self.path_actions(request)
       if request.options? && path_actions.present?
-        Action.stub do
+        Action.dummy do
           response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
           response(status: 200, accept: '*/*')
         end.call(self, request)
@@ -114,7 +114,6 @@ module JSONAPIonify::Api
     end
 
     def callbacks_for(action_name)
-      resource               = self
       callbacks[action_name] ||= Class.new(base_callbacks)
     end
 
@@ -133,14 +132,14 @@ module JSONAPIonify::Api
 
     def no_action_response(request)
       if request_method_actions(request).present?
-        Action.stub { error_now :unsupported_media_type }
+        Action.error :unsupported_media_type
       elsif (path_actions = self.path_actions(request)).present?
-        Action.stub do
+        Action.dummy do
           response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
           error_now :method_not_allowed
         end
       else
-        Action.stub { error_now :not_found }
+        Action.error :not_found
       end
     end
 

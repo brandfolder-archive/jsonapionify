@@ -27,6 +27,10 @@ module JSONAPIonify::Api
       end
     end
 
+    def http_error(action, request)
+      Action.error(action).call(resource_class, request)
+    end
+
     def resource_class
       const_get(:ResourceBase, false)
     end

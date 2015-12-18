@@ -3,8 +3,14 @@ module JSONAPIonify::Api
     attr_reader :name, :request_block, :content_type, :responses, :prepend,
                 :path, :request_method, :only_associated
 
-    def self.stub(&block)
+    def self.dummy(&block)
       new(nil, nil, &block)
+    end
+
+    def self.error(name)
+      dummy do
+        error_now name
+      end
     end
 
     def initialize(name, request_method, path = nil, require_body = nil, example_type = :resource, content_type: nil, prepend: nil, only_associated: false, &block)

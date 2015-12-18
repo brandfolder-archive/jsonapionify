@@ -8,7 +8,7 @@ module JSONAPIonify::Api
       rescue_from JSONAPIonify::Structure::ValidationError, error: :jsonapi_validation_error
       rescue_from Oj::ParseError, error: :json_parse_error
 
-      Rack::Utils::SYMBOL_TO_STATUS_CODE.each do |symbol, code|
+      Rack::Utils::SYMBOL_TO_STATUS_CODE.reject { |_, v| v < 400 }.each do |symbol, code|
         message = Rack::Utils::HTTP_STATUS_CODES[code]
         error symbol do
           title message
