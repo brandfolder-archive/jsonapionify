@@ -69,7 +69,8 @@ module JSONAPIonify::Api
 
     def documentation_object
       OpenStruct.new(
-        name: name
+        name:     name,
+        resource: resource_class.type
       )
     end
 
