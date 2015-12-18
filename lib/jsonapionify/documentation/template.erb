@@ -17,6 +17,7 @@
   <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
   <style>
     body {
+      margin-top: 100px;
       font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
       color: #4c555a;
     }
@@ -26,6 +27,7 @@
     }
 
     .navbar-default {
+      left: 0;
       border-radius: 0px;
       background-color: #4c555a;
       border: 0px;
@@ -50,6 +52,14 @@
       font-size: 14px;
       font-weight: 300;
       letter-spacing: 0.3px;
+    }
+
+    .navbar-default .navbar-nav > li > a:link, .navbar-default .navbar-nav > li > a:visited, .navbar-default .navbar-nav > li > a:active {
+      color: #e1e8ed;
+    }
+
+    .navbar-default .navbar-nav > li > a:hover {
+      color: #939da3;
     }
 
     /* sidebar */
@@ -289,7 +299,7 @@
   <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -302,6 +312,14 @@
       <a class="navbar-brand" href="<%= api.base_url %>">
         <%= api.title %>
       </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-left">
+        <% api.links.each do |link| %>
+            <li><a href="<%= link.href %>"><%= link.title %></a></li>
+        <% end %>
+      </ul>
     </div>
   </div>
 </nav>
@@ -324,38 +342,42 @@
             <p><%= resource.description %></p>
 
             <div class="details">
-              <h4>Attributes</h4>
-              <ul class="attributes">
-                <% resource.attributes.each do |attribute| %>
-                    <li>
-                      <div class="row-attribute">
-                        <div class="col-xs-4 attribute-name">
-                          <strong><%= attribute.name %></strong>
-                          <i class="attribute-type"><%= attribute.type %></i>
-                          <% if attribute.required %>
-                              <p class="optional">required</p>
-                          <% else %>
-                              <p class="optional">optional</p>
-                          <% end %>
-                        </div>
-                        <div class="col-xs-8 attribute-description">
-                          <%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %>
-                          <p class="allowed">Allowed: <%= "#{attribute.allow.to_sentence}" %></p>
-                        </div>
-                        <div style="clear: both;"></div>
-                      </div>
-                    </li>
-                <% end %>
-              </ul>
+              <% if resource.attributes.present? %>
+                  <h4>Attributes</h4>
+                  <ul class="attributes">
+                    <% resource.attributes.each do |attribute| %>
+                        <li>
+                          <div class="row-attribute">
+                            <div class="col-xs-4 attribute-name">
+                              <strong><%= attribute.name %></strong>
+                              <i class="attribute-type"><%= attribute.type %></i>
+                              <% if attribute.required %>
+                                  <p class="optional">required</p>
+                              <% else %>
+                                  <p class="optional">optional</p>
+                              <% end %>
+                            </div>
+                            <div class="col-xs-8 attribute-description">
+                              <%= attribute.description.gsub(/`(.*?)`/, "<code class='inline'>\\1</code>") %>
+                              <p class="allowed">Allowed: <%= "#{attribute.allow.to_sentence}" %></p>
+                            </div>
+                            <div style="clear: both;"></div>
+                          </div>
+                        </li>
+                    <% end %>
+                  </ul>
+              <% end %>
 
-              <h4 id="<%= resource.name %>-relationships">Relationships</h4>
-              <ul class="relationships">
-                <% resource.relationships.each do |relationship| %>
-                    <li id="<%= resource.name %>-<%= relationship.name %>" class="subgroup">
-                      <strong><a href="#<%= relationship.resource %>"><%= relationship.name %></a></strong>
-                    </li>
-                <% end %>
-              </ul>
+              <% if resource.relationships.present? %>
+                  <h4 id="<%= resource.name %>-relationships">Relationships</h4>
+                  <ul class="relationships">
+                    <% resource.relationships.each do |relationship| %>
+                        <li id="<%= resource.name %>-<%= relationship.name %>" class="subgroup">
+                          <strong><a href="#<%= relationship.resource %>"><%= relationship.name %></a></strong>
+                        </li>
+                    <% end %>
+                  </ul>
+              <% end %>
 
               <% resource.actions.each do |action| %>
                   <h4><%= action.label.titleize %></h4>
