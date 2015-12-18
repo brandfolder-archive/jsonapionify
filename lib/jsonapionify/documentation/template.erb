@@ -348,6 +348,15 @@
                 <% end %>
               </ul>
 
+              <h4 id="<%= resource.name %>-relationships">Relationships</h4>
+              <ul class="relationships">
+                <% resource.relationships.each do |relationship| %>
+                    <li id="<%= resource.name %>-<%= relationship.name %>" class="subgroup">
+                      <strong><a href="#<%= relationship.resource %>"><%= relationship.name %></a></strong>
+                    </li>
+                <% end %>
+              </ul>
+
               <% resource.actions.each do |action| %>
                   <h4><%= action.label.titleize %></h4>
                   <% action.sample_requests.each do |sample_request| %>
@@ -357,14 +366,6 @@
                       <pre><code class="http"><%= sample_request.response %></code></pre>
                   <% end %>
               <% end %>
-              <h4 id="<%= resource.name %>-relationships">Relationships</h4>
-              <ul class="relationships">
-                <% resource.relationships.each do |relationship| %>
-                    <li id="<%= resource.name %>-<%= relationship.name %>" class="subgroup">
-                      <strong><a href="#<%= relationship.resource %>"><%= relationship.name %></a></strong>
-                    </li>
-                <% end %>
-              </ul>
             </div>
           </section>
       <% end %>

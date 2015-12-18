@@ -80,7 +80,7 @@ module JSONAPIonify::Api
                                       { 'data' => resource.build_resource(request, resource.example_instance, relationships: false, links: false).as_json }.to_json
                                     when :resource_identifier
                                       { 'data' => resource.build_resource_identifier(resource.example_instance).as_json }.to_json
-                                    end if @content_type == 'application/vnd.api+json'
+                                    end if @content_type == 'application/vnd.api+json' && !%w{GET DELETE}.include?(request_method)
         request                   = Server::Request.env_for(url, request_method, opts)
         response                  = Server::MockResponse.new(*sample_request(resource, request))
 

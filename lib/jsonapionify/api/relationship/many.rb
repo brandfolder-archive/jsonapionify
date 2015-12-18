@@ -55,7 +55,6 @@ module JSONAPIonify::Api
       end
 
       show
-      replace { error_now :forbidden }
     end
   end
 end
