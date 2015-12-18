@@ -181,7 +181,7 @@ module JSONAPIonify::Api
       relationships = descendants.select { |descendant| descendant.respond_to? :rel }
       rels          = relationships.each_with_object([]) do |rel, ary|
         rel.actions.each do |action|
-          ary << [action, rel.rel.owner.type, [rel, rel.rel.name, false, "#{action.name} #{rel.rel.owner.type.singularize.possessive} #{rel.rel.name}"]]
+          ary << [action, "#{rel.rel.owner.type}/:id", [rel, rel.rel.name, false, "#{action.name} #{rel.rel.owner.type.singularize.possessive} #{rel.rel.name}"]]
         end
       end
       actions.map do |action|
