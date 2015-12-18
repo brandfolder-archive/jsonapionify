@@ -135,10 +135,7 @@ module JSONAPIonify::Api
       if request_method_actions(request).present?
         Action.error :unsupported_media_type
       elsif (path_actions = self.path_actions(request)).present?
-        Action.dummy do
-          response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
-          error_now :method_not_allowed
-        end
+        Action.error :forbidden
       else
         Action.error :not_found
       end
