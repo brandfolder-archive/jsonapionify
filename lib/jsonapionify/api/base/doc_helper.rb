@@ -1,5 +1,6 @@
 module JSONAPIonify::Api
   module Base::DocHelper
+    Link = Struct.new(:title, :href)
 
     def self.extended(klass)
       klass.class_eval do
@@ -8,8 +9,8 @@ module JSONAPIonify::Api
       end
     end
 
-    def link(href)
-      links << href
+    def link(title, href)
+      links << Link.new(title, href)
     end
 
     def title(title)
