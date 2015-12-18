@@ -15,11 +15,28 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/agate.min.css">
   <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <style>
     body {
       margin-top: 100px;
       font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
       color: #4c555a;
+    }
+
+    #back-top {
+      top: 60px;
+      position: fixed;
+      margin-left: -12px;
+    }
+
+    #backtop a {
+      color: #CCC;
+      text-decoration: none;
+    }
+
+    #back-top a:hover {
+      color: #777;
+      text-decoration: none;
     }
 
     .affix-top {
@@ -71,10 +88,14 @@
     }
 
     /* sidebar */
-    #sidebar {
+    #sidebar ul {
       padding-left: 20px;
       margin-top: 20px;
       margin-bottom: 20px;
+    }
+
+    #sidebar li {
+      list-style: none;
     }
 
     #sidebar li.nav-H2 {
@@ -404,7 +425,17 @@
 
     <!--Side Bar -->
     <nav class="col-md-3 bs-docs-sidebar hidden-sm hidden-xs scrollspy">
-      <ul id="sidebar" class="nav" data-spy="affix"></ul>
+      <div id="sidebar">
+      <div id="back-top" style="display: block;">
+        <a href="#">
+          <span class="fa-stack fa-sm">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-arrow-up fa-stack-1x fa-inverse"></i>
+          </span>
+        </a>
+      </div>
+      <ul class="nav" data-spy="affix"></ul>
+      </div>
     </nav>
 
   </div>
@@ -503,40 +534,53 @@
     var hash = this.hash;
 
     // animate
-    $('html, body').animate({
-      scrollTop: $(hash).offset().top - 20
-    }, 300, function () {
+    if (hash) {
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top - 20
+      }, 300, function () {
 
-      // when done, add hash to url
-      // (default click behaviour)
-      if (window.location)
-      window.location.hash = hash;
-    });
+        // when done, add hash to url
+        // (default click behaviour)
+        if (window.location)
+          window.location.hash = hash;
+      });
+    } else {
+      $('html, body').animate({scrollTop: 0}, 'slow');
+    }
   });
+
   function sidebarTop() {
-    var sidebarlOffset = $('#sidebar').offset().top;
-    if ($('.active:last').offset()){
-      var activeElementOffset =  $('.active:last').offset().top;
+    var sidebarlOffset = $('#sidebar ul').offset().top;
+    if ($('.active:last').offset()) {
+      var activeElementOffset = $('.active:last').offset().top;
     }
     var difference = activeElementOffset - sidebarlOffset;
-    if ( difference > (window.innerHeight/5) ) {
-      var top = (difference - (window.innerHeight/5));
+    if (difference > (window.innerHeight / 5)) {
+      var top = (difference - (window.innerHeight / 5));
       $('.affix').css('top', -top);
     } else {
       $('.affix').removeAttr('style');
 
     }
-  };
+  }
 
-  $(window).load(function() {
+  $(document).ready(function () {
+    // hide #back-top first
+    $("#back-top").hide();
+
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 100) {
+        $('#back-top').fadeIn();
+      } else {
+        $('#back-top').fadeOut();
+      }
+    });
+  });
+
+  $(window).on("load resize scroll", function () {
     sidebarTop();
   });
-  $(window).resize(function() {
-    sidebarTop();
-  });
-  $(window).scroll(function() {
-    sidebarTop();
-  });
+
 </script>
 </body>
 </html>
