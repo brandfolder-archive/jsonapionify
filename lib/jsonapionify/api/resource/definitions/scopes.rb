@@ -1,15 +1,6 @@
 module JSONAPIonify::Api
   module Resource::Definitions::Scopes
 
-    def self.extended(klass)
-      klass.class_eval do
-        scope { raise NotImplementedError, 'scope not implemented' }
-        collection { raise NotImplementedError, 'collection not implemented' }
-        instance { raise NotImplementedError, 'instance not implemented' }
-        new_instance { raise NotImplementedError, 'new instance not implemented' }
-      end
-    end
-
     def scope(&block)
       define_singleton_method(:current_scope) do
         Object.new.instance_eval(&block)
