@@ -9,7 +9,7 @@ module JSONAPIonify::Types
     def dump(value)
       case value
       when Time
-        JSON.dump(value.to_time)
+        JSON.load JSON.dump(value.to_time)
       else
         raise TypeError, "#{value} is not a valid JSON #{name}."
       end
