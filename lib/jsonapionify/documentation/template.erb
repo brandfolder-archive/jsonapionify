@@ -349,7 +349,7 @@
               </ul>
 
               <% resource.actions.each do |action| %>
-                  <h4><%= action.name.titleize %> <%= action.name == 'list' ? resource.name.pluralize : resource.name.singularize %></h4>
+                  <h4><%= action.label.titleize %></h4>
                   <% action.sample_requests.each do |sample_request| %>
                       <h5>Request</h5>
                       <pre><code class="http"><%= sample_request.request %></code></pre>

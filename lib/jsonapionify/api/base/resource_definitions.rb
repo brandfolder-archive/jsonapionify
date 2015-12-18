@@ -11,7 +11,7 @@ module JSONAPIonify::Api
     def resource(type)
       raise ArgumentError, 'type required' if type.nil?
       type       = type.to_sym
-      const_name = type.to_s.camelcase
+      const_name = type.to_s.camelcase + 'Resource'
       return const_get(const_name, false) if const_defined?(const_name, false)
       raise Errors::ResourceNotFound, "Resource not defined: #{type}" unless resource_defined?(type)
       klass = Class.new(resource_class, &resource_definitions[type]).set_type(type)
@@ -30,7 +30,7 @@ module JSONAPIonify::Api
     end
 
     def define_resource(name, &block)
-      const_name = name.to_s.camelcase
+      const_name = name.to_s.camelcase + 'Resource'
       remove_const(const_name) if const_defined? const_name
       resource_definitions[name.to_sym] = block
     end

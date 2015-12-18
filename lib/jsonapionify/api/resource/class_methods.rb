@@ -36,6 +36,12 @@ module JSONAPIonify::Api
       nil
     end
 
+    def eager_load
+      relationships.map(&:name).each do |name|
+        relationship name
+      end
+    end
+
     def get_url(base)
       URI.parse(base).tap do |uri|
         uri.path  = File.join(uri.path, type)
@@ -44,19 +50,20 @@ module JSONAPIonify::Api
       end.to_s
     end
 
-    def actions_in_order
+    def documented_actions_in_order
       indexes = %i{list create read update delete add replace remove}
-      actions.sort_by { |action| indexes.index(action.name) || indexes.length }
+      documented_actions.sort_by { |action, _| indexes.index(action.name) || indexes.length }
     end
 
     def documentation_object(base_url)
-      url = File.join(base_url, type)
       OpenStruct.new(
         name:          type,
         description:   JSONAPIonify::Documentation.render_markdown(@description || ''),
-        relationships: relationships.map { |r| r.documentation_object url },
+        relationships: relationships.map { |r| r.documentation_object },
         attributes:    attributes.map(&:documentation_object),
-        actions:       actions_in_order.map { |a| a.documentation_object self, base_url, type, true }
+        actions:       documented_actions_in_order.map do |action, base, args|
+          action.documentation_object File.join(base_url, base), *args
+        end
       )
     end
 

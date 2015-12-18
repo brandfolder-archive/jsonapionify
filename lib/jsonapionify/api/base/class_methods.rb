@@ -79,6 +79,10 @@ module JSONAPIonify::Api
       @cache_store = store
     end
 
+    def eager_load
+      resources.each(&:eager_load)
+    end
+
     def cache_store
       @cache_store ||= JSONAPIonify.cache_store
     end

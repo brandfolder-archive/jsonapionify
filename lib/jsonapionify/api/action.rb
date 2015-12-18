@@ -60,14 +60,13 @@ module JSONAPIonify::Api
       request.path_info.match(path_regex(base, name, include_path))
     end
 
-    def documentation_object(resource, base, name, include_path)
-      @documentation_object ||= begin
-        url = build_path(base, name, include_path)
-        OpenStruct.new(
-          name:            self.name.to_s,
-          sample_requests: example_requests(resource, url)
-        )
-      end
+    def documentation_object(base, resource, name, include_path, label)
+      url = build_path(base, name.to_s, include_path)
+      puts url
+      OpenStruct.new(
+        label:           label,
+        sample_requests: example_requests(resource, url)
+      )
     end
 
 

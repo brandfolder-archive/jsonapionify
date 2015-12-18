@@ -46,7 +46,7 @@ module JSONAPIonify::Api
         build_url = ->(*paths) {
           URI.parse(base_url).tap do |uri|
             uri.path  = File.join uri.path, *paths
-            params = sticky_params(Rack::Utils.parse_nested_query(uri.query))
+            params    = sticky_params(Rack::Utils.parse_nested_query(uri.query))
             uri.query = params.to_param if params.present?
           end.to_s
         }
@@ -67,10 +67,9 @@ module JSONAPIonify::Api
       @resource   = resource || name
     end
 
-    def documentation_object(base_url)
+    def documentation_object
       OpenStruct.new(
-        name:    name,
-        actions: resource_class.actions.map { |a| a.documentation_object resource_class, base_url, name.to_s, false }
+        name: name
       )
     end
 

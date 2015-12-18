@@ -1,3 +1,4 @@
+require 'possessive'
 require 'active_support/core_ext/array/wrap'
 
 module JSONAPIonify::Api
@@ -176,6 +177,19 @@ module JSONAPIonify::Api
         action.only_associated == false ||
           (respond_to?(:rel) && action.only_associated == true)
       end
+    end
+
+    def documented_actions
+      api.eager_load
+      relationships = descendants.select { |descendant| descendant.respond_to? :rel }
+      rels          = relationships.each_with_object([]) do |rel, ary|
+        rel.actions.each do |action|
+          ary << [action, rel.rel.owner.type, [rel, rel.rel.name, false, "#{action.name} #{rel.rel.owner.type.singularize.possessive} #{rel.rel.name}"]]
+        end
+      end
+      actions.map do |action|
+        [action, '', [self, type, true, "#{action.name} #{type}"]]
+      end + rels
     end
 
     private
