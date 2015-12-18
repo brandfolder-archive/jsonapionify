@@ -1,0 +1,35 @@
+root = true
+
+[*]
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+# Ruby Files
+[{*.rb, Gemfile*, config.ru, Rakefile, *.rake}]
+indent_style = space
+indent_size = 2
+
+# SQL
+[*.sql]
+indent_style = space
+indent_size = 4
+
+# Makefiles
+[{Makefile, *.mk}]
+indent_style = tab
+indent_size = 1
+
+# ERB
+[*.erb]
+indent_style = space
+indent_size = 2
+
+# Yaml
+[*.yml]
+indent_style = space
+indent_size = 2
+
+# Markdown uses trailing whitespace for linebreaks.
+[{*.markdown, *.md}]
+trim_trailing_whitespace = false
