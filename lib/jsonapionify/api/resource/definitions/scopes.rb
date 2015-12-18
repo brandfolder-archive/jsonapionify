@@ -7,7 +7,6 @@ module JSONAPIonify::Api
         collection { raise NotImplementedError, 'collection not implemented' }
         instance { raise NotImplementedError, 'instance not implemented' }
         new_instance { raise NotImplementedError, 'new instance not implemented' }
-        param :include
       end
     end
 

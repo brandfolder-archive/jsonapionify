@@ -11,6 +11,7 @@ module JSONAPIonify::Api
     extend ClassMethods
 
     include ErrorHandling
+    include Includer
     include Builders
     include Defaults
 
