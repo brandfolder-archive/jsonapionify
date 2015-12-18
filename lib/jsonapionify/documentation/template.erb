@@ -21,8 +21,16 @@
       color: #4c555a;
     }
 
+    .affix-top {
+      position: fixed;
+    }
+
     .affix {
-      top: 20px;
+      position: fixed;
+    }
+
+    .relative {
+      position: relative;
     }
 
     .navbar-default {
@@ -307,7 +315,7 @@
 </nav>
 
 <div class="container">
-  <div class="row">
+  <div class="row relative">
 
     <!--Main Content -->
     <div class="col-md-9" id="_main">
@@ -458,7 +466,7 @@
 
   $sidebar.affix({
     offset: {
-      top: $sidebar.offset().top
+      top: 500
     }
   });
 
@@ -479,17 +487,33 @@
 
       // when done, add hash to url
       // (default click behaviour)
+      if (window.location)
       window.location.hash = hash;
     });
+  });
+  function sidebarTop() {
+    var sidebarlOffset = $('#sidebar').offset().top;
+    if ($('.active:last').offset()){
+      var activeElementOffset =  $('.active:last').offset().top;
+    }
+    var difference = activeElementOffset - sidebarlOffset;
+    if ( difference > (window.innerHeight/5) ) {
+      var top = (difference - (window.innerHeight/5));
+      $('.affix').css('top', -top);
+    } else {
+      $('.affix').removeAttr('style');
 
-    $(window).load(function() {
-      var $windowHeight = window.innerHeight;
+    }
+  };
 
-    });
-    $(window).resize(function() {
-      console.log('resize');
-    });
-
+  $(window).load(function() {
+    sidebarTop();
+  });
+  $(window).resize(function() {
+    sidebarTop();
+  });
+  $(window).scroll(function() {
+    sidebarTop();
   });
 </script>
 </body>

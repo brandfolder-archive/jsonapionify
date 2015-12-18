@@ -21,7 +21,8 @@ module JSONAPIonify::Api
     end
 
     def documentation_output(request)
-      @documentation_output ||= JSONAPIonify::Documentation.new(documentation_object(request)).result
+      #@documentation_output ||=
+          JSONAPIonify::Documentation.new(documentation_object(request)).result
     end
 
     def resources_in_order
@@ -36,11 +37,11 @@ module JSONAPIonify::Api
         uri.path.chomp! '/docs'
       end.to_s
       OpenStruct.new(
-        links:       links,
-        title:       @title || self.name,
-        base_url:    base_url,
-        description: JSONAPIonify::Documentation.render_markdown(@description || ''),
-        resources:   resources_in_order.map { |r| r.documentation_object base_url }
+          links: links,
+          title: @title || self.name,
+          base_url: base_url,
+          description: JSONAPIonify::Documentation.render_markdown(@description || ''),
+          resources: resources_in_order.map { |r| r.documentation_object base_url }
       )
     end
   end
