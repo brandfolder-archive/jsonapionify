@@ -17,13 +17,6 @@ module JSONAPIonify::Api
             v.required
           end
 
-          if (invalid_keys = context.request.headers.keys.map(&:downcase) - headers.keys.map(&:downcase)).present?
-            should_error = true
-            invalid_keys.each do |key|
-              error :header_not_permitted, key
-            end
-          end
-
           if (missing_keys = required_headers.keys.map(&:downcase) - context.request.headers.keys.map(&:downcase)).present?
             should_error = true
             error :headers_missing, missing_keys
