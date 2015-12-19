@@ -253,7 +253,7 @@ module JSONAPIonify
 
       describe 'invalid parameter' do
         it 'should error' do
-          get "/things?BADPARAM=1"
+          get "/things?badparam=1"
           expect(last_response.status).to eq 400
         end
       end
@@ -272,25 +272,17 @@ module JSONAPIonify
 
       describe 'action based parameters' do
         context 'when on an action with the param' do
-          it 'should not error' do
-            get "/places?just-index=1&the-foo=1"
-            expect(last_response.status).to eq 200
+          it 'should error' do
+            get "/places"
+            expect(last_response.status).to eq 400
           end
         end
 
         context 'when on an action without the param' do
-          it 'should error' do
-            get "/places/1?just-index=1&the-foo=1"
-            expect(last_response.status).to eq 400
+          it 'should not error' do
+            get "/places/1"
+            expect(last_response.status).to eq 200
           end
-        end
-      end
-
-      describe 'invalid header' do
-        it 'should error' do
-          header('BADHEADER', '1')
-          get "/things"
-          expect(last_response.status).to eq 400
         end
       end
 
@@ -309,20 +301,16 @@ module JSONAPIonify
 
       describe 'action based headers' do
         context 'when on an action with the header' do
-          it 'should not error' do
-            header('Required-Header', '1')
-            header('Action-Header', '1')
+          it 'should error' do
             get "/parties"
-            expect(last_response.status).to eq 200
+            expect(last_response.status).to eq 400
           end
         end
 
         context 'when on an action without the header' do
-          it 'should error' do
-            header('Required-Header', '1')
-            header('Action-Header', '1')
+          it 'should not error' do
             get "/parties/1"
-            expect(last_response.status).to eq 400
+            expect(last_response.status).to eq 200
           end
         end
       end

@@ -5,7 +5,6 @@ MyApi.define_resource :places do
   instance { OpenStruct.new id: 1 }
   new_instance { OpenStruct.new }
 
-  param :'the-foo', required: true
-  param :'just-index', actions: :list
+  param :'the-foo', required: true, actions: :list
 
 end

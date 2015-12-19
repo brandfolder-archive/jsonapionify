@@ -1,5 +1,11 @@
 module JSONAPIonify::Api
   class ParamOptions
+    extend JSONAPIonify::Structure::Helpers::MemberNames
+
+    def self.valid?(value)
+      return true if %w{sort include}.include? value
+      super(value) && value =~ /[^\u0061-\u007A]/
+    end
 
     def self.hash_to_keypaths(hash)
       mapper = lambda do |hash, ary|

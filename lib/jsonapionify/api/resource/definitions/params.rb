@@ -7,19 +7,21 @@ module JSONAPIonify::Api
         inherited_hash_attribute :param_definitions
 
         context(:params, readonly: true) do |context|
-          should_error    = false
+          should_error = false
 
-          # Check for validity
-          params          = self.class.param_definitions.select do |_, v|
+          params       = self.class.param_definitions.select do |_, v|
             v.actions.blank? || v.actions.include?(action_name)
           end
+
           required_params = params.select do |_, v|
             v.required
           end
-          if (invalid_params = ParamOptions.invalid_parameters(context.request.params, params.values.map(&:keypath))).present?
-            should_error = true
-            invalid_params.each do |string|
-              error :parameter_not_permitted, string
+
+          # Check for validity
+          context.request.params.each do |k, v|
+            unless v.is_a?(Hash) || ParamOptions.valid?(k)
+              should_error = true
+              error :parameter_invalid, k
             end
           end
 

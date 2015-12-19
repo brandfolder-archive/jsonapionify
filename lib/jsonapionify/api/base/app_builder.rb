@@ -24,9 +24,6 @@ module JSONAPIonify::Api
         use Rack::ShowExceptions
         use Rack::CommonLogger
         use Base::Reloader unless ENV['RACK_ENV'] == 'production'
-        api.middleware.each do |args|
-          use *args
-        end
         map "/docs" do
           run ->(env) {
             request = JSONAPIonify::Api::Server::Request.new env
@@ -39,6 +36,9 @@ module JSONAPIonify::Api
           }
         end
         map "/" do
+          api.middleware.each do |args|
+            use *args
+          end
           run JSONAPIonify::Api::Server.new(api)
         end
       end

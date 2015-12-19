@@ -51,7 +51,7 @@ module JSONAPIonify::Api
 
       error :include_parameter_invalid do
         parameter 'sort'
-        title 'Sort parameter is invalid'
+        title 'Include parameter is invalid'
         status '400'
       end
 
@@ -61,22 +61,16 @@ module JSONAPIonify::Api
         status '400'
       end
 
-      error :parameter_not_permitted do |param|
+      error :parameter_invalid do |param|
         parameter param
-        title 'Parameter Not Permitted'
-        detail "parameter not permitted: #{param}"
+        title 'Parameter Invalid'
+        detail "parameter invalid: #{param}"
         status '400'
       end
 
       error :headers_missing do |headers|
         title 'Missing required headers'
         detail "missing: #{headers.to_sentence}"
-        status '400'
-      end
-
-      error :header_not_permitted do |header|
-        title 'Header Not Permitted'
-        detail "header not permitted: #{header}"
         status '400'
       end
 
