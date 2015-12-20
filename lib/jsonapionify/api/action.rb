@@ -7,9 +7,9 @@ module JSONAPIonify::Api
       new(nil, nil, &block)
     end
 
-    def self.error(name)
+    def self.error(name, &block)
       dummy do
-        error_now name
+        error_now name, &block
       end
     end
 

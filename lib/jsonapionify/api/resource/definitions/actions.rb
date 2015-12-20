@@ -134,7 +134,7 @@ module JSONAPIonify::Api
     def no_action_response(request)
       if request_method_actions(request).present?
         Action.error :unsupported_media_type do
-          meta :content_type, request.content_type
+          meta[:content_type] = request.content_type
         end
       elsif (path_actions = self.path_actions(request)).present?
         Action.error :forbidden
