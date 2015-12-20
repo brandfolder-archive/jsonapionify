@@ -77,8 +77,7 @@ module JSONAPIonify::Api
       if request.options? && path_actions.present?
         Action.dummy do
           response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
-          response(status: 200, accept: '*/*')
-        end.call(self, request)
+        end.response(status: 200, accept: '*/*').call(self, request)
       elsif (action = find_supported_action(request))
         action.call(self, request)
       elsif (rel = find_supported_relationship(request))
