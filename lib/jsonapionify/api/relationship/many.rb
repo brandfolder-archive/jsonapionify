@@ -12,7 +12,6 @@ module JSONAPIonify::Api
         options[:prepend] = 'relationships'
         define_action(:show, 'GET', **options, &block).response status: 200 do |context|
           context.response_object[:data] = build_identifier_collection(context.collection)
-          context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
       end
@@ -23,7 +22,6 @@ module JSONAPIonify::Api
           context.owner_context.reset(:instance)
           context.reset(:collection)
           context.response_object[:data] = build_identifier_collection(context.collection)
-          context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
       end
@@ -34,7 +32,6 @@ module JSONAPIonify::Api
           context.owner_context.reset(:instance)
           context.reset(:collection)
           context.response_object[:data] = build_identifier_collection(context.collection)
-          context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
       end
@@ -45,7 +42,6 @@ module JSONAPIonify::Api
           context.owner_context.reset(:instance)
           context.reset(:collection)
           context.response_object[:data] = build_identifier_collection(context.collection)
-          context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
       end

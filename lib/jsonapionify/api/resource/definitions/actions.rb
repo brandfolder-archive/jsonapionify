@@ -28,7 +28,6 @@ module JSONAPIonify::Api
             context.response_collection,
             fields: context.fields
           )
-          context.meta[:total_count]     = context.collection.count
           context.response_object.to_json
         end
       end
