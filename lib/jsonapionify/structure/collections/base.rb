@@ -1,9 +1,10 @@
+require 'enumerable_observer'
 require 'active_support/core_ext/module/delegation'
 
 module JSONAPIonify::Structure
   module Collections
     class Base < Array
-      include JSONAPIonify::EnumerableObserver
+      include EnumerableObserver
       include Helpers::InheritsOrigin
       attr_reader :parent
 

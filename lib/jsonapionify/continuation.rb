@@ -1,3 +1,4 @@
+require 'unstrict_proc'
 module JSONAPIonify
   class Continuation
     using UnstrictProc

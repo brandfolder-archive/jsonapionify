@@ -1,10 +1,11 @@
+require 'unstrict_proc'
 require 'active_support/core_ext/class/attribute'
 
 module JSONAPIonify::Structure
   module Helpers
     module Validations
       extend ActiveSupport::Concern
-      using JSONAPIonify::UnstrictProc
+      using UnstrictProc
 
       module ClassMethods
 

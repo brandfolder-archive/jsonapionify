@@ -1,3 +1,5 @@
+require 'enumerable_observer'
+
 module JSONAPIonify
   module InheritedAttributes
 

@@ -4,6 +4,7 @@ require 'active_support/core_ext/array/wrap'
 require 'active_support/core_ext/hash'
 require 'active_support/core_ext/array/conversions'
 require 'active_support/core_ext/hash/keys'
+require 'enumerable_observer'
 
 module JSONAPIonify::Structure
   module Objects
@@ -11,7 +12,7 @@ module JSONAPIonify::Structure
 
       include JSONAPIonify::Callbacks
       include Enumerable
-      include JSONAPIonify::EnumerableObserver
+      include EnumerableObserver
       include Helpers::InheritsOrigin
 
       define_callbacks :initialize, :validation

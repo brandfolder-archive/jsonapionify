@@ -1,5 +1,4 @@
 MyApi.define_resource :things do
-  extend JSONAPIonify::EnumerableObserver
 
   description <<-markdown
     Describes this resource

@@ -1,10 +1,11 @@
+require 'enumerable_observer'
 require 'active_support/concern'
 
 module JSONAPIonify::Structure
   module Helpers
     module ObjectDefaults
       extend ActiveSupport::Concern
-      include JSONAPIonify::EnumerableObserver
+      include EnumerableObserver
 
       module ClassMethods
         # Forces the setter to a type

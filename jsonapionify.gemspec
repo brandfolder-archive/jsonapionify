@@ -28,6 +28,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rack-test"
   spec.add_dependency 'faker'
   spec.add_dependency 'possessive'
+  spec.add_dependency 'unstrict_proc'
+  spec.add_dependency 'enumerable_observer'
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rocco'
