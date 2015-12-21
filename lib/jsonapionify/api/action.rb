@@ -92,8 +92,7 @@ module JSONAPIonify::Api
     end
 
     def supports_content_type?(request)
-      @content_type == request.content_type ||
-        (request.content_type.nil? && !request.has_body?)
+      @content_type == request.content_type || !request.has_body?
     end
 
     def supports_request_method?(request)

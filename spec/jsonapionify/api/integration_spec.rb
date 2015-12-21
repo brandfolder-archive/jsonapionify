@@ -316,5 +316,45 @@ module JSONAPIonify
       end
 
     end
+
+    describe 'content-type' do
+      context 'with a body' do
+        context 'supported content type' do
+          it 'should not fail' do
+            content_type 'application/vnd.api+json'
+            body = { data: { type: "things", attributes: { name: "thing" }}}
+            post "/things", json(body)
+            expect(last_response.status).to eq 201
+          end
+        end
+
+        context 'unsupported content type' do
+          it 'should fail' do
+            content_type 'text/plain'
+            body = { data: { type: "things", attributes: { name: "thing" }}}
+            post "/things", json(body)
+            expect(last_response.status).to eq 415
+          end
+        end
+      end
+
+      context 'without a body' do
+        context 'supported content type' do
+          it 'should not fail' do
+            content_type 'application/vnd.api+json'
+            get "/things"
+            expect(last_response.status).to eq 200
+          end
+        end
+
+        context 'unsupported content type' do
+          it 'should not fail' do
+            content_type 'text/plain'
+            get "/things"
+            expect(last_response.status).to eq 200
+          end
+        end
+      end
+    end
   end
 end
