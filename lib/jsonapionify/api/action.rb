@@ -68,7 +68,6 @@ module JSONAPIonify::Api
       )
     end
 
-
     def example_requests(resource, url)
       responses.map do |response|
         opts                      = {}
