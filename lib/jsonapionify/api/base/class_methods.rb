@@ -15,6 +15,10 @@ module JSONAPIonify::Api
       Digest::SHA2.hexdigest resource_files.map { |file| File.read file }.join
     end
 
+    def signature
+      [name, resource_signature].join('@')
+    end
+
     def load_resources
       return unless load_path
       if @last_signature != resource_signature

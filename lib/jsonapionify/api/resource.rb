@@ -18,7 +18,7 @@ module JSONAPIonify::Api
     def self.inherited(subclass)
       super(subclass)
       subclass.class_eval do
-        context(:api, readonly: true) { api }
+        context(:api, readonly: true) { self.class.api }
         context(:resource, readonly: true) { self }
       end
     end
