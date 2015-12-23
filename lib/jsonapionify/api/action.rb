@@ -143,36 +143,40 @@ module JSONAPIonify::Api
       cache_options = {}
       resource.new.instance_eval do
         # Bootstrap the Action
-        callbacks = resource.callbacks_for(action.name).new
+        callbacks = resource.callbacks_for(action.name).new self
         context   = ContextDelegate.new(request, self, self.class.context_definitions)
 
-        define_singleton_method :action_name do
-          action.name
-        end
-
+        # Define Shared Singletons
+        # [self, callbacks].each do |target|
+        #   target.instance_exec self do |request_instance|
         define_singleton_method :cache do |key, **options|
           cache_options.merge! options
           cache_options[:key] = [*{
             dsl:          JSONAPIonify.digest,
-            api:          [self.class.api.name, self.class.api.resource_signature].join('@'),
+            api:          self.class.api.signature,
             resource:     self.class.type,
             content_type: request.content_type || '*',
             accept:       request.accept.join(','),
             params:       context.params.to_param
           }.map { |kv| kv.join(':') }, key].join('|')
-          raise Errors::CacheHit, cache_options[:key] if self.class.cache_store.exist?(cache_options[:key])
+          if self.class.cache_store.exist?(cache_options[:key])
+            raise Errors::CacheHit, cache_options[:key]
+          end
         end if request.get?
 
-        # Define Shared Singletons
-        [self, callbacks].each do |target|
-          target.define_singleton_method :errors do
-            context.errors
-          end
-
-          define_singleton_method :response_headers do
-            context.response_headers
-          end
+        define_singleton_method :action_name do
+          action.name
         end
+
+        define_singleton_method :errors do
+          context.errors
+        end
+
+        define_singleton_method :response_headers do
+          context.response_headers
+        end
+        #   end
+        # end
 
         begin
           # Run Callbacks
@@ -181,7 +185,7 @@ module JSONAPIonify::Api
             raise Errors::RequestError
           when nil # nil means no result, callback failed
             error_now :internal_server_error
-          end
+          end if action.name
 
           # Start the request
           instance_exec(context, &action.request_block)

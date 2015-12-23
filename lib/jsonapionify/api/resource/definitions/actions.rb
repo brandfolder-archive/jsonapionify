@@ -96,17 +96,7 @@ module JSONAPIonify::Api
     end
 
     def base_callbacks
-      resource       = self
-      callbacks['*'] ||= Class.new do
-        def self.context(*)
-        end
-
-        include Resource::ErrorHandling
-
-        define_singleton_method(:error_definitions) do
-          resource.error_definitions
-        end
-
+      callbacks['*'] ||= Class.new SimpleDelegator do
         include JSONAPIonify::Callbacks
         define_callbacks :request
       end
