@@ -36,8 +36,8 @@ module JSONAPIonify::Api
         body = instance_exec(context, &response.response_block)
         Rack::Response.new.tap do |rack_response|
           rack_response.status = response.status
-          response_headers.each { |k, v| rack_response.headers[k] = v }
-          rack_response.headers['content-type'] = response.accept unless response.accept == '*/*'
+          response_headers.each { |k, v| rack_response.headers[k.split('-').map(&:capitalize).join('-')] = v }
+          rack_response.headers['Content-Type'] = response.accept unless response.accept == '*/*'
           rack_response.write(body) unless body.nil?
         end.finish
       end
