@@ -146,9 +146,7 @@ module JSONAPIonify::Api
         callbacks = resource.callbacks_for(action.name).new self
         context   = ContextDelegate.new(request, self, self.class.context_definitions)
 
-        # Define Shared Singletons
-        # [self, callbacks].each do |target|
-        #   target.instance_exec self do |request_instance|
+        # Define Singletons
         define_singleton_method :cache do |key, **options|
           cache_options.merge! options
           cache_options[:key] = [*{
@@ -175,8 +173,6 @@ module JSONAPIonify::Api
         define_singleton_method :response_headers do
           context.response_headers
         end
-        #   end
-        # end
 
         begin
           # Run Callbacks
