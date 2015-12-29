@@ -42,6 +42,7 @@ module JSONAPIonify::Api
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
           context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+          response_headers['Location'] = build_url(context.request, context.instance)
           context.response_object.to_json
         end
       end
