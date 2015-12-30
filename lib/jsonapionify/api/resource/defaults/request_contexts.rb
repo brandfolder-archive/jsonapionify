@@ -18,20 +18,22 @@ module JSONAPIonify::Api
       end
 
       context(:request_attributes, readonly: true) do |context|
-        request_object     = context.request_object
+        request_object = context.request_object
+
+        # Validate Request Object
+        request_object.validate
+        error_now(:request_object_invalid, context, request_object) if request_object.errors.present?
+
         request_attributes = context.request_data.fetch(:attributes) do
           error_now :attributes_missing
         end
         request_attributes.tap do |attributes|
+          # Check Permitted Attributes
           writable_attributes = context.request_resource.attributes.select(&:write?)
-          required_attributes = writable_attributes.select(&:required?).map(&:name)
-          optional_attributes = writable_attributes.select(&:optional?).map(&:name)
-          if (extra_attributes = attributes.keys - (optional_attributes + required_attributes)).present?
+          if (extra_attributes = attributes.keys - writable_attributes.map(&:name)).present?
             extra_attributes.each { |attr| error :attribute_not_permitted, attr }
             raise Errors::RequestError
           end
-          request_object.validate
-          error_now(:request_object_invalid, context, request_object) if request_object.errors.present?
         end.to_hash
       end
 

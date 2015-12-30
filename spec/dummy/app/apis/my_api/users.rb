@@ -21,7 +21,7 @@ MyApi.define_resource :users do
 
   scope { User }
 
-  attribute :email, types.String, "The email address"
+  attribute :email, types.String, "The email address", required: true
   attribute :first_name, types.String, "The last name"
   attribute :last_name, types.String, "The last name"
   attribute :password, types.String, "The password", read: false

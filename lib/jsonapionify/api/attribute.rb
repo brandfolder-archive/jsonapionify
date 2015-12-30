@@ -3,6 +3,7 @@ module JSONAPIonify::Api
     attr_reader :name, :type, :description, :read, :write, :required
 
     def initialize(name, type, description, read: true, write: true, required: false, example: nil)
+      raise ArgumentError, 'required attributes must be writable' if required && !write
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
       end
