@@ -214,8 +214,13 @@
       font-size: 13px;
       letter-spacing: 1px;
       padding-bottom: 10px;
-      margin-bottom: 0px;
+      margin-bottom: 20px;
       border-bottom: 1px solid #e1e8ed;
+    }
+
+    section.group h5 {
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     ul.attributes {
@@ -327,7 +332,7 @@
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
   <script
-      src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
@@ -350,7 +355,9 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-left">
         <% api.links.each do |link| %>
-            <li><a href="<%= link.href %>" target="_blank"><%= link.title %></a></li>
+            <li>
+              <a href="<%= link.href %>" target="_blank"><%= link.title %></a>
+            </li>
         <% end %>
       </ul>
     </div>
@@ -369,14 +376,14 @@
 
       <h2>Resources</h2>
       <% api.resources.each do |resource| %>
-          <section id="<%= resource.name %>" class="group">
-            <h3><%= resource.name.titleize %></h3>
+          <section class="group">
+            <h3 id="<%= resource.name %>"><%= resource.name.titleize %></h3>
 
             <p><%= resource.description %></p>
 
             <div class="details">
               <% if resource.attributes.present? %>
-                  <h4>Attributes</h4>
+                  <h4 id="<%= resource.name %>-attributes">Attributes</h4>
                   <ul class="attributes">
                     <% resource.attributes.each do |attribute| %>
                         <li>
@@ -412,8 +419,8 @@
                   </ul>
               <% end %>
 
-              <% resource.actions.each do |action| %>
-                  <h4><%= action.label.titleize %></h4>
+              <% resource.actions.each_with_index do |action, index| %>
+                  <h4 id="<%= resource.name %>-action-<%= index + 1 %>"><%= action.label.titleize %></h4>
                   <% action.sample_requests.each do |sample_request| %>
                       <h5>Request</h5>
                       <pre><code class="http"><%= sample_request.request %></code></pre>
@@ -430,15 +437,15 @@
     <!--Side Bar -->
     <nav class="col-md-3 bs-docs-sidebar hidden-sm hidden-xs scrollspy">
       <div id="sidebar">
-      <div id="back-top" style="display: block;">
-        <a href="#">
+        <div id="back-top" style="display: block;">
+          <a href="#">
           <span class="fa-stack fa-sm">
             <i class="fa fa-square fa-stack-2x"></i>
             <i class="fa fa-arrow-up fa-stack-1x fa-inverse"></i>
           </span>
-        </a>
-      </div>
-      <ul class="nav" data-spy="affix"></ul>
+          </a>
+        </div>
+        <ul class="nav" data-spy="affix"></ul>
       </div>
     </nav>
 
@@ -502,7 +509,14 @@
         return
       }
       $e = $(sublist._element);
-      $e.attr('id', id);
+
+      // Set or get the ID
+      if ($e.attr('id')) {
+        id = $e.attr('id');
+      } else {
+        $e.attr('id', id);
+      }
+
       var $listItem = $('<li class="nav-' + $e[0].tagName + '"></li>');
       $listItem.append($('<a href="#' + id + '">' + $e.text() + '</a>'));
       var $subList = $('<ul class="nav"></ul>');
