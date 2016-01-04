@@ -549,12 +549,16 @@
           window.location.hash = hash;
       });
     } else {
-      $('html, body').animate({scrollTop: 0}, 'slow');
+      $('html, body').animate({scrollTop: 0}, 'slow').then(function() {
+       sidebarTop();
+      });
+
     }
   });
 
   function sidebarTop() {
     var sidebarlOffset = $('#sidebar ul').offset().top;
+
     if ($('.active:last').offset()) {
       var activeElementOffset = $('.active:last').offset().top;
     }
