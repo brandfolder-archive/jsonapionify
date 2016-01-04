@@ -517,7 +517,7 @@
 
   $('body').scrollspy({
     target: '.bs-docs-sidebar',
-    offset: 40
+    offset: 140
   });
 
   $sidebar.affix({
@@ -539,7 +539,7 @@
     // animate
     if (hash) {
       $('html, body').animate({
-        scrollTop: $(hash).offset().top - 20
+        scrollTop: $(hash).offset().top - 70
       }, 300, function () {
 
         // when done, add hash to url
