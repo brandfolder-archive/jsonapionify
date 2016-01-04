@@ -325,7 +325,6 @@
     #back-top {
       display: none;
     }
-
   </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -532,7 +531,7 @@
 
   $('body').scrollspy({
     target: '.bs-docs-sidebar',
-    offset: 40
+    offset: 140
   });
 
   $sidebar.affix({
@@ -554,7 +553,7 @@
     // animate
     if (hash) {
       $('html, body').animate({
-        scrollTop: $(hash).offset().top - 20
+        scrollTop: $(hash).offset().top - 70
       }, 300, function () {
 
         // when done, add hash to url
@@ -563,12 +562,16 @@
           window.location.hash = hash;
       });
     } else {
-      $('html, body').animate({scrollTop: 0}, 'slow');
+      $('html, body').animate({scrollTop: 0}, 'slow', function(){
+       sidebarTop();
+      });
+
     }
   });
 
   function sidebarTop() {
     var sidebarlOffset = $('#sidebar ul').offset().top;
+
     if ($('.active:last').offset()) {
       var activeElementOffset = $('.active:last').offset().top;
     }
