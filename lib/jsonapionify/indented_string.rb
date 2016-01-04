@@ -5,6 +5,7 @@ module JSONAPIonify
     refine String do
       def deindent
         shortest_line_length = lines.each_with_object([]) do |line, ary|
+          next if line.empty?
           ary << line.match(/^\s*/)[0].length if line.rstrip.present?
         end.sort.first
 
