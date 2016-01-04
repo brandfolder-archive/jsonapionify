@@ -320,7 +320,6 @@
     #back-top {
       display: none;
     }
-
   </style>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -549,7 +548,7 @@
           window.location.hash = hash;
       });
     } else {
-      $('html, body').animate({scrollTop: 0}, 'slow').then(function() {
+      $('html, body').animate({scrollTop: 0}, 'slow', function(){
        sidebarTop();
       });
 
