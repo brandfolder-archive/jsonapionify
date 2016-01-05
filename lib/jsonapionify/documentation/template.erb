@@ -53,9 +53,9 @@
 
     .navbar-default {
       left: 0;
-      border-radius: 0px;
+      border-radius: 0;
       background-color: #4c555a;
-      border: 0px;
+      border: 0;
     }
 
     .navbar-default .navbar-collapse, .navbar-default .navbar-form {
@@ -194,11 +194,11 @@
     }
 
     section:first-child {
-      margin-top: 0px;
+      margin-top: 0;
     }
 
     section:last-child {
-      border-bottom: 0px;
+      border-bottom: 0;
     }
 
     section.group h3 {
@@ -226,22 +226,22 @@
     ul.attributes {
       list-style-type: none;
       font-size: 14px;
-      padding-left: 0px;
+      padding-left: 0;
     }
 
     ul.attributes .row-attribute {
       border-bottom: 1px solid #f0f4f7;
-      padding: 15px 0px;
+      padding: 15px 0;
     }
 
     ul.relationships {
       margin-top: 10px;
       list-style-type: none;
-      padding-left: 0px;
+      padding-left: 0;
     }
 
     ul.attributes > li:last-child > p {
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
 
     .attribute-name strong {
@@ -258,7 +258,7 @@
     color: #939da3;
       font-size: 13px;
       font-weight: 300;
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
 
     ul.attributes .allowed {
@@ -271,7 +271,7 @@
 
     footer {
       margin-top: 60px;
-      padding: 10px 0px;
+      padding: 10px 0;
       border-top: 1px solid #e7e7e7;
       background-color: #4c555a;
       text-align: center;
@@ -299,12 +299,12 @@
     }
 
     pre.nostyle {
-      padding: 0px;
-      margin: 0px;
-      border-radius: 0px;
+      padding: 0;
+      margin: 0;
+      border-radius: 0;
       position: relative;
-      margin: 10px 0px;
-      padding: 0px;
+      margin: 10px 0;
+      padding: 0;
       border: 1px solid #e1e8ed;
       font-size: 12px;
       line-height: 16px;
@@ -418,8 +418,8 @@
                   </ul>
               <% end %>
 
-              <% resource.actions.each_with_index do |action, index| %>
-                  <h4 id="<%= resource.name %>-action-<%= index + 1 %>"><%= action.label.titleize %></h4>
+              <% resource.actions.each do |action| %>
+                  <h4 id="<%= action.id %>"><%= action.label.titleize %></h4>
                   <% action.sample_requests.each do |sample_request| %>
                       <h5>Request</h5>
                       <pre><code class="http"><%= sample_request.request %></code></pre>
@@ -598,6 +598,8 @@
   $(window).on("load resize scroll", function () {
     sidebarTop();
   });
+
+  $('table').addClass('table')
 
 </script>
 </body>

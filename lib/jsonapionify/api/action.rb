@@ -62,7 +62,9 @@ module JSONAPIonify::Api
 
     def documentation_object(base, resource, name, include_path, label)
       url = build_path(base, name.to_s, include_path)
+      path = URI.parse(url).path
       OpenStruct.new(
+        id:              [request_method, path].join('-').parameterize,
         label:           label,
         sample_requests: example_requests(resource, url)
       )
