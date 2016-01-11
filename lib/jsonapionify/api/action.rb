@@ -61,7 +61,7 @@ module JSONAPIonify::Api
     end
 
     def documentation_object(base, resource, name, include_path, label)
-      url = build_path(base, name.to_s, include_path)
+      url  = build_path(base, name.to_s, include_path)
       path = URI.parse(url).path
       OpenStruct.new(
         id:              [request_method, path].join('-').parameterize,
@@ -154,7 +154,7 @@ module JSONAPIonify::Api
           cache_options[:key] = [*{
             dsl:          JSONAPIonify.digest,
             api:          self.class.api.signature,
-            resource:     self.class.type,
+            path:         request.path,
             content_type: request.content_type || '*',
             accept:       request.accept.join(','),
             params:       context.params.to_param
