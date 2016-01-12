@@ -10,12 +10,14 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         inherited_array_attribute :action_definitions
 
-        def self.inherited(subclass)
-          super
-          callbacks.each do |action_name, klass|
-            subclass.callbacks[action_name] = Class.new klass
+        extend (Module.new do
+          def inherited(subclass)
+            super(subclass)
+            callbacks.each do |action_name, klass|
+              subclass.callbacks[action_name] = Class.new klass
+            end
           end
-        end
+        end)
 
         def self.callbacks
           @callbacks ||= {}
@@ -47,7 +49,7 @@ module JSONAPIonify::Api
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
           context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
-          response_headers['Location'] = build_url(context.request, context.instance)
+          response_headers['Location']   = build_url(context.request, context.instance)
           context.response_object.to_json
         end
       end

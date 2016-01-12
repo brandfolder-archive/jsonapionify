@@ -41,7 +41,7 @@ module JSONAPIonify
         end if instance_writer
 
         # Define Inheritor
-        mod = Module.new do
+        extend (Module.new do
           define_method :inherited do |subclass|
             super(subclass)
 
@@ -58,8 +58,7 @@ module JSONAPIonify
             observer.added { |items| subclass_var.deep_merge! items.to_h }
             observer.removed { |items| subclass_var.delete_if { |k, v| items.to_h[k] == v } }
           end
-        end
-        extend mod
+        end)
       end
     end
 
