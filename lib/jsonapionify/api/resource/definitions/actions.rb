@@ -9,7 +9,6 @@ module JSONAPIonify::Api
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
         inherited_array_attribute :action_definitions
-        inherited_hash_attribute :callbacks
 
         def self.inherited(subclass)
           super
@@ -17,6 +16,12 @@ module JSONAPIonify::Api
             subclass.callbacks[action_name] = Class.new klass
           end
         end
+
+        def self.callbacks
+          @callbacks ||= {}
+        end
+
+        delegate :callbacks, to: :class
       end
     end
 
