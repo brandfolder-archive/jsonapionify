@@ -14,7 +14,7 @@ module JSONAPIonify::Api
         env.select do |name, _|
           name.start_with?('HTTP_') && !%w{HTTP_VERSION}.include?(name)
         end.each_with_object({}) do |(name, value), hash|
-          hash[name[5..-1].gsub('_', '-')] = value
+          hash[name[5..-1].gsub('_', '-').downcase] = value
         end
       )
     end

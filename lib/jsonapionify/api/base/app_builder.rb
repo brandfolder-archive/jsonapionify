@@ -1,15 +1,19 @@
 module JSONAPIonify::Api
   module Base::AppBuilder
 
-    def self.extended(klass)
-      klass.class_eval do
-        extend JSONAPIonify::InheritedAttributes
-        inherited_array_attribute :middleware
+    def middleware
+      @middleware ||= MiddlewareStack.new
+    end
+
+    def inherited(subclass)
+      super(subclass)
+      subclass.instance_exec(self) do |superclass|
+        @middleware = superclass.middleware.dup
       end
     end
 
     def use(*args)
-      middleware << args
+      middleware.use(*args)
     end
 
     def call(env)
@@ -36,9 +40,7 @@ module JSONAPIonify::Api
           }
         end
         map "/" do
-          api.middleware.each do |args|
-            use *args
-          end
+          api.middleware.install(binding)
           run JSONAPIonify::Api::Server.new(api)
         end
       end
