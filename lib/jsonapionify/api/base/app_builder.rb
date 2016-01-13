@@ -40,7 +40,7 @@ module JSONAPIonify::Api
           }
         end
         map "/" do
-          api.middleware.install(binding)
+          api.middleware.install(self)
           run JSONAPIonify::Api::Server.new(api)
         end
       end
