@@ -22,7 +22,7 @@ module JSONAPIonify::Api
     end
 
     def use(name, *args)
-      @middlewares << [name, *args]
+      @stack << [name, *args]
     end
 
     def delete(target_name, *target_args)
