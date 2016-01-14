@@ -70,6 +70,7 @@ module JSONAPIonify::Api
 
     def rescued_response(exception)
       rescue_with_handler(exception) || begin
+        run_callbacks(:exception, exception)
         errors.evaluate(
           error_block:   lookup_error(:internal_server_error),
           runtime_block: proc {

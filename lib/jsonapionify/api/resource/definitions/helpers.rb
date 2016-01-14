@@ -13,5 +13,9 @@ module JSONAPIonify::Api
       end
     end
 
+    def on_exception(&block)
+      before_exception &block
+    end
+
   end
 end

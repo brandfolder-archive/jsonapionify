@@ -10,7 +10,7 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         include JSONAPIonify::Callbacks
         define_callbacks :request, :list, :create, :read, :update, :delete,
-                         :show, :add, :remove, :replace
+                         :show, :add, :remove, :replace, :exception
         inherited_array_attribute :action_definitions
       end
     end
