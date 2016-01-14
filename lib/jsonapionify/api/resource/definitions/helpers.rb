@@ -5,5 +5,13 @@ module JSONAPIonify::Api
       define_method(name, &block)
     end
 
+    def authentication(&block)
+      before do |context|
+        if instance_exec(context.request, context.authentication, &block) == false
+          error_now :forbidden
+        end
+      end
+    end
+
   end
 end

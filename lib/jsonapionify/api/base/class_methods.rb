@@ -35,10 +35,6 @@ module JSONAPIonify::Api
       Action.error(action).call(resource_class, request)
     end
 
-    def resource_class
-      const_get(:ResourceBase, false)
-    end
-
     def documentation_order(resources_in_order)
       @documentation_order = resources_in_order
     end

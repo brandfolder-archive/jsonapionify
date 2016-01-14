@@ -65,6 +65,10 @@ module JSONAPIonify::Api
           error_now(:data_missing)
         }
       end
+
+      context(:authentication, readonly: true) do
+        OpenStruct.new
+      end
     end
 
     def find_instance(item, pointer:)

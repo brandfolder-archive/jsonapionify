@@ -17,12 +17,11 @@ module JSONAPIonify
               value = instance_exec(*args, &block)
               value if send(chains[:after], *args) != false
             end
-          end
+          end unless method_defined? chains[:main]
 
           # Define before and after chains
           %i{after before}.each do |timing|
-            define_method chains[timing] do |*|
-            end
+            define_method chains[timing] { |*| } unless method_defined? chains[timing]
 
             define_singleton_method "#{timing}_#{name}" do |sym = nil, &outer_block|
               outer_block = (outer_block || sym).to_proc

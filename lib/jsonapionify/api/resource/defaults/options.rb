@@ -16,7 +16,6 @@ module JSONAPIonify::Api
         context.params # pull params so they verify
       end
 
-
     end
   end
 end

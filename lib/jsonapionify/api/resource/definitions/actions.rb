@@ -8,22 +8,10 @@ module JSONAPIonify::Api
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
+        include JSONAPIonify::Callbacks
+        define_callbacks :request, :list, :create, :read, :update, :delete,
+                         :show, :add, :remove, :replace
         inherited_array_attribute :action_definitions
-
-        extend (Module.new do
-          def inherited(subclass)
-            super(subclass)
-            callbacks.each do |action_name, klass|
-              subclass.callbacks[action_name] = Class.new klass
-            end
-          end
-        end)
-
-        def self.callbacks
-          @callbacks ||= {}
-        end
-
-        delegate :callbacks, to: :class
       end
     end
 
@@ -99,23 +87,12 @@ module JSONAPIonify::Api
         warn 'the `index` action will soon be deprecated, use `list` instead!'
         action_name = :list
       end
-      return base_callbacks.before_request(&block) if action_name == nil
-      callbacks_for(action_name).before_request(&block)
+      return before_request &block if action_name == nil
+      send("before_#{action_name}", &block)
     end
 
-    def base_callbacks
-      callbacks['*'] ||= Class.new SimpleDelegator do
-        include JSONAPIonify::Callbacks
-        define_callbacks :request
-      end
-    end
-
-    def callbacks_for(action_name)
-      callbacks[action_name] ||= Class.new(base_callbacks)
-    end
-
-    def define_action(*args, **options, &block)
-      Action.new(*args, **options, &block).tap do |new_action|
+    def define_action(name, *args, **options, &block)
+      Action.new(name, *args, **options, &block).tap do |new_action|
         action_definitions.delete new_action
         action_definitions << new_action
       end

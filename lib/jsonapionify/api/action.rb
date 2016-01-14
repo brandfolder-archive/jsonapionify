@@ -145,8 +145,7 @@ module JSONAPIonify::Api
       cache_options = {}
       resource.new.instance_eval do
         # Bootstrap the Action
-        callbacks = resource.callbacks_for(action.name).new self
-        context   = ContextDelegate.new(request, self, self.class.context_definitions)
+        context = ContextDelegate.new(request, self, self.class.context_definitions)
 
         # Define Singletons
         define_singleton_method :cache do |key, **options|
@@ -178,12 +177,14 @@ module JSONAPIonify::Api
 
         begin
           # Run Callbacks
-          case callbacks.run_callbacks(:request, context) { errors.present? }
-          when true # Boolean true means errors
-            raise Errors::RequestError
-          when nil # nil means no result, callback failed
-            error_now :internal_server_error
-          end if action.name
+          [:request, action.name].each do |callback|
+            case run_callbacks(callback, context) { errors.present? }
+            when true # Boolean true means errors
+              raise Errors::RequestError
+            when nil # nil means no result, callback failed
+              error_now :internal_server_error
+            end if action.name
+          end
 
           # Start the request
           instance_exec(context, &action.request_block)
