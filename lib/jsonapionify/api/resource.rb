@@ -27,12 +27,12 @@ module JSONAPIonify::Api
       define_singleton_method :generate_id, &block
     end
 
-    def self.example_instance(id=1)
-      id = generate_id(id)
+    def self.example_instance(index=1)
+      id = generate_id(index)
       OpenStruct.new.tap do |instance|
         instance.send "#{id_attribute}=", (id).to_s
         attributes.select(&:read?).each do |attribute|
-          instance.send "#{attribute.name}=", attribute.example(id)
+          instance.send "#{attribute.name}=", attribute.example(id, index)
         end
       end
     end

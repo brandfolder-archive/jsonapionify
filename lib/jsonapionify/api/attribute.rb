@@ -40,10 +40,10 @@ module JSONAPIonify::Api
       !!@write
     end
 
-    def example(id)
+    def example(*args)
       case @example
       when Proc
-        type.dump @example.unstrict.call(id)
+        type.dump @example.unstrict.call(*args)
       when nil
         type.dump type.sample(name)
       else
