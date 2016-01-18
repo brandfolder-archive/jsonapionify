@@ -10,13 +10,13 @@ module JSONAPIonify::Api
     end
 
     def headers
-      Rack::Utils::HeaderHash.new(
-        env.select do |name, _|
-          name.start_with?('HTTP_') && !%w{HTTP_VERSION}.include?(name)
-        end.each_with_object({}) do |(name, value), hash|
-          hash[name[5..-1].gsub('_', '-').downcase] = value
-        end
-      )
+      env_headers = env.select do |name, _|
+        name.start_with?('HTTP_') && !%w{HTTP_VERSION}.include?(name)
+      end.each_with_object({}) do |(name, value), hash|
+        hash[name[5..-1].gsub('_', '-').downcase] = value
+      end
+      env_headers['content-type'] = content_type
+      Rack::Utils::HeaderHash.new(env_headers)
     end
 
     def http_string
