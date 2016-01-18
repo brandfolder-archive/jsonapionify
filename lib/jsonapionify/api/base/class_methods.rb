@@ -35,10 +35,6 @@ module JSONAPIonify::Api
       Action.error(action).call(resource_class, request)
     end
 
-    def documentation_order(resources_in_order)
-      @documentation_order = resources_in_order
-    end
-
     def root_url(request)
       URI.parse(request.root_url).tap do |uri|
         sticky_params = sticky_params(request.params)

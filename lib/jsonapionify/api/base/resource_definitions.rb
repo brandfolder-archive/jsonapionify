@@ -35,5 +35,12 @@ module JSONAPIonify::Api
       resource_definitions[name.to_sym] = block
     end
 
+    def extend_resource(name, &block)
+      old                               = resource_definitions[name.to_sym]
+      resource_definitions[name.to_sym] = proc do
+        [old, block].each { |b| class_eval(&b) }
+      end
+    end
+
   end
 end

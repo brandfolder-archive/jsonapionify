@@ -7,6 +7,7 @@ module JSONAPIonify::Api
           delegate :context, :response_header, :helper, :rescue_from, :error,
                    :pagination, :before, :param, :request_header, :sorting,
                    :sticky_params, :authentication, :on_exception,
+                   :example_id_generator,
                    to: :resource_class
         end
       end

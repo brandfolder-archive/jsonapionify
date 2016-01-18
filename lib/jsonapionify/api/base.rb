@@ -22,6 +22,10 @@ module JSONAPIonify::Api
         const_set(:ResourceBase, Class.new(superclass.resource_class))
         resource_class.set_api(self)
         load_resources
+
+        @title = superclass.instance_variable_get(:@title)
+        @description = superclass.instance_variable_get(:@description)
+        @documentation_order = superclass.instance_variable_get(:@documentation_order)
       end
     end
 

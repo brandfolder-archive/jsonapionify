@@ -9,6 +9,10 @@ module JSONAPIonify::Api
       end
     end
 
+    def documentation_order(resources_in_order)
+      @documentation_order = resources_in_order
+    end
+
     def link(title, href)
       links << Link.new(title, href)
     end
@@ -29,7 +33,7 @@ module JSONAPIonify::Api
 
     def resources_in_order
       indexes = @documentation_order || []
-      resources.sort_by do |resource|
+      resources.sort_by(&:name).sort_by do |resource|
         indexes.map(&:to_s).index(resource.type) || indexes.length
       end
     end

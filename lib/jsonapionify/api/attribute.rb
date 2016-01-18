@@ -1,5 +1,8 @@
+require 'unstrict_proc'
+
 module JSONAPIonify::Api
   class Attribute
+    using UnstrictProc
     attr_reader :name, :type, :description, :read, :write, :required
 
     def initialize(name, type, description, read: true, write: true, required: false, example: nil)
@@ -37,10 +40,10 @@ module JSONAPIonify::Api
       !!@write
     end
 
-    def example
+    def example(id)
       case @example
       when Proc
-        type.dump @example.call
+        type.dump @example.unstrict.call(id)
       when nil
         type.dump type.sample(name)
       else
