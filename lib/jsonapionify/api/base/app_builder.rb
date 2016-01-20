@@ -8,8 +8,8 @@ module JSONAPIonify::Api
       end
     end
 
-    def use(*args)
-      middleware << args
+    def use(*args, &block)
+      middleware << [args, block]
     end
 
     def call(env)
@@ -36,8 +36,8 @@ module JSONAPIonify::Api
           }
         end
         map "/" do
-          api.middleware.each do |args|
-            use *args
+          api.middleware.each do |*args, block|
+            use *args, &block
           end
           run JSONAPIonify::Api::Server.new(api)
         end
