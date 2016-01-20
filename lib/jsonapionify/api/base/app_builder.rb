@@ -36,7 +36,7 @@ module JSONAPIonify::Api
           }
         end
         map "/" do
-          api.middleware.each do |*args, block|
+          api.middleware.each do |args, block|
             use *args, &block
           end
           run JSONAPIonify::Api::Server.new(api)
