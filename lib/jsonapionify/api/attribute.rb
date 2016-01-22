@@ -27,8 +27,6 @@ module JSONAPIonify::Api
     def options_json
       {
         name: name,
-        read: read,
-        write: write,
         required: required
       }
     end

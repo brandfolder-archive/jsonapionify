@@ -70,14 +70,16 @@ module JSONAPIonify::Api
     def process(request)
       path_actions = self.path_actions(request)
       if request.options? && path_actions.present?
+        allow = [*path_actions.map(&:request_method), 'OPTIONS']
+        requests = allow.each_with_object({}) do |method, h|
+          h[method] = options_for_method(method)
+        end
         Action.dummy do
-          response_headers['Allow'] = [*path_actions.map(&:request_method), 'OPTIONS'].join(', ')
+          response_headers['Allow'] = allow.join(', ')
         end.response(status: 200, accept: '*/*') do
           JSONAPIonify.new_object(
             meta: {
-              allow: response_headers['Allow'],
-              resource: self.class.type,
-              attributes: attributes.map(&:options_json)
+              requests: requests
             }
           ).to_json
         end.call(self, request)
@@ -87,6 +89,17 @@ module JSONAPIonify::Api
         relationship(rel.name).process(request)
       else
         no_action_response(request).call(self, request)
+      end
+    end
+
+    def options_for_method(method)
+      case method
+      when 'GET'
+        { attributes: attributes.select(&:read).map(&:options_json) }
+      when 'POST', 'PUT', 'PATCH'
+        { attributes: attributes.select(&:write).map(&:options_json) }
+      else
+        {}
       end
     end
 
