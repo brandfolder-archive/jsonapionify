@@ -45,7 +45,7 @@ module JSONAPIonify::Api
     end
 
     def content_type
-      super.split(';')[0]
+      super&.split(';')&.first
     end
 
     def accept

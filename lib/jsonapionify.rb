@@ -19,8 +19,8 @@ module JSONAPIonify
     Structure::Objects::TopLevel.from_hash(hash)
   end
 
-  def self.new_object
-    Structure::Objects::TopLevel.new
+  def self.new_object(*args)
+    Structure::Objects::TopLevel.new(*args)
   end
 
   def self.cache(store, *args)

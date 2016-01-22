@@ -24,6 +24,15 @@ module JSONAPIonify::Api
         self.name == other.name
     end
 
+    def options_json
+      {
+        name: name,
+        read: read,
+        write: write,
+        required: required
+      }
+    end
+
     def required?
       !!@required
     end

@@ -71,8 +71,16 @@ module JSONAPIonify::Api
       path_actions = self.path_actions(request)
       if request.options? && path_actions.present?
         Action.dummy do
-          response_headers['Allow'] = path_actions.map(&:request_method).join(', ')
-        end.response(status: 200, accept: '*/*').call(self, request)
+          response_headers['Allow'] = [*path_actions.map(&:request_method), 'OPTIONS'].join(', ')
+        end.response(status: 200, accept: '*/*') do
+          JSONAPIonify.new_object(
+            meta: {
+              allow: response_headers['Allow'],
+              resource: self.class.type,
+              attributes: attributes.map(&:options_json)
+            }
+          ).to_json
+        end.call(self, request)
       elsif (action = find_supported_action(request))
         action.call(self, request)
       elsif (rel = find_supported_relationship(request))
