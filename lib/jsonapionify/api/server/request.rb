@@ -44,6 +44,10 @@ module JSONAPIonify::Api
       body.rewind
     end
 
+    def content_type
+      super.split(';')[0]
+    end
+
     def accept
       accepts = (headers['accept'] || '*/*').split(',')
       accepts.to_a.sort_by! do |accept|
