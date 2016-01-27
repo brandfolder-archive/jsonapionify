@@ -53,7 +53,7 @@ module JSONAPIonify::Api
               else
                 should_error = true
                 error :sort_parameter_invalid do
-                  detail "resource `#{self.class.type}` does not have field: #{field}"
+                  detail "resource `#{context.resource.class.type}` does not have field: #{field}"
                 end
               end
             end
@@ -64,21 +64,31 @@ module JSONAPIonify::Api
       end
     end
 
-    def sorting(strategy = nil, &block)
+    def default_sort(options)
+      context(:default_sort, readonly: true) do
+        case options
+        when Hash, Array
+          options.map do |k, v|
+            v.to_s.downcase == 'asc' ? "-#{k}" : k.to_s
+          end.join(',')
+        else
+          options.to_s
+        end
+      end
+    end
+
+    def sorting(strategy = nil, default: nil, &block)
+      default_sort default
       param :sort
       context :sorted_collection do |context|
+        context.params['sort'] ||= context.default_sort
+        context.reset(:sort_params)
         unless (actual_block = block)
           actual_strategy = strategy || self.class.default_strategy
           actual_block    = actual_strategy ? STRATEGIES[actual_strategy] : DEFAULT
         end
         Object.new.instance_exec(context.collection, context.sort_params, &actual_block)
       end
-    end
-
-    private
-
-    def default_sort
-      api.resource_definitions.keys.each_with_object({}) { |type, h| h[type] = [] }
     end
 
   end
