@@ -36,6 +36,7 @@ module JSONAPIonify::Api
           }
         end
         map "/" do
+          use Rack::MethodOverride
           api.middleware.each do |args, block|
             use *args, &block
           end
