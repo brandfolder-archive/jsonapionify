@@ -197,7 +197,7 @@ module JSONAPIonify::Api
               cache_options[:key],
               [status, headers, body.body],
               **cache_options.except(:key)
-            ) if request.get?
+            ) if request.get? && cache_options.present?
           end
         rescue Errors::RequestError
           error_response
