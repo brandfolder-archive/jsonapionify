@@ -258,6 +258,13 @@ module JSONAPIonify
         end
       end
 
+      describe 'invalid deep parameter' do
+        it 'should error' do
+          get "/things?badparam[foo]=1"
+          expect(last_response.status).to eq 400
+        end
+      end
+
       describe 'require parameters' do
         it 'should error when missing' do
           get "/places"

@@ -19,9 +19,13 @@ module JSONAPIonify::Api
 
           # Check for validity
           context.request.params.each do |k, v|
-            unless v.is_a?(Hash) || ParamOptions.valid?(k)
+            keypath = ParamOptions.hash_to_keypaths(k => v)[0]
+            reserved = ParamOptions.reserved?(k)
+            allowed = params.keys.include? keypath
+            valid = ParamOptions.valid?(k) || v.is_a?(Hash)
+            unless reserved || (allowed && valid)
               should_error = true
-              error :parameter_invalid, k
+              error :parameter_invalid, ParamOptions.keypath_to_string(*keypath)
             end
           end
 

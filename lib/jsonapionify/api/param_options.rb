@@ -2,8 +2,11 @@ module JSONAPIonify::Api
   class ParamOptions
     extend JSONAPIonify::Structure::Helpers::MemberNames
 
+    def self.reserved?(value)
+      %w{sort include}.include? value
+    end
+
     def self.valid?(value)
-      return true if %w{sort include}.include? value
       super(value) && value =~ /[^\u0061-\u007A]/
     end
 
