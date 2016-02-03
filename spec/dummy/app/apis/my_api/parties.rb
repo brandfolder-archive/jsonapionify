@@ -7,4 +7,5 @@ MyApi.define_resource :parties do
 
   request_header 'Required-Header', required: true, actions: :list
 
+  list
 end

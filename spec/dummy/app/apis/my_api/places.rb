@@ -7,4 +7,5 @@ MyApi.define_resource :places do
 
   param :'the-foo', required: true, actions: :list
 
+  list
 end
