@@ -5,8 +5,8 @@ module JSONAPIonify::Api
     attr_reader :status, :headers, :body
 
     def initialize(status, headers, body)
-      @status = status
-      @body   = body.is_a?(Rack::BodyProxy) ? body.body : body
+      @status  = status
+      @body    = body.is_a?(Rack::BodyProxy) ? body.body : body
       @headers = Rack::Utils::HeaderHash.new headers
     end
 

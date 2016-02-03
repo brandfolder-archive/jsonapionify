@@ -322,7 +322,7 @@ module JSONAPIonify
         context 'supported content type' do
           it 'should not fail' do
             content_type 'application/vnd.api+json'
-            body = { data: { type: "things", attributes: { name: "thing" }}}
+            body = { data: { type: "things", attributes: { name: "thing" } } }
             post "/things", json(body)
             expect(last_response.status).to eq 201
           end
@@ -331,7 +331,7 @@ module JSONAPIonify
         context 'unsupported content type' do
           it 'should fail' do
             content_type 'text/plain'
-            body = { data: { type: "things", attributes: { name: "thing" }}}
+            body = { data: { type: "things", attributes: { name: "thing" } } }
             post "/things", json(body)
             expect(last_response.status).to eq 415
           end

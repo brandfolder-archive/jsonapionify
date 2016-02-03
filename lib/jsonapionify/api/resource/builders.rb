@@ -8,8 +8,8 @@ module JSONAPIonify::Api
         resource_url = build_url(request, instance)
         id           = build_id(instance)
         JSONAPIonify::Structure::Objects::Resource.new.tap do |resource|
-          resource[:id]            = id
-          resource[:type]          = type
+          resource[:id]   = id
+          resource[:type] = type
 
           resource[:attributes]    = fields[type.to_sym].each_with_object(JSONAPIonify::Structure::Objects::Attributes.new) do |member, attributes|
             attributes[member.to_sym] = instance.public_send(member)

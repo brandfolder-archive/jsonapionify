@@ -42,7 +42,7 @@ module JSONAPIonify
           evaluator.instance_exec(*args, &block) if block
         end
         unless ENV['RACK_ENV'] == 'production'
-          error[:meta]   ||= {}
+          error[:meta]             ||= {}
           error[:meta][:backtrace] = backtrace
         end
       end

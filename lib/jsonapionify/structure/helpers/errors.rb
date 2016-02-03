@@ -48,7 +48,7 @@ module JSONAPIonify::Structure
           entity = key.present? ? key : 'object'
           messages.each do |message|
             message = "#{entity} #{message}".chomp('.') << '.'
-            object = {
+            object  = {
               source: {
                 pointer: pointer
               },

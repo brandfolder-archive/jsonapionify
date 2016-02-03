@@ -11,7 +11,7 @@ module JSONAPIonify::Structure::Objects
     # API version supported. This object **MAY** also contain a `meta` member, whose
     # value is a [meta] object that contains non-standard meta-information.
     context 'may contain' do
-      schema   = {
+      schema = {
         version: "1.0.0",
         meta:    {}
       }

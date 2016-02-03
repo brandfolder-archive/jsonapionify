@@ -10,7 +10,7 @@ module JSONAPIonify::Structure::Objects
     #
     # An error object **MAY** have the following members:
     context 'may contain' do
-      schema   = {
+      schema = {
         id:     "1", # a unique identifier for this particular occurrence of the problem.
         links:  {}, # a links object
         status: "OK", # the HTTP status code applicable to this problem, expressed as a string value.

@@ -30,7 +30,7 @@ class CodeStatistics #:nodoc:
 
   private
   def calculate_statistics
-    Hash[@pairs.map{|pair| [pair.first, calculate_directory_statistics(pair.last)]}]
+    Hash[@pairs.map { |pair| [pair.first, calculate_directory_statistics(pair.last)] }]
   end
 
   def calculate_directory_statistics(directory, pattern = /.*\.(rb|js|coffee|rake)$/)
@@ -78,7 +78,7 @@ class CodeStatistics #:nodoc:
   end
 
   def print_line(name, statistics)
-    m_over_c   = (statistics.methods / statistics.classes) rescue m_over_c = 0
+    m_over_c = (statistics.methods / statistics.classes) rescue m_over_c = 0
     loc_over_m = (statistics.code_lines / statistics.methods) - 2 rescue loc_over_m = 0
 
     puts "| #{name.ljust(20)} " \

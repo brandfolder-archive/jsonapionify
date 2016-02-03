@@ -483,19 +483,19 @@
       $e = $(e);
       switch (e.tagName) {
         case 'H2':
-          nav[key] = {};
-          nav[key]['_element'] = $e;
-          currentH2 = nav[key];
+          nav[ key ] = {};
+          nav[ key ][ '_element' ] = $e;
+          currentH2 = nav[ key ];
           break;
         case 'H3':
-          currentH2[key] = {};
-          currentH2[key]['_element'] = $e;
-          currentH3 = currentH2[key];
+          currentH2[ key ] = {};
+          currentH2[ key ][ '_element' ] = $e;
+          currentH3 = currentH2[ key ];
           break;
         case 'H4':
-          currentH3[key] = {};
-          currentH3[key]['_element'] = $e;
-          currentH4 = currentH3[key];
+          currentH3[ key ] = {};
+          currentH3[ key ][ '_element' ] = $e;
+          currentH4 = currentH3[ key ];
           break;
       }
     });
@@ -516,7 +516,7 @@
         $e.attr('id', id);
       }
 
-      var $listItem = $('<li class="nav-' + $e[0].tagName + '"></li>');
+      var $listItem = $('<li class="nav-' + $e[ 0 ].tagName + '"></li>');
       $listItem.append($('<a href="#' + id + '">' + $e.text() + '</a>'));
       var $subList = $('<ul class="nav"></ul>');
       buildNavigation(sublist, $subList);
@@ -562,8 +562,8 @@
           window.location.hash = hash;
       });
     } else {
-      $('html, body').animate({scrollTop: 0}, 'slow', function(){
-       sidebarTop();
+      $('html, body').animate({ scrollTop: 0 }, 'slow', function () {
+        sidebarTop();
       });
 
     }

@@ -8,16 +8,16 @@ module JSONAPIonify
     using JSONAPIonify::IndentedString
     RENDERER = Redcarpet::Markdown.new(
       Redcarpet::Render::HTML,
-      autolink: true,
-      tables: true,
-      fenced_code_blocks: true,
-      strikethrough: true,
+      autolink:                     true,
+      tables:                       true,
+      fenced_code_blocks:           true,
+      strikethrough:                true,
       disable_indented_code_blocks: true,
-      no_intra_emphasis: true,
-      space_after_headers: true,
-      underline: true,
-      highlight: true,
-      quote: true
+      no_intra_emphasis:            true,
+      space_after_headers:          true,
+      underline:                    true,
+      highlight:                    true,
+      quote:                        true
     )
 
     def self.render_markdown(string)

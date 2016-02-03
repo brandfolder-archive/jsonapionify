@@ -4,7 +4,7 @@ module JSONAPIonify::Structure::Collections
     describe ".value_is" do
       it 'should set any new value added to the array as the referenced class' do
         object_klass = Class.new(JSONAPIonify::Structure::Objects::Base)
-        klass = Class.new(described_class) do
+        klass        = Class.new(described_class) do
           value_is object_klass
         end
         expect(klass.new([{}, {}])).to all be_a object_klass

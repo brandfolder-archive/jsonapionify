@@ -10,7 +10,7 @@ module JSONAPIonify::Structure::Objects
     #   the error.
     describe 'may contain' do
       schema = {
-        pointer: 'data/1/id',
+        pointer:   'data/1/id',
         parameter: 'something'
       }
       it_should_behave_like 'valid jsonapi object given schema', schema

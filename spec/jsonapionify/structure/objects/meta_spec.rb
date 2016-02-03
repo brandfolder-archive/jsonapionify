@@ -10,7 +10,7 @@ module JSONAPIonify::Structure::Objects
     #
     # Any members **MAY** be specified within `meta` objects.
     context 'may contain any member' do
-      schema   = {
+      schema = {
         a: 1,
         b: {},
         c: [],

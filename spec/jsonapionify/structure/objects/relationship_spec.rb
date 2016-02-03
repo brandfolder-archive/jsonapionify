@@ -10,8 +10,8 @@ module JSONAPIonify::Structure::Objects
     describe 'must contain one of' do
       schema = {
         links: {},
-        data: nil,
-        meta: {}
+        data:  nil,
+        meta:  {}
       }
       schema.each do |key, value|
         data = { key => value }

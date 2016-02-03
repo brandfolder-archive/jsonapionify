@@ -7,8 +7,8 @@ module JSONAPIonify::Api
     end
 
     def initialize(request, instance, definitions)
-      memo     = {}
-      delegate = self
+      memo         = {}
+      delegate     = self
       @definitions = definitions
 
       define_singleton_method :request do

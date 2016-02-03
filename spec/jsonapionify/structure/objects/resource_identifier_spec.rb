@@ -33,7 +33,7 @@ module JSONAPIonify::Structure::Objects
     # A "resource identifier object" **MAY** also include a `meta` member, whose value is a meta object that
     # contains non-standard meta-information.
     describe 'may contain' do
-      schema   = {
+      schema = {
         meta: {}
       }
       it_should_behave_like 'valid jsonapi object given schema', schema, { id: "1", type: "stuff" }

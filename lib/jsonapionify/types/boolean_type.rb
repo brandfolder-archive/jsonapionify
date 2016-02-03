@@ -4,7 +4,7 @@ module JSONAPIonify::Types
     def load(value)
 
     end
-    
+
     def dump(value)
       case value
       when true, false

@@ -70,7 +70,7 @@ module JSONAPIonify::Api
     def process(request)
       path_actions = self.path_actions(request)
       if request.options? && path_actions.present?
-        allow = [*path_actions.map(&:request_method), 'OPTIONS']
+        allow    = [*path_actions.map(&:request_method), 'OPTIONS']
         requests = allow.each_with_object({}) do |method, h|
           h[method] = options_for_method(method)
         end

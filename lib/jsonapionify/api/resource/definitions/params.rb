@@ -9,7 +9,7 @@ module JSONAPIonify::Api
         context(:params, readonly: true) do |context|
           should_error = false
 
-          params       = self.class.param_definitions.select do |_, v|
+          params = self.class.param_definitions.select do |_, v|
             v.actions.blank? || v.actions.include?(action_name)
           end
 

@@ -15,7 +15,7 @@ module JSONAPIonify
         klass.before_default do
           false
         end
-        expect(klass.new.run_callbacks(:default){ "FOO" }).to_not eq "FOO"
+        expect(klass.new.run_callbacks(:default) { "FOO" }).to_not eq "FOO"
       end
     end
 

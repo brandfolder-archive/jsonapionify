@@ -26,7 +26,7 @@ module JSONAPIonify::Structure::Objects
     end
 
     describe 'may contain' do
-      schema   = {
+      schema = {
         href: 'http://google.com',
         meta: {}
       }
