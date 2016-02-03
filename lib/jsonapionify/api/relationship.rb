@@ -30,6 +30,10 @@ module JSONAPIonify::Api
         owner_context_proc.call(context.request)
       end
 
+      context(:owner) do |context|
+        context.owner_context.instance
+      end
+
       context(:id) do
         nil
       end
