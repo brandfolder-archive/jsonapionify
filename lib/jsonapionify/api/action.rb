@@ -150,14 +150,13 @@ module JSONAPIonify::Api
         # Define Singletons
         define_singleton_method :cache do |key, **options|
           cache_options.merge! options
-          cache_options[:key] = [*{
+          context.meta[:cache_key] = cache_options[:key] = Base64.urlsafe_encode64({
             dsl:          JSONAPIonify.digest,
             api:          self.class.api.signature,
             path:         request.path,
-            content_type: request.content_type || '*',
-            accept:       request.accept.join(','),
-            params:       context.params.to_param
-          }.map { |kv| kv.join(':') }, key].join('|')
+            accept:       request.accept,
+            params:       context.params
+          }.to_json)
           if self.class.cache_store.exist?(cache_options[:key])
             raise Errors::CacheHit, cache_options[:key]
           end
