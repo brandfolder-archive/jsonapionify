@@ -76,9 +76,10 @@ module JSONAPIonify::Api
         end
         Action.dummy do
           response_headers['Allow'] = allow.join(', ')
-        end.response(status: 200, accept: '*/*') do
+        end.response(status: 200, accept: 'application/vnd.api+json') do
           JSONAPIonify.new_object(
             meta: {
+              type: self.class.type,
               requests: requests
             }
           ).to_json
