@@ -13,6 +13,7 @@ module JSONAPIonify
             after:  "__#{name}_after_callback_chain"
           }
           define_method chains[:main] do |*args, &block|
+            block ||= proc {}
             if send(chains[:before], *args) != false
               value = instance_exec(*args, &block)
               value if send(chains[:after], *args) != false

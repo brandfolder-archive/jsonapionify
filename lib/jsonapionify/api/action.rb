@@ -149,14 +149,24 @@ module JSONAPIonify::Api
 
         # Define Singletons
         define_singleton_method :cache do |key, **options|
+          raise Errors::DoubleCacheError, "Cache was already called for this action" if @called
+          @called = true
           cache_options.merge! options
-          context.meta[:cache_key] = cache_options[:key] = Base64.urlsafe_encode64({
-            dsl:          JSONAPIonify.digest,
-            api:          self.class.api.signature,
-            path:         request.path,
-            accept:       request.accept,
-            params:       context.params
-          }.to_json)
+
+          # Build the cache key, and obscure it.
+          context.meta[:cache_key] =
+            cache_options[:key] =
+              Base64.urlsafe_encode64(
+                {
+                  dsl:    JSONAPIonify.digest,
+                  api:    self.class.api.signature,
+                  path:   request.path,
+                  accept: request.accept,
+                  params: context.params,
+                  key:    key,
+                }.to_json
+              )
+          # If the cache exists, then fail to cache miss
           if self.class.cache_store.exist?(cache_options[:key])
             raise Errors::CacheHit, cache_options[:key]
           end

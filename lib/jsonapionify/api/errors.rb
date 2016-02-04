@@ -1,8 +1,10 @@
 module JSONAPIonify::Api
   module Errors
-    ResourceNotFound     = Class.new StandardError
-    RelationshipNotFound = Class.new StandardError
-    RequestError         = Class.new StandardError
-    CacheHit             = Class.new StandardError
+    JSONAPIonifyError    = Class.new StandardError
+    ResourceNotFound     = Class.new JSONAPIonifyError
+    RelationshipNotFound = Class.new JSONAPIonifyError
+    RequestError         = Class.new JSONAPIonifyError
+    CacheHit             = Class.new JSONAPIonifyError
+    DoubleCacheError     = Class.new JSONAPIonifyError
   end
 end
