@@ -19,55 +19,51 @@ module JSONAPIonify::Api
 
     end
 
-    STRATEGIES         = {
-      active_record: proc do |collection, params, links|
-        page_number = Integer(params['number'] || 1)
-        page_number = 1 if page_number < 1
-        page_size   = Integer(params['size'] || 50)
-        raise PaginationError if page_size > 250
-        first_page = 1
-        last_page  = (collection.count / page_size).ceil
-        last_page  = 1 if last_page == 0
+    STRATEGIES                         = {}
+    STRATEGIES[ActiveRecord::Relation] = proc do |collection, params, links|
+      page_number = Integer(params['number'] || 1)
+      page_number = 1 if page_number < 1
+      page_size   = Integer(params['size'] || 50)
+      raise PaginationError if page_size > 250
+      first_page = 1
+      last_page  = (collection.count / page_size).ceil
+      last_page  = 1 if last_page == 0
 
-        links.first number: 1 unless page_number == first_page
-        links.last number: last_page unless page_number == last_page
-        links.prev number: page_number - 1 unless page_number <= first_page
-        links.next number: page_number + 1 unless page_number >= last_page
+      links.first number: 1 unless page_number == first_page
+      links.last number: last_page unless page_number == last_page
+      links.prev number: page_number - 1 unless page_number <= first_page
+      links.next number: page_number + 1 unless page_number >= last_page
 
-        slice_start = (page_number - 1) * page_size
-        collection.limit(page_size).offset(slice_start)
-      end,
-      enumerable:    proc do |collection, params, links|
-        page_number = Integer(params['number'] || 1)
-        page_number = 1 if page_number < 1
-        page_size   = Integer(params['size'] || 50)
-        first_page  = 1
-        last_page   = (collection.count / page_size).ceil
-        last_page   = 1 if last_page == 0
+      slice_start = (page_number - 1) * page_size
+      collection.limit(page_size).offset(slice_start)
+    end if defined? ActiveRecord
 
-        links.first number: 1 unless page_number == first_page
-        links.last number: last_page unless page_number == last_page
-        links.prev number: page_number - 1 unless page_number <= first_page
-        links.next number: page_number + 1 unless page_number >= last_page
+    STRATEGIES[Enumerable] = proc do |collection, params, links|
+      page_number = Integer(params['number'] || 1)
+      page_number = 1 if page_number < 1
+      page_size   = Integer(params['size'] || 50)
+      first_page  = 1
+      last_page   = (collection.count / page_size).ceil
+      last_page   = 1 if last_page == 0
 
-        slice_start = (page_number - 1) * page_size
+      links.first number: 1 unless page_number == first_page
+      links.last number: last_page unless page_number == last_page
+      links.prev number: page_number - 1 unless page_number <= first_page
+      links.next number: page_number + 1 unless page_number >= last_page
 
-        collection.slice(slice_start, page_size)
-      end
-    }
-    STRATEGIES[:array] = STRATEGIES[:enumerable]
-    DEFAULT            = STRATEGIES[:enumerable]
+      slice_start = (page_number - 1) * page_size
 
-    def pagination(*params, strategy: nil, &block)
+      collection.slice(slice_start, page_size)
+    end
+
+    def pagination(*params, &block)
       params = %i{number size} unless block
       params.each { |p| param :page, p, actions: %i{list} }
       context :paginated_collection do |context|
-        unless (actual_block = block)
-          actual_strategy = strategy || self.class.default_strategy
-          actual_block    = actual_strategy ? STRATEGIES[actual_strategy] : DEFAULT
-        end
+        collection   = context.respond_to?(:sorted_collection) ? context.sorted_collection : context.collection
+        actual_block = block || STRATEGIES.find { |mod, _| collection.class <= mod }&.last
         Object.new.instance_exec(
-          context.respond_to?(:sorted_collection) ? context.sorted_collection : context.collection,
+          collection,
           context.request.params['page'] || {},
           PaginationLinksDelegate.new(context.request, context.links),
           &actual_block

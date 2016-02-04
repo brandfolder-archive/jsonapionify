@@ -17,27 +17,29 @@ module JSONAPIonify::Api
 
     end
 
-    STRATEGIES         = {
-      active_record: proc { |collection, fields|
-        order_hash = fields.each_with_object({}) do |field, hash|
-          hash[field.name] = field.order
+    STRATEGIES                         = {}
+
+    # Strategy for ActiveRecord
+    STRATEGIES[ActiveRecord::Relation] = proc do |collection, fields|
+      order_hash = fields.each_with_object({}) do |field, hash|
+        hash[field.name] = field.order
+      end
+      collection.order order_hash
+    end if defined? ActiveRecord
+
+    # Strategy for most enumerable things
+    STRATEGIES[Enumerable]             = proc do |collection, fields|
+      fields.reverse.reduce(collection) do |o, field|
+        result = o.sort_by(&field.name)
+        case field.order
+        when :asc
+          result
+        when :desc
+          result.reverse
         end
-        collection.order order_hash
-      },
-      enumerable:    proc { |collection, fields|
-        fields.reverse.reduce(collection) do |o, field|
-          result = o.sort_by(&field.name)
-          case field.order
-          when :asc
-            result
-          when :desc
-            result.reverse
-          end
-        end
-      }
-    }
-    STRATEGIES[:array] = STRATEGIES[:enumerable]
-    DEFAULT            = STRATEGIES[:enumerable]
+
+      end
+    end
 
     def self.extended(klass)
       klass.class_eval do
@@ -77,16 +79,13 @@ module JSONAPIonify::Api
       end
     end
 
-    def sorting(strategy = nil, default: nil, &block)
+    def sorting(default: nil, &block)
       default_sort default
       param :sort
       context :sorted_collection do |context|
+        actual_block           = block || STRATEGIES.find { |mod, _| context.collection.class <= mod }&.last
         context.params['sort'] ||= context.default_sort
         context.reset(:sort_params)
-        unless (actual_block = block)
-          actual_strategy = strategy || self.class.default_strategy
-          actual_block    = actual_strategy ? STRATEGIES[actual_strategy] : DEFAULT
-        end
         Object.new.instance_exec(context.collection, context.sort_params, &actual_block)
       end
     end
