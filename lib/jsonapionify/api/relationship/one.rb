@@ -3,9 +3,10 @@ module JSONAPIonify::Api
 
     prepend_class do
       rel = self.rel
-      remove_action :list, :create
+      remove_action :list
+
       class << self
-        undef_method :list, :create
+        undef_method :list
       end
 
       define_singleton_method(:show) do |**options, &block|
