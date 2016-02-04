@@ -4,11 +4,13 @@ module JSONAPIonify::Api
   module Base::ClassMethods
 
     def self.extended(klass)
-      klass.class_attribute :load_path
+      klass.class_attribute :load_path, :load_file
     end
 
     def resource_files
-      Dir.glob File.join(load_path, '**/*.rb')
+      files = Dir.glob(File.join(load_path, '**/*.rb'))
+      files << load_file
+      files.concat(superclass < JSONAPIonify::Api::Base ? superclass.resource_files : []).sort
     end
 
     def resource_signature

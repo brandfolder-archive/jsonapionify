@@ -18,6 +18,7 @@ module JSONAPIonify::Api
         dir            = File.expand_path File.dirname(file)
         basename       = File.basename(file, File.extname(file))
         self.load_path = File.join(dir, basename)
+        self.load_file = file
 
         const_set(:ResourceBase, Class.new(superclass.resource_class))
         resource_class.set_api(self)
