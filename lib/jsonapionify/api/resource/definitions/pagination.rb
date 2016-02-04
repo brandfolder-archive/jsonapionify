@@ -19,41 +19,44 @@ module JSONAPIonify::Api
 
     end
 
-    STRATEGIES                         = {}
-    STRATEGIES[ActiveRecord::Relation] = proc do |collection, params, links|
-      page_number = Integer(params['number'] || 1)
-      page_number = 1 if page_number < 1
-      page_size   = Integer(params['size'] || 50)
-      raise PaginationError if page_size > 250
-      first_page = 1
-      last_page  = (collection.count / page_size).ceil
-      last_page  = 1 if last_page == 0
+    def self.strategies
+      Hash.new.tap do |strategies|
+        strategies[ActiveRecord::Relation] = proc do |collection, params, links|
+          page_number = Integer(params['number'] || 1)
+          page_number = 1 if page_number < 1
+          page_size   = Integer(params['size'] || 50)
+          raise PaginationError if page_size > 250
+          first_page = 1
+          last_page  = (collection.count / page_size).ceil
+          last_page  = 1 if last_page == 0
 
-      links.first number: 1 unless page_number == first_page
-      links.last number: last_page unless page_number == last_page
-      links.prev number: page_number - 1 unless page_number <= first_page
-      links.next number: page_number + 1 unless page_number >= last_page
+          links.first number: 1 unless page_number == first_page
+          links.last number: last_page unless page_number == last_page
+          links.prev number: page_number - 1 unless page_number <= first_page
+          links.next number: page_number + 1 unless page_number >= last_page
 
-      slice_start = (page_number - 1) * page_size
-      collection.limit(page_size).offset(slice_start)
-    end if defined? ActiveRecord
+          slice_start = (page_number - 1) * page_size
+          collection.limit(page_size).offset(slice_start)
+        end if defined? ActiveRecord
 
-    STRATEGIES[Enumerable] = proc do |collection, params, links|
-      page_number = Integer(params['number'] || 1)
-      page_number = 1 if page_number < 1
-      page_size   = Integer(params['size'] || 50)
-      first_page  = 1
-      last_page   = (collection.count / page_size).ceil
-      last_page   = 1 if last_page == 0
+        strategies[Enumerable] = proc do |collection, params, links|
+          page_number = Integer(params['number'] || 1)
+          page_number = 1 if page_number < 1
+          page_size   = Integer(params['size'] || 50)
+          first_page  = 1
+          last_page   = (collection.count / page_size).ceil
+          last_page   = 1 if last_page == 0
 
-      links.first number: 1 unless page_number == first_page
-      links.last number: last_page unless page_number == last_page
-      links.prev number: page_number - 1 unless page_number <= first_page
-      links.next number: page_number + 1 unless page_number >= last_page
+          links.first number: 1 unless page_number == first_page
+          links.last number: last_page unless page_number == last_page
+          links.prev number: page_number - 1 unless page_number <= first_page
+          links.next number: page_number + 1 unless page_number >= last_page
 
-      slice_start = (page_number - 1) * page_size
+          slice_start = (page_number - 1) * page_size
 
-      collection.slice(slice_start, page_size)
+          collection.slice(slice_start, page_size)
+        end
+      end
     end
 
     def pagination(*params, &block)
@@ -61,7 +64,7 @@ module JSONAPIonify::Api
       params.each { |p| param :page, p, actions: %i{list} }
       context :paginated_collection do |context|
         collection   = context.respond_to?(:sorted_collection) ? context.sorted_collection : context.collection
-        actual_block = block || STRATEGIES.find { |mod, _| collection.class <= mod }&.last
+        actual_block = block || Resource::Definitions::Pagination.strategies.find { |mod, _| context.collection.class <= mod }&.last
         Object.new.instance_exec(
           collection,
           context.request.params['page'] || {},

@@ -17,33 +17,34 @@ module JSONAPIonify::Api
 
     end
 
-    STRATEGIES                         = {}
+    def self.strategies
+      Hash.new.tap do |strategies|
+        # Strategy for ActiveRecord
+        strategies[ActiveRecord::Relation] = proc do |collection, fields|
+          order_hash = fields.each_with_object({}) do |field, hash|
+            hash[field.name] = field.order
+          end
+          collection.order order_hash
+        end if defined? ActiveRecord
 
-    # Strategy for ActiveRecord
-    STRATEGIES[ActiveRecord::Relation] = proc do |collection, fields|
-      order_hash = fields.each_with_object({}) do |field, hash|
-        hash[field.name] = field.order
-      end
-      collection.order order_hash
-    end if defined? ActiveRecord
+        # Strategy for most enumerable things
+        strategies[Enumerable]             = proc do |collection, fields|
+          fields.reverse.reduce(collection) do |o, field|
+            result = o.sort_by(&field.name)
+            case field.order
+            when :asc
+              result
+            when :desc
+              result.reverse
+            end
 
-    # Strategy for most enumerable things
-    STRATEGIES[Enumerable]             = proc do |collection, fields|
-      fields.reverse.reduce(collection) do |o, field|
-        result = o.sort_by(&field.name)
-        case field.order
-        when :asc
-          result
-        when :desc
-          result.reverse
+          end
         end
-
       end
     end
 
     def self.extended(klass)
       klass.class_eval do
-
         context(:sort_params, readonly: true) do |context|
           should_error = false
           fields       = context.params['sort'].to_s.split(',')
@@ -83,7 +84,7 @@ module JSONAPIonify::Api
       default_sort default
       param :sort
       context :sorted_collection do |context|
-        actual_block           = block || STRATEGIES.find { |mod, _| context.collection.class <= mod }&.last
+        actual_block           = block || Resource::Definitions::Sorting.strategies.find { |mod, _| context.collection.class <= mod }&.last
         context.params['sort'] ||= context.default_sort
         context.reset(:sort_params)
         Object.new.instance_exec(context.collection, context.sort_params, &actual_block)
