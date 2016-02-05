@@ -17,6 +17,6 @@ class MyApi < JSONAPIonify::Api::Base
     # Before actions here
   end
 
-  pagination
-  sorting
+  enable_pagination
+  enable_sorting
 end

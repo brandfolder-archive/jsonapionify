@@ -19,27 +19,15 @@ module JSONAPIonify::Api
 
     end
 
-    def self.strategies
-      Hash.new.tap do |strategies|
-        strategies[ActiveRecord::Relation] = proc do |collection, params, links|
-          page_number = Integer(params['number'] || 1)
-          page_number = 1 if page_number < 1
-          page_size   = Integer(params['size'] || 50)
-          raise PaginationError if page_size > 250
-          first_page = 1
-          last_page  = (collection.count / page_size).ceil
-          last_page  = 1 if last_page == 0
+    def self.extended(klass)
+      klass.class_eval do
+        inherited_hash_attribute :pagination_strategies
 
-          links.first number: 1 unless page_number == first_page
-          links.last number: last_page unless page_number == last_page
-          links.prev number: page_number - 1 unless page_number <= first_page
-          links.next number: page_number + 1 unless page_number >= last_page
+        define_pagination_strategy 'Object' do |collection|
+          collection
+        end
 
-          slice_start = (page_number - 1) * page_size
-          collection.limit(page_size).offset(slice_start)
-        end if defined? ActiveRecord
-
-        strategies[Enumerable] = proc do |collection, params, links|
+        define_pagination_strategy 'Enumerable' do |collection, params, links|
           page_number = Integer(params['number'] || 1)
           page_number = 1 if page_number < 1
           page_size   = Integer(params['size'] || 50)
@@ -56,20 +44,43 @@ module JSONAPIonify::Api
 
           collection.slice(slice_start, page_size)
         end
+
+        define_pagination_strategy 'ActiveRecord::Relation' do |collection, params, links|
+          page_number = Integer(params['number'] || 1)
+          page_number = 1 if page_number < 1
+          page_size   = Integer(params['size'] || 50)
+          first_page  = 1
+          last_page   = (collection.count / page_size).ceil
+          last_page   = 1 if last_page == 0
+
+          links.first number: 1 unless page_number == first_page
+          links.last number: last_page unless page_number == last_page
+          links.prev number: page_number - 1 unless page_number <= first_page
+          links.next number: page_number + 1 unless page_number >= last_page
+
+          slice_start = (page_number - 1) * page_size
+          collection.limit(page_size).offset(slice_start)
+        end
       end
     end
 
-    def pagination(*params, &block)
-      params = %i{number size} unless block
-      params.each { |p| param :page, p, actions: %i{list} }
+    def define_pagination_strategy(mod, &block)
+      pagination_strategies[mod.to_s] = block
+    end
+
+    def enable_pagination
+      %i{number size}.each { |p| param :page, p, actions: %i{list} }
       context :paginated_collection do |context|
-        collection   = context.respond_to?(:sorted_collection) ? context.sorted_collection : context.collection
-        actual_block = block || Resource::Definitions::Pagination.strategies.find { |mod, _| context.collection.class <= mod }&.last
+        collection = context.respond_to?(:sorted_collection) ? context.sorted_collection : context.collection
+        _, block   = pagination_strategies.to_a.reverse.to_h.find do |mod, _|
+          Object.const_defined?(mod, false) && context.collection.class <= Object.const_get(mod, false)
+        end
+
         Object.new.instance_exec(
           collection,
           context.request.params['page'] || {},
           PaginationLinksDelegate.new(context.request, context.links),
-          &actual_block
+          &block
         )
       end
     end
