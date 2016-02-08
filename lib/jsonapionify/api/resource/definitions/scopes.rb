@@ -13,11 +13,11 @@ module JSONAPIonify::Api
     alias_method :resource_class, :scope
 
     def instance(&block)
-      define_singleton_method(:find_instance) do |id|
-        Object.new.instance_exec(current_scope, id, &block)
+      define_singleton_method(:find_instance) do |id, context = nil|
+        Object.new.instance_exec(current_scope, id, context, &block)
       end
       context :instance do |context|
-        self.class.find_instance(context.id)
+        self.class.find_instance(context.id, context)
       end
     end
 
