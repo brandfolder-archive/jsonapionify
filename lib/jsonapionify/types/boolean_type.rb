@@ -2,7 +2,7 @@ module JSONAPIonify::Types
   class BooleanType < BaseType
 
     def load(value)
-
+      value
     end
 
     def dump(value)
