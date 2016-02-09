@@ -39,5 +39,8 @@ module JSONAPIonify::Api
 
     example_id_generator { |val| val }
 
+    def action_name
+    end
+
   end
 end
