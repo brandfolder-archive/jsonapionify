@@ -4,7 +4,11 @@
 [![Code Climate](https://codeclimate.com/repos/5672446f137f95309c0067c6/badges/a369f0a182ce111c8fcd/gpa.svg)](https://codeclimate.com/repos/5672446f137f95309c0067c6/feed)
 [![Test Coverage](https://codeclimate.com/repos/5672446f137f95309c0067c6/badges/a369f0a182ce111c8fcd/coverage.svg)](https://codeclimate.com/repos/5672446f137f95309c0067c6/coverage)
 
-TODO: Write Description
+JSONAPIonify is a framework for building JSONApi 1.0 compliant
+APIs. It can run as a standalone rack app or as part of a larger framework such
+as rails. In addition, it auto-generates beautiful documentation.
+
+![Documentation Example](https://api.url2png.com/v6/P3CAE278FC306AA/50ef2ba09c77f6fb25dd7f179de2a704/png/?thumbnail_max_width=500&url=https%3A%2F%2Fapi.brandfolder.com%2Fv2%2Fdocs)
 
 ## Installation
 
@@ -18,13 +22,10 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install jsonapionify
-
 ## Usage
 
-TODO: Write usage instructions here
+Refer to the [wiki](https://github.com/brandfolder/jsonapionify/wiki) for detailed
+information on how to use the framework.
 
 ## Development
 
@@ -40,4 +41,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/brandf
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
