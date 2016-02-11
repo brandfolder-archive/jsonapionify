@@ -13,7 +13,7 @@ Live Example:
 * [Resource](https://api.brandfolder.com/v2/slug/brandfolder)
 * [Documentation](https://api.brandfolder.com/v2/docs) (screenshot below)
 
-  [![Documentation Example](https://api.url2png.com/v6/P3CAE278FC306AA/50ef2ba09c77f6fb25dd7f179de2a704/png/?thumbnail_max_width=500&url=https%3A%2F%2Fapi.brandfolder.com%2Fv2%2Fdocs)]((https://api.brandfolder.com/v2/docs))
+  [![Documentation Example](https://api.url2png.com/v6/P3CAE278FC306AA/50ef2ba09c77f6fb25dd7f179de2a704/png/?thumbnail_max_width=500&url=https%3A%2F%2Fapi.brandfolder.com%2Fv2%2Fdocs)](https://api.brandfolder.com/v2/docs)
 
 ## Installation
 
