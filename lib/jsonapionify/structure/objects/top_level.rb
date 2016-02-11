@@ -76,7 +76,7 @@ module JSONAPIonify::Structure
                                ]
 
       def compile(*)
-        compiled        = super
+        compiled        = super(validate: ENV['RACK_ENV'] != 'production')
         compiled_errors = compiled['errors'] || []
         all_errors      = compiled_errors | errors.as_collection.compile
         if all_errors.present?

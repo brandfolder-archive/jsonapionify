@@ -71,8 +71,8 @@ module JSONAPIonify::Structure
       # Compile as json
       attr_reader :errors, :warnings
 
-      def compile
-        validate
+      def compile(validate: true)
+        self.validate if validate
         to_hash
       end
 

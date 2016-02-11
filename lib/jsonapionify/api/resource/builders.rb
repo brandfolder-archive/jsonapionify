@@ -4,6 +4,7 @@ module JSONAPIonify::Api
 
     module ClassMethods
       def build_resource(request, instance, fields: api.fields, relationships: true, links: true)
+        relationships = false if JSONAPIonify::FALSEY_STRINGS.include? request.params['include-relationships']
         return nil unless instance
         resource_url = build_url(request, instance)
         id           = build_id(instance)
@@ -32,7 +33,8 @@ module JSONAPIonify::Api
         )
       end
 
-      def build_collection(request, collection, fields: api.fields, relationships: false)
+      def build_collection(request, collection, fields: api.fields)
+        relationships = JSONAPIonify::TRUTHY_STRINGS.include? request.params['include-relationships']
         collection.each_with_object(JSONAPIonify::Structure::Collections::Resources.new) do |instance, resources|
           resources << build_resource(request, instance, fields: fields, relationships: relationships)
         end

@@ -10,6 +10,14 @@ module JSONAPIonify
   extend JSONAPIonify::Autoload
   autoload_all 'jsonapionify'
 
+  TRUTHY_STRINGS = %w(t true y yes 1).flat_map do |str|
+    [str.downcase, str.upcase, str.capitalize]
+  end.uniq
+
+  FALSEY_STRINGS = %w(f false n no 0).flat_map do |str|
+    [str.downcase, str.upcase, str.capitalize]
+  end.uniq
+
   def self.path
     __dir__
   end
