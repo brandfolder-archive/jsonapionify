@@ -12,13 +12,17 @@ module JSONAPIonify::Api
           resource[:id]   = id
           resource[:type] = type
 
-          resource[:attributes]    = fields[type.to_sym].each_with_object(JSONAPIonify::Structure::Objects::Attributes.new) do |member, attributes|
+          resource[:attributes] = fields[type.to_sym].each_with_object(JSONAPIonify::Structure::Objects::Attributes.new) do |member, attributes|
             attributes[member.to_sym] = instance.public_send(member)
           end
 
-          resource[:links]         = JSONAPIonify::Structure::Objects::Links.new(
+          resource[:links]      = JSONAPIonify::Structure::Objects::Links.new(
             self: resource_url
           ) if links
+
+          resource[:meta]          = {
+            cursor: build_cursor_from_instance(request, instance)
+          }
 
           resource[:relationships] = relationship_definitions.each_with_object(JSONAPIonify::Structure::Maps::Relationships.new) do |rel, hash|
             hash[rel.name] = build_relationship(request, instance, rel.name)
@@ -38,6 +42,21 @@ module JSONAPIonify::Api
         collection.each_with_object(JSONAPIonify::Structure::Collections::Resources.new) do |instance, resources|
           resources << build_resource(request, instance, fields: fields, relationships: relationships)
         end
+      end
+
+      def build_cursor_from_instance(request, instance)
+        sort_string       = request.params['sort']
+        sort_fields       = sort_fields_from_sort_string(sort_string)
+        attrs_with_values = sort_fields.each_with_object({}) do |field, hash|
+          hash[field.name] = instance.send(field.name)
+        end
+        Base64.urlsafe_encode64(JSON.dump(
+          {
+            t: type,
+            s: sort_string,
+            a: attrs_with_values
+          }
+        ))
       end
 
       def build_identifier_collection(collection)

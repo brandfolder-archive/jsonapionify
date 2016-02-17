@@ -80,6 +80,12 @@ module JSONAPIonify::Api
         status '400'
       end
 
+      error :page_parameter_invalid do |*paths|
+        parameter ParamOptions.keypath_to_string(*paths)
+        title 'Page parameter invalid'
+        status '400'
+      end
+
       error :request_object_invalid do |context, request_object|
         context.errors.set request_object.errors.as_collection
       end

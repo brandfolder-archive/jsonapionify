@@ -9,12 +9,11 @@ module JSONAPIonify::Api
 
     def resource_files
       files = Dir.glob(File.join(load_path, '**/*.rb'))
-      files << load_file
       files.concat(superclass < JSONAPIonify::Api::Base ? superclass.resource_files : []).sort
     end
 
     def resource_signature
-      Digest::SHA2.hexdigest resource_files.map { |file| File.read file }.join
+      Digest::SHA2.hexdigest [*resource_files, load_file].map { |file| File.read file }.join
     end
 
     def signature
@@ -22,15 +21,17 @@ module JSONAPIonify::Api
     end
 
     def load_resources
-      return unless load_path
-      if @last_signature != resource_signature
-        @documentation_output = nil
-        @last_signature       = resource_signature
-        $".delete_if { |s| s.start_with? load_path }
-        resource_files.each do |file|
-          require file
-        end
+      return unless load_path || resources_loaded?
+      @documentation_output = nil
+      @last_signature       = resource_signature
+      $".delete_if { |s| s.start_with? load_path }
+      resource_files.each do |file|
+        require file
       end
+    end
+
+    def resources_loaded?
+      @last_signature == resource_signature
     end
 
     def http_error(action, request)

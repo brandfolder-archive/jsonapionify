@@ -13,16 +13,20 @@ module JSONAPIonify::Api
             v.actions.blank? || v.actions.include?(action_name)
           end
 
+          context.request.params.replace(
+            [*params.values.select(&:has_default?).map(&:default), context.request.params].reduce(:deep_merge)
+          )
+
           required_params = params.select do |_, v|
             v.required
           end
 
           # Check for validity
           context.request.params.each do |k, v|
-            keypath = ParamOptions.hash_to_keypaths(k => v)[0]
+            keypath  = ParamOptions.hash_to_keypaths(k => v)[0]
             reserved = ParamOptions.reserved?(k)
-            allowed = params.keys.include? keypath
-            valid = ParamOptions.valid?(k) || v.is_a?(Hash)
+            allowed  = params.keys.include? keypath
+            valid    = ParamOptions.valid?(k) || v.is_a?(Hash)
             unless reserved || (allowed && valid)
               should_error = true
               error :parameter_invalid, ParamOptions.keypath_to_string(*keypath)
@@ -48,10 +52,28 @@ module JSONAPIonify::Api
     end
 
     def sticky_params(params)
-      sticky_param_paths = param_definitions.values.select(&:sticky).map(&:keypath)
-      params.select do |k, v|
-        sticky_param_paths.include? ParamOptions.hash_to_keypaths(k => v)[0]
-      end
+      sticky_param_definitions = param_definitions.values.select(&:sticky)
+      ParamOptions.hash_to_keypaths(params).map do |keypath|
+        definition = sticky_param_definitions.find do |definition|
+          definition.keypath == keypath
+        end
+        next {} unless definition
+        value      = definition.extract_value(params)
+        if definition.default_value?(value)
+          {}
+        else
+          definition.with_value(value)
+        end
+      end.reduce(:deep_merge)
+
+      # sticky_param_definitions = param_definitions.values.select(&:sticky)
+      # params.each_with_object do |k, v|
+      #   definition = sticky_param_definitions.find do |definition|
+      #     definition.keypath == ParamOptions.hash_to_keypaths(k => v)[0]
+      #   end
+      #   binding.pry
+      #   definition && !definition.default_value?(v)
+      # end
     end
 
   end

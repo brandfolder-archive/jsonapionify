@@ -6,7 +6,7 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         extend JSONAPIonify::Types
         inherited_array_attribute :attributes
-        delegate :attributes, to: :class
+        delegate :id_attribute, :attributes, to: :class
 
         context(:fields, readonly: true) do |context|
           should_error = false

@@ -5,7 +5,7 @@ module JSONAPIonify::Api
       klass.class_eval do
         class << self
           delegate :context, :response_header, :helper, :rescue_from, :error,
-                   :enable_pagination, :before, :param, :request_header, :enable_sorting,
+                   :enable_pagination, :before, :param, :request_header,
                    :define_pagination_strategy, :define_sorting_strategy,
                    :sticky_params, :authentication, :on_exception,
                    :example_id_generator,

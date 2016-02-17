@@ -11,13 +11,18 @@ module JSONAPIonify::Api
     end
 
     def self.hash_to_keypaths(hash)
-      mapper = lambda do |hash, ary|
-        hash.each_with_object(ary) do |(k, v), a|
-          a << (map = [k.to_sym])
-          mapper[v, map] if v.is_a?(Hash)
+      hash.each_with_object([]) do |(k, v), key_paths|
+        pather = lambda do |v, current_path|
+          if v.is_a? Hash
+            v.each do |k, v|
+              pather.call(v, [*current_path, k])
+            end
+          else
+            key_paths << current_path.map(&:to_sym)
+          end
         end
+        pather.call(v, [k])
       end
-      mapper[hash, []].map(&:flatten)
     end
 
     def self.keypath_to_string(*paths)
@@ -41,11 +46,38 @@ module JSONAPIonify::Api
 
     attr_reader :keypath, :actions, :required, :sticky
 
-    def initialize(*keys, actions: nil, required: false, sticky: false)
+    def initialize(*keys, default: nil, actions: nil, required: false, sticky: false)
       @keypath  = keys
       @sticky   = sticky
       @actions  = Array.wrap(actions)
+      @default  = default.to_s
       @required = required
+    end
+
+    def with_value(value)
+      Hash.new.tap do |hash|
+        keypath[0..-2].reduce(hash) do |current_hash, key|
+          current_hash[key.to_s] = {}
+        end[keypath.last.to_s] = value
+      end
+    end
+
+    def default
+      with_value @default
+    end
+
+    def extract_value(params)
+      keypath.reduce(params) do |p, key|
+        p[key.to_s]
+      end
+    end
+
+    def has_default?
+      @default.present?
+    end
+
+    def default_value?(value)
+      @default == value
     end
 
     def string

@@ -14,15 +14,14 @@ module JSONAPIonify::Api
     def self.inherited(subclass)
       super(subclass)
       subclass.instance_exec(self) do |superclass|
+        const_set(:ResourceBase, Class.new(superclass.resource_class))
+        resource_class.set_api(self)
+
         file           = caller.reject { |f| f.start_with? JSONAPIonify.path }[0].split(/\:\d/)[0]
         dir            = File.expand_path File.dirname(file)
         basename       = File.basename(file, File.extname(file))
         self.load_path = File.join(dir, basename)
         self.load_file = file
-
-        const_set(:ResourceBase, Class.new(superclass.resource_class))
-        resource_class.set_api(self)
-        load_resources
 
         @title               = superclass.instance_variable_get(:@title)
         @description         = superclass.instance_variable_get(:@description)

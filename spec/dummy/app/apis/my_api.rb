@@ -18,5 +18,4 @@ class MyApi < JSONAPIonify::Api::Base
   end
 
   enable_pagination
-  enable_sorting
 end

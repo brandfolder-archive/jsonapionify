@@ -10,7 +10,7 @@ module JSONAPIonify::Structure
       end
 
       def origin
-        self.parent&.origin
+        self.parent.try(:origin)
       end
     end
   end
