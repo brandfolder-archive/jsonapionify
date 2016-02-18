@@ -17,6 +17,16 @@ task :missing_specs do
   end
 end
 
+desc 'Remove empty specs'
+task :prune_specs do
+  empty_specs = Dir.glob("./spec/**/*_spec.rb").select do |f|
+    File.read(f).empty?
+  end
+  empty_specs.each do |f|
+    FileUtils.rm f
+  end
+end
+
 STATS_DIRECTORIES = [
   %w(Structure        lib/jsonapionify/structure),
   %w(Server           lib/jsonapionify/api),
