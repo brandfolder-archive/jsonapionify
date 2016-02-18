@@ -26,6 +26,14 @@ module JSONAPIonify::Api::Resource::Definitions
         list
         enable_pagination per: 5
       end
+
+      it 'should list results in order' do
+        get '/sample_resources?sort=-color,weight,-name'
+        actual_ids = last_response_json['data'].map { |i| i['id'] }
+        expected_ids = model.to_a.deep_sort(color: :desc, weight: :asc, name: :desc).first(5).map(&:id).map(&:to_s)
+        expect(actual_ids).to be_present
+        expect(actual_ids).to eq expected_ids
+      end
     end
 
     describe 'active record sorting' do
@@ -47,6 +55,14 @@ module JSONAPIonify::Api::Resource::Definitions
 
         list
         enable_pagination per: 5
+      end
+
+      it 'should list results in order' do
+        get '/sample_resources?sort=-color,weight,-name'
+        actual_ids = last_response_json['data'].map { |i| i['id'] }
+        expected_ids = model.order(color: :desc, weight: :asc, name: :desc).first(5).map(&:id).map(&:to_s)
+        expect(actual_ids).to be_present
+        expect(actual_ids).to eq expected_ids
       end
     end
   end
