@@ -1,36 +1,30 @@
 require 'spec_helper'
 module JSONAPIonify::Api::Resource::Definitions
   describe Pagination do
+    extend ApiHelper
     include JSONAPIonify::Api::TestHelper
 
-    let(:resource_scope) {
-      nil
-    }
-
-    # Create Dummy App with Dummy Resource
-    let(:app) {
-      spec = self
-      Class.new(JSONAPIonify::Api::Base).tap do |api|
-        api.define_resource :sample_resources do
-          scope { spec.resource_scope }
-          collection { |scope| scope.is_a?(Array) ? scope.to_a : scope.all }
-          list
-          enable_pagination
-        end
-      end
-    }
-
     describe "enumerable pagination" do
-      # Create a dummy Array Collection
-      let (:resource_scope) do
-        100.times.map do |i|
-          OpenStruct.new(
-            id:     i + 1,
-            name:   Faker::Commerce.product_name,
-            color:  Faker::Commerce.color,
-            weight: rand(0..100)
-          )
-        end
+      using JSONAPIonify::DeepSortCollection
+
+      simple_object_api(:sample_resources).create_model do
+        field :name
+        field :color
+        field :weight
+      end.seed(count: 20) do |instance|
+        instance.name = Faker::Commerce.product_name
+        instance.color = Faker::Commerce.color
+        instance.weight = rand(0..100)
+      end.create_api do |model|
+        scope { model }
+        collection { |scope| scope.all }
+
+        attribute :name, types.String, ''
+        attribute :color, types.String, ''
+        attribute :weight, types.Integer, ''
+
+        list
+        enable_pagination per: 5
       end
 
       ##### SPECS HERE
@@ -43,11 +37,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should start with the first result" do
-          expect(last_response_json['data'].first['id']).to eq resource_scope.first.id.to_s
+          expect(last_response_json['data'].first['id']).to eq model.to_a.deep_sort(id: :asc).first.id.to_s
         end
       end
 
@@ -62,11 +56,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should start with the first result" do
-          expect(last_response_json['data'].first['id']).to eq resource_scope.first.id.to_s
+          expect(last_response_json['data'].first['id']).to eq model.to_a.deep_sort(id: :asc).first.id.to_s
         end
       end
 
@@ -81,11 +75,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should end with the last result" do
-          expect(last_response_json['data'].last['id']).to eq resource_scope.last.id.to_s
+          expect(last_response_json['data'].last['id']).to eq model.to_a.deep_sort(id: :asc).last.id.to_s
         end
       end
 
@@ -101,11 +95,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should not start with the first result" do
-          expect(last_response_json['data'].first['id']).to_not eq resource_scope.last.id.to_s
+          expect(last_response_json['data'].first['id']).to_not eq model.to_a.deep_sort(id: :asc).last.id.to_s
         end
 
         it "should properly navigate to the previous page" do
@@ -118,6 +112,7 @@ module JSONAPIonify::Api::Resource::Definitions
         before do
           get '/sample_resources'
           get last_response_json['links']['next']
+          get last_response_json['links']['next']
           @first_response_json = last_response_json
           get last_response_json['links']['prev']
         end
@@ -127,11 +122,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should not start with the first result" do
-          expect(last_response_json['data'].first['id']).to_not eq resource_scope.last.id.to_s
+          expect(last_response_json['data'].first['id']).to_not eq model.to_a.deep_sort(id: :asc).first.id.to_s
         end
 
         it "should properly navigate to the next page" do
@@ -143,7 +138,7 @@ module JSONAPIonify::Api::Resource::Definitions
       describe "random after cursor" do
         before do
           get '/sample_resources'
-          @cursor = last_response_json['data'][11]['meta']['cursor']
+          @cursor = last_response_json['data'][3]['meta']['cursor']
           get "/sample_resources?page[after]=#{@cursor}"
         end
         it 'should properly navigate to after the cursor' do
@@ -155,7 +150,7 @@ module JSONAPIonify::Api::Resource::Definitions
       describe "random before cursor" do
         before do
           get '/sample_resources'
-          @cursor = last_response_json['data'][11]['meta']['cursor']
+          @cursor = last_response_json['data'][3]['meta']['cursor']
           get "/sample_resources?page[before]=#{@cursor}"
         end
         it 'should properly navigate to before the cursor' do
@@ -175,7 +170,7 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should return the first x results" do
-          expect(last_response_json['data'].map { |i| i['id'] }).to eq resource_scope.first(5).map(&:id).map(&:to_s)
+          expect(last_response_json['data'].map { |i| i['id'] }).to eq model.to_a.deep_sort(id: :asc).first(5).map(&:id).map(&:to_s)
         end
       end
 
@@ -189,44 +184,30 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should return the last x results" do
-          expect(last_response_json['data'].map { |i| i['id'] }).to eq resource_scope.last(5).map(&:id).map(&:to_s)
+          expect(last_response_json['data'].map { |i| i['id'] }).to eq model.to_a.deep_sort(id: :asc).last(5).map(&:id).map(&:to_s)
         end
       end
     end
 
     describe "active record pagination" do
-      # Set the table name
-      let(:table_name) { 'sample_resources' }
+      active_record_api(:sample_resources).create_table do |t|
+        t.string :name
+        t.string :color
+        t.integer :weight
+      end.seed(count: 20) do |instance|
+        instance.name = Faker::Commerce.product_name
+        instance.color = Faker::Commerce.color
+        instance.weight = rand(0..100)
+      end.create_api do |model|
+        scope { model }
+        collection { |scope| scope.all }
 
-      # Create a Dummy Resource Class
-      let(:resource_scope) do
-        spec = self
-        Class.new(ActiveRecord::Base) do
-          self.table_name = spec.table_name
-        end
-      end
+        attribute :name, types.String, ''
+        attribute :color, types.String, ''
+        attribute :weight, types.Integer, ''
 
-      # Migrate inline
-      before do
-        spec = self
-        Class.new(ActiveRecord::Migration) do
-          suppress_messages do
-            drop_table spec.table_name rescue nil
-            create_table spec.table_name do |t|
-              t.string :name
-              t.string :color
-              t.integer :weight
-            end
-
-            100.times do
-              spec.resource_scope.create(
-                name:   Faker::Commerce.product_name,
-                color:  Faker::Commerce.color,
-                weight: rand(0..100)
-              )
-            end
-          end
-        end
+        list
+        enable_pagination per: 5
       end
 
       ##### SPECS HERE
@@ -239,11 +220,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should start with the first result" do
-          expect(last_response_json['data'].first['id']).to eq resource_scope.first.id.to_s
+          expect(last_response_json['data'].first['id']).to eq model.first.id.to_s
         end
       end
 
@@ -258,11 +239,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should start with the first result" do
-          expect(last_response_json['data'].first['id']).to eq resource_scope.first.id.to_s
+          expect(last_response_json['data'].first['id']).to eq model.first.id.to_s
         end
       end
 
@@ -277,11 +258,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should end with the last result" do
-          expect(last_response_json['data'].last['id']).to eq resource_scope.last.id.to_s
+          expect(last_response_json['data'].last['id']).to eq model.last.id.to_s
         end
       end
 
@@ -297,11 +278,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should not start with the first result" do
-          expect(last_response_json['data'].first['id']).to_not eq resource_scope.last.id.to_s
+          expect(last_response_json['data'].first['id']).to_not eq model.last.id.to_s
         end
 
         it "should properly navigate to the previous page" do
@@ -323,11 +304,11 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should not return the full list of results" do
-          expect(last_response_json['data'].length).to_not eq resource_scope.count
+          expect(last_response_json['data'].length).to_not eq model.count
         end
 
         it "should not start with the first result" do
-          expect(last_response_json['data'].first['id']).to_not eq resource_scope.last.id.to_s
+          expect(last_response_json['data'].first['id']).to_not eq model.last.id.to_s
         end
 
         it "should properly navigate to the next page" do
@@ -339,7 +320,7 @@ module JSONAPIonify::Api::Resource::Definitions
       describe "random after cursor" do
         before do
           get '/sample_resources'
-          @cursor = last_response_json['data'][11]['meta']['cursor']
+          @cursor = last_response_json['data'][3]['meta']['cursor']
           get "/sample_resources?page[after]=#{@cursor}"
         end
         it 'should properly navigate to after the cursor' do
@@ -351,7 +332,7 @@ module JSONAPIonify::Api::Resource::Definitions
       describe "random before cursor" do
         before do
           get '/sample_resources'
-          @cursor = last_response_json['data'][11]['meta']['cursor']
+          @cursor = last_response_json['data'][3]['meta']['cursor']
           get "/sample_resources?page[before]=#{@cursor}"
         end
         it 'should properly navigate to before the cursor' do
@@ -371,7 +352,7 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should return the first x results" do
-          expect(last_response_json['data'].map { |i| i['id'] }).to eq resource_scope.first(5).map(&:id).map(&:to_s)
+          expect(last_response_json['data'].map { |i| i['id'] }).to eq model.first(5).map(&:id).map(&:to_s)
         end
       end
 
@@ -385,7 +366,7 @@ module JSONAPIonify::Api::Resource::Definitions
         end
 
         it "should return the last x results" do
-          expect(last_response_json['data'].map { |i| i['id'] }).to eq resource_scope.last(5).map(&:id).map(&:to_s)
+          expect(last_response_json['data'].map { |i| i['id'] }).to eq model.last(5).map(&:id).map(&:to_s)
         end
       end
 

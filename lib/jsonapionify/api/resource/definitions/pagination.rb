@@ -29,8 +29,8 @@ module JSONAPIonify::Api
           collection
         end
 
-        define_pagination_strategy 'Enumerable' do |collection, params, links, context|
-          size = Integer(params['first'] || params['last'] || 50)
+        define_pagination_strategy 'Enumerable' do |collection, params, links, per, context|
+          size = Integer(params['first'] || params['last'] || per)
 
           slice =
             if (params['before'] && params['first']) || (params['after'] && params['last'])
@@ -65,8 +65,8 @@ module JSONAPIonify::Api
           slice
         end
 
-        define_pagination_strategy 'ActiveRecord::Relation' do |collection, params, links, context|
-          size = Integer(params['first'] || params['last'] || 50)
+        define_pagination_strategy 'ActiveRecord::Relation' do |collection, params, links, per, context|
+          size = Integer(params['first'] || params['last'] || per)
 
           slice =
             if (params['before'] && params['first']) || (params['after'] && params['last'])
@@ -109,7 +109,7 @@ module JSONAPIonify::Api
       pagination_strategies[mod.to_s] = block
     end
 
-    def enable_pagination
+    def enable_pagination(per: 50)
       param :page, :after, actions: %i{list}
       param :page, :before, actions: %i{list}
       param :page, :first, actions: %i{list}
@@ -130,6 +130,7 @@ module JSONAPIonify::Api
           collection,
           context.request.params['page'] || {},
           links_delegate,
+          per,
           context,
           &block
         )

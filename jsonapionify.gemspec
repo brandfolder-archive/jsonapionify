@@ -51,4 +51,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'ruby-prof'
   spec.add_development_dependency 'bcrypt'
   spec.add_development_dependency 'thin'
+  spec.add_development_dependency 'memory_model'
 end

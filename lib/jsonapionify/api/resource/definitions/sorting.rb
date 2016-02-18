@@ -40,7 +40,7 @@ module JSONAPIonify::Api
         end
 
         define_sorting_strategy('Enumerable') do |collection, fields|
-          collection.deep_sort(fields.to_hash)
+          collection.to_a.deep_sort(fields.to_hash)
         end
 
         define_sorting_strategy('ActiveRecord::Relation') do |collection, fields|
