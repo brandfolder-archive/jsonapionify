@@ -41,9 +41,9 @@ module JSONAPIonify::Api
     def contains_arel
       case @order
       when :asc
-        :gte
+        :gteq
       when :desc
-        :lte
+        :lteq
       end
     end
 
