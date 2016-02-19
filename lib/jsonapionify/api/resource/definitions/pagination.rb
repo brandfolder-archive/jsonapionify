@@ -12,7 +12,7 @@ module JSONAPIonify::Api
         define_method method do |**options|
           @links[method] = URI.parse(@url).tap do |uri|
             page_params = { page: options }.deep_stringify_keys
-            uri.query   = @params.deep_merge(page_params).to_param
+            uri.query   = @params.merge(page_params).to_param
           end.to_s
         end
       end
@@ -35,22 +35,14 @@ module JSONAPIonify::Api
           slice =
             if (params['before'] && params['first']) || (params['after'] && params['last'])
               error :forbidden do
-                message 'Illegal combination of parameters'
+                detail 'Illegal combination of parameters'
               end
             elsif (after = params['after'])
               key_values = parse_and_validate_cursor(:after, after, context)
-              array_select_past_cursor(
-                collection,
-                context.sort_params,
-                key_values
-              ).first(size)
+              array_select_past_cursor(collection, context.sort_params, key_values).first(size)
             elsif (before = params['before'])
               key_values = parse_and_validate_cursor(:before, before, context)
-              array_select_past_cursor(
-                collection,
-                context.sort_params.reverse,
-                key_values
-              ).last(size)
+              array_select_past_cursor(collection, context.sort_params.reverse, key_values).last(size)
             elsif params['last']
               collection.last(size)
             else
@@ -71,22 +63,15 @@ module JSONAPIonify::Api
           slice =
             if (params['before'] && params['first']) || (params['after'] && params['last'])
               error :forbidden do
-                message 'Illegal combination of parameters'
+                detail 'Illegal combination of parameters'
               end
             elsif (after = params['after'])
               key_values = parse_and_validate_cursor(:after, after, context)
-              arel_select_past_cursor(
-                collection,
-                context.sort_params,
-                key_values
-              ).limit(size)
+              arel_select_past_cursor(collection, context.sort_params, key_values).limit(size)
             elsif (before = params['before'])
               key_values = parse_and_validate_cursor(:before, before, context)
-              ids        = arel_select_past_cursor(
-                collection,
-                context.sort_params.reverse,
-                key_values
-              ).reverse_order.limit(size).pluck(id_attribute)
+              ids        = arel_select_past_cursor(collection, context.sort_params.reverse, key_values)
+                             .reverse_order.limit(size).pluck(id_attribute)
               collection.where(id_attribute => ids)
             elsif params['last']
               ids = collection.reverse_order.limit(size).pluck(id_attribute)
@@ -122,7 +107,7 @@ module JSONAPIonify::Api
 
         links_delegate = PaginationLinksDelegate.new(
           context.request.url,
-          self.class.sticky_params(context.params),
+          context.params,
           context.links
         )
 

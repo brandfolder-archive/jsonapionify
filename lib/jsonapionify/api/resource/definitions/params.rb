@@ -65,15 +65,6 @@ module JSONAPIonify::Api
           definition.with_value(value)
         end
       end.reduce(:deep_merge)
-
-      # sticky_param_definitions = param_definitions.values.select(&:sticky)
-      # params.each_with_object do |k, v|
-      #   definition = sticky_param_definitions.find do |definition|
-      #     definition.keypath == ParamOptions.hash_to_keypaths(k => v)[0]
-      #   end
-      #   binding.pry
-      #   definition && !definition.default_value?(v)
-      # end
     end
 
   end
