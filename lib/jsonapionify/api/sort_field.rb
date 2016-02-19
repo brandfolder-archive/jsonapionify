@@ -38,12 +38,30 @@ module JSONAPIonify::Api
       end
     end
 
+    def contains_arel
+      case @order
+      when :asc
+        :gte
+      when :desc
+        :lte
+      end
+    end
+
     def outside_operator
       case @order
       when :asc
         :>
       when :desc
         :<
+      end
+    end
+
+    def outside_arel
+      case @order
+      when :asc
+        :gt
+      when :desc
+        :lt
       end
     end
 

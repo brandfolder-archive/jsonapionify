@@ -170,12 +170,12 @@ module JSONAPIonify::Api
           set                             = sort_params[0..i]
           *contains_fields, outside_field = set
           contains_fields.reduce(collection.reorder(nil)) do |relation, field|
-            relation.where <<-SQL.strip, value: key_values[field.name.to_s]
-              "#{field.name}" #{field.contains_operator} :value
-            SQL
-          end.where(<<-SQL.strip, key_values[outside_field.name.to_s]).to_sql
-            "#{outside_field.name}" #{outside_field.outside_operator} ?
-          SQL
+            relation.where(
+              collection.arel_table[field.name].send(field.contains_arel, key_values[field.name.to_s])
+            )
+          end.where(
+            collection.arel_table[outside_field.name].send(outside_field.outside_arel, key_values[outside_field.name.to_s])
+          ).to_sql
         end.join(' UNION ')
         collection.from("(#{subselect}) AS #{collection.table_name}")
       end
