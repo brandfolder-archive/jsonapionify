@@ -86,7 +86,7 @@ module JSONAPIonify::Api
                 collection,
                 context.sort_params.reverse,
                 key_values
-              ).reverse_order.limit(size).pluck(:id)
+              ).reverse_order.limit(size).pluck(id_attribute)
               collection.where(id_attribute => ids)
             elsif params['last']
               ids = collection.reverse_order.limit(size).pluck(id_attribute)
