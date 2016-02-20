@@ -165,7 +165,7 @@ module JSONAPIonify::Api
     end
 
     def actions
-      return if action_definitions.blank?
+      return [] if action_definitions.blank?
       action_definitions.select do |action|
         action.only_associated == false ||
           (respond_to?(:rel) && action.only_associated == true)
