@@ -47,9 +47,6 @@ module JSONAPIonify::Api
           collection.reorder(fields.to_hash).order(self.class.id_attribute)
         end
 
-        # Configure the default sort
-        default_sort 'id'
-
       end
     end
 

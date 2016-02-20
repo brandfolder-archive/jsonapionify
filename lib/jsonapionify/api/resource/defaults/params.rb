@@ -4,6 +4,9 @@ module JSONAPIonify::Api
 
     included do
       param :'include-relationships'
+
+      # Configure the default sort
+      default_sort 'id'
     end
   end
 end
