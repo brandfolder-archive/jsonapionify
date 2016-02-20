@@ -17,16 +17,15 @@ module JSONAPIonify::Api
         context.request.env['jsonapionify.id']
       end
 
+      context(:request_id) do |context|
+        context.request_data[:id]
+      end
+
       context(:request_attributes, readonly: true) do |context|
-        request_object = context.request_object
-
-        # Validate Request Object
-        request_object.validate
-        error_now(:request_object_invalid, context, request_object) if request_object.errors.present?
-
         request_attributes = context.request_data.fetch(:attributes) do
           error_now :attributes_missing
         end
+
         request_attributes.tap do |attributes|
           # Check Permitted Attributes
           writable_attributes = context.request_resource.attributes.select(&:write?)

@@ -10,20 +10,20 @@ module JSONAPIonify
         t.string :name
         t.string :color
       end.seed(count: 20) do |instance|
-        instance.name = Faker::Commerce.product_name
+        instance.name  = Faker::Commerce.product_name
         instance.color = Faker::Commerce.color
       end.create_api do |model|
         scope { model }
         collection { model.all }
         instance { |scope, id| scope.find id }
-        new_instance { |scope| scope.new }
+        new_instance { |scope, context| scope.new id: context.request_id, **context.request_attributes }
         attribute :name, types.String, ''
         attribute :color, types.String, ''
 
         list
 
         create do |context|
-          context.instance.update_attributes context.request_attributes
+          context.instance.save!
         end
 
         read do
@@ -31,11 +31,11 @@ module JSONAPIonify
         end
 
         update do |context|
-          context.instance.update_attributes context.request_attributes
+          context.instance.update_attributes! context.request_attributes
         end
 
         delete do |context|
-          context.instance.destroy
+          context.instance.destroy!
         end
       end
 
@@ -52,7 +52,21 @@ module JSONAPIonify
           body = json(data: { type: 'things', attributes: { name: 'Card', color: 'blue' } })
           content_type 'application/vnd.api+json'
           expect { post '/things', body }.to change { model.count }.by 1
+          expect(model.last.id.to_s).to eq last_response_json['data']['id']
+          expect(model.last.name).to eq 'Card'
           expect(last_response.status).to eq 201
+        end
+
+        context 'with a custom id' do
+          it 'should add a resource instance with a custom id' do
+            body = json(data: { id: '999999', type: 'things', attributes: { name: 'Card', color: 'blue' } })
+            content_type 'application/vnd.api+json'
+            expect { post '/things', body }.to change { model.count }.by 1
+            expect { model.find(999999) }.to_not raise_error
+            expect(model.last.id.to_s).to eq last_response_json['data']['id']
+            expect(model.last.name).to eq 'Card'
+            expect(last_response.status).to eq 201
+          end
         end
       end
 
