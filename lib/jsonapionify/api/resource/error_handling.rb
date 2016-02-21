@@ -74,7 +74,7 @@ module JSONAPIonify::Api
         errors.evaluate(
           error_block:   lookup_error(:internal_server_error),
           runtime_block: proc {
-            unless ENV['RACK_ENV'] == 'production'
+            if self.class.api.verbose_errors
               detail exception.message
               meta[:error_class] = exception.class.name
             end
