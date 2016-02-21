@@ -70,11 +70,12 @@ module JSONAPIonify::Api
 
     def rescued_response(exception)
       rescue_with_handler(exception) || begin
+        verbose_errors = self.class.api.verbose_errors
         run_callbacks(:exception, exception)
         errors.evaluate(
           error_block:   lookup_error(:internal_server_error),
           runtime_block: proc {
-            if self.class.api.verbose_errors
+            if verbose_errors
               detail exception.message
               meta[:error_class] = exception.class.name
             end
