@@ -21,7 +21,8 @@ module JSONAPIonify::Api
           context.response_object[:data] = build_collection(
             context.request,
             context.response_collection,
-            fields: context.fields
+            fields: context.fields,
+            include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?
           )
           context.response_object.to_json
         end

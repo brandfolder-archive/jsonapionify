@@ -3,7 +3,7 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def build_resource(request, instance, fields: api.fields, relationships: true, links: true)
+      def build_resource(request, instance, fields: api.fields, relationships: true, links: true, include_cursor: false)
         relationships = false if JSONAPIonify::FALSEY_STRINGS.include? request.params['include-relationships']
         return nil unless instance
         resource_url = build_url(request, instance)
@@ -12,17 +12,17 @@ module JSONAPIonify::Api
           resource[:id]   = id
           resource[:type] = type
 
-          resource[:attributes] = fields[type.to_sym].each_with_object(JSONAPIonify::Structure::Objects::Attributes.new) do |member, attributes|
+          resource[:attributes]    = fields[type.to_sym].each_with_object(JSONAPIonify::Structure::Objects::Attributes.new) do |member, attributes|
             attributes[member.to_sym] = instance.public_send(member)
           end
 
-          resource[:links]      = JSONAPIonify::Structure::Objects::Links.new(
+          resource[:links]         = JSONAPIonify::Structure::Objects::Links.new(
             self: resource_url
           ) if links
 
           resource[:meta]          = {
             cursor: build_cursor_from_instance(request, instance)
-          }
+          } if include_cursor
 
           resource[:relationships] = relationship_definitions.each_with_object(JSONAPIonify::Structure::Maps::Relationships.new) do |rel, hash|
             hash[rel.name] = build_relationship(request, instance, rel.name)
@@ -37,10 +37,10 @@ module JSONAPIonify::Api
         )
       end
 
-      def build_collection(request, collection, fields: api.fields)
+      def build_collection(request, collection, fields: api.fields, include_cursors: false)
         relationships = JSONAPIonify::TRUTHY_STRINGS.include? request.params['include-relationships']
         collection.each_with_object(JSONAPIonify::Structure::Collections::Resources.new) do |instance, resources|
-          resources << build_resource(request, instance, fields: fields, relationships: relationships)
+          resources << build_resource(request, instance, fields: fields, relationships: relationships, include_cursor: include_cursors)
         end
       end
 

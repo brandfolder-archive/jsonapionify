@@ -24,7 +24,6 @@ module JSONAPIonify::Structure
       # Attributes
       attr_reader :object, :parent
 
-      delegate :fetch, :select, :has_key?, :keys, :values, :each, :present?, :blank?, :empty?, to: :object
       delegate :cache_store, to: JSONAPIonify
 
       before_initialize do
@@ -160,6 +159,12 @@ module JSONAPIonify::Structure
             warnings.replace [key, warning_key].join('/'), messages
           end
         end
+      end
+
+      def method_missing(m, *args, &block)
+        super unless object.respond_to? m
+        define_singleton_method(m, object.method(m).to_proc)
+        method(m).call(*args, &block)
       end
 
     end
