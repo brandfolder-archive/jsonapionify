@@ -45,6 +45,14 @@ module JSONAPIonify
     @cache_store = store
   end
 
+  def self.disable_validation(bool)
+    @validation_disabled = bool
+  end
+
+  def self.validation_disabled?
+    !!@validation_disabled
+  end
+
   def self.cache_store
     @cache_store ||= ActiveSupport::Cache.lookup_store :null_store
   end

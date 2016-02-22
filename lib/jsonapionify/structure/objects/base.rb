@@ -72,7 +72,7 @@ module JSONAPIonify::Structure
       attr_reader :errors, :warnings
 
       def compile(validate: true)
-        self.validate if validate
+        self.validate if validate && !JSONAPIonify.validation_disabled?
         to_hash
       end
 
