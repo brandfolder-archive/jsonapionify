@@ -2,7 +2,7 @@ module JSONAPIonify::Api
   class Base::Reloader < Struct.new :app
 
     def call(env)
-      Base.descendants.each(&:load_resources)
+      Base.descendants.map(&:load_resources)
       app.call(env)
     end
 

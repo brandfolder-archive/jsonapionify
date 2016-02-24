@@ -21,7 +21,8 @@ module JSONAPIonify::Api
     end
 
     def load_resources
-      return unless load_path || resources_loaded?
+      return if !load_path || resources_loaded?
+      superclass.load_resources if superclass.respond_to? :load_resources
       @documentation_output = nil
       @last_signature       = resource_signature
       $".delete_if { |s| s.start_with? load_path }
