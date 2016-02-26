@@ -97,7 +97,10 @@ module JSONAPIonify::Api
     def options_for_method(method)
       case method
       when 'GET'
-        { attributes: attributes.select(&:read).map(&:options_json) }
+        {
+          attributes: attributes.select(&:read).map(&:options_json),
+          relationships: relationships.map(&:options_json)
+        }
       when 'POST', 'PUT', 'PATCH'
         { attributes: attributes.select(&:write).map(&:options_json) }
       else

@@ -73,7 +73,7 @@ module JSONAPIonify::Structure
             instance
           else
             raise ValidationError,
-                  " Can 't initialize collection `#{self.class.name}` with a type of `#{instance.class.name}`"
+                  " Can't initialize collection `#{self.class.name}` with a type of `#{instance.class.name}`"
           end
         super new_instance
       end

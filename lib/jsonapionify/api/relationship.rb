@@ -71,6 +71,13 @@ module JSONAPIonify::Api
       @resource   = resource || name
     end
 
+    def options_json
+      {
+        name: name,
+        type: resource
+      }
+    end
+
     def documentation_object
       OpenStruct.new(
         name:     name,
