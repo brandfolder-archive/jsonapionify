@@ -18,11 +18,13 @@ module JSONAPIonify::Api
     def list(**options, &block)
       define_action(:list, 'GET', **options, &block).tap do |action|
         action.response status: 200 do |context|
+          builder                        = context.respond_to?(:builder) ? context.builder : nil
           context.response_object[:data] = build_collection(
             context.request,
             context.response_collection,
-            fields: context.fields,
-            include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?
+            fields:          context.fields,
+            include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?,
+            &builder
           )
           context.response_object.to_json
         end
@@ -37,7 +39,8 @@ module JSONAPIonify::Api
     def create(**options, &block)
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
-          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+          builder                        = context.respond_to?(:builder) ? context.builder : nil
+          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields, &builder)
           response_headers['Location']   = build_url(context.request, context.instance)
           context.response_object.to_json
         end
@@ -47,7 +50,8 @@ module JSONAPIonify::Api
     def read(**options, &block)
       define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
-          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+          builder                        = context.respond_to?(:builder) ? context.builder : nil
+          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields, &builder)
           context.response_object.to_json
         end
       end
@@ -56,7 +60,8 @@ module JSONAPIonify::Api
     def update(**options, &block)
       define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
-          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields)
+          builder                        = context.respond_to?(:builder) ? context.builder : nil
+          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields, &builder)
           context.response_object.to_json
         end
       end
@@ -80,7 +85,7 @@ module JSONAPIonify::Api
         end.response(status: 200, accept: 'application/vnd.api+json') do
           JSONAPIonify.new_object(
             meta: {
-              type: self.class.type,
+              type:     self.class.type,
               requests: requests
             }
           ).to_json
@@ -98,7 +103,7 @@ module JSONAPIonify::Api
       case method
       when 'GET'
         {
-          attributes: attributes.select(&:read).map(&:options_json),
+          attributes:    attributes.select(&:read).map(&:options_json),
           relationships: relationships.map(&:options_json)
         }
       when 'POST', 'PUT', 'PATCH'
@@ -106,6 +111,15 @@ module JSONAPIonify::Api
       else
         {}
       end
+    end
+
+    def after(action_name = nil, &block)
+      if action_name == :index
+        warn 'the `index` action will soon be deprecated, use `list` instead!'
+        action_name = :list
+      end
+      return after_request &block if action_name == nil
+      send("after_#{action_name}", &block)
     end
 
     def before(action_name = nil, &block)

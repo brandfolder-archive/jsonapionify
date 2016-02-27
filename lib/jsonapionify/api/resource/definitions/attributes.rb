@@ -43,6 +43,14 @@ module JSONAPIonify::Api
       attributes.select(&:read?).map(&:name)
     end
 
+    def builder(&block)
+      context :builder, readonly: true do |context|
+        proc do |resource, instance|
+          block.call resource, instance, context
+        end
+      end
+    end
+
     def field_valid?(name)
       fields.include? name.to_sym
     end

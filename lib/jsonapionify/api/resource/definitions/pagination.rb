@@ -51,8 +51,8 @@ module JSONAPIonify::Api
 
           links.first first: size
           links.last last: size
-          links.prev before: build_cursor_from_instance(context.request, slice.first), last: size unless slice.first == collection.first
-          links.next after: build_cursor_from_instance(context.request, slice.last), first: size unless slice.last == collection.last
+          links.prev before: build_cursor_from_instance(context.request, slice.first), last: size unless !slice.first || slice.first == collection.first
+          links.next after: build_cursor_from_instance(context.request, slice.last), first: size unless !slice.last || slice.last == collection.last
 
           slice
         end
@@ -82,8 +82,8 @@ module JSONAPIonify::Api
 
           links.first first: size
           links.last last: size
-          links.prev before: build_cursor_from_instance(context.request, slice.first), last: size unless slice.first == collection.first
-          links.next after: build_cursor_from_instance(context.request, slice.last), first: size unless slice.last == collection.last
+          links.prev before: build_cursor_from_instance(context.request, slice.first), last: size unless !slice.first || slice.first == collection.first
+          links.next after: build_cursor_from_instance(context.request, slice.last), first: size unless !slice.last || slice.last == collection.last
 
           slice
         end
