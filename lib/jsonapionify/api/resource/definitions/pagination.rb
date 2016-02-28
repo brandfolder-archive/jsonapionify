@@ -42,7 +42,7 @@ module JSONAPIonify::Api
               array_select_past_cursor(collection, context.sort_params, key_values).first(size)
             elsif (before = params['before'])
               key_values = parse_and_validate_cursor(:before, before, context)
-              array_select_past_cursor(collection, context.sort_params.reverse, key_values).last(size)
+              array_select_past_cursor(collection, context.sort_params.invert, key_values).last(size)
             elsif params['last']
               collection.last(size)
             else
@@ -70,7 +70,7 @@ module JSONAPIonify::Api
               arel_select_past_cursor(collection, context.sort_params, key_values).limit(size)
             elsif (before = params['before'])
               key_values = parse_and_validate_cursor(:before, before, context)
-              ids        = arel_select_past_cursor(collection, context.sort_params.reverse, key_values)
+              ids        = arel_select_past_cursor(collection, context.sort_params.invert, key_values)
                              .reverse_order.limit(size).pluck(id_attribute)
               collection.where(id_attribute => ids)
             elsif params['last']

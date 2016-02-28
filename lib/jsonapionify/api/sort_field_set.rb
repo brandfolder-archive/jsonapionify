@@ -12,7 +12,7 @@ module JSONAPIonify::Api
       map(&:to_hash).reduce(:merge)
     end
 
-    def reverse
+    def invert
       self.class.new.tap do |set|
         each do |field|
           name =
