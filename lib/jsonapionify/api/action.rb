@@ -184,6 +184,18 @@ module JSONAPIonify::Api
           context.response_headers
         end
 
+        define_singleton_method :invoke_response! do
+          response_definition = action.responses.find { |response| response.accept? request } ||
+            error_now(:not_acceptable)
+          response_definition.call(self, context).tap do |status, headers, body|
+            self.class.cache_store.write(
+              cache_options[:key],
+              [status, headers, body.body],
+              **cache_options.except(:key)
+            ) if request.get? && cache_options.present?
+          end
+        end
+
         begin
           # Run Callbacks
           [:request, action.name].each do |callback|
@@ -198,16 +210,7 @@ module JSONAPIonify::Api
           # Start the request
           instance_exec(context, &action.request_block)
           fail Errors::RequestError if errors.present?
-          response_definition =
-            action.responses.find { |response| response.accept? request } ||
-              error_now(:not_acceptable)
-          response_definition.call(self, context).tap do |status, headers, body|
-            self.class.cache_store.write(
-              cache_options[:key],
-              [status, headers, body.body],
-              **cache_options.except(:key)
-            ) if request.get? && cache_options.present?
-          end
+          invoke_response!
         rescue Errors::RequestError
           error_response
         rescue Errors::CacheHit
