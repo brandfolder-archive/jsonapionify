@@ -196,21 +196,21 @@ module JSONAPIonify::Api
           end
         end
 
-        begin
-          # Run Callbacks
-          [:request, action.name].each do |callback|
-            case run_callbacks(callback, context) { errors.present? }
-            when true # Boolean true means errors
-              raise Errors::RequestError
-            when nil # nil means no result, callback failed
-              error_now :internal_server_error
-            end if action.name
-          end
-
-          # Start the request
+        commit_and_respond = proc {
+          fail Errors::RequestError if errors.present?
           instance_exec(context, &action.request_block)
           fail Errors::RequestError if errors.present?
           invoke_response!
+        }
+
+        begin
+          run_callbacks(:request, context) do
+            if action.name
+              run_callbacks(action.name, context, &commit_and_respond)
+            else
+              commit_and_respond.call
+            end
+          end || error_now(:internal_server_error)
         rescue Errors::RequestError
           error_response
         rescue Errors::CacheHit
