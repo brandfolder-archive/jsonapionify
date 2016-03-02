@@ -1,48 +1,64 @@
 require 'active_support/concern'
+require 'unstrict_proc'
 
 module JSONAPIonify
   module Callbacks
+    using UnstrictProc
     extend ActiveSupport::Concern
-    included do
+    CallbackHalted = Class.new StandardError
 
-      def self.define_callbacks(*names)
-        names.each do |name|
-          chains = {
-            main:   "__#{name}_callback_chain",
-            before: "__#{name}_before_callback_chain",
-            after:  "__#{name}_after_callback_chain"
-          }
-          define_method chains[:main] do |*args, &block|
-            block ||= proc {}
-            if send(chains[:before], *args) != false
-              value = instance_exec(*args, &block)
-              value if send(chains[:after], *args) != false
-            end
-          end unless method_defined? chains[:main]
+    module ClassMethods
+      def define_callbacks(*names)
+        names.each &method(:define_callback).to_proc
+      end
 
-          # Define before and after chains
-          %i{after before}.each do |timing|
-            define_method chains[timing] { |*| } unless method_defined? chains[timing]
+      def define_callback(name)
+        return if method_defined? "get_#{name}_callbacks"
+        memo_name = "__#{name}_callbacks__"
+        define_singleton_method memo_name do
+          instance_variable_get("@#{memo_name}") ||
+            instance_variable_set("@#{memo_name}", {
+              before: [],
+              after: []
+            })
+        end
 
-            define_singleton_method "#{timing}_#{name}" do |sym = nil, &outer_block|
-              outer_block = (outer_block || sym).to_proc
-              prev_chain  = instance_method(chains[timing])
-              define_method chains[timing] do |*args, &block|
-                if prev_chain.bind(self).call(*args, &block) != false
-                  instance_exec(*args, &outer_block)
-                end
-              end
-            end
+        %i{before after}.each do |placement|
+          define_singleton_method "#{placement}_#{name}" do |*symbols, &block|
+            callbacks = send(memo_name)[placement]
+            callbacks.concat symbols
+            callbacks << block if block
           end
+        end
 
-          private *chains.values
-
+        # Fetch callbacks for a given name
+        define_singleton_method "get_#{name}_callbacks" do
+          return send(memo_name).dup.freeze unless superclass.respond_to?("get_#{name}_callbacks")
+          super_callbacks = superclass.send("get_#{name}_callbacks")
+          %i{before after}.each_with_object({}) do |placement, hash|
+            hash[placement] = super_callbacks[placement] + send(memo_name)[placement]
+          end.freeze
         end
       end
     end
 
     def run_callbacks(name, *args, &block)
-      send("__#{name}_callback_chain", *args, &block)
+      callbacks = self.class.send("get_#{name}_callbacks")
+
+      # Run the before callbacks
+      callbacks[:before].reduce(true) do |iterator, callable|
+        iterator != false && instance_exec(*args, &callable) != false
+      end != false || fail(CallbackHalted)
+
+      # Define the return value and the after callbacks
+      block.call.tap do
+        callbacks[:after].reduce(true) do |iterator, callable|
+          iterator != false && instance_exec(*args, &callable) != false
+        end != false || fail(CallbackHalted)
+      end
+
+    rescue CallbackHalted
+      false
     end
 
   end
