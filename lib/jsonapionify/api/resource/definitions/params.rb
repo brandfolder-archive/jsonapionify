@@ -31,7 +31,7 @@ module JSONAPIonify::Api
               should_error = true
               error :parameter_invalid, ParamOptions.keypath_to_string(*keypath)
             end
-          end
+          end unless context.request.options?
 
           # Check for requirement
           if (missing_params = ParamOptions.missing_parameters(context.request.params, required_params.values.map(&:keypath))).present?
