@@ -34,7 +34,7 @@ module JSONAPIonify::Api
       const_name = name.to_s.camelcase + 'Relationship'
       return const_get(const_name, false) if const_defined? const_name
       relationship_definition = relationship_definitions.find { |rel| rel.name == name }
-      raise Errors::RelationshipNotDefined, "Relationship not defined: #{name}" unless relationship_definition
+      raise Errors::RelationshipNotFound, "Relationship not found: #{name}" unless relationship_definition
       const_set const_name, relationship_definition.resource_class
     end
 
