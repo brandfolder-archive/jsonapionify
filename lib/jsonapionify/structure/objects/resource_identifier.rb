@@ -21,7 +21,11 @@ module JSONAPIonify::Structure
       def duplicate_exists?
         return false unless parent.is_a?(Array)
         peers = parent - [self]
-        peers.any? { |peer| same_as? peer }
+        !!peers.index(self)
+      end
+
+      def ==(other)
+        same_as? other
       end
 
       def duplicate_does_not_exist?
