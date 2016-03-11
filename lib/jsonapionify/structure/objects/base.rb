@@ -75,12 +75,12 @@ module JSONAPIonify::Structure
         to_hash
       end
 
-      def as_json
-        compile.deep_stringify_keys
+      def as_json(**opts)
+        compile(**opts).deep_stringify_keys
       end
 
-      def to_json
-        Oj.dump(as_json)
+      def to_json(**opts)
+        Oj.dump(as_json **opts)
       end
 
       def signature

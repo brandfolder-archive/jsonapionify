@@ -75,8 +75,8 @@ module JSONAPIonify::Structure
                                  Collections::ResourceIdentifiers
                                ]
 
-      def compile(*)
-        compiled        = super(validate: ENV['RACK_ENV'] != 'production')
+      def compile(**opts)
+        compiled        = super(**opts)
         compiled_errors = compiled['errors'] || []
         all_errors      = compiled_errors | errors.as_collection.compile
         if all_errors.present?
