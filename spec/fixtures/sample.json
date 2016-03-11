@@ -1,0 +1,3279 @@
+{
+  "links": {
+    "self": "https://api.brandfolder.com/v2/brandfolders/nfetzrmhesfq/assets?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc&page[first]=100",
+    "first": "https://api.brandfolder.com/v2/brandfolders/nfetzrmhesfq/assets?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc&page%5Bfirst%5D=100&sort=position",
+    "last": "https://api.brandfolder.com/v2/brandfolders/nfetzrmhesfq/assets?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc&page%5Blast%5D=100&sort=position",
+    "next": "https://api.brandfolder.com/v2/brandfolders/nfetzrmhesfq/assets?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc&page%5Bafter%5D=eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjMsImFzc2V0X2tleSI6ImRuMDR5MHBxIn19&page%5Bfirst%5D=100&sort=position"
+  },
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "meta": {
+    "cache_key": "eyJkc2wiOiI1YTZjZGFkOTYxYTIyMTNlM2JmZGQ5YTRiZmUyZGVlZGI3NmU5OTM1M2E4NTY2NzNhNGRmY2FjYjgxYmNiNDliIiwiYXBpIjoiVjI6OlB1YmxpY0BlNTYyZmY1Y2E5ZjgzYjIwODQ4MTlkZGViMzllZGM4YmYzOTE0ZDNlNGY4N2VmNDhlODFiZTAwNWIyMTBlYjgxIiwicGF0aCI6Ii92Mi9icmFuZGZvbGRlcnMvbmZldHpybWhlc2ZxL2Fzc2V0cyIsImFjY2VwdCI6WyJ0ZXh0L2h0bWwiLCJhcHBsaWNhdGlvbi94aHRtbCt4bWwiLCJpbWFnZS93ZWJwIiwiYXBwbGljYXRpb24veG1sIiwiKi8qIl0sInBhcmFtcyI6eyJzb3J0IjoicG9zaXRpb24iLCJhcGktdG9rZW4iOiJleUowZVhBaU9pSktWMVFpTENKaGJHY2lPaUpJVXpJMU5pSjkuZXlKMWMyVnlYMnRsZVNJNkltY3piWE5xWm5SM0luMC5uSHRocm50S0MtamdYdjRESVRzb1FKc2FwTUZfajk2YzJYTzFPRlN1T2JjIiwicGFnZSI6eyJmaXJzdCI6IjEwMCJ9fSwia2V5IjoiYXNzZXRzLzIwYjYzMzVmOTYzZmRmNjYwMjdlNjFmMTY2ZmQwMWMxYTE5MTdmMDFhODNjYzBmM2FmMzY0YmVkZjY4NDM4ZDIvIzxVc2VyOjB4MDA3ZjAxMzU2MWQxYTg-In0="
+  },
+  "data": [
+    {
+      "id": "0zd1mmd2",
+      "type": "assets",
+      "attributes": {
+        "name": "How to install your new Pineapple",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/i9li9lht/element.png",
+        "preview_url": "https://assets.brandfolder.com/i9li9lht/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Fall Campaign"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-05T00:06:02.905Z",
+        "updated_at": "2016-01-12T20:37:17.599Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/0zd1mmd2?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoiMHpkMW1tZDIifX0="
+      }
+    },
+    {
+      "id": "2ykf6a3u",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Named Least Innovative Company in the World",
+        "asset_type": "Press",
+        "thumbnail_url": "https://assets.brandfolder.com/s4pupn0q/element.png",
+        "preview_url": "https://assets.brandfolder.com/s4pupn0q/view.png",
+        "description": "Thanks to our team of dedicated technology strategists and experts, we're proud to announce that Pineapple has been named the least innovative company ever to exist.",
+        "asset_data": {
+          "url": "http://issuu.com/pineapple52/docs/press_release___for_immediate_relea?utm_source=conversion_success&utm_campaign=Transactional&utm_medium=email",
+          "published_date": "06/10/1986"
+        },
+        "tag_names": [],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-10T21:33:09.653Z",
+        "updated_at": "2016-01-12T22:00:14.562Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/2ykf6a3u?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoiMnlrZjZhM3UifX0="
+      }
+    },
+    {
+      "id": "g8xcufog",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Case Study",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://fp.brandfolder.com/api/file/TfjTQ2DoS66OuIlSR0My/convert?rotate=exif&strip=true&fit=max&h=162&w=262&format=png",
+        "preview_url": "https://fp.brandfolder.com/api/file/TfjTQ2DoS66OuIlSR0My/convert?rotate=exif&strip=true&fit=max&h=400&w=550&format=png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Spring Campaign",
+          "sales"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T20:49:34.327Z",
+        "updated_at": "2016-02-21T17:09:31.101Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/g8xcufog?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoiZzh4Y3Vmb2cifX0="
+      }
+    },
+    {
+      "id": "hkiyfbxq",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Sales One Sheet - V2",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://fp.brandfolder.com/api/file/jrRq8FWpS7mS2NX9BbUI/convert?rotate=exif&strip=true&fit=max&h=162&w=262&format=png",
+        "preview_url": "https://fp.brandfolder.com/api/file/jrRq8FWpS7mS2NX9BbUI/convert?rotate=exif&strip=true&fit=max&h=400&w=550&format=png",
+        "description": "Use this document as a sales tool for channel partners.",
+        "asset_data": {},
+        "tag_names": [
+          "channel"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T20:49:34.317Z",
+        "updated_at": "2016-02-21T17:13:29.612Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/hkiyfbxq?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoiaGtpeWZieHEifX0="
+      }
+    },
+    {
+      "id": "hzi6ddxg",
+      "type": "assets",
+      "attributes": {
+        "name": "Leaf",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "73b944",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "115",
+          "g": "185",
+          "b": "68",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [
+          "Events",
+          "Fall Campaign"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:41:45.329Z",
+        "updated_at": "2016-01-12T22:07:33.283Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/hzi6ddxg?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoiaHppNmRkeGcifX0="
+      }
+    },
+    {
+      "id": "igkirqvm",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Main Color",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/mm3atr8q/element.png",
+        "preview_url": "https://assets.brandfolder.com/mm3atr8q/view.png",
+        "description": "Do:\n* Use only on light backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all print situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "primary",
+          "Spring Campaign"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Combination Mark",
+          "Type": "Full Color",
+          "Use": "Print, Web"
+        },
+        "created_at": "2015-06-08T20:39:09.077Z",
+        "updated_at": "2016-02-21T17:07:37.217Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/igkirqvm?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoiaWdraXJxdm0ifX0="
+      }
+    },
+    {
+      "id": "jolgyq5x",
+      "type": "assets",
+      "attributes": {
+        "name": "High Powered Home Computer in White",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/o2woza-eho02x-8etixl/element.png",
+        "preview_url": "https://assets.brandfolder.com/o2woza-eho02x-8etixl/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Home",
+          "White"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "489008510292",
+          "Product Name": "Incredible Wool Knife",
+          "Version": "2.2",
+          "Color": "azure",
+          "Price": "98.7",
+          "Department": "Health",
+          "Manufacture Date": "2015-06-15",
+          "Short Description": "Use the primary SMS panel, then you can compress the haptic bus!",
+          "Long Description": "Poutine before they sold out letterpress hella hashtag. Normcore organic next level chillwave pug aesthetic. Kickstarter gluten-free sustainable gastropub.Lumbersexual cold-pressed xoxo poutine disrupt five dollar toast vinegar pug. Synth yuccie swag cardigan church-key wayfarers pitchfork. Keytar stumptown mustache trust fund gluten-free skateboard thundercats bicycle rights.Tofu carry irony slow-carb brooklyn. Raw denim cornhole pinterest. Thundercats taxidermy drinking pickled artisan. Microdosing pork belly meggings bitters. Twee green juice scenester vinegar.",
+          "Magic Code": "z6rb948wrimtnm9ahagucgmt7p8zdsc57w6i0yumtopestb30eo6mrp1j3qndb8pceyp9ukix04xdd04npqqevu8uig0dov64kmwgfx7cxvjdw5w764sax796xvjuzc7nmda5aov6ui7msnufpp4cvziwa68stma622nzifpk4l4dk9ej4k5jpywuwq139nxfiougfw19cp4wzvkpgb837syadgrxdc3y7ddvywwv8rvokjedy7171bb0xvcmlv",
+          "Owner": "Mrs. Jessie Trantow",
+          "Contact Email": "jerrold@brown.biz",
+          "Contact Number": "983-984-0989",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://kuphal.org/micah",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:50.308Z",
+        "updated_at": "2016-02-21T16:40:37.254Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/jolgyq5x?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5Ijoiam9sZ3lxNXgifX0="
+      }
+    },
+    {
+      "id": "kuckpaxo",
+      "type": "assets",
+      "attributes": {
+        "name": "EB Garamond",
+        "asset_type": "Font",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "Use for all print advertisements.",
+        "asset_data": {},
+        "tag_names": [
+          "print"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:58:38.404Z",
+        "updated_at": "2016-02-21T17:11:03.854Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/kuckpaxo?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5Ijoia3Vja3BheG8ifX0="
+      }
+    },
+    {
+      "id": "t6z4lqc6",
+      "type": "assets",
+      "attributes": {
+        "name": "Steve",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/o1eewg38/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/o1eewg38/view.jpg",
+        "description": "Steve Careers is an competitive ping pong player and holds the world record for simultaneously playing ping pong, standing on one leg and holding a baby dachshund.",
+        "asset_data": {
+          "bio": "Steve Careers is an competitive ping pong player and holds the world record for simultaneously playing ping pong, standing on one leg and holding a baby dachshund.",
+          "title": "CEO",
+          "phone_number": "555-555-5555",
+          "email": "steve@pineapple.com",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [
+          "Fall Campaign"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.253Z",
+        "updated_at": "2016-02-21T16:34:47.953Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/t6z4lqc6?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoidDZ6NGxxYzYifX0="
+      }
+    },
+    {
+      "id": "uzm9xc16",
+      "type": "assets",
+      "attributes": {
+        "name": "1113280 1099 9fc66f",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/kfqnnt9s/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/kfqnnt9s/view.jpg",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Phone",
+          "Action Shot"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:41:48.105Z",
+        "updated_at": "2016-01-12T20:30:40.564Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/uzm9xc16?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoidXptOXhjMTYifX0="
+      }
+    },
+    {
+      "id": "wuf6amw3",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Ads",
+        "asset_type": "ExternalMedium",
+        "thumbnail_url": "https://assets.brandfolder.com/Media_wuf6amw3/element-1456073031.png",
+        "preview_url": "http://static.brandfolder.com/assets/types/video.svg",
+        "description": "A collection of some old Pineapple computer advertisements.",
+        "asset_data": {
+          "url": "https://www.youtube.com/watch?v=3OZg3ljsbc0"
+        },
+        "tag_names": [
+          "Spring Campaign",
+          "Computer"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-16T18:11:10.513Z",
+        "updated_at": "2016-02-21T16:43:51.455Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/wuf6amw3?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5Ijoid3VmNmFtdzMifX0="
+      }
+    },
+    {
+      "id": "ztdz3ngd",
+      "type": "assets",
+      "attributes": {
+        "name": "computer-mouse55",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/9ipf66nk/element.png",
+        "preview_url": "https://assets.brandfolder.com/9ipf66nk/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Graphic Designer Tools"
+        ],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:13.690Z",
+        "updated_at": "2016-01-12T20:30:41.488Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/ztdz3ngd?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoienRkejNuZ2QifX0="
+      }
+    },
+    {
+      "id": "zyks3wl9",
+      "type": "assets",
+      "attributes": {
+        "name": "Mission Statement",
+        "asset_type": "Text",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "At Pineapple, our mission is to ensure that outdated technology stays relevant, so that our fans can relive the integrity and joy of the past. We promise to deliver the most authentic and outdated technology that our fans have already seen. \n\nPineapple: empowering people with the past. ",
+        "asset_data": {},
+        "tag_names": [],
+        "position": 0,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T20:44:49.827Z",
+        "updated_at": "2016-01-12T22:07:52.780Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/zyks3wl9?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MCwiYXNzZXRfa2V5IjoienlrczN3bDkifX0="
+      }
+    },
+    {
+      "id": "1es3r78k",
+      "type": "assets",
+      "attributes": {
+        "name": "chat103",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/3n7h9lw9/element.png",
+        "preview_url": "https://assets.brandfolder.com/3n7h9lw9/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Office",
+          "Phone"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:07.212Z",
+        "updated_at": "2016-01-12T20:30:11.949Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/1es3r78k?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoiMWVzM3I3OGsifX0="
+      }
+    },
+    {
+      "id": "1f9weyog",
+      "type": "assets",
+      "attributes": {
+        "name": "Arapey",
+        "asset_type": "Font",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-10-06T18:33:57.789Z",
+        "updated_at": "2016-02-21T16:33:27.040Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/1f9weyog?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoiMWY5d2V5b2cifX0="
+      }
+    },
+    {
+      "id": "82z7kg4f",
+      "type": "assets",
+      "attributes": {
+        "name": "Bob",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/00psav40/element.png",
+        "preview_url": "https://assets.brandfolder.com/00psav40/view.png",
+        "description": "After working at Pineapple for the past seven years, Bob has learned the way to consumer hearts. ",
+        "asset_data": {
+          "bio": "After working at Pineapple for the past seven years, Bob has learned the way to consumer hearts. ",
+          "title": "Marketing",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [
+          "Spring Campaign"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.638Z",
+        "updated_at": "2016-01-12T22:07:49.570Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/82z7kg4f?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoiODJ6N2tnNGYifX0="
+      }
+    },
+    {
+      "id": "fzzyyjzb",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "f7c216",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "247",
+          "g": "194",
+          "b": "22",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [
+          "Events",
+          "Fall Campaign"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:42:13.157Z",
+        "updated_at": "2016-01-12T22:07:33.438Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/fzzyyjzb?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoiZnp6eXlqemIifX0="
+      }
+    },
+    {
+      "id": "is887mv1",
+      "type": "assets",
+      "attributes": {
+        "name": "Illustration10",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/0v3aoc6g/element.png",
+        "preview_url": "https://assets.brandfolder.com/0v3aoc6g/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Phone"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:41:58.324Z",
+        "updated_at": "2016-01-12T20:30:38.587Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/is887mv1?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoiaXM4ODdtdjEifX0="
+      }
+    },
+    {
+      "id": "l7ya842o",
+      "type": "assets",
+      "attributes": {
+        "name": "Testimonials",
+        "asset_type": "Text",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "\"I first became enthralled with Pineapple when I visited my sister in New York City. Once I saw that there was a floppy drive in her machine, I couldn't believe my eyes! Now I can finally access all those floppy disks I've been saving notes on over the years and get to writing my novel.\"\n<b>-Deborah L. Oates, Aspiring Romance Novelist</b>\n\n\"I purchased a Pineapple desktop computer 10 months ago and itâ€™s been absolutely incredible. I can't wait to get one for my son when he graduates high school and heads to college next year! I know he'll need it to follow in my footsteps.\"\n<b>-Jon Leavenworth, Aerospace Engineer</b>\n\n\"I am so happy someone decided to bring back the computers I grew up with. I love how long it takes to warm up and how slow it runs. Plus, the incessant beeping noises keep me company â€“ thereâ€™s only so much conversation my cats provide!\" \n<b>- Sally Burns, Stay-at-Home Cat Mom</b>\n\n\"I donâ€™t know why everyone is so crazy over the Apple Watch. Pineappleâ€™s watch is SO much better! The calculator is right on the wristband so I no longer have to keep one in my fanny pack. Thank you Pineapple for actually understanding my needs!\"\n<b>- Bruce Clements, High School Chemistry Teacher</b>\n",
+        "asset_data": {},
+        "tag_names": [
+          "Fall Campaign"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-10T22:22:21.476Z",
+        "updated_at": "2016-01-12T22:08:37.464Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/l7ya842o?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoibDd5YTg0Mm8ifX0="
+      }
+    },
+    {
+      "id": "nicdy2gh",
+      "type": "assets",
+      "attributes": {
+        "name": "Summer Product Catolog",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/4nrlyumv/element.png",
+        "preview_url": "https://assets.brandfolder.com/4nrlyumv/view.png",
+        "description": "Is it Summer? Go ahead and share this with your prospects",
+        "asset_data": {},
+        "tag_names": [
+          "Catologue"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-04T23:18:57.198Z",
+        "updated_at": "2016-01-12T20:37:43.524Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/nicdy2gh?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoibmljZHkyZ2gifX0="
+      }
+    },
+    {
+      "id": "qnxdtx77",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Secondary Color",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/9u8w249j/element.png",
+        "preview_url": "https://assets.brandfolder.com/9u8w249j/view.png",
+        "description": "Do:\n* Use only on dark backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all print  situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "Interactive",
+          "Spring Campaign"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Combination Mark",
+          "Type": "Full Color",
+          "Use": "Print, Web"
+        },
+        "created_at": "2015-06-08T20:39:08.589Z",
+        "updated_at": "2016-02-21T17:11:30.977Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/qnxdtx77?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoicW54ZHR4NzcifX0="
+      }
+    },
+    {
+      "id": "w8zj20v3",
+      "type": "assets",
+      "attributes": {
+        "name": "Holding the Tower of Power",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/72o1gwj4/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/72o1gwj4/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Action Shot",
+          "Fall Campaign"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "754955618234",
+          "Product Name": "Enormous Leather Bag",
+          "Version": "0.8.4",
+          "Color": "pink",
+          "Price": "51.51",
+          "Department": "Baby, Games & Tools",
+          "Manufacture Date": "2016-01-28",
+          "Short Description": "We need to back up the multi-byte FTP matrix!",
+          "Long Description": "Yolo actually cronut blue bottle. Everyday you probably haven't heard of them authentic. Neutra retro irony cliche pbr&b.\n\nLeggings tofu try-hard. Cliche kogi pork belly. Carry flannel yr pinterest leggings offal tousled synth.\n\nLo-fi drinking trust fund pitchfork meditation blue bottle. Cray drinking pabst retro scenester stumptown. Cred pbr&b art party fanny pack 3 wolf moon thundercats fingerstache venmo.",
+          "Magic Code": "1iydg6wrozl0w43z64dk4bapy2uquq43uv2t4pvjlmwmo0601f7qs1kqbd422jue3jvczktz058x3u4xnaj6gc25ay63aukxzlluv8exxmrb398oy9c4l1deplpichzj6hs6473rm7mlwy7vv1k93oo189u1pw2sc9139g1cv4v217cg7sw0v9kxauysld6oogvamycg56ft9cy2pp6bmimzotn9uly8ygl2roduj7ealarl65vttkc7n6cb9wf",
+          "Owner": "Bernard Anderson",
+          "Contact Email": "jackeline.gulgowski@pfannerstillziemann.info",
+          "Contact Number": "817-801-7137",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://carrollmetz.com/ottilie",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:48.165Z",
+        "updated_at": "2016-01-12T20:30:29.378Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/w8zj20v3?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5Ijoidzh6ajIwdjMifX0="
+      }
+    },
+    {
+      "id": "z6vtnybt",
+      "type": "assets",
+      "attributes": {
+        "name": "Rise and Shine",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/b6vbywig/element.png",
+        "preview_url": "https://assets.brandfolder.com/b6vbywig/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Fall Campaign"
+        ],
+        "position": 1,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-11T22:59:17.944Z",
+        "updated_at": "2016-02-21T16:34:30.623Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/z6vtnybt?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MSwiYXNzZXRfa2V5IjoiejZ2dG55YnQifX0="
+      }
+    },
+    {
+      "id": "1t2wpxsi",
+      "type": "assets",
+      "attributes": {
+        "name": "Acme",
+        "asset_type": "Font",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-10-08T15:36:56.129Z",
+        "updated_at": "2016-02-21T17:26:51.719Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/1t2wpxsi?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoiMXQyd3B4c2kifX0="
+      }
+    },
+    {
+      "id": "bj720ujy",
+      "type": "assets",
+      "attributes": {
+        "name": "Orange",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "e78e24",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "231",
+          "g": "142",
+          "b": "36",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [
+          "Events"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:43:03.837Z",
+        "updated_at": "2016-02-21T16:33:25.993Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/bj720ujy?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoiYmo3MjB1ankifX0="
+      }
+    },
+    {
+      "id": "iql3cit4",
+      "type": "assets",
+      "attributes": {
+        "name": "Computer-Watch of the Future",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/lodzxhat/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/lodzxhat/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Portable",
+          "Fall Campaign"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "496801685492",
+          "Product Name": "Practical Silk Plate",
+          "Version": "0.7.0",
+          "Color": "black",
+          "Price": "87.38",
+          "Department": "Tools, Health & Industrial",
+          "Manufacture Date": "2015-11-10",
+          "Short Description": "transmitting the port won't do anything, we need to calculate the neural XML interface!",
+          "Long Description": "Yuccie gentrify yr plaid farm-to-table gastropub brooklyn quinoa. Ramps keytar aesthetic humblebrag jean shorts viral ugh. Sriracha slow-carb blog truffaut normcore narwhal +1 fingerstache.\n\nBespoke craft beer whatever jean shorts yuccie drinking readymade thundercats. Pabst pbr&b kombucha listicle truffaut. Kombucha banjo synth. Lo-fi carry kombucha blog.\n\nLomo fashion axe mustache keytar lo-fi. Pitchfork put a bird on it blue bottle fingerstache neutra +1 hella. Meggings post-ironic food truck pabst carry fingerstache. Fixie etsy meditation ugh hella pop-up roof. You probably haven't heard of them irony seitan.",
+          "Magic Code": "3fqcf571huh5hliwe56v9nkrvjplaflfu8v0b6s1q9ybvzpuom8o254s7vjlas89mmjabncih9ny0obyq8raonsoji25f877l6ior1xdzudmb9nzdk7t3wphif8nraml73wqxnav5pppqr2e89xzeikl2do4u3drtyguwkmdpssj27lbgmin772307rnc743qcune3argiru6kqj449ith8lp0t9r4q72brwg90dy3nvmx4e5bx6wxce0hkctb6",
+          "Owner": "Anya Johnson II",
+          "Contact Email": "lexus.mitchell@fay.org",
+          "Contact Number": "263.047.6847",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://brekke.name/vella.nienow",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:48.461Z",
+        "updated_at": "2016-01-12T20:30:42.244Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/iql3cit4?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoiaXFsM2NpdDQifX0="
+      }
+    },
+    {
+      "id": "l3qpdfxm",
+      "type": "assets",
+      "attributes": {
+        "name": "agenda44",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/dpxfdk6m/element.png",
+        "preview_url": "https://assets.brandfolder.com/dpxfdk6m/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Startup",
+          "Fall Campaign"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:46:51.392Z",
+        "updated_at": "2016-02-21T16:33:27.741Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/l3qpdfxm?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoibDNxcGRmeG0ifX0="
+      }
+    },
+    {
+      "id": "o32iuj-d8tic0-cgtalv",
+      "type": "assets",
+      "attributes": {
+        "name": "Brand Usage Agreement",
+        "asset_type": "Text",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "<p><strong>Important Image Use Information</strong><br>By copying or making any use of the brand assets contained within this site, you acknowledge that you have read and understand, and agree to, the Brand Usage Agreement below that governs your use of these brand assets. If you do not agree to the Agreement<E2><80><99>s terms, do not copy or use them in any way, unless you have written permission signed by ABC Company.</p><p><strong>Brand Usage Agreement</strong><br>Subject to the terms of this Agreement, you may use these assets solely in whole for use in ABC Company approved materials. This right to use is personal to you and is not transferable by you to another party. You may not alter, or modify these assets, in whole or in part, for any reason.</p><p>As between you and ABC Company, ABC Company is and shall remain the sole and exclusive owner of the brand assets. You will not delete, alter, or obfuscate any proprietary legends relating to the brand.</p>",
+        "asset_data": {},
+        "tag_names": [
+          "Usage Agreement"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2016-02-24T20:13:30.789Z",
+        "updated_at": "2016-02-24T20:13:30.854Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/o32iuj-d8tic0-cgtalv?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoibzMyaXVqLWQ4dGljMC1jZ3RhbHYifX0="
+      }
+    },
+    {
+      "id": "pn96k5yg",
+      "type": "assets",
+      "attributes": {
+        "name": "Winter Product Catolog",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/qwib7yus/element.png",
+        "preview_url": "https://assets.brandfolder.com/qwib7yus/view.png",
+        "description": "Use this Catalog to show of our impressive line of Winter time computers ",
+        "asset_data": {},
+        "tag_names": [
+          "Catologue"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-04T23:18:57.692Z",
+        "updated_at": "2016-01-12T20:37:27.842Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/pn96k5yg?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoicG45Nms1eWcifX0="
+      }
+    },
+    {
+      "id": "ub9riyj7",
+      "type": "assets",
+      "attributes": {
+        "name": "Tony",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/pkvsn9ii/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/pkvsn9ii/view.jpg",
+        "description": "Tony's intense and driven personality have helped him make his way from intern to manager in a short fifteen years. He often brings homemade cupcakes into the office, although he usually eats them all himself.",
+        "asset_data": {
+          "bio": "Tony's intense and driven personality have helped him make his way from intern to manager in a short fifteen years. He often brings homemade cupcakes into the office, although he usually eats them all himself.",
+          "title": "Manager of Managers",
+          "phone_number": "555-555-5555",
+          "email": "tony@pineapple.com",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.273Z",
+        "updated_at": "2016-01-12T22:07:47.281Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/ub9riyj7?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoidWI5cml5ajcifX0="
+      }
+    },
+    {
+      "id": "wdq3d9pz",
+      "type": "assets",
+      "attributes": {
+        "name": "Rainbow Maker 5000",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/dfdx52dz/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/dfdx52dz/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Rainbow"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:41:58.688Z",
+        "updated_at": "2016-01-12T20:30:22.776Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/wdq3d9pz?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5Ijoid2RxM2Q5cHoifX0="
+      }
+    },
+    {
+      "id": "z0sey22d",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Black",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/32d5sua3/element.png",
+        "preview_url": "https://assets.brandfolder.com/32d5sua3/view.png",
+        "description": "Do:\n* Use only on light backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all print situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "tag",
+          "web",
+          "Black & White"
+        ],
+        "position": 2,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Combination Mark",
+          "Type": "Black & White",
+          "Use": "Print, Web"
+        },
+        "created_at": "2015-06-08T20:39:11.130Z",
+        "updated_at": "2016-02-21T17:10:50.313Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/z0sey22d?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MiwiYXNzZXRfa2V5IjoiejBzZXkyMmQifX0="
+      }
+    },
+    {
+      "id": "0x7wa2y0",
+      "type": "assets",
+      "attributes": {
+        "name": "Internal Sales Deck",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/dxbsnvtx/element.png",
+        "preview_url": "https://assets.brandfolder.com/dxbsnvtx/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-04T23:55:46.221Z",
+        "updated_at": "2016-01-12T20:37:26.105Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/0x7wa2y0?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoiMHg3d2EyeTAifX0="
+      }
+    },
+    {
+      "id": "5y6tlu35",
+      "type": "assets",
+      "attributes": {
+        "name": "Rainbow Maker 5000",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/y71qt56s/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/y71qt56s/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Rainbow"
+        ],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "690163296471",
+          "Product Name": "Mediocre Concrete Bench",
+          "Version": "6.9.8",
+          "Color": "lime",
+          "Price": "93.49",
+          "Department": "Books, Jewelery & Computers",
+          "Manufacture Date": "2016-02-19",
+          "Short Description": "The SMS matrix is down, parse the solid state program so we can compress the EXE card!",
+          "Long Description": "Goth etsy pug whatever keytar polaroid +1 pop-up. Mumblecore hoodie sartorial. Gluten-free pop-up asymmetrical trust fund photo booth. Tumblr cornhole ennui selfies.\n\nSelfies ramps fap portland kombucha meh. Locavore skateboard gastropub vhs venmo actually aesthetic. Keffiyeh bitters health. Meditation yolo normcore.\n\nSchlitz banjo cornhole tattooed loko lo-fi shabby chic. Five dollar toast williamsburg organic bespoke meditation aesthetic. Tacos mumblecore bespoke ugh 8-bit. Yolo franzen hoodie.",
+          "Magic Code": "y5dac0lt9tnjsq3784pttj4ditmd1m27p3naxzamgjgacvcqhk8il21o04z53iabdkiqbn71d4f1fqsuzxqzx5i9hsd2di4ave8kvj588mbsmg67d0i2ed5h8256g3ok46u5oz823x3fdn6j7wrw4ox9y35rs3m2h5jfzzmn6xj4h8z828huvtz1qra9wde1v8enss83052xy3tetd3z40ujobudwdha7b9982lljb7u6b22zjgk9panxg2gznw",
+          "Owner": "Mr. Myra Langosh",
+          "Contact Email": "aileen@boehm.net",
+          "Contact Number": "676-072-3430",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://maggiokuvalis.io/philip",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:55.768Z",
+        "updated_at": "2016-01-12T20:30:35.676Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/5y6tlu35?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoiNXk2dGx1MzUifX0="
+      }
+    },
+    {
+      "id": "a7wwfqkz",
+      "type": "assets",
+      "attributes": {
+        "name": "Sharon",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/xhbdyqhp/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/xhbdyqhp/view.jpg",
+        "description": "After growing up in a small Kansas town, Sharon left her job at Piggly Wiggly to pursue a greater dream. She never leaves the house without a bag of caramels in her purse and a smile on her face.",
+        "asset_data": {
+          "bio": "After growing up in a small Kansas town, Sharon left her job at Piggly Wiggly to pursue a greater dream. She never leaves the house without a bag of caramels in her purse and a smile on her face.",
+          "title": "Customer Service",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:59:17.053Z",
+        "updated_at": "2016-01-12T22:07:51.449Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/a7wwfqkz?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoiYTd3d2Zxa3oifX0="
+      }
+    },
+    {
+      "id": "fl6cowl1",
+      "type": "assets",
+      "attributes": {
+        "name": "computer-screen5",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/2llvvswy/element.png",
+        "preview_url": "https://assets.brandfolder.com/2llvvswy/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise",
+          "Computer",
+          "Fall Campaign"
+        ],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:14.050Z",
+        "updated_at": "2016-01-12T20:30:37.014Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/fl6cowl1?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoiZmw2Y293bDEifX0="
+      }
+    },
+    {
+      "id": "gjpyhqnm",
+      "type": "assets",
+      "attributes": {
+        "name": "computers-AI",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/0j8wj4fp/element.png",
+        "preview_url": "https://assets.brandfolder.com/0j8wj4fp/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Computer"
+        ],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:42:04.355Z",
+        "updated_at": "2016-01-12T20:30:29.735Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/gjpyhqnm?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoiZ2pweWhxbm0ifX0="
+      }
+    },
+    {
+      "id": "o0e86l13",
+      "type": "assets",
+      "attributes": {
+        "name": "Allan",
+        "asset_type": "Font",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "Primary font for web.",
+        "asset_data": {},
+        "tag_names": [
+          "web"
+        ],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-10-13T20:34:19.378Z",
+        "updated_at": "2016-02-21T17:10:30.238Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/o0e86l13?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoibzBlODZsMTMifX0="
+      }
+    },
+    {
+      "id": "rk8p72ru",
+      "type": "assets",
+      "attributes": {
+        "name": "Cherry",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "cc3338",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "204",
+          "g": "51",
+          "b": "56",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:45:01.110Z",
+        "updated_at": "2016-01-12T22:07:33.600Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/rk8p72ru?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5Ijoicms4cDcycnUifX0="
+      }
+    },
+    {
+      "id": "xy1i1vdj",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple White",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/2op3imw9/element.png",
+        "preview_url": "https://assets.brandfolder.com/2op3imw9/view.png",
+        "description": "Do:\n* Use only on dark backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all print situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "tag",
+          "web",
+          "Black & White"
+        ],
+        "position": 3,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Combination Mark",
+          "Use": "Print, Web",
+          "Type": "Black & White"
+        },
+        "created_at": "2015-06-08T20:39:11.598Z",
+        "updated_at": "2016-02-21T17:08:03.585Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/xy1i1vdj?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MywiYXNzZXRfa2V5IjoieHkxaTF2ZGoifX0="
+      }
+    },
+    {
+      "id": "c7volwpo",
+      "type": "assets",
+      "attributes": {
+        "name": "Computer with High Definition Monitor",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/pok40h80/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/pok40h80/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "High Definition"
+        ],
+        "position": 4,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "393130130408",
+          "Product Name": "Small Cotton Bench",
+          "Version": "0.2.6",
+          "Color": "blue",
+          "Price": "35.81",
+          "Department": "Movies & Shoes",
+          "Manufacture Date": "2015-08-11",
+          "Short Description": "Try to synthesize the JSON firewall, maybe it will input the primary bus!",
+          "Long Description": "Offal carry salvia. Schlitz squid vegan food truck banjo. Literally kinfolk farm-to-table. Drinking vinyl small batch loko xoxo lomo wolf. Retro vinegar crucifix small batch stumptown pour-over five dollar toast vice.\n\nCred organic quinoa polaroid. Beard meh godard tumblr shabby chic crucifix. Tumblr kitsch shabby chic gastropub paleo godard actually tofu. Tote bag actually wolf irony. Cronut squid umami artisan fingerstache plaid flannel crucifix.\n\nPop-up marfa cliche viral readymade carry put a bird on it. Pour-over lumbersexual +1 umami shoreditch. Fanny pack art party yolo echo mixtape 3 wolf moon cronut.",
+          "Magic Code": "rpuafmuder900wjabog37x01vsltyg4q42huziswgnmnlj9h6shwjy28v7rlom971qpke0odtrttg6x1eenvtipaztqu8b6f6373wqsyo42fdbwkgh6b3dkgpypad22u4u8v9iaj4go18p26s51boa91nug00ryub5fefri4edjsunuybgygz2sffjgr4o9256458ppitbur3hoh79ab7y2jir24rftlk4amjmpx42fan8e47fb4s5e6zir9231",
+          "Owner": "Myra Jenkins",
+          "Contact Email": "sierra@rolfson.org",
+          "Contact Number": "1-742-800-7250",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://raynor.net/alec",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:53.816Z",
+        "updated_at": "2016-01-12T20:30:09.774Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/c7volwpo?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NCwiYXNzZXRfa2V5IjoiYzd2b2x3cG8ifX0="
+      }
+    },
+    {
+      "id": "gephvtzs",
+      "type": "assets",
+      "attributes": {
+        "name": "computer220",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/xakrdne7/element.png",
+        "preview_url": "https://assets.brandfolder.com/xakrdne7/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise",
+          "Computer"
+        ],
+        "position": 4,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:14.236Z",
+        "updated_at": "2016-02-21T16:33:26.597Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/gephvtzs?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NCwiYXNzZXRfa2V5IjoiZ2VwaHZ0enMifX0="
+      }
+    },
+    {
+      "id": "gfbbhnru",
+      "type": "assets",
+      "attributes": {
+        "name": "MX-C9 20000000 Ad",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/lmefejia/element.png",
+        "preview_url": "https://assets.brandfolder.com/lmefejia/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "sales",
+          "Spring Campaign"
+        ],
+        "position": 4,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T21:17:25.546Z",
+        "updated_at": "2016-02-21T17:12:53.930Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/gfbbhnru?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NCwiYXNzZXRfa2V5IjoiZ2ZiYmhucnUifX0="
+      }
+    },
+    {
+      "id": "wge8aquv",
+      "type": "assets",
+      "attributes": {
+        "name": "Plum",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "Coated: 202\nUncoated: 202 C",
+        "asset_data": {
+          "hex": "902e7d",
+          "c": "89",
+          "m": "89",
+          "y": "89",
+          "k": "89",
+          "r": "144",
+          "g": "46",
+          "b": "125",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [],
+        "position": 4,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:45:56.872Z",
+        "updated_at": "2016-01-12T22:07:34.220Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/wge8aquv?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NCwiYXNzZXRfa2V5Ijoid2dlOGFxdXYifX0="
+      }
+    },
+    {
+      "id": "xl9gpi3o",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Text - Black",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/ifiib2qj/element.png",
+        "preview_url": "https://assets.brandfolder.com/ifiib2qj/view.png",
+        "description": "Use for black & white print use only.",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "Spring Campaign",
+          "Black & White"
+        ],
+        "position": 4,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Word Mark",
+          "Type": "Black & White",
+          "Use": "Print, Web"
+        },
+        "created_at": "2015-08-19T18:08:51.380Z",
+        "updated_at": "2016-02-24T23:00:03.870Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/xl9gpi3o?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NCwiYXNzZXRfa2V5IjoieGw5Z3BpM28ifX0="
+      }
+    },
+    {
+      "id": "z2sslti4",
+      "type": "assets",
+      "attributes": {
+        "name": "Chuck",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/fpgwpidk/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/fpgwpidk/view.jpg",
+        "description": "Chuck's well-rounded experience includes professional salsa dancing, teaching and interning at NASA. On weekends, you can find him spelunking through deep caves in search of rare minerals and gems.",
+        "asset_data": {
+          "bio": "Chuck's well-rounded experience includes professional salsa dancing, teaching and interning at NASA. On weekends, you can find him spelunking through deep caves in search of rare minerals and gems.",
+          "title": "Research & Development",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 4,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.345Z",
+        "updated_at": "2016-01-12T22:07:48.125Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/z2sslti4?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NCwiYXNzZXRfa2V5IjoiejJzc2x0aTQifX0="
+      }
+    },
+    {
+      "id": "0hsj7yhb",
+      "type": "assets",
+      "attributes": {
+        "name": "Keyboard with Joystick",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/ea80w0oa/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/ea80w0oa/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Keyboard",
+          "White"
+        ],
+        "position": 5,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "334083094990",
+          "Product Name": "Intelligent Silk Gloves",
+          "Version": "5.7.5",
+          "Color": "indigo",
+          "Price": "13.76",
+          "Department": "Garden",
+          "Manufacture Date": "2015-10-11",
+          "Short Description": "The RAM interface is down, calculate the virtual circuit so we can compress the USB bus!",
+          "Long Description": "Iphone photo booth asymmetrical cornhole cronut. Stumptown selfies etsy actually celiac. Wolf literally lomo polaroid forage.\n\nRoof direct trade normcore selvage celiac narwhal mumblecore. Tilde vegan vinyl health 90's artisan typewriter. Keffiyeh craft beer tumblr bespoke park offal. Shoreditch diy actually venmo echo. Pbr&b irony schlitz wayfarers actually.\n\nPortland mumblecore cliche actually pour-over scenester chartreuse. Lumbersexual health beard etsy. Taxidermy goth freegan. Fixie ramps trust fund banh mi.",
+          "Magic Code": "zlzlj2pldp2m6u4rnnyefovlb7k7cwhpyr5ecdu822i9kfosqcavjpdqq0saq71raoraci01seweub6aqge73gyci9lz3zle535yo9fzyt4hplyxej9wfzt6j9jn4v3ynjzii8nzfuebomfkgzkzd6a3g3v2a2wbsj4phvpuex0xuhjxwv67myliw4k4g5of1iawdvtece539b6uc7qlk2ns495duow9icf8ougoyi19hknxfhiv4qblv4esk8n",
+          "Owner": "Jennie Powlowski",
+          "Contact Email": "mckenna@rowe.name",
+          "Contact Number": "548-778-8303",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://oconner.io/melba.bashirian",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:51.926Z",
+        "updated_at": "2016-01-12T20:30:19.495Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/0hsj7yhb?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NSwiYXNzZXRfa2V5IjoiMGhzajd5aGIifX0="
+      }
+    },
+    {
+      "id": "2vclqpcg",
+      "type": "assets",
+      "attributes": {
+        "name": "Blueberry",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "0e97d3",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "14",
+          "g": "151",
+          "b": "211",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [],
+        "position": 5,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:51:17.549Z",
+        "updated_at": "2016-01-12T22:07:33.831Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/2vclqpcg?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NSwiYXNzZXRfa2V5IjoiMnZjbHFwY2cifX0="
+      }
+    },
+    {
+      "id": "4x80geyk",
+      "type": "assets",
+      "attributes": {
+        "name": "Joe",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/k89oouqm/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/k89oouqm/view.jpg",
+        "description": "Joe is talented at making espresso flowers and hearts. He keeps the staff energized with his unique coffee concoctions, which sometimes include rare ingredients.",
+        "asset_data": {
+          "bio": "Joe is talented at making espresso flowers and hearts. He keeps the staff energized with his unique coffee concoctions, which sometimes include rare ingredients.",
+          "title": "In-House Barista",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 5,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.054Z",
+        "updated_at": "2016-01-12T22:07:45.795Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/4x80geyk?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NSwiYXNzZXRfa2V5IjoiNHg4MGdleWsifX0="
+      }
+    },
+    {
+      "id": "iqobmwvq",
+      "type": "assets",
+      "attributes": {
+        "name": "computer221",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/ihrqmhx1/element.png",
+        "preview_url": "https://assets.brandfolder.com/ihrqmhx1/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise",
+          "Computer"
+        ],
+        "position": 5,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:14.724Z",
+        "updated_at": "2016-01-12T20:30:21.932Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/iqobmwvq?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NSwiYXNzZXRfa2V5IjoiaXFvYm13dnEifX0="
+      }
+    },
+    {
+      "id": "jf61zbw2",
+      "type": "assets",
+      "attributes": {
+        "name": "Home Computing System Ad",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/ey287awk/element.png",
+        "preview_url": "https://assets.brandfolder.com/ey287awk/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "sales",
+          "Spring Campaign"
+        ],
+        "position": 5,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T21:17:24.071Z",
+        "updated_at": "2016-02-21T17:12:01.763Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/jf61zbw2?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NSwiYXNzZXRfa2V5IjoiamY2MXpidzIifX0="
+      }
+    },
+    {
+      "id": "gak7rsxv",
+      "type": "assets",
+      "attributes": {
+        "name": "Almost Black",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "222222",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "34",
+          "g": "34",
+          "b": "34",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [
+          "Black & White"
+        ],
+        "position": 6,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:40:28.888Z",
+        "updated_at": "2016-01-12T22:07:29.158Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/gak7rsxv?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NiwiYXNzZXRfa2V5IjoiZ2FrN3JzeHYifX0="
+      }
+    },
+    {
+      "id": "hy3r2o0t",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Watch Ad",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/6mg2t3rw/element.png",
+        "preview_url": "https://assets.brandfolder.com/6mg2t3rw/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "sales"
+        ],
+        "position": 6,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T21:17:23.704Z",
+        "updated_at": "2016-02-21T17:12:19.032Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/hy3r2o0t?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NiwiYXNzZXRfa2V5IjoiaHkzcjJvMHQifX0="
+      }
+    },
+    {
+      "id": "rcwxscq7",
+      "type": "assets",
+      "attributes": {
+        "name": "agenda5",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/qjdxbkgu/element.png",
+        "preview_url": "https://assets.brandfolder.com/qjdxbkgu/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise",
+          "Phone"
+        ],
+        "position": 6,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:46:51.596Z",
+        "updated_at": "2016-02-21T16:33:25.494Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/rcwxscq7?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NiwiYXNzZXRfa2V5IjoicmN3eHNjcTcifX0="
+      }
+    },
+    {
+      "id": "uoxpen7z",
+      "type": "assets",
+      "attributes": {
+        "name": "Judy",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/yya0lti0/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/yya0lti0/view.jpg",
+        "description": null,
+        "asset_data": {
+          "bio": "",
+          "title": "Lead Scientist",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 6,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:59:16.862Z",
+        "updated_at": "2016-01-12T22:07:47.316Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/uoxpen7z?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NiwiYXNzZXRfa2V5IjoidW94cGVuN3oifX0="
+      }
+    },
+    {
+      "id": "xrx8rl63",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Logomark Color",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/bnho37bp/element.png",
+        "preview_url": "https://assets.brandfolder.com/bnho37bp/view.png",
+        "description": "Do:\n* Use only on light backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all print situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "Interactive",
+          "web"
+        ],
+        "position": 6,
+        "approved": true,
+        "custom_fields": {
+          "Use": "Print, Web",
+          "Style": "Symbol",
+          "Type": "Full Color"
+        },
+        "created_at": "2015-06-08T20:39:13.617Z",
+        "updated_at": "2016-02-21T17:11:16.666Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/xrx8rl63?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NiwiYXNzZXRfa2V5IjoieHJ4OHJsNjMifX0="
+      }
+    },
+    {
+      "id": "xt6o2zmy",
+      "type": "assets",
+      "attributes": {
+        "name": "Professional Computing 2",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/a627skzw/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/a627skzw/view.jpg",
+        "description": "In addition to fulfilling all the computing needs of a technological wizard, the screen can actually be TOUCHED!",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Action Shot",
+          "Touch Screen"
+        ],
+        "position": 6,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "485380317316",
+          "Product Name": "Rustic Leather Bag",
+          "Version": "0.7.4",
+          "Color": "ivory",
+          "Price": "15.28",
+          "Department": "Automotive, Industrial & Toys",
+          "Manufacture Date": "2016-02-01",
+          "Short Description": "Try to connect the ADP protocol, maybe it will connect the multi-byte pixel!",
+          "Long Description": "Kombucha loko pour-over. Fap crucifix asymmetrical health forage food truck roof neutra. Wayfarers next level cray hammock. Sartorial gastropub forage meggings keytar microdosing. Organic master cornhole shoreditch brunch literally.\n\nMigas offal butcher etsy iphone loko cornhole. Yr cliche tousled. Lo-fi flannel marfa franzen +1 venmo hella.\n\nListicle health tumblr selvage chillwave pinterest. Small batch migas pop-up offal fap 90's squid. Food truck diy banjo single-origin coffee. Freegan polaroid kombucha raw denim wes anderson pop-up. Pbr&b marfa deep v stumptown.",
+          "Magic Code": "4ic8lbuii4nf5wm1ckdhgb8hqkvzk5kogljllw7ebk3zx0m98g3suwrbrd4psepqzda0phqtop80fk1eb3qkai4pgn8n6koeau4ge38ez344raon0fuue7srtm0gi2xdr618djrxqmuu0ttz2bi7kjnvvt2gxa1h2sktxlc8nb88n66acw7ftum9qw8bt2zj9ahlodbgozp1o80ajzyo4nzepq83ufwfivw3y5u5nz2i7r3isijpt5cpmbqrk5a",
+          "Owner": "Adelle Herzog",
+          "Contact Email": "jaclyn@lowe.co",
+          "Contact Number": "1-464-753-3665",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://klingschaefer.com/luna_kuhn",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:42:04.468Z",
+        "updated_at": "2016-01-12T20:30:24.883Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/xt6o2zmy?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NiwiYXNzZXRfa2V5IjoieHQ2bzJ6bXkifX0="
+      }
+    },
+    {
+      "id": "9x4dg6wn",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Logomark White",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/1uulc4l1/element.png",
+        "preview_url": "https://assets.brandfolder.com/1uulc4l1/view.png",
+        "description": "Do:\n* Use only on dark backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all print situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "Black & White"
+        ],
+        "position": 7,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Symbol",
+          "Type": "Black & White",
+          "Use": "Print, Web"
+        },
+        "created_at": "2015-06-08T20:39:14.632Z",
+        "updated_at": "2016-02-21T17:08:25.090Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/9x4dg6wn?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NywiYXNzZXRfa2V5IjoiOXg0ZGc2d24ifX0="
+      }
+    },
+    {
+      "id": "el5ddlr9",
+      "type": "assets",
+      "attributes": {
+        "name": "save2",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/zutbdt8m/element.png",
+        "preview_url": "https://assets.brandfolder.com/zutbdt8m/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise"
+        ],
+        "position": 7,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:48:39.062Z",
+        "updated_at": "2016-02-21T16:33:26.718Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/el5ddlr9?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NywiYXNzZXRfa2V5IjoiZWw1ZGRscjkifX0="
+      }
+    },
+    {
+      "id": "kig0rx4y",
+      "type": "assets",
+      "attributes": {
+        "name": "Using the Internet",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/9ajarf6o/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/9ajarf6o/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Action Shot"
+        ],
+        "position": 7,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "866915413301",
+          "Product Name": "Lightweight Paper Shoes",
+          "Version": "0.68",
+          "Color": "violet",
+          "Price": "17.95",
+          "Department": "Garden",
+          "Manufacture Date": "2015-11-11",
+          "Short Description": "The SSL sensor is down, navigate the multi-byte alarm so we can override the SDD monitor!",
+          "Long Description": "Cliche ugh church-key squid. Kinfolk meditation pug listicle cred knausgaard bicycle rights flannel. Seitan raw denim 8-bit selvage truffaut farm-to-table readymade mlkshk.\n\nNeutra lumbersexual cray hashtag. Bitters blue bottle cronut heirloom. Fashion axe lo-fi waistcoat vinyl. Keytar brooklyn salvia post-ironic whatever. Typewriter skateboard narwhal letterpress.\n\nFashion axe sriracha bespoke. Pbr&b kinfolk aesthetic narwhal brunch fanny pack fixie mustache. Vinegar cray put a bird on it aesthetic mustache selfies semiotics photo booth. Selfies blue bottle listicle mlkshk. Pour-over vice tattooed single-origin coffee pinterest mumblecore artisan.",
+          "Magic Code": "pj3a47zkco9z6h93vgu5jkjaa3idn2j13jx1lyuhx31qkt2bgujuw697sfhewu3pcpqo837syubs00g4muhurg978rsa767p7ixfu2efcbrxoo6v4ptx8v8bnaravhhlgvvcdrky03un21bd4398aoxku68oyeu76fdpuwtr0wy70ac22pmu1o5vum84lr5f72npayympic9trsxy0ve9qtt4u4dip4hycpqlelgd30w1428sduoluwazsdjosc",
+          "Owner": "Mable Tremblay",
+          "Contact Email": "america.beahan@will.name",
+          "Contact Number": "(173) 778-7402",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://bruen.net/chad",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:53.940Z",
+        "updated_at": "2016-01-12T20:30:37.749Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/kig0rx4y?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NywiYXNzZXRfa2V5Ijoia2lnMHJ4NHkifX0="
+      }
+    },
+    {
+      "id": "p9yujikx",
+      "type": "assets",
+      "attributes": {
+        "name": "Joystick Keyboard Ad",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/g1jn66bh/element.png",
+        "preview_url": "https://assets.brandfolder.com/g1jn66bh/view.png",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "sales"
+        ],
+        "position": 7,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T21:17:25.056Z",
+        "updated_at": "2016-02-21T17:12:41.404Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/p9yujikx?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NywiYXNzZXRfa2V5IjoicDl5dWppa3gifX0="
+      }
+    },
+    {
+      "id": "pdqwej3f",
+      "type": "assets",
+      "attributes": {
+        "name": "Classic White",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "ffffff",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "255",
+          "g": "255",
+          "b": "255",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [
+          "Black & White"
+        ],
+        "position": 7,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T16:40:12.098Z",
+        "updated_at": "2016-01-12T22:07:29.664Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/pdqwej3f?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NywiYXNzZXRfa2V5IjoicGRxd2VqM2YifX0="
+      }
+    },
+    {
+      "id": "xyd18hjq",
+      "type": "assets",
+      "attributes": {
+        "name": "Debbie",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/ulwebswq/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/ulwebswq/view.jpg",
+        "description": null,
+        "asset_data": {
+          "bio": "",
+          "title": "Lead Sales Executive",
+          "phone_number": "555-555-5555",
+          "email": "debbie@pineapple.com",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 7,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:59:51.729Z",
+        "updated_at": "2016-01-12T22:07:47.241Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/xyd18hjq?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6NywiYXNzZXRfa2V5IjoieHlkMThoanEifX0="
+      }
+    },
+    {
+      "id": "0bwjmy4p",
+      "type": "assets",
+      "attributes": {
+        "name": "Light Gray",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "f8f8f8",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "248",
+          "g": "248",
+          "b": "248",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [],
+        "position": 8,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T17:57:23.652Z",
+        "updated_at": "2016-01-12T22:07:38.360Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/0bwjmy4p?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OCwiYXNzZXRfa2V5IjoiMGJ3am15NHAifX0="
+      }
+    },
+    {
+      "id": "ev9i40bz",
+      "type": "assets",
+      "attributes": {
+        "name": "High Powered Computer of the Future in Black",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/92jfx2zp/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/92jfx2zp/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Fall Campaign"
+        ],
+        "position": 8,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "620634820331",
+          "Product Name": "Practical Plastic Shoes",
+          "Version": "8.3.8",
+          "Color": "yellow",
+          "Price": "40.47",
+          "Department": "Music & Sports",
+          "Manufacture Date": "2016-02-19",
+          "Short Description": "Try to bypass the SAS capacitor, maybe it will quantify the online microchip!",
+          "Long Description": "Small batch literally yolo. Banh mi meggings humblebrag yolo green juice drinking. Green juice cliche iphone lomo. Cornhole aesthetic crucifix hoodie locavore.\n\nCeliac banh mi actually cold-pressed tofu. Tacos chillwave quinoa. Aesthetic diy readymade. Goth church-key narwhal pinterest taxidermy everyday swag squid.\n\nKitsch celiac retro hashtag chicharrones. Austin cardigan five dollar toast asymmetrical church-key intelligentsia crucifix. Chambray portland messenger bag lo-fi dreamcatcher kinfolk.",
+          "Magic Code": "prjrr0zd3lez69xswqfxlot5dqmhoecg1drmvy4hz8zn0p9gktk0sm45rcemp1bjw66lz62tjulr0hegkenyi7thvk7d5or1i031ru1phofy3j8hyea5heqgu4cmborsejmik5ntoqz0h1roqx8ssowqm2qd4hzc7zdngiojzo4e2pyp00teoo4bqbngud5z73pqf9s0n8cgmdpafspu1yskkb43jo3gbx6cpkyzssd8ys42jh361tzfkqaysgi",
+          "Owner": "Mr. Kian Langosh",
+          "Contact Email": "edgar_larson@schuster.com",
+          "Contact Number": "204.432.4411",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://ledner.io/nya.waters",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:50.357Z",
+        "updated_at": "2016-01-12T20:30:24.800Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/ev9i40bz?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OCwiYXNzZXRfa2V5IjoiZXY5aTQwYnoifX0="
+      }
+    },
+    {
+      "id": "exizmqyv",
+      "type": "assets",
+      "attributes": {
+        "name": "Charles",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/n7ymjgk3/element.png",
+        "preview_url": "https://assets.brandfolder.com/n7ymjgk3/view.png",
+        "description": "Charles' ability to crunch numbers is almost as strong as his ability to perform crunches, professionally. He has been competing in body building competitions since the age of 16; he claims it keeps his mind sharp.",
+        "asset_data": {
+          "bio": "Charles' ability to crunch numbers is almost as strong as his ability to perform crunches, professionally. He has been competing in body building competitions since the age of 16; he claims it keeps his mind sharp.",
+          "title": "Accountant",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 8,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.344Z",
+        "updated_at": "2016-01-12T22:07:50.412Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/exizmqyv?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OCwiYXNzZXRfa2V5IjoiZXhpem1xeXYifX0="
+      }
+    },
+    {
+      "id": "ksl212dh",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple Logomark Black",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/aazk7z9a/element.png",
+        "preview_url": "https://assets.brandfolder.com/aazk7z9a/view.png",
+        "description": "Do:\n* Use only on light backgrounds \n* Use for web services that require a rectangular logo\n* Use the EPS file format for most applications\n* Use CMYK for all  print situations\n\nDo Not:\n* Do not use unless the height is at least 35 pixels tall & 149 pixels wide\n* Do not use the logo in-line with text as a replacement to the name\n* Do not place other graphics or text next to the logo that is closer than a space equal to the vertical height of the arrow portion of the square from the corner to the tip of the arrow\n* Do not modify the logo, in any way, without explicit permission",
+        "asset_data": {},
+        "tag_names": [
+          "print",
+          "Black & White"
+        ],
+        "position": 8,
+        "approved": true,
+        "custom_fields": {
+          "Style": "Symbol",
+          "Type": "Black & White",
+          "Use": "Print, Web"
+        },
+        "created_at": "2015-06-08T20:39:15.141Z",
+        "updated_at": "2016-02-21T17:09:08.840Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/ksl212dh?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OCwiYXNzZXRfa2V5Ijoia3NsMjEyZGgifX0="
+      }
+    },
+    {
+      "id": "svvjiq61",
+      "type": "assets",
+      "attributes": {
+        "name": "data-analytics",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/fs46gp87/element.png",
+        "preview_url": "https://assets.brandfolder.com/fs46gp87/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Office"
+        ],
+        "position": 8,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:21.083Z",
+        "updated_at": "2016-01-12T20:30:33.687Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/svvjiq61?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OCwiYXNzZXRfa2V5Ijoic3Z2amlxNjEifX0="
+      }
+    },
+    {
+      "id": "81qp8wt7",
+      "type": "assets",
+      "attributes": {
+        "name": "Larry",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/9s1d4nfl/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/9s1d4nfl/view.jpg",
+        "description": null,
+        "asset_data": {
+          "bio": "",
+          "title": "Remote Employee",
+          "phone_number": "555-555-5555",
+          "email": "larry@pineapple.com",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 9,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:54.018Z",
+        "updated_at": "2016-01-12T22:07:37.612Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/81qp8wt7?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OSwiYXNzZXRfa2V5IjoiODFxcDh3dDcifX0="
+      }
+    },
+    {
+      "id": "lqjrvn9g",
+      "type": "assets",
+      "attributes": {
+        "name": "The Office of Tomorrow",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/kino392t/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/kino392t/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Action Shot"
+        ],
+        "position": 9,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "814970540994",
+          "Product Name": "Intelligent Cotton Gloves",
+          "Version": "0.81",
+          "Color": "lavender",
+          "Price": "47.66",
+          "Department": "Outdoors, Games & Jewelery",
+          "Manufacture Date": "2015-09-21",
+          "Short Description": "You can't quantify the card without backing up the digital XSS monitor!",
+          "Long Description": "Shabby chic fashion axe venmo pop-up. Gastropub semiotics swag pour-over shoreditch. Banjo five dollar toast disrupt shoreditch listicle messenger bag microdosing shabby chic.\n\nCold-pressed helvetica paleo photo booth echo knausgaard. Vinegar typewriter hoodie. Kale chips taxidermy tacos truffaut wayfarers quinoa tilde.\n\nChia distillery authentic tacos. Fashion axe plaid schlitz cleanse whatever flexitarian mixtape. Vice distillery flexitarian tumblr you probably haven't heard of them stumptown fanny pack. Pour-over church-key disrupt.",
+          "Magic Code": "6pwmwc151ped8i4c2g9qfiunw1eu8gwehryaj2vhzgvg8yhdvhnb2512sggoeer5x51pzbsq3czgdyqwms5ty34igm3j1a4f2fmuwfwf319pci54puosyyui0vgu5vl51rfk51oxvptd2zllztfqqdkwp4u4s4ny4387uvz50r0xbsu7jb5vcsahzis8qiybnjv34ywwof0iyp6ut0w6xd670xrxnxd2dew2a43j9ox3guvui03pngt0jv9yw8j",
+          "Owner": "Henderson Crona",
+          "Contact Email": "emily_brown@stehrratke.net",
+          "Contact Number": "(613) 035-5037",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://goldner.name/lenny",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:50.764Z",
+        "updated_at": "2016-01-12T20:30:22.657Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/lqjrvn9g?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OSwiYXNzZXRfa2V5IjoibHFqcnZuOWcifX0="
+      }
+    },
+    {
+      "id": "nrehsi6v",
+      "type": "assets",
+      "attributes": {
+        "name": "Grey",
+        "asset_type": "Color",
+        "thumbnail_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "preview_url": "http://static.brandfolder.com/assets/types/empty.svg",
+        "description": "",
+        "asset_data": {
+          "hex": "999999",
+          "c": "",
+          "m": "",
+          "y": "",
+          "k": "",
+          "r": "153",
+          "g": "153",
+          "b": "153",
+          "pantone": "",
+          "pantone_u": null
+        },
+        "tag_names": [],
+        "position": 9,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-10-08T15:37:24.271Z",
+        "updated_at": "2016-01-12T21:38:58.506Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/nrehsi6v?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OSwiYXNzZXRfa2V5IjoibnJlaHNpNnYifX0="
+      }
+    },
+    {
+      "id": "o3hmrv-2dzcvc-44kx1t",
+      "type": "assets",
+      "attributes": {
+        "name": "Pineapple CMYK Secondary Logo",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/o3hmrv-2dzcvc-bgy7lp/element.png",
+        "preview_url": "https://assets.brandfolder.com/o3hmrv-2dzcvc-bgy7lp/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [],
+        "position": 9,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2016-03-04T00:02:18.146Z",
+        "updated_at": "2016-03-04T01:01:11.617Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/o3hmrv-2dzcvc-44kx1t?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OSwiYXNzZXRfa2V5IjoibzNobXJ2LTJkemN2Yy00NGt4MXQifX0="
+      }
+    },
+    {
+      "id": "s5oh44zt",
+      "type": "assets",
+      "attributes": {
+        "name": "agenda4",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/xfvw6h73/element.png",
+        "preview_url": "https://assets.brandfolder.com/xfvw6h73/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise"
+        ],
+        "position": 9,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:46:51.067Z",
+        "updated_at": "2016-01-12T20:30:32.308Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/s5oh44zt?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6OSwiYXNzZXRfa2V5IjoiczVvaDQ0enQifX0="
+      }
+    },
+    {
+      "id": "d72qul34",
+      "type": "assets",
+      "attributes": {
+        "name": "Jeff",
+        "asset_type": "Person",
+        "thumbnail_url": "https://assets.brandfolder.com/6z78ppu3/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/6z78ppu3/view.jpg",
+        "description": null,
+        "asset_data": {
+          "bio": "",
+          "title": "Intern",
+          "phone_number": "",
+          "email": "",
+          "linkedin": "",
+          "twitter": ""
+        },
+        "tag_names": [],
+        "position": 10,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-06-08T22:50:53.941Z",
+        "updated_at": "2016-01-12T22:07:43.841Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/d72qul34?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTAsImFzc2V0X2tleSI6ImQ3MnF1bDM0In19"
+      }
+    },
+    {
+      "id": "vzzif7u9",
+      "type": "assets",
+      "attributes": {
+        "name": "best-choice",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/24ha3l3r/element.png",
+        "preview_url": "https://assets.brandfolder.com/24ha3l3r/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Office"
+        ],
+        "position": 10,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:46:57.444Z",
+        "updated_at": "2016-01-12T20:30:20.717Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/vzzif7u9?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTAsImFzc2V0X2tleSI6InZ6emlmN3U5In19"
+      }
+    },
+    {
+      "id": "408ouu96",
+      "type": "assets",
+      "attributes": {
+        "name": "browser129",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/rhz4xul4/element.png",
+        "preview_url": "https://assets.brandfolder.com/rhz4xul4/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Startup"
+        ],
+        "position": 11,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:03.419Z",
+        "updated_at": "2016-01-12T20:30:14.347Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/408ouu96?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTEsImFzc2V0X2tleSI6IjQwOG91dTk2In19"
+      }
+    },
+    {
+      "id": "xdteaabu",
+      "type": "assets",
+      "attributes": {
+        "name": "Phone of the Future",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/t17el2r5/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/t17el2r5/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Phone"
+        ],
+        "position": 11,
+        "approved": true,
+        "custom_fields": {
+          "Locale": "en",
+          "Product ID": "321776914632",
+          "Product Name": "Durable Silk Coat",
+          "Version": "0.34",
+          "Color": "pink",
+          "Price": "43.81",
+          "Department": "Home, Sports & Books",
+          "Manufacture Date": "2015-12-29",
+          "Short Description": "We need to copy the bluetooth CSS array!",
+          "Long Description": "Park biodiesel authentic farm-to-table banh mi chia williamsburg before they sold out. Franzen flannel gentrify. Austin vice artisan loko. Pitchfork mustache plaid mumblecore. Bushwick pabst small batch.\n\nFive dollar toast selfies next level. Meditation art party before they sold out. Hella actually readymade humblebrag chartreuse godard vinyl. Yuccie before they sold out semiotics neutra schlitz.\n\nFranzen mustache crucifix. Five dollar toast fingerstache 90's. Green juice actually try-hard health semiotics blog.",
+          "Magic Code": "qnn6jvbpjzvt1k6vf80wus0mhrpkmr2b7d41uvn2fu6k6p88cs14ngq9g24yr6xx0vf2a4zeo70k2gvweqfafxo85voicfzu0kni2xqhi7z48e4ppujknuecfuj5dtwizztwd3u7xnsqq1165u30mdogrd4vj21dn4nkzmzua5m7x0nl1lo5f0ncx3i5570sjqo0ai8qcekxqpm5xx3lcz8t5p0ldewe813jyb5rm6jkfo9ztv193mw1yg6xc8d",
+          "Owner": "Miss Dawn Nolan",
+          "Contact Email": "jany@rath.io",
+          "Contact Number": "905-045-9656",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://hettinger.biz/gillian",
+          "Copyright": "Copyright 2016 Pineapple, Inc."
+        },
+        "created_at": "2015-12-02T23:41:49.124Z",
+        "updated_at": "2016-01-12T20:30:11.543Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/xdteaabu?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTEsImFzc2V0X2tleSI6InhkdGVhYWJ1In19"
+      }
+    },
+    {
+      "id": "0hmlzgow",
+      "type": "assets",
+      "attributes": {
+        "name": "browser128",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/r1wlkmzm/element.png",
+        "preview_url": "https://assets.brandfolder.com/r1wlkmzm/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Graphic Designer Tools"
+        ],
+        "position": 12,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:03.585Z",
+        "updated_at": "2016-01-12T20:30:28.686Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/0hmlzgow?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTIsImFzc2V0X2tleSI6IjBobWx6Z293In19"
+      }
+    },
+    {
+      "id": "5fp5329i",
+      "type": "assets",
+      "attributes": {
+        "name": "Audio Recorder",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/52rtanpp/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/52rtanpp/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Audio Player"
+        ],
+        "position": 12,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "733533471659",
+          "Product Name": "Ergonomic Wooden Chair",
+          "Version": "1.3",
+          "Color": "fuchsia",
+          "Price": "11.79",
+          "Department": "Tools",
+          "Manufacture Date": "2016-01-16",
+          "Short Description": "Use the wireless SDD capacitor, then you can bypass the online firewall!",
+          "Long Description": "Authentic butcher meggings mumblecore. Humblebrag skateboard tumblr selvage normcore actually. Flexitarian microdosing jean shorts tote bag venmo. Twee tote bag meh vinegar selvage taxidermy gentrify.\n\nRamps mumblecore raw denim pour-over tacos lo-fi. Scenester distillery selvage. Synth meh kombucha health gentrify skateboard letterpress. Sriracha fanny pack yolo tousled pinterest. Kombucha 8-bit pabst pork belly fanny pack wolf raw denim.\n\nBiodiesel lo-fi fixie. Goth readymade mumblecore craft beer. Organic humblebrag typewriter xoxo pbr&b. Ramps locavore small batch intelligentsia beard organic. Chambray stumptown pork belly crucifix mlkshk.",
+          "Magic Code": "t0xen8p5gc8bkzuxmslvhy6j3st4jj6u11y2tafnz8fpwsxzgd8xtw58bh1k41uem4quvm1bwsyb1312mpeq6s4y7pmgauz9ohls0qpjbcdfoh7pyd9xnxy5mn6p5lg8vfk8zzphmbloam688t7579dfmzcsg8drvbmv3mfuepp9k0yxrzx7w9pu4wi31764tiaknw2yl2ez00bnck0e9hjjdmwgebn616evuoxv66ha97j14q693ihgsozqe3m",
+          "Owner": "Tyrese Nolan",
+          "Contact Email": "brown.dietrich@gerlachpaucek.info",
+          "Contact Number": "727-475-8515",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://hyattnikolaus.org/carlotta_schultz",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:49.267Z",
+        "updated_at": "2016-01-12T20:30:44.067Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/5fp5329i?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTIsImFzc2V0X2tleSI6IjVmcDUzMjlpIn19"
+      }
+    },
+    {
+      "id": "q07t7i97",
+      "type": "assets",
+      "attributes": {
+        "name": "chart1",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/6x9ud52k/element.png",
+        "preview_url": "https://assets.brandfolder.com/6x9ud52k/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Office"
+        ],
+        "position": 13,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:06.321Z",
+        "updated_at": "2016-01-12T20:30:33.615Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/q07t7i97?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTMsImFzc2V0X2tleSI6InEwN3Q3aTk3In19"
+      }
+    },
+    {
+      "id": "x0qsgheq",
+      "type": "assets",
+      "attributes": {
+        "name": "On the Job Computing",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/mfthvnvm/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/mfthvnvm/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Action Shot",
+          "Touch Screen"
+        ],
+        "position": 13,
+        "approved": true,
+        "custom_fields": {
+          "Price": "40.96",
+          "Department": "Sports & Computers",
+          "Manufacture Date": "2016-02-12",
+          "Short Description": "The JSON card is down, copy the bluetooth bus so we can navigate the RSS transmitter!",
+          "Product ID": "479947422013",
+          "Product Name": "Synergistic Concrete Keyboard",
+          "Version": "0.6.6",
+          "Color": "salmon",
+          "Long Description": "Synth cardigan before they sold out salvia humblebrag flannel pbr&b. Humblebrag lomo single-origin coffee slow-carb mustache tacos 3 wolf moon. Seitan pour-over cardigan irony tousled.\n\nSalvia cold-pressed leggings. Chicharrones pitchfork freegan lumbersexual vinegar ugh intelligentsia. Selfies truffaut meditation diy yr put a bird on it freegan.\n\nVenmo gentrify kickstarter truffaut portland fap. Echo hella aesthetic. Tumblr photo booth crucifix pinterest humblebrag. Poutine shabby chic chambray. Kogi selfies cornhole venmo.",
+          "Magic Code": "ijqxrtxd0dz7ha69b71rn5fcoaajdxdx54unb81h4n6ur3sts8nh3c825i75pd6hx7tg6lkdrphvgrcfyl1jprbbei51kgida8368biojc0vrocj3afqkbylj1om1jopb4eswyp977dbg4a61m1ys37w6h2f8cvkfnk8flpgucrwcyi5mm23mlt1o4ymu17898ojidm4dklg5sunqd64ezj0ea87gyccq96vfvnjj9oh4x47xp9ue65wtq07dbg",
+          "Owner": "Napoleon Macejkovic",
+          "Contact Email": "lukas.franecki@dubuque.io",
+          "Contact Number": "(737) 967-9721",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://dickens.biz/pink.ryan",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:49.592Z",
+        "updated_at": "2016-01-12T20:30:16.695Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/x0qsgheq?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTMsImFzc2V0X2tleSI6IngwcXNnaGVxIn19"
+      }
+    },
+    {
+      "id": "j050oura",
+      "type": "assets",
+      "attributes": {
+        "name": "Office Computer with Mega Keyboard",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/mwvpul9t/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/mwvpul9t/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer"
+        ],
+        "position": 14,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "483159869403",
+          "Product Name": "Sleek Plastic Coat",
+          "Version": "1.50",
+          "Color": "plum",
+          "Price": "39.39",
+          "Department": "Computers, Grocery & Electronics",
+          "Manufacture Date": "2015-10-21",
+          "Short Description": "You can't hack the protocol without synthesizing the bluetooth XML card!",
+          "Long Description": "Flannel vice williamsburg actually. Kale chips portland chia knausgaard photo booth celiac. Forage drinking cliche. Retro next level venmo cleanse asymmetrical. Celiac skateboard chia craft beer meggings.\n\nCeliac literally echo. Flannel xoxo slow-carb. Leggings franzen offal. Loko cronut quinoa mixtape bicycle rights forage hoodie ugh. Street pabst pop-up xoxo.\n\nWolf pork belly godard. Disrupt kogi hashtag direct trade. Selvage franzen humblebrag cardigan food truck.",
+          "Magic Code": "unh556ta5zgqmfk7bnle2xj5ew36kbzt13qzzy8dn2tiydg0r6sbn43og5pch1jubeaqx6tjht5j5kttt3j5usw4yll072p53ara0turvqnesyb4tolox2qk9o25ni7f3fz04aazdb5kca0gmoz9kpdmge67xdig8ctateh3nd3qo1q1h4phe1upn4avjjwqmpdkharjw00y308rwq0sxg4w59vw9f03cav0yrc5e2l8p3fisqtwh3veq1c3ntn",
+          "Owner": "Carlee Powlowski PhD",
+          "Contact Email": "quinton_kaulke@bergeturcotte.info",
+          "Contact Number": "(190) 150-0097",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://donnelly.name/nick.lind",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:55.073Z",
+        "updated_at": "2016-01-12T20:30:34.408Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/j050oura?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTQsImFzc2V0X2tleSI6ImowNTBvdXJhIn19"
+      }
+    },
+    {
+      "id": "nxq7vnee",
+      "type": "assets",
+      "attributes": {
+        "name": "chart",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/g4zd60q9/element.png",
+        "preview_url": "https://assets.brandfolder.com/g4zd60q9/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Office"
+        ],
+        "position": 14,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:06.875Z",
+        "updated_at": "2016-01-12T20:30:15.169Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/nxq7vnee?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTQsImFzc2V0X2tleSI6Im54cTd2bmVlIn19"
+      }
+    },
+    {
+      "id": "cz8yk56v",
+      "type": "assets",
+      "attributes": {
+        "name": "chart44",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/n9et5tdr/element.png",
+        "preview_url": "https://assets.brandfolder.com/n9et5tdr/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Office"
+        ],
+        "position": 15,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:07.049Z",
+        "updated_at": "2016-01-12T20:30:35.935Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/cz8yk56v?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTUsImFzc2V0X2tleSI6ImN6OHlrNTZ2In19"
+      }
+    },
+    {
+      "id": "z1ejqxb1",
+      "type": "assets",
+      "attributes": {
+        "name": "Portable Audio Recording",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/fnya984r/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/fnya984r/view.jpg",
+        "description": "Record sounds on the go!",
+        "asset_data": {},
+        "tag_names": [
+          "Audio Player",
+          "Audio Recorder"
+        ],
+        "position": 15,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "137948413517",
+          "Product Name": "Enormous Linen Chair",
+          "Version": "9.3",
+          "Color": "silver",
+          "Price": "40.52",
+          "Department": "Electronics, Toys & Kids",
+          "Manufacture Date": "2015-11-15",
+          "Short Description": "I'll calculate the optical EXE port, that should feed the SQL circuit!",
+          "Long Description": "Banh mi tote bag everyday cardigan street fixie lomo master. Wayfarers vinegar listicle lo-fi five dollar toast. Godard beard whatever ethical tousled tacos scenester. Ramps small batch butcher kombucha post-ironic. Pinterest try-hard wayfarers aesthetic goth semiotics kitsch.\n\nBrooklyn forage ethical. Cred vinegar taxidermy letterpress loko tofu trust fund. Marfa next level goth vice knausgaard 90's park kombucha. Mixtape wayfarers blue bottle next level. Fashion axe fixie 8-bit helvetica bitters.\n\nChillwave polaroid next level fap pop-up hoodie. Forage next level humblebrag cray. Tofu bespoke direct trade messenger bag flexitarian pitchfork. Tilde brooklyn tousled 8-bit thundercats marfa. Master vinegar food truck you probably haven't heard of them pour-over blue bottle disrupt.",
+          "Magic Code": "fb0ak2sa340fzkb27xx35spyovt3d8c0inn1c4ibwlsuyev864da4b3dl8xi9ki3zvx9dyo3maoh9lx747w0mtmcdespnksxzwskvixcrxd65e4b794i4xjsbsbaso4nfx48ygrgi33ylt0y6gtnmx3de9euocsneo2veu4otz89fyj4wf4cvsevrlxzztzmpmqb0vailbtmnwopumc8a3g9hfl6ynkydik5dppvolq5c4nps2ba0drzz7tw6k1",
+          "Owner": "Oliver Rice",
+          "Contact Email": "virgie_ortiz@hamill.net",
+          "Contact Number": "(183) 167-5475",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://walker.io/eliane.towne",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:49.491Z",
+        "updated_at": "2016-01-12T20:30:08.336Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/z1ejqxb1?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTUsImFzc2V0X2tleSI6InoxZWpxeGIxIn19"
+      }
+    },
+    {
+      "id": "99z38971",
+      "type": "assets",
+      "attributes": {
+        "name": "Home Gaming System",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/pnbjnacg/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/pnbjnacg/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Action Shot",
+          "Game",
+          "Kids",
+          "White"
+        ],
+        "position": 16,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "530086364476",
+          "Product Name": "Enormous Marble Bag",
+          "Version": "9.4.1",
+          "Color": "violet",
+          "Price": "15.35",
+          "Department": "Clothing & Automotive",
+          "Manufacture Date": "2015-12-25",
+          "Short Description": "We need to connect the optical COM capacitor!",
+          "Long Description": "Ethical fap sartorial try-hard banh mi. Roof keytar single-origin coffee xoxo listicle. Microdosing twee brunch portland helvetica bushwick diy. Letterpress pabst beard.\n\nPickled celiac narwhal diy scenester ennui tacos. 3 wolf moon raw denim tofu gentrify pour-over pork belly vegan master. Franzen drinking biodiesel vinegar gentrify bushwick. Hammock +1 godard selfies truffaut.\n\nFarm-to-table small batch banh mi. Fap gastropub next level. Tilde try-hard distillery thundercats meggings flannel street yolo.",
+          "Magic Code": "bndey56nk41rbxoels9vishwj9j0v3tprim9fgt2dpplzqtzqzf5dqlel9mwqzmrog9zkin2fc4mzh9p5ybvpf0f0acpn1ri1uvh7ncwxpob94k7k9uu5n8at0ua8gfof16q6li94tmxrl7ygn6scgiee4w6947ztd1s0qik86edybhksyhnkzd44v4mhgd7uttrss1rq02ldq5xrqf7amrhsz4z7m8f08y5p5r4mktumd33xfj5blktoemob6c",
+          "Owner": "Talon Lockman",
+          "Contact Email": "gino_carter@kemmer.io",
+          "Contact Number": "994.689.4313",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://aufderhar.io/kasey",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:52.594Z",
+        "updated_at": "2016-01-12T20:30:21.980Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/99z38971?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTYsImFzc2V0X2tleSI6Ijk5ejM4OTcxIn19"
+      }
+    },
+    {
+      "id": "lqwbvy7n",
+      "type": "assets",
+      "attributes": {
+        "name": "check-box2",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/78myloon/element.png",
+        "preview_url": "https://assets.brandfolder.com/78myloon/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise"
+        ],
+        "position": 16,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:08.364Z",
+        "updated_at": "2016-01-12T20:30:17.178Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/lqwbvy7n?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTYsImFzc2V0X2tleSI6Imxxd2J2eTduIn19"
+      }
+    },
+    {
+      "id": "a0rrr3kp",
+      "type": "assets",
+      "attributes": {
+        "name": "chemistry46",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/cia7oul4/element.png",
+        "preview_url": "https://assets.brandfolder.com/cia7oul4/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Startup"
+        ],
+        "position": 17,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:08.481Z",
+        "updated_at": "2016-01-12T20:30:22.742Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/a0rrr3kp?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTcsImFzc2V0X2tleSI6ImEwcnJyM2twIn19"
+      }
+    },
+    {
+      "id": "y7cyr3k2",
+      "type": "assets",
+      "attributes": {
+        "name": "Cassette Tapes",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/ktt3dnk8/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/ktt3dnk8/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Audio",
+          "Cassetts"
+        ],
+        "position": 17,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "834440998842",
+          "Product Name": "Aerodynamic Silk Computer",
+          "Version": "0.1.5",
+          "Color": "purple",
+          "Price": "78.06",
+          "Department": "Jewelery, Kids & Beauty",
+          "Manufacture Date": "2015-12-10",
+          "Short Description": "If we input the bandwidth, we can get to the HTTP firewall through the back-end SCSI program!",
+          "Long Description": "Leggings 3 wolf moon photo booth heirloom shabby chic kogi. Celiac pitchfork banjo echo. Stumptown tattooed cornhole paleo bicycle rights.\n\nNormcore you probably haven't heard of them forage swag bicycle rights lomo. Leggings yolo brunch before they sold out cliche seitan. Pbr&b helvetica squid cliche selfies.\n\nTumblr gastropub mustache disrupt xoxo direct trade. Everyday trust fund stumptown post-ironic swag. Before they sold out pickled brooklyn pinterest distillery sustainable.",
+          "Magic Code": "jlicbmj6g1bumgs8d13tlmlemv5ju9kbbdi8det8vfocjx1dtocbkukm9kanhl2658pzwzy4but8m9iy6v4ya41wsn1eeu2i9gyr0qfqdq86zin2wffkkw6pr1v618qdemrbcvvbpmkghm8p5qt487knbu7o5mrfdeftwawj0yved1kp001jzeda7iewj6d8u2rbkqirhvj6h36pd04ukv2mc3woiqyi4vp7nl84m1lz4qgjywuv9syuk9enb9d",
+          "Owner": "Kurtis Towne DVM",
+          "Contact Email": "novella@kemmer.com",
+          "Contact Number": "667.078.3751",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://willmsmayert.biz/lorena",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:50.626Z",
+        "updated_at": "2016-01-12T20:30:14.681Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/y7cyr3k2?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTcsImFzc2V0X2tleSI6Ink3Y3lyM2syIn19"
+      }
+    },
+    {
+      "id": "nqditp6u",
+      "type": "assets",
+      "attributes": {
+        "name": "clerk",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/gqk5a491/element.png",
+        "preview_url": "https://assets.brandfolder.com/gqk5a491/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise"
+        ],
+        "position": 18,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:09.504Z",
+        "updated_at": "2016-01-12T20:30:22.021Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/nqditp6u?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTgsImFzc2V0X2tleSI6Im5xZGl0cDZ1In19"
+      }
+    },
+    {
+      "id": "unq6fpgv",
+      "type": "assets",
+      "attributes": {
+        "name": "Using Floppy Disks",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/fdjxr8qf/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/fdjxr8qf/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Floppy Disk",
+          "Fall Campaign"
+        ],
+        "position": 18,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "788598787285",
+          "Product Name": "Small Bronze Bench",
+          "Version": "0.47",
+          "Color": "plum",
+          "Price": "37.32",
+          "Department": "Industrial, Music & Clothing",
+          "Manufacture Date": "2015-08-24",
+          "Short Description": "compressing the circuit won't do anything, we need to back up the digital COM array!",
+          "Long Description": "Keytar franzen pitchfork park 90's. Readymade skateboard ennui austin art party franzen blue bottle. Authentic roof letterpress plaid whatever photo booth craft beer celiac.\n\nLiterally mixtape ramps kinfolk tousled marfa. Mumblecore vegan bushwick twee quinoa before they sold out xoxo direct trade. Banh mi mixtape leggings vhs selvage.\n\nSquid wayfarers keffiyeh selvage street waistcoat readymade taxidermy. Actually trust fund wes anderson. Kinfolk street vinegar meh taxidermy disrupt bespoke drinking.",
+          "Magic Code": "5jz1zxfj1clxk8nf9z94l88ex7phf4ltoy2mbafzwj81j974wq6gjre52hutqzmudzi563z82v3lyge6mmgcxlicidkzsfm6kk86343fcixspq7cmtuxudk4ga2aix534qjwecpabp8uov7t00tgljmgzf3wtmvjidvx3dubhe46b0ubsgvs1qf6dr12v8fj602ty7u9ik4deay59x7v72opx7osg9zz9pvjy75i9vf76e15p3rtyv1rn8uvky7",
+          "Owner": "Twila Hoppe",
+          "Contact Email": "ashlynn@oconner.org",
+          "Contact Number": "427-754-2280",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://weinat.info/arnold_herman",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:54.114Z",
+        "updated_at": "2016-01-12T20:30:44.458Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/unq6fpgv?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTgsImFzc2V0X2tleSI6InVucTZmcGd2In19"
+      }
+    },
+    {
+      "id": "h7k4b7l7",
+      "type": "assets",
+      "attributes": {
+        "name": "Home Computer",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/efezqcrt/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/efezqcrt/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Home",
+          "White"
+        ],
+        "position": 19,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "471363424546",
+          "Product Name": "Incredible Bronze Bottle",
+          "Version": "0.3.2",
+          "Color": "silver",
+          "Price": "3.74",
+          "Department": "Beauty",
+          "Manufacture Date": "2015-12-02",
+          "Short Description": "Try to back up the AI protocol, maybe it will bypass the auxiliary transmitter!",
+          "Long Description": "Polaroid cred helvetica lumbersexual church-key. Craft beer gentrify deep v. Waistcoat jean shorts selvage.\n\nKnausgaard cray letterpress mustache messenger bag neutra. Master marfa xoxo gastropub. Goth tousled gluten-free you probably haven't heard of them heirloom microdosing celiac sartorial. Microdosing banh mi keytar paleo. Asymmetrical post-ironic hella wolf.\n\nLumbersexual quinoa freegan ugh kombucha cliche godard offal. Yuccie pour-over cray fanny pack fap bespoke small batch. Vegan thundercats hoodie.",
+          "Magic Code": "60fiup1card4zg1adokrn6qu7457h68gs7y9roawlp6gjgskmw7itm2khmog38a7yr1z5bgraez4c063o6ww7o8r61y7r2ninumddpofsp4t9bxwllbfu941lxnamfnwun9zlow4b87156y5hgrnr4jko01tzbg7wb3bhk7u3yjikjp7176vyp15jcvf9hgueys3i6e9ph3gpl0ha76ac02bjajauj9xu7bosav8ptdeaxrti2vo5r8orjyjbhu",
+          "Owner": "Jakob Champlin",
+          "Contact Email": "abraham@jakubowski.com",
+          "Contact Number": "955.270.8666",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://pacocha.name/bernita",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:56.430Z",
+        "updated_at": "2016-01-12T20:30:27.908Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/h7k4b7l7?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTksImFzc2V0X2tleSI6Img3azRiN2w3In19"
+      }
+    },
+    {
+      "id": "jofzf7zd",
+      "type": "assets",
+      "attributes": {
+        "name": "clock166",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/nv0ygixq/element.png",
+        "preview_url": "https://assets.brandfolder.com/nv0ygixq/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise"
+        ],
+        "position": 19,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:11.414Z",
+        "updated_at": "2016-02-21T16:33:25.526Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/jofzf7zd?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MTksImFzc2V0X2tleSI6ImpvZnpmN3pkIn19"
+      }
+    },
+    {
+      "id": "ii6f9mrm",
+      "type": "assets",
+      "attributes": {
+        "name": "coffee131",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/c0equghc/element.png",
+        "preview_url": "https://assets.brandfolder.com/c0equghc/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Enterprise"
+        ],
+        "position": 20,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:12.081Z",
+        "updated_at": "2016-01-12T20:30:17.306Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/ii6f9mrm?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjAsImFzc2V0X2tleSI6ImlpNmY5bXJtIn19"
+      }
+    },
+    {
+      "id": "sckwdzq4",
+      "type": "assets",
+      "attributes": {
+        "name": "Computer Lightsource",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/4xidqqxr/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/4xidqqxr/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Lightsource"
+        ],
+        "position": 20,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "462524059724",
+          "Product Name": "Mediocre Aluminum Chair",
+          "Version": "8.5.0",
+          "Color": "cyan",
+          "Price": "69.85",
+          "Department": "Grocery, Movies & Toys",
+          "Manufacture Date": "2015-09-18",
+          "Short Description": "navigating the card won't do anything, we need to bypass the wireless EXE card!",
+          "Long Description": "Occupy messenger bag selfies tumblr hammock. Synth wolf you probably haven't heard of them heirloom pinterest gastropub lumbersexual. Artisan asymmetrical mixtape. Ramps intelligentsia wayfarers. Bespoke direct trade chartreuse pickled diy squid vhs sriracha.\n\nTilde carry humblebrag godard twee post-ironic. Jean shorts literally brooklyn. Quinoa jean shorts roof. Chia asymmetrical flannel pinterest.\n\nPitchfork pug meditation try-hard organic franzen wes anderson. Humblebrag 8-bit xoxo wolf retro. Tousled cleanse fanny pack chicharrones pug goth scenester yuccie. Mustache jean shorts poutine taxidermy salvia put a bird on it. Vegan drinking asymmetrical paleo.",
+          "Magic Code": "et4tuo8n7awu1qr6l34mhbwonkwnw65k5fkqggrpxlgt6b4ok5139mpv9tsvbpj2egq9g6tcn5kx41q4x175ksghjffl7fkyrvam6fx7swxferdou2th9e3v05wj3j8bdtoz4bo9ngxh9bl3etelq4fg7dr2yte64djkfk6vhggvsrp1cjd9x62rjog8j683yw4oub48nlpbsysy06y2oyei0qvvoa3wom6mgbjswnh3wi9nnbak82xiofbzpbw",
+          "Owner": "Destini Beer IV",
+          "Contact Email": "theodora@lebsackkuhn.info",
+          "Contact Number": "319.293.3126",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://pagac.info/leanne.dare",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:52.072Z",
+        "updated_at": "2016-02-21T16:33:27.332Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/sckwdzq4?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjAsImFzc2V0X2tleSI6InNja3dkenE0In19"
+      }
+    },
+    {
+      "id": "bot4z8uz",
+      "type": "assets",
+      "attributes": {
+        "name": "Professional Computing",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/xzh1o080/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/xzh1o080/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "Action Shot",
+          "Touch Screen"
+        ],
+        "position": 21,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "585878241273",
+          "Product Name": "Ergonomic Marble Watch",
+          "Version": "9.86",
+          "Color": "sky blue",
+          "Price": "51.52",
+          "Department": "Music",
+          "Manufacture Date": "2016-02-06",
+          "Short Description": "I'll calculate the cross-platform SAS bus, that should driver the SMTP driver!",
+          "Long Description": "Deep v street etsy small batch pickled. Skateboard xoxo church-key. Bitters farm-to-table five dollar toast 90's locavore. Hella chillwave distillery. Selfies keffiyeh stumptown humblebrag pour-over umami crucifix wes anderson.\n\nSartorial crucifix helvetica hammock tacos green juice truffaut. Retro farm-to-table forage deep v meditation. Tousled chartreuse yuccie yr dreamcatcher. Yr hella literally blue bottle whatever franzen.\n\nMixtape etsy ugh xoxo kitsch artisan migas. Before they sold out chia salvia organic typewriter craft beer twee knausgaard. +1 skateboard photo booth shabby chic chambray banh mi vice cardigan.",
+          "Magic Code": "1f8479saxclylb8d0n0vyhnzf2a3u4a6om5v9az7qf8josatwndpnztpq76g8y9kl5hvgct1ljl0g3axtgdfdm9w6fyh5pwn0j5on8a6o9jz89ou7qexw36bklm6uw33oyde5zjxu6871olwkbqydwmhkni8xa1t7chufcv63wgucbne454b2egz58xankq18mrkry6lp2jayhbcm6tjsh8f5qzs5y222ams39p8snp2mplchd5u633jtpgkjdp",
+          "Owner": "Jaylen DuBuque",
+          "Contact Email": "maureen.kuhic@treutel.org",
+          "Contact Number": "703-243-7248",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://heaney.co/kianna.farrell",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:52.521Z",
+        "updated_at": "2016-02-21T16:33:25.142Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/bot4z8uz?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjEsImFzc2V0X2tleSI6ImJvdDR6OHV6In19"
+      }
+    },
+    {
+      "id": "g2tk9823",
+      "type": "assets",
+      "attributes": {
+        "name": "commercial",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/nynmqtr6/element.png",
+        "preview_url": "https://assets.brandfolder.com/nynmqtr6/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Startup"
+        ],
+        "position": 21,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:12.703Z",
+        "updated_at": "2016-02-21T16:33:27.627Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/g2tk9823?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjEsImFzc2V0X2tleSI6ImcydGs5ODIzIn19"
+      }
+    },
+    {
+      "id": "7scbbh1c",
+      "type": "assets",
+      "attributes": {
+        "name": "Hyper Audio Recorder ",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/f8ej8fry/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/f8ej8fry/view.jpg",
+        "description": "",
+        "asset_data": {},
+        "tag_names": [
+          "Audio Recorder",
+          "Audio Player"
+        ],
+        "position": 22,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "171253109870",
+          "Product Name": "Fantastic Granite Computer",
+          "Version": "2.2",
+          "Color": "blue",
+          "Price": "20.05",
+          "Department": "Automotive",
+          "Manufacture Date": "2015-11-23",
+          "Short Description": "If we navigate the alarm, we can get to the JBOD microchip through the online COM feed!",
+          "Long Description": "Cleanse wes anderson master. Carry next level twee echo. Kale chips squid wayfarers ennui etsy lumbersexual mixtape. Vhs taxidermy shabby chic beard shoreditch hashtag chia.\n\nCardigan tacos poutine retro. Cred 3 wolf moon selfies narwhal. You probably haven't heard of them whatever lumbersexual sartorial master xoxo pinterest slow-carb. Hammock kickstarter drinking sriracha. Bespoke retro asymmetrical lumbersexual xoxo pinterest whatever.\n\nSelvage selfies gastropub. Williamsburg direct trade mlkshk asymmetrical squid art party truffaut. Cold-pressed brooklyn shabby chic artisan hammock. Diy food truck mixtape paleo vinyl fap biodiesel. Pork belly cardigan cornhole tattooed.",
+          "Magic Code": "0kmfp3hyr59f4eua9ehdo2kpzl8dzf2tx2pf472jmrusgmkmwbv5cr6st22t7lwzgcxa59kp3wvbfkeozakgncm4nf5jbhq6qpgun9uzw5uqveszm6yuw0iprrtcrr8mku6z5icfkfof11r303tux0o9idkr2lqg8fj2qid3k4m523f9x8hwsw9hg3nnu2gx5maxonvw0c6jvhf2sgrscoo318a6vfsrrfbb6njdgmhx7dnqi8h0idame7ei1fh",
+          "Owner": "Brice Schoen",
+          "Contact Email": "lysanne@greensenger.com",
+          "Contact Number": "914-731-1665",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://schmittanderson.name/zechariah",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:56.078Z",
+        "updated_at": "2016-02-21T16:33:26.104Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/7scbbh1c?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjIsImFzc2V0X2tleSI6IjdzY2JiaDFjIn19"
+      }
+    },
+    {
+      "id": "inqdk2cz",
+      "type": "assets",
+      "attributes": {
+        "name": "computer350",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/okxq9pyc/element.png",
+        "preview_url": "https://assets.brandfolder.com/okxq9pyc/view.png",
+        "description": null,
+        "asset_data": {},
+        "tag_names": [
+          "Graphic Designer Tools"
+        ],
+        "position": 22,
+        "approved": true,
+        "custom_fields": {},
+        "created_at": "2015-12-02T23:47:15.098Z",
+        "updated_at": "2016-01-12T20:30:29.323Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/inqdk2cz?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjIsImFzc2V0X2tleSI6ImlucWRrMmN6In19"
+      }
+    },
+    {
+      "id": "dn04y0pq",
+      "type": "assets",
+      "attributes": {
+        "name": "Computing in Color",
+        "asset_type": "GenericFile",
+        "thumbnail_url": "https://assets.brandfolder.com/w4aj5vvm/element.jpg",
+        "preview_url": "https://assets.brandfolder.com/w4aj5vvm/view.jpg",
+        "description": "Computing ",
+        "asset_data": {},
+        "tag_names": [
+          "Computer",
+          "High Definition"
+        ],
+        "position": 23,
+        "approved": true,
+        "custom_fields": {
+          "Product ID": "669433663470",
+          "Product Name": "Enormous Cotton Table",
+          "Version": "0.7.9",
+          "Color": "green",
+          "Price": "43.31",
+          "Department": "Electronics & Shoes",
+          "Manufacture Date": "2015-09-25",
+          "Short Description": "If we hack the port, we can get to the COM firewall through the 1080p FTP feed!",
+          "Long Description": "Portland everyday +1 yr fixie godard literally heirloom. Aesthetic flannel seitan heirloom park keffiyeh vinyl hella. Fingerstache deep v asymmetrical hammock carry gastropub bitters.\n\nCraft beer gastropub tacos ennui brooklyn meggings salvia master. Mixtape before they sold out umami hella. Art party bushwick narwhal meditation church-key kogi. Ramps venmo waistcoat kale chips.\n\nVinegar retro mustache. Vegan 3 wolf moon cray. Single-origin coffee kickstarter lo-fi. Drinking irony mixtape. Green juice banh mi dreamcatcher kinfolk.",
+          "Magic Code": "1udyo6jbbnssfomoryyofyp7hqilt34e0dgulmsa8uucc21djd5j12uqkysvdcssgc69q4jd4n577uqc7za657x0lmen8jht0eyr8hiyhkx6m6xq0y1xblfa8pob27zeqqogvoon3px7eipxy4maiz15fs0xp8xrc5a79nhiow713c631tz9t2fl5w1nyxsyypm5auxcl2mquv4csgqfz00iyer74u24ugg6ejae5l2ysw04xyltpbmn90ccv1t",
+          "Owner": "Martina Hintz",
+          "Contact Email": "akeem.abbott@schimmel.name",
+          "Contact Number": "1-285-278-6564",
+          "Preview": "https://placehold.it/300x300.png/000",
+          "Product Page": "http://heller.io/arjun.wunsch",
+          "Copyright": "Copyright 2016 Pineapple, Inc.",
+          "Locale": "en"
+        },
+        "created_at": "2015-12-02T23:41:58.303Z",
+        "updated_at": "2016-02-21T16:33:27.272Z"
+      },
+      "links": {
+        "self": "https://api.brandfolder.com/v2/assets/dn04y0pq?api-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2tleSI6ImczbXNqZnR3In0.nHthrntKC-jgXv4DITsoQJsapMF_j96c2XO1OFSuObc"
+      },
+      "meta": {
+        "cursor": "eyJ0IjoiYXNzZXRzIiwicyI6InBvc2l0aW9uIiwiYSI6eyJwb3NpdGlvbiI6MjMsImFzc2V0X2tleSI6ImRuMDR5MHBxIn19"
+      }
+    }
+  ]
+}

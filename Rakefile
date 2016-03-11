@@ -17,6 +17,20 @@ task :missing_specs do
   end
 end
 
+desc 'Open a console with jsonapionify'
+task :console do
+  require 'jsonapionify'
+  Pry.start
+end
+
+task :benchmark do
+  require 'jsonapionify'
+  toplevel = nil
+  puts parse: Benchmark.realtime { toplevel = JSONAPIonify.parse(File.read('spec/fixtures/sample.json')) }
+  puts validate: Benchmark.realtime { toplevel.validate }
+  puts generate: Benchmark.realtime { toplevel.to_json(validate: false) }
+end
+
 desc 'Remove empty specs'
 task :prune_specs do
   empty_specs = Dir.glob("./spec/**/*_spec.rb").select do |f|
