@@ -30,9 +30,11 @@ module JSONAPIonify::Structure
 
       def same_as?(other)
         return false unless other.is_a? ResourceIdentifier
-        matches_id   = other.has_key?(:id) && has_key?(:id) && other[:id] == self[:id]
-        matches_type = other[:type] == self[:type]
-        matches_type && matches_id
+        other_type, other_id = other.values_at :type, :id
+        local_type, local_id = values_at :type, :id
+        other_type == local_type &&
+          !(other_id || local_id).nil? &&
+          other_id == local_id
       end
 
     end
