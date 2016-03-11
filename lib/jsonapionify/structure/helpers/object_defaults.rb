@@ -60,6 +60,10 @@ module JSONAPIonify::Structure
 
         before_initialize do
           @unset = {}
+          newly_set = unset.select { |_, v| v.present? }
+          newly_set.each do |k, v|
+            self[k] = v
+          end
         end
       end
 
@@ -78,15 +82,6 @@ module JSONAPIonify::Structure
       def []=(k, v)
         unset.delete_if { |unset_key, _| unset_key == k }
         super k, coerce_value(k, v)
-      end
-
-      def object
-        super.tap do
-          newly_set = unset.select { |_, v| v.present? }
-          newly_set.each do |k, v|
-            self[k] = v
-          end
-        end
       end
 
       private
