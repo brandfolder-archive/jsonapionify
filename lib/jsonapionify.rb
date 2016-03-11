@@ -4,6 +4,7 @@ require "active_support/core_ext/string/inflections"
 require "active_support/core_ext/hash/keys"
 require 'active_support/cache'
 require 'jsonapionify/autoload'
+require 'oj'
 
 module JSONAPIonify
   autoload :VERSION, 'jsonapi-objects/version'
@@ -23,7 +24,7 @@ module JSONAPIonify
   end
 
   def self.parse(hash)
-    hash = JSON.parse(hash) if hash.is_a? String
+    hash = Oj.load(hash) if hash.is_a? String
     Structure::Objects::TopLevel.from_hash(hash)
   end
 
