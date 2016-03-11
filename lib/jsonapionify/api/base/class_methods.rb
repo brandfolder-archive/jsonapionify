@@ -35,8 +35,8 @@ module JSONAPIonify::Api
       @last_signature == resource_signature
     end
 
-    def http_error(action, request)
-      Action.error(action).call(resource_class, request)
+    def http_error(error, request, &block)
+      Action.error(error, &block).call(resource_class, request)
     end
 
     def root_url(request)
