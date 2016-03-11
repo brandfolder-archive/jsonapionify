@@ -43,12 +43,22 @@ module JSONAPIonify::Structure::Objects
       pending
     end
 
-    describe '#duplicate_exists?' do
-      pending
-    end
-
-    describe '#duplicate_does_not_exist' do
-      pending
+    describe '#duplicate_does_not_exist?' do
+      context 'given duplicate identifiers' do
+        it 'should not compile' do
+          data = {
+            data: [
+                    { type: 'a', id: '1' },
+                    { type: 'a', id: '1' }
+                  ]
+          }
+          expect {
+            JSONAPIonify::Structure::Objects::TopLevel.new(data).compile!
+          }.to(
+            raise_error JSONAPIonify::Structure::ValidationError
+          )
+        end
+      end
     end
   end
 end
