@@ -28,8 +28,7 @@ module JSONAPIonify::Structure
       delegate *(Hash.instance_methods - instance_methods), to: :object
 
       before_initialize do
-        @object = {}
-        observe(@object).added do |items|
+        observe(self.object).added do |items|
           items.each do |_, value|
             value.instance_variable_set(:@parent, self) unless value.frozen?
           end
@@ -46,6 +45,7 @@ module JSONAPIonify::Structure
 
       # Initialize the object
       def initialize(**attributes)
+        @object = {}
         run_callbacks :initialize do
           attributes.each do |k, v|
             self[k] = v
