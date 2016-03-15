@@ -76,20 +76,27 @@ module JSONAPIonify::Api
     def process(request)
       path_actions = self.path_actions(request)
       if request.options? && path_actions.present?
-        allow    = [*path_actions.map(&:request_method), 'OPTIONS']
-        requests = allow.each_with_object({}) do |method, h|
-          h[method] = options_for_method(method)
+        cache_store.fetch(cache_key(options: true)) do
+          allow                 = [*path_actions.map(&:request_method), 'OPTIONS']
+          requests              = allow.each_with_object({}) do |method, h|
+            h[method] = options_for_method(method)
+          end
+
+          # Return Action
+          status, headers, body = Action.dummy do
+            response_headers['Allow'] = allow.join(', ')
+          end.response(status: 200, accept: 'application/vnd.api+json') do
+            JSONAPIonify.new_object(
+              meta: {
+                type:     self.class.type,
+                requests: requests
+              }
+            ).to_json
+          end.call(self, request)
+
+          # Return response
+          [status, headers, body.body]
         end
-        Action.dummy do
-          response_headers['Allow'] = allow.join(', ')
-        end.response(status: 200, accept: 'application/vnd.api+json') do
-          JSONAPIonify.new_object(
-            meta: {
-              type:     self.class.type,
-              requests: requests
-            }
-          ).to_json
-        end.call(self, request)
       elsif (action = find_supported_action(request))
         action.call(self, request)
       elsif (rel = find_supported_relationship(request))

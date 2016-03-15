@@ -32,6 +32,12 @@ module JSONAPIonify::Api
       end
     end
 
+    def self.cache_key(**options)
+      Base64.urlsafe_encode64(
+        { **options, dsl: JSONAPIonify.digest, api: signature, }.to_json
+      )
+    end
+
     def self.resource_class
       if const_defined?(:ResourceBase, false)
         const_get(:ResourceBase, false)

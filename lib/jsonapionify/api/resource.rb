@@ -23,6 +23,13 @@ module JSONAPIonify::Api
       end
     end
 
+    def self.cache_key(**options)
+      api.cache_key(
+        **options,
+        resource: name
+      )
+    end
+
     def self.example_id_generator(&block)
       define_singleton_method :generate_id, &block
     end
@@ -40,6 +47,13 @@ module JSONAPIonify::Api
     example_id_generator { |val| val }
 
     def action_name
+    end
+
+    def cache_key(**options)
+      self.class.cache_key(
+        **options,
+        action_name: action_name
+      )
     end
 
   end

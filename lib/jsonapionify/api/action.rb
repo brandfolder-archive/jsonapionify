@@ -154,18 +154,12 @@ module JSONAPIonify::Api
           cache_options.merge! options
 
           # Build the cache key, and obscure it.
-          context.meta[:cache_key] =
-            cache_options[:key] =
-              Base64.urlsafe_encode64(
-                {
-                  dsl:    JSONAPIonify.digest,
-                  api:    self.class.api.signature,
-                  path:   request.path,
-                  accept: request.accept,
-                  params: context.params,
-                  key:    key,
-                }.to_json
-              )
+          context.meta[:cache_key] = cache_options[:key] = cache_key(
+            path:   request.path,
+            accept: request.accept,
+            params: context.params,
+            key:    key
+          )
           # If the cache exists, then fail to cache miss
           if self.class.cache_store.exist?(cache_options[:key])
             raise Errors::CacheHit, cache_options[:key]
