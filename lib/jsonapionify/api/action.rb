@@ -1,7 +1,8 @@
 module JSONAPIonify::Api
   class Action
-    attr_reader :name, :request_block, :content_type, :responses, :prepend,
-                :path, :request_method, :only_associated
+    attr_reader :name, :block, :content_type, :responses, :prepend,
+                :path, :request_method, :only_associated, :cacheable,
+                :callbacks
 
     def self.dummy(&block)
       new(nil, nil, &block)
@@ -13,17 +14,25 @@ module JSONAPIonify::Api
       end
     end
 
-    def initialize(name, request_method, path = nil, require_body = nil, example_type = :resource, content_type: nil, prepend: nil, only_associated: false, &block)
+    def initialize(name, request_method, path = nil,
+                   example_input: nil,
+                   content_type: nil,
+                   prepend: nil,
+                   only_associated: false,
+                   cacheable: false,
+                   callbacks: true,
+                   &block)
       @request_method  = request_method
-      @require_body    = require_body.nil? ? %w{POST PUT PATCH}.include?(@request_method) : require_body
       @path            = path || ''
       @prepend         = prepend
       @only_associated = only_associated
       @name            = name
-      @example_type    = example_type
+      @example_input   = example_input
       @content_type    = content_type || 'application/vnd.api+json'
-      @request_block   = block || proc {}
+      @block           = block || proc {}
       @responses       = []
+      @cacheable       = cacheable
+      @callbacks       = callbacks
     end
 
     def initialize_copy(new_instance)
@@ -45,7 +54,14 @@ module JSONAPIonify::Api
     end
 
     def path_regex(base, name, include_path)
-      raw_reqexp = build_path(base, name, include_path).gsub(':id', '(?<id>[^\/]+)')
+      raw_reqexp =
+        build_path(
+          base, name, include_path
+        ).gsub(
+          ':id', '(?<id>[^\/]+)'
+        ).gsub(
+          '*', '.*'
+        )
       Regexp.new('^' + raw_reqexp + '$')
     end
 
@@ -72,30 +88,32 @@ module JSONAPIonify::Api
 
     def example_requests(resource, url)
       responses.map do |response|
-        opts                      = {}
+        opts                 = {}
         opts['CONTENT_TYPE'] = content_type if @require_body
-        opts['HTTP_ACCEPT']       = response.accept
-        request                   = Server::Request.env_for(url, request_method, opts)
-        context                   = ContextDelegate::Mock.new(request: request)
-        opts[:input]              = case @example_type
-                                    when :resource
-                                      {
-                                        'data' => resource.build_resource(
-                                          context,
-                                          resource.example_instance,
-                                          relationships: false,
-                                          links: false
-                                        ).as_json
-                                      }.to_json
-                                    when :resource_identifier
-                                      {
-                                        'data' => resource.build_resource_identifier(
-                                          resource.example_instance
-                                        ).as_json
-                                      }.to_json
-                                    end if @content_type == 'application/vnd.api+json' && !%w{GET DELETE}.include?(request_method)
-        request                   = Server::Request.env_for(url, request_method, opts)
-        response                  = Server::MockResponse.new(*sample_request(resource, request))
+        opts['HTTP_ACCEPT']  = response.accept
+        request              = Server::Request.env_for(url, request_method, opts)
+        context              = ContextDelegate::Mock.new(request: request)
+        opts[:input]         = case @example_input
+                               when :resource
+                                 {
+                                   'data' => resource.build_resource(
+                                     context,
+                                     resource.example_instance,
+                                     relationships: false,
+                                     links:         false
+                                   ).as_json
+                                 }.to_json
+                               when :resource_identifier
+                                 {
+                                   'data' => resource.build_resource_identifier(
+                                     resource.example_instance
+                                   ).as_json
+                                 }.to_json
+                               when Proc
+                                 @example_input.call
+                               end if @content_type == 'application/vnd.api+json' && !%w{GET DELETE}.include?(request_method)
+        request              = Server::Request.env_for(url, request_method, opts)
+        response             = Server::MockResponse.new(*sample_request(resource, request))
 
         OpenStruct.new(
           request:  request.http_string,
@@ -180,7 +198,7 @@ module JSONAPIonify::Api
           if self.class.cache_store.exist?(cache_options[:key])
             raise Errors::CacheHit, cache_options[:key]
           end
-        end if request.get?
+        end if action.cacheable
 
         define_singleton_method :action_name do
           action.name
@@ -198,32 +216,40 @@ module JSONAPIonify::Api
           response_definition = action.responses.find { |response| response.accept? request } ||
             error_now(:not_acceptable)
           response_definition.call(self, context).tap do |status, headers, body|
-            self.class.cache_store.write(
-              cache_options[:key],
-              [status, headers, body.body],
-              **cache_options.except(:key)
-            ) if request.get? && cache_options.present?
+            if action.cacheable && cache_options.present?
+              JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
+              self.class.cache_store.write(
+                cache_options[:key],
+                [status, headers, body.body],
+                **cache_options.except(:key)
+              )
+            end
           end
         end
 
         commit_and_respond = proc {
           fail Errors::RequestError if errors.present?
-          instance_exec(context, &action.request_block)
+          instance_exec(context, &action.block)
           fail Errors::RequestError if errors.present?
           invoke_response!
         }
 
         begin
-          run_callbacks(:request, context) do
-            if action.name
-              run_callbacks(action.name, context, &commit_and_respond)
-            else
-              commit_and_respond.call
-            end
-          end || error_now(:internal_server_error)
+          if action.callbacks
+            run_callbacks(:request, context) do
+              if action.name
+                run_callbacks(action.name, context, &commit_and_respond)
+              else
+                commit_and_respond.call
+              end
+            end || error_now(:internal_server_error)
+          else
+            commit_and_respond.call
+          end
         rescue Errors::RequestError
           error_response
         rescue Errors::CacheHit
+          JSONAPIonify.logger.info "Cache Hit: #{cache_options[:key]}"
           self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
           rescued_response exception

@@ -8,17 +8,28 @@ module JSONAPIonify::Api
         undef_method :read
       end
 
-      define_singleton_method(:show) do |**options, &block|
-        options[:prepend] = 'relationships'
+      define_singleton_method(:show) do |content_type: nil, callbacks: true, &block|
+        options = {
+          content_type: content_type,
+          callbacks: callbacks,
+          cacheable: true,
+          prepend: 'relationships'
+        }
         define_action(:show, 'GET', **options, &block).response status: 200 do |context|
           context.response_object[:data] = build_identifier_collection(context.collection)
           context.response_object.to_json
         end
       end
 
-      define_singleton_method(:replace) do |**options, &block|
-        options[:prepend] = 'relationships'
-        define_action(:replace, 'PATCH', '', true, :resource_identifier, **options, &block).response status: 200 do |context|
+      define_singleton_method(:replace) do |content_type: nil, callbacks: true, &block|
+        options = {
+          content_type: content_type,
+          callbacks: callbacks,
+          cacheable: false,
+          prepend: 'relationships',
+          example_input: :resource_identifier
+        }
+        define_action(:replace, 'PATCH', **options, &block).response status: 200 do |context|
           context.owner_context.reset(:instance)
           context.reset(:collection)
           context.response_object[:data] = build_identifier_collection(context.collection)
@@ -26,9 +37,15 @@ module JSONAPIonify::Api
         end
       end
 
-      define_singleton_method(:add) do |**options, &block|
-        options[:prepend] = 'relationships'
-        define_action(:add, 'POST', '', true, :resource_identifier, **options, &block).response status: 200 do |context|
+      define_singleton_method(:add) do |content_type: nil, callbacks: true, &block|
+        options = {
+          content_type: content_type,
+          callbacks: callbacks,
+          cacheable: false,
+          prepend: 'relationships',
+          example_input: :resource_identifier
+        }
+        define_action(:add, 'POST', **options, &block).response status: 200 do |context|
           context.owner_context.reset(:instance)
           context.reset(:collection)
           context.response_object[:data] = build_identifier_collection(context.collection)
@@ -36,9 +53,16 @@ module JSONAPIonify::Api
         end
       end
 
-      define_singleton_method(:remove) do |**options, &block|
+      define_singleton_method(:remove) do |content_type: nil, callbacks: true, &block|
+        options = {
+          content_type: content_type,
+          callbacks: callbacks,
+          cacheable: false,
+          prepend: 'relationships',
+          example_input: :resource_identifier
+        }
         options[:prepend] = 'relationships'
-        define_action(:remove, 'DELETE', '', true, :resource_identifier, **options, &block).response status: 200 do |context|
+        define_action(:remove, 'DELETE', **options, &block).response status: 200 do |context|
           context.owner_context.reset(:instance)
           context.reset(:collection)
           context.response_object[:data] = build_identifier_collection(context.collection)

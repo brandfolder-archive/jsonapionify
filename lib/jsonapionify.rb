@@ -42,6 +42,14 @@ module JSONAPIonify
     )
   end
 
+  def self.logger=(logger)
+    @logger = logger
+  end
+
+  def self.logger
+    @logger ||= defined?(Rails) ? Rails.logger : Logger.new('/dev/null')
+  end
+
   def self.cache_store=(store)
     @cache_store = store
   end

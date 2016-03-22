@@ -9,17 +9,27 @@ module JSONAPIonify::Api
         undef_method :list
       end
 
-      define_singleton_method(:show) do |**options, &block|
-        options[:prepend] = 'relationships'
-        define_action(:show, 'GET', '', nil, :resource_identifier, **options, &block).response status: 200 do |context|
+      define_singleton_method(:show) do |content_type: nil, callbacks: true, &block|
+        options = {
+          content_type: content_type,
+          callbacks: callbacks,
+          cacheable: true,
+          prepend: 'relationships'
+        }
+        define_action(:show, 'GET', **options, &block).response status: 200 do |context|
           context.response_object[:data] = build_resource_identifier(context.instance)
           context.response_object.to_json
         end
       end
 
-      define_singleton_method(:replace) do |**options, &block|
-        options[:prepend] = 'relationships'
-        define_action(:replace, 'PATCH', '', nil, :resource_identifier, **options, &block).response status: 200 do |context|
+      define_singleton_method(:replace) do |content_type: nil, callbacks: true, &block|
+        options = {
+          content_type: content_type,
+          callbacks: callbacks,
+          cacheable: false,
+          prepend: 'relationships'
+        }
+        define_action(:replace, 'PATCH', **options, &block).response status: 200 do |context|
           context.owner_context.reset(:instance)
           context.reset(:instance)
           context.response_object[:data] = build_resource_identifier(context.instance)

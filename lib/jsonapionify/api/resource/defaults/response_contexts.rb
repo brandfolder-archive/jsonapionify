@@ -3,6 +3,9 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
+      context :http_allow, readonly: true do |context|
+        self.class.path_actions(context.request).map(&:request_method)
+      end
 
       # Response Objects
       context(:links, readonly: true) do |context|

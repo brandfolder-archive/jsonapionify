@@ -15,7 +15,13 @@ module JSONAPIonify::Api
       end
     end
 
-    def list(**options, &block)
+    def list(content_type: nil, only_associated: false, callbacks: true, &block)
+      options = {
+        content_type: content_type,
+        only_associated: only_associated,
+        callbacks: callbacks,
+        cacheable: true
+      }
       define_action(:list, 'GET', **options, &block).tap do |action|
         action.response status: 200 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
@@ -31,12 +37,14 @@ module JSONAPIonify::Api
       end
     end
 
-    def index(**options, &block)
-      warn 'the `index` action will soon be deprecated, use `list` instead!'
-      list(**options, &block)
-    end
-
-    def create(**options, &block)
+    def create(content_type: nil, only_associated: false, callbacks: true, &block)
+      options = {
+        content_type: content_type,
+        only_associated: only_associated,
+        callbacks: callbacks,
+        cacheable: false,
+        example_input: :resource
+      }
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
@@ -47,7 +55,13 @@ module JSONAPIonify::Api
       end
     end
 
-    def read(**options, &block)
+    def read(content_type: nil, only_associated: false, callbacks: true, &block)
+      options = {
+        content_type: content_type,
+        only_associated: only_associated,
+        callbacks: callbacks,
+        cacheable: true
+      }
       define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
@@ -57,7 +71,14 @@ module JSONAPIonify::Api
       end
     end
 
-    def update(**options, &block)
+    def update(content_type: nil, only_associated: false, callbacks: true, &block)
+      options = {
+        content_type: content_type,
+        only_associated: only_associated,
+        callbacks: callbacks,
+        cacheable: false,
+        example_input: :resource
+      }
       define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
@@ -67,37 +88,20 @@ module JSONAPIonify::Api
       end
     end
 
-    def delete(**options, &block)
+    def delete(content_type: nil, only_associated: false, callbacks: true, &block)
+      options = {
+        content_type: content_type,
+        only_associated: only_associated,
+        callbacks: callbacks,
+        cacheable: false
+      }
       define_action(:delete, 'DELETE', '/:id', **options, &block).tap do |action|
         action.response status: 204
       end
     end
 
     def process(request)
-      path_actions = self.path_actions(request)
-      if request.options? && path_actions.present?
-        cache_store.fetch(cache_key(options: true)) do
-          allow                 = [*path_actions.map(&:request_method), 'OPTIONS']
-          requests              = allow.each_with_object({}) do |method, h|
-            h[method] = options_for_method(method)
-          end
-
-          # Return Action
-          status, headers, body = Action.dummy do
-            response_headers['Allow'] = allow.join(', ')
-          end.response(status: 200, accept: 'application/vnd.api+json') do
-            JSONAPIonify.new_object(
-              meta: {
-                type:     self.class.type,
-                requests: requests
-              }
-            ).to_json
-          end.call(self, request)
-
-          # Return response
-          [status, headers, body.body]
-        end
-      elsif (action = find_supported_action(request))
+      if (action = find_supported_action(request))
         action.call(self, request)
       elsif (rel = find_supported_relationship(request))
         relationship(rel.name).process(request)
@@ -106,34 +110,12 @@ module JSONAPIonify::Api
       end
     end
 
-    def options_for_method(method)
-      case method
-      when 'GET'
-        {
-          attributes:    attributes.select(&:read).map(&:options_json),
-          relationships: relationships.map(&:options_json)
-        }
-      when 'POST', 'PUT', 'PATCH'
-        { attributes: attributes.select(&:write).map(&:options_json) }
-      else
-        {}
-      end
-    end
-
     def after(action_name = nil, &block)
-      if action_name == :index
-        warn 'the `index` action will soon be deprecated, use `list` instead!'
-        action_name = :list
-      end
       return after_request &block if action_name == nil
       send("after_#{action_name}", &block)
     end
 
     def before(action_name = nil, &block)
-      if action_name == :index
-        warn 'the `index` action will soon be deprecated, use `list` instead!'
-        action_name = :list
-      end
       return before_request &block if action_name == nil
       send("before_#{action_name}", &block)
     end
@@ -180,10 +162,6 @@ module JSONAPIonify::Api
     end
 
     def remove_action(*names)
-      if names.include? :index
-        warn 'the `index` action will soon be deprecated, use `list` instead!'
-        names << :list
-      end
       action_definitions.delete_if do |action_definition|
         names.include? action_definition.name
       end
