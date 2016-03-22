@@ -3,9 +3,9 @@ require 'unstrict_proc'
 module JSONAPIonify::Api
   class Attribute
     using UnstrictProc
-    attr_reader :name, :type, :description, :read, :write, :required
+    attr_reader :name, :type, :description, :read, :write, :required, :block
 
-    def initialize(name, type, description, read: true, write: true, required: false, example: nil)
+    def initialize(name, type, description, read: true, write: true, required: false, example: nil, &block)
       raise ArgumentError, 'required attributes must be writable' if required && !write
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
@@ -17,11 +17,16 @@ module JSONAPIonify::Api
       @read        = read
       @write       = write
       @required    = write ? required : false
+      @block       = block || proc { |attr, instance| instance.send attr.name }
     end
 
     def ==(other)
       self.class == other.class &&
         self.name == other.name
+    end
+
+    def resolve(instance, context)
+      block.unstrict.call(self, instance, context)
     end
 
     def options_json

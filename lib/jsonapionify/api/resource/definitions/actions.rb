@@ -20,7 +20,7 @@ module JSONAPIonify::Api
         action.response status: 200 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
           context.response_object[:data] = build_collection(
-            context.request,
+            context,
             context.response_collection,
             fields:          context.fields,
             include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?,
@@ -40,8 +40,8 @@ module JSONAPIonify::Api
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields, &builder)
-          response_headers['Location']   = build_url(context.request, context.instance)
+          context.response_object[:data] = build_resource(context, context.instance, fields: context.fields, &builder)
+          response_headers['Location']   = build_url(context, context.instance)
           context.response_object.to_json
         end
       end
@@ -51,7 +51,7 @@ module JSONAPIonify::Api
       define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields, &builder)
+          context.response_object[:data] = build_resource(context, context.instance, fields: context.fields, &builder)
           context.response_object.to_json
         end
       end
@@ -61,7 +61,7 @@ module JSONAPIonify::Api
       define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
           builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(context.request, context.instance, fields: context.fields, &builder)
+          context.response_object[:data] = build_resource(context, context.instance, fields: context.fields, &builder)
           context.response_object.to_json
         end
       end

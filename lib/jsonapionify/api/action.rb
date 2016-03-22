@@ -73,14 +73,26 @@ module JSONAPIonify::Api
     def example_requests(resource, url)
       responses.map do |response|
         opts                      = {}
-        opts['HTTP_CONTENT_TYPE'] = content_type if @require_body
+        opts['CONTENT_TYPE'] = content_type if @require_body
         opts['HTTP_ACCEPT']       = response.accept
         request                   = Server::Request.env_for(url, request_method, opts)
+        context                   = ContextDelegate::Mock.new(request: request)
         opts[:input]              = case @example_type
                                     when :resource
-                                      { 'data' => resource.build_resource(request, resource.example_instance, relationships: false, links: false).as_json }.to_json
+                                      {
+                                        'data' => resource.build_resource(
+                                          context,
+                                          resource.example_instance,
+                                          relationships: false,
+                                          links: false
+                                        ).as_json
+                                      }.to_json
                                     when :resource_identifier
-                                      { 'data' => resource.build_resource_identifier(resource.example_instance).as_json }.to_json
+                                      {
+                                        'data' => resource.build_resource_identifier(
+                                          resource.example_instance
+                                        ).as_json
+                                      }.to_json
                                     end if @content_type == 'application/vnd.api+json' && !%w{GET DELETE}.include?(request_method)
         request                   = Server::Request.env_for(url, request_method, opts)
         response                  = Server::MockResponse.new(*sample_request(resource, request))
@@ -127,6 +139,10 @@ module JSONAPIonify::Api
 
         # Bootstrap the Action
         context = ContextDelegate.new(request, self, sample_context)
+
+        define_singleton_method :errors do
+          context.errors
+        end
 
         define_singleton_method :response_headers do
           context.response_headers

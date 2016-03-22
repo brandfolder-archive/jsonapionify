@@ -1,7 +1,13 @@
 module JSONAPIonify::Api
   class ContextDelegate
     class Mock
-      def method_missing(*args, &block)
+      def initialize(**attrs)
+        attrs.each do |attr, value|
+          define_singleton_method(attr){ value }
+        end
+      end
+
+      def method_missing(*)
         self
       end
     end

@@ -1,31 +1,47 @@
 module JSONAPIonify::Api
   module Resource::Builders
     extend ActiveSupport::Concern
+    FALSEY_STRINGS = JSONAPIonify::FALSEY_STRINGS
+    TRUTHY_STRINGS = JSONAPIonify::TRUTHY_STRINGS
+    Structure = JSONAPIonify::Structure
 
     module ClassMethods
-      def build_resource(request, instance, fields: api.fields, relationships: true, links: true, include_cursor: false, &block)
-        relationships = false if JSONAPIonify::FALSEY_STRINGS.include? request.params['include-relationships']
+      def build_resource(
+        context,
+        instance,
+        fields: api.fields,
+        relationships: true,
+        links: true,
+        include_cursor: false, &block
+      )
+        include_rel_param = context.params['include-relationships']
+        relationships = false if FALSEY_STRINGS.include?(include_rel_param)
         return nil unless instance
-        resource_url = build_url(request, instance)
+        resource_url = build_url(context, instance)
         id           = build_id(instance)
-        JSONAPIonify::Structure::Objects::Resource.new.tap do |resource|
+        Structure::Objects::Resource.new.tap do |resource|
           resource[:id]   = id
           resource[:type] = type
 
-          resource[:attributes]    = fields[type.to_sym].each_with_object(JSONAPIonify::Structure::Objects::Attributes.new) do |member, attributes|
-            attributes[member.to_sym] = instance.public_send(member)
+          resource[:attributes]    = fields[type.to_sym].each_with_object(
+            Structure::Objects::Attributes.new
+          ) do |member, attributes|
+            attribute = self.attributes.find { |a| a.name == member }
+            attributes[member.to_sym] = attribute.resolve(instance, context)
           end
 
-          resource[:links]         = JSONAPIonify::Structure::Objects::Links.new(
+          resource[:links]         = Structure::Objects::Links.new(
             self: resource_url
           ) if links
 
           resource[:meta]          = {
-            cursor: build_cursor_from_instance(request, instance)
+            cursor: build_cursor_from_instance(context, instance)
           } if include_cursor
 
-          resource[:relationships] = relationship_definitions.each_with_object(JSONAPIonify::Structure::Maps::Relationships.new) do |rel, hash|
-            hash[rel.name] = build_relationship(request, instance, rel.name)
+          resource[:relationships] = relationship_definitions.each_with_object(
+            Structure::Maps::Relationships.new
+          ) do |rel, hash|
+            hash[rel.name] = build_relationship(context, instance, rel.name)
           end if relationships
 
           block.call(resource, instance) if block
@@ -33,21 +49,37 @@ module JSONAPIonify::Api
       end
 
       def build_resource_identifier(instance)
-        JSONAPIonify::Structure::Objects::ResourceIdentifier.new(
+        Structure::Objects::ResourceIdentifier.new(
           id:   build_id(instance),
           type: type.to_s
         )
       end
 
-      def build_collection(request, collection, fields: api.fields, include_cursors: false, &block)
-        relationships = JSONAPIonify::TRUTHY_STRINGS.include? request.params['include-relationships']
-        collection.each_with_object(JSONAPIonify::Structure::Collections::Resources.new) do |instance, resources|
-          resources << build_resource(request, instance, fields: fields, relationships: relationships, include_cursor: include_cursors, &block)
+      def build_collection(
+        context,
+        collection,
+        fields: api.fields,
+        include_cursors: false,
+        &block
+      )
+        include_rel_param = context.params['include-relationships']
+        relationships = TRUTHY_STRINGS.include? include_rel_param
+        collection.each_with_object(
+          Structure::Collections::Resources.new
+        ) do |instance, resources|
+          resources << build_resource(
+            context,
+            instance,
+            fields: fields,
+            relationships: relationships,
+            include_cursor: include_cursors,
+            &block
+          )
         end
       end
 
-      def build_cursor_from_instance(request, instance)
-        sort_string       = request.params['sort']
+      def build_cursor_from_instance(context, instance)
+        sort_string       = context.params['sort']
         sort_fields       = sort_fields_from_sort_string(sort_string)
         attrs_with_values = sort_fields.each_with_object({}) do |field, hash|
           hash[field.name] = instance.send(field.name)
@@ -62,13 +94,15 @@ module JSONAPIonify::Api
       end
 
       def build_identifier_collection(collection)
-        collection.each_with_object(JSONAPIonify::Structure::Collections::ResourceIdentifiers.new) do |instance, resource_identifiers|
+        collection.each_with_object(
+          JSONAPIonify::Structure::Collections::ResourceIdentifiers.new
+        ) do |instance, resource_identifiers|
           resource_identifiers << build_resource_identifier(instance)
         end
       end
 
-      def build_relationship(request, instance, name, links: true, data: false)
-        resource_url = build_url(request, instance)
+      def build_relationship(context, instance, name, links: true, data: false)
+        resource_url = build_url(context, instance)
         relationship = self.relationship(name)
         JSONAPIonify::Structure::Objects::Relationship.new.tap do |rel|
           rel[:links] = relationship.build_links(resource_url) if links
@@ -86,15 +120,15 @@ module JSONAPIonify::Api
         end
       end
 
-      def build_url(request, instance = nil)
-        URI.parse(request.root_url).tap do |uri|
+      def build_url(context, instance = nil)
+        URI.parse(context.request.root_url).tap do |uri|
           uri.path      =
             if instance
               File.join(uri.path, type, build_id(instance))
             else
-              File.join(request.root_url, type)
+              File.join(context.request.root_url, type)
             end
-          sticky_params = self.sticky_params(request.params)
+          sticky_params = self.sticky_params(context.params)
           uri.query     = sticky_params.to_param if sticky_params.present?
         end.to_s
       end
@@ -105,7 +139,9 @@ module JSONAPIonify::Api
     end
 
     included do
-      delegate *(ClassMethods.instance_methods - JSONAPIonify::Api::Resource::Builders.instance_methods), to: :class
+      delegated_methods = ClassMethods.instance_methods -
+        JSONAPIonify::Api::Resource::Builders.instance_methods
+      delegate(*delegated_methods, to: :class)
     end
 
   end

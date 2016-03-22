@@ -32,8 +32,8 @@ module JSONAPIonify::Api
       end
     end
 
-    def attribute(name, type, description = '', **options)
-      Attribute.new(name, type, description, **options).tap do |new_attribute|
+    def attribute(name, type, description = '', **options, &block)
+      Attribute.new(name, type, description, **options, &block).tap do |new_attribute|
         attributes.delete(new_attribute)
         attributes << new_attribute
       end
