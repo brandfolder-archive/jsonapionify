@@ -5,6 +5,8 @@ module JSONAPIonify::Api::Resource::Definitions
     include JSONAPIonify::Api::TestHelper
 
     describe ".attribute" do
+      username = Faker::Internet.user_name
+      let(:username){ username }
       simple_object_api(:sample_resources).create_model do
         field :name
         field :color
@@ -17,11 +19,14 @@ module JSONAPIonify::Api::Resource::Definitions
         scope { model }
         collection { |scope| scope.all }
 
+        context :username do
+          username
+        end
+
         attribute :name, types.String, ''
-        attribute :color, types.String, ''
         attribute :weight, types.Integer, ''
-        attribute :custom_value, types.String, '' do
-          "CUSTOM VALUE"
+        attribute :color, types.String, '' do |attr, instance, context|
+          "#{context.username} is #{instance.send(attr).upcase}"
         end
 
         list
@@ -32,7 +37,8 @@ module JSONAPIonify::Api::Resource::Definitions
           get '/sample_resources'
           expect(last_response_json['data']).to be_present
           last_response_json['data'].each do |instance|
-            expect(instance.fetch('attributes', {})['custom_value']).to eq 'CUSTOM VALUE'
+            color = model.find(instance['id']).color.upcase
+            expect(instance.fetch('attributes', {})['color']).to eq "#{username} is #{color}"
           end
         end
       end

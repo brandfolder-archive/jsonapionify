@@ -17,7 +17,7 @@ module JSONAPIonify::Api
       @read        = read
       @write       = write
       @required    = write ? required : false
-      @block       = block || proc { |attr, instance| instance.send attr.name }
+      @block       = block || proc { |attr, instance| instance.send attr }
     end
 
     def ==(other)
@@ -26,7 +26,7 @@ module JSONAPIonify::Api
     end
 
     def resolve(instance, context)
-      block.unstrict.call(self, instance, context)
+      block.unstrict.call(self.name, instance, context)
     end
 
     def options_json
