@@ -48,17 +48,22 @@ module JSONAPIonify::Api
       super.try(:split, ';').try(:first)
     end
 
-    def accept
-      accepts = (headers['accept'] || '*/*').split(',')
-      accepts.to_a.sort_by! do |accept|
-        _, *media_type_params = accept.split(';')
-        rqf                   = media_type_params.find { |mtp| mtp.start_with? 'q=' }
-        -(rqf ? rqf[2..-1].to_f : 1.0)
-      end.map do |accept|
-        mime, *media_type_params = accept.split(';')
-        media_type_params.reject! { |mtp| mtp.start_with? 'q=' }
-        [mime, *media_type_params].join(';')
+    def accept_params
+      @accept_params ||= begin
+        types = (headers['accept'] || '*/*').split(',')
+        types.each_with_object({}) do |type, list|
+          list[Server::MediaType.type(type)] =
+            Server::MediaType.params(type)
+        end
       end
+    end
+
+    def jsonapi_params
+      accept_params['application/vnd.api+json']
+    end
+
+    def accept
+      @accept ||= accept_params.keys
     end
 
     def authorizations
