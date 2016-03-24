@@ -26,14 +26,18 @@ module JSONAPIonify::Api
           error_now :attributes_missing
         end
 
-        request_attributes.tap do |attributes|
-          # Check Permitted Attributes
-          writable_attributes = context.request_resource.attributes.select(&:write?)
-          if (extra_attributes = attributes.keys - writable_attributes.map(&:name)).present?
-            extra_attributes.each { |attr| error :attribute_not_permitted, attr }
-            raise Errors::RequestError
+        should_error = false
+        request_attributes.each_with_object({}) do |(attr, v), attributes|
+          resource_attribute = self.attributes.find { |a| a.name == attr }
+          unless !!resource_attribute&.write?
+            error :attribute_not_permitted, attr
+            should_error = true
           end
-        end.to_hash
+          attributes[attr] = resource_attribute.type.load(v)
+        end.tap do
+          raise Errors::RequestError if should_error
+        end
+
       end
 
       context(:request_instances, readonly: true) do |context|

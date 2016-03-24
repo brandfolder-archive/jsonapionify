@@ -26,7 +26,7 @@ module JSONAPIonify::Api
     end
 
     def resolve(instance, context)
-      block.unstrict.call(self.name, instance, context)
+      type.dump block.unstrict.call(self.name, instance, context)
     end
 
     def options_json

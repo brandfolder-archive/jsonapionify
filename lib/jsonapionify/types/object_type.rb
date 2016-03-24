@@ -4,10 +4,15 @@ module JSONAPIonify::Types
   class ObjectType < BaseType
 
     def load(value)
+      raise LoadError, 'invalid type' unless value.is_a?(Hash)
       super(value).deep_symbolize_keys
     end
 
     def dump(value)
+      raise DumpError, 'cannot convert value to Hash' unless value.respond_to?(:to_h)
+      value = value.to_h.tap do |hash|
+        raise DumpError, 'output value was not a Hash' unless hash.is_a? Hash
+      end
       super(value.deep_stringify_keys)
     end
 

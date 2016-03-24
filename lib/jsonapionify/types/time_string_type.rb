@@ -1,18 +1,14 @@
 require 'faker'
 
 module JSONAPIonify::Types
-  class TimeStringType < BaseType
+  class TimeStringType < StringType
     def load(value)
-      Time.parse value
+      Time.parse super(value)
     end
 
     def dump(value)
-      case value
-      when Time
-        JSON.load JSON.dump(value.to_time)
-      else
-        raise TypeError, "#{value} is not a valid JSON #{name}."
-      end
+      raise DumpError, 'cannot convert value to Time' unless value.respond_to?(:to_time)
+      JSON.load JSON.dump(value.to_time)
     end
 
     def sample(field_name)

@@ -1,18 +1,14 @@
 require 'faker'
 
 module JSONAPIonify::Types
-  class DateStringType < BaseType
+  class DateStringType < StringType
     def load(value)
-      Date.parse value
+      Date.parse super(value)
     end
 
     def dump(value)
-      case value
-      when Date
-        JSON.load JSON.dump(value.to_date)
-      else
-        raise TypeError, "#{value} is not a valid JSON #{name}."
-      end
+      raise DumpError, 'cannot convert value to Date' unless value.respond_to?(:to_date)
+      JSON.load JSON.dump(value.to_date)
     end
 
     def sample(field_name)
@@ -26,3 +22,4 @@ module JSONAPIonify::Types
 
   end
 end
+

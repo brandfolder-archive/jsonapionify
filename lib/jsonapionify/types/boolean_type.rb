@@ -2,7 +2,12 @@ module JSONAPIonify::Types
   class BooleanType < BaseType
 
     def load(value)
-      value
+      case value
+      when true, false
+        value
+      else
+        raise LoadError, "#{value} is not a valid JSON #{name}."
+      end
     end
 
     def dump(value)
@@ -10,7 +15,7 @@ module JSONAPIonify::Types
       when true, false
         value
       else
-        raise TypeError, "#{value} is not a valid JSON #{name}."
+        raise DumpError, "#{value} is not a valid JSON #{name}."
       end
     end
 

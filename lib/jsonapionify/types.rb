@@ -4,6 +4,9 @@ module JSONAPIonify::Types
   extend JSONAPIonify::Autoload
   autoload_all
 
+  DumpError = Class.new(StandardError)
+  LoadError = Class.new(StandardError)
+
   def types
     DefinitionFinder
   end
