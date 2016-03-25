@@ -3,19 +3,20 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
     FALSEY_STRINGS = JSONAPIonify::FALSEY_STRINGS
     TRUTHY_STRINGS = JSONAPIonify::TRUTHY_STRINGS
-    Structure = JSONAPIonify::Structure
+    Structure      = JSONAPIonify::Structure
 
     module ClassMethods
+
       def build_resource(
         context,
         instance,
-        fields: api.fields,
+        fields:,
         relationships: true,
         links: true,
         include_cursor: false, &block
       )
         include_rel_param = context.params['include-relationships']
-        relationships = false if FALSEY_STRINGS.include?(include_rel_param)
+        relationships     = false if FALSEY_STRINGS.include?(include_rel_param)
         return nil unless instance
         resource_url = build_url(context, instance)
         id           = build_id(instance)
@@ -26,7 +27,7 @@ module JSONAPIonify::Api
           resource[:attributes]    = fields[type.to_sym].each_with_object(
             Structure::Objects::Attributes.new
           ) do |member, attributes|
-            attribute = self.attributes.find { |a| a.name == member }
+            attribute = self.attributes.find { |a| a.name == member.to_sym }
             attributes[member.to_sym] = attribute.resolve(instance, context)
           end
 
@@ -58,20 +59,20 @@ module JSONAPIonify::Api
       def build_collection(
         context,
         collection,
-        fields: api.fields,
+        fields:,
         include_cursors: false,
         &block
       )
         include_rel_param = context.params['include-relationships']
-        relationships = TRUTHY_STRINGS.include? include_rel_param
+        relationships     = TRUTHY_STRINGS.include? include_rel_param
         collection.each_with_object(
           Structure::Collections::Resources.new
         ) do |instance, resources|
           resources << build_resource(
             context,
             instance,
-            fields: fields,
-            relationships: relationships,
+            fields:         fields,
+            relationships:  relationships,
             include_cursor: include_cursors,
             &block
           )

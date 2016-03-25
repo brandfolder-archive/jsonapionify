@@ -25,7 +25,7 @@ module JSONAPIonify::Api
 
       error :json_parse_error do
         title 'Parse Error'
-        detail 'Could not parse JSON object'
+        detail 'could not parse JSON object'
         status '422'
       end
 
@@ -36,10 +36,17 @@ module JSONAPIonify::Api
         status '400'
       end
 
+      error :attribute_type_error do |attribute|
+        pointer "data/attributes/#{attribute}"
+        status '500'
+        title "Attribute type error"
+      end
+
       error :attribute_not_permitted do |attribute|
         pointer "data/attributes/#{attribute}"
         title 'Attribute not permitted'
-        detail "Attribute not permitted: #{attribute}"
+        status '422'
+        detail "attribute not permitted: #{attribute}"
       end
 
       error :attributes_missing do

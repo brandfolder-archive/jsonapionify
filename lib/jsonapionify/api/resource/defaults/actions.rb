@@ -3,6 +3,7 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
+      context(:action_name){}
       define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
         cache 'options-request'
       end.response(status: 200) do |context|

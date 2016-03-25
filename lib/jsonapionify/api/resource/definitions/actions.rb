@@ -10,17 +10,17 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         include JSONAPIonify::Callbacks
         define_callbacks :request, :list, :create, :read, :update, :delete,
-                         :show, :add, :remove, :replace, :exception
+                         :show, :add, :remove, :replace, :exception, :response
         inherited_array_attribute :action_definitions
       end
     end
 
     def list(content_type: nil, only_associated: false, callbacks: true, &block)
       options = {
-        content_type: content_type,
+        content_type:    content_type,
         only_associated: only_associated,
-        callbacks: callbacks,
-        cacheable: true
+        callbacks:       callbacks,
+        cacheable:       true
       }
       define_action(:list, 'GET', **options, &block).tap do |action|
         action.response status: 200 do |context|
@@ -39,11 +39,11 @@ module JSONAPIonify::Api
 
     def create(content_type: nil, only_associated: false, callbacks: true, &block)
       options = {
-        content_type: content_type,
+        content_type:    content_type,
         only_associated: only_associated,
-        callbacks: callbacks,
-        cacheable: false,
-        example_input: :resource
+        callbacks:       callbacks,
+        cacheable:       false,
+        example_input:   :resource
       }
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
@@ -57,10 +57,10 @@ module JSONAPIonify::Api
 
     def read(content_type: nil, only_associated: false, callbacks: true, &block)
       options = {
-        content_type: content_type,
+        content_type:    content_type,
         only_associated: only_associated,
-        callbacks: callbacks,
-        cacheable: true
+        callbacks:       callbacks,
+        cacheable:       true
       }
       define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
@@ -73,11 +73,11 @@ module JSONAPIonify::Api
 
     def update(content_type: nil, only_associated: false, callbacks: true, &block)
       options = {
-        content_type: content_type,
+        content_type:    content_type,
         only_associated: only_associated,
-        callbacks: callbacks,
-        cacheable: false,
-        example_input: :resource
+        callbacks:       callbacks,
+        cacheable:       false,
+        example_input:   :resource
       }
       define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
         action.response status: 200 do |context|
@@ -90,10 +90,10 @@ module JSONAPIonify::Api
 
     def delete(content_type: nil, only_associated: false, callbacks: true, &block)
       options = {
-        content_type: content_type,
+        content_type:    content_type,
         only_associated: only_associated,
-        callbacks: callbacks,
-        cacheable: false
+        callbacks:       callbacks,
+        cacheable:       false
       }
       define_action(:delete, 'DELETE', '/:id', **options, &block).tap do |action|
         action.response status: 204
@@ -110,14 +110,18 @@ module JSONAPIonify::Api
       end
     end
 
-    def after(action_name = nil, &block)
-      return after_request &block if action_name == nil
-      send("after_#{action_name}", &block)
+    def after(*action_names, &block)
+      return after_request &block if action_names.blank?
+      action_names.each do |action_name|
+        send("after_#{action_name}", &block)
+      end
     end
 
-    def before(action_name = nil, &block)
-      return before_request &block if action_name == nil
-      send("before_#{action_name}", &block)
+    def before(*action_names, &block)
+      return before_request &block if action_names.blank?
+      action_names.each do |action_name|
+        send("before_#{action_name}", &block)
+      end
     end
 
     def define_action(name, *args, **options, &block)

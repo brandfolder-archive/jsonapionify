@@ -29,11 +29,19 @@ module JSONAPIonify::Api
         should_error = false
         request_attributes.each_with_object({}) do |(attr, v), attributes|
           resource_attribute = self.attributes.find { |a| a.name == attr }
-          unless !!resource_attribute&.write?
+          is_writable = !!resource_attribute&.write?
+          is_actionable = !!resource_attribute&.supports_action?(action_name)
+          unless is_writable && is_actionable
             error :attribute_not_permitted, attr
             should_error = true
           end
-          attributes[attr] = resource_attribute.type.load(v)
+
+          begin
+            attributes[attr] = resource_attribute.type.load(v)
+          rescue JSONAPIonify::Types::LoadError
+            error :attribute_type_error, attr
+            should_error = true
+          end
         end.tap do
           raise Errors::RequestError if should_error
         end

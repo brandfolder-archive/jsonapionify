@@ -5,19 +5,34 @@ module JSONAPIonify::Api
     using UnstrictProc
     attr_reader :name, :type, :description, :read, :write, :required, :block
 
-    def initialize(name, type, description, read: true, write: true, required: false, example: nil, &block)
-      raise ArgumentError, 'required attributes must be writable' if required && !write
+    def initialize(
+      name,
+      type,
+      description,
+      read: true,
+      write: true,
+      required: false,
+      example: nil,
+      only: nil,
+      except: nil,
+      &block
+    )
+      if required && !write
+        raise ArgumentError, 'required attributes must be writable'
+      end
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
       end
-      @name        = name
-      @type        = type
-      @description = description
-      @example     = example
-      @read        = read
-      @write       = write
-      @required    = write ? required : false
-      @block       = block || proc { |attr, instance| instance.send attr }
+      @name           = name
+      @type           = type
+      @description    = description
+      @example        = example
+      @read           = read
+      @write          = write
+      @required       = write ? required : false
+      @block          = block || proc { |attr, instance| instance.send attr }
+      @only_actions   = Array.wrap(only) if only
+      @except_actions = Array.wrap(except) if except
     end
 
     def ==(other)
@@ -25,8 +40,29 @@ module JSONAPIonify::Api
         self.name == other.name
     end
 
+    def supports_action?(action)
+      !!JSONAPIonify::Continuation.new(
+        if:     ->(a) { @only_actions.nil? || @only_actions.include?(a) },
+        unless: ->(a) { @except_actions.present? && @except_actions.include?(a) }
+      ).check(action) do
+        true
+      end
+    end
+
     def resolve(instance, context)
       type.dump block.unstrict.call(self.name, instance, context)
+    rescue JSONAPIonify::Types::DumpError => ex
+      error_block =
+        context.request_resource.error_definitions[:attribute_type_error]
+      context.errors.evaluate(
+        name,
+        error_block:   error_block,
+        backtrace:     ex.backtrace,
+        runtime_block: proc {
+          detail ex.message
+        }
+      )
+      nil
     end
 
     def options_json

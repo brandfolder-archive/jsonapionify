@@ -17,6 +17,8 @@ module JSONAPIonify::Types
         Faker::Time.backward
       elsif field_name.include?('end')
         Faker::Time.forward
+      else
+        Faker::Time.backward
       end
     end
 

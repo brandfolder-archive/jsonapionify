@@ -86,34 +86,41 @@ module JSONAPIonify::Api
       )
     end
 
+    def example_input(resource)
+      request = Server::Request.env_for('http://example.org', request_method)
+      context = ContextDelegate::Mock.new(request: request)
+      case @example_input
+      when :resource
+        {
+          'data' => resource.build_resource(
+            context,
+            resource.example_instance_for_action(name),
+            relationships: false,
+            links:         false,
+            fields:        resource.fields_for_action(name)
+          ).as_json
+        }.to_json
+      when :resource_identifier
+        {
+          'data' => resource.build_resource_identifier(
+            resource.example_instance_for_action(name)
+          ).as_json
+        }.to_json
+      when Proc
+        @example_input.call
+      end
+    end
+
     def example_requests(resource, url)
       responses.map do |response|
         opts                 = {}
-        opts['CONTENT_TYPE'] = content_type if @require_body
+        opts['CONTENT_TYPE'] = content_type if @example_input
         opts['HTTP_ACCEPT']  = response.accept
-        request              = Server::Request.env_for(url, request_method, opts)
-        context              = ContextDelegate::Mock.new(request: request)
-        opts[:input]         = case @example_input
-                               when :resource
-                                 {
-                                   'data' => resource.build_resource(
-                                     context,
-                                     resource.example_instance,
-                                     relationships: false,
-                                     links:         false
-                                   ).as_json
-                                 }.to_json
-                               when :resource_identifier
-                                 {
-                                   'data' => resource.build_resource_identifier(
-                                     resource.example_instance
-                                   ).as_json
-                                 }.to_json
-                               when Proc
-                                 @example_input.call
-                               end if @content_type == 'application/vnd.api+json' && !%w{GET DELETE}.include?(request_method)
-        request              = Server::Request.env_for(url, request_method, opts)
-        response             = Server::MockResponse.new(*sample_request(resource, request))
+        if content_type == 'application/vnd.api+json' && @example_input
+          opts[:input] = example_input(resource)
+        end
+        request  = Server::Request.env_for(url, request_method, opts)
+        response = Server::MockResponse.new(*sample_request(resource, request))
 
         OpenStruct.new(
           request:  request.http_string,
@@ -148,7 +155,11 @@ module JSONAPIonify::Api
       resource.new.instance_eval do
         sample_context                        = self.class.context_definitions.dup
         sample_context[:collection]           =
-          Context.new proc { 3.times.map.each_with_index { |i| resource.example_instance(i + 1) } }, true
+          Context.new proc {
+            3.times.map.each_with_index { |i|
+              resource.example_instance_for_action(action.name, index: i + 1)
+            }
+          }, true
         sample_context[:paginated_collection] = Context.new proc { |context| context.collection }
         sample_context[:instance]             = Context.new proc { |context| context.collection.first }
         if sample_context.has_key? :owner_context
@@ -179,7 +190,13 @@ module JSONAPIonify::Api
       cache_options = {}
       resource.new.instance_eval do
         # Bootstrap the Action
-        context = ContextDelegate.new(request, self, self.class.context_definitions)
+        context = ContextDelegate.new(
+          request,
+          self,
+          self.class.context_definitions
+        )
+
+        context.action_name = action.name
 
         # Define Singletons
         define_singleton_method :cache do |key, **options|
@@ -201,7 +218,7 @@ module JSONAPIonify::Api
         end if action.cacheable
 
         define_singleton_method :action_name do
-          action.name
+          context.action_name
         end
 
         define_singleton_method :errors do
@@ -231,7 +248,11 @@ module JSONAPIonify::Api
           fail Errors::RequestError if errors.present?
           instance_exec(context, &action.block)
           fail Errors::RequestError if errors.present?
-          invoke_response!
+          run_callbacks :response, context do
+            invoke_response!.tap do
+              raise Errors::RequestError if errors.present?
+            end
+          end
         }
 
         begin

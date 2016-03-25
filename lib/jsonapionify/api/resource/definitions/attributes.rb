@@ -9,19 +9,32 @@ module JSONAPIonify::Api
         delegate :id_attribute, :attributes, to: :class
 
         context(:fields, readonly: true) do |context|
-          should_error = false
-          fields       = (context.request.params['fields'] || {}).each_with_object(self.class.api.fields) do |(type, fields), field_map|
+          should_error      = false
+          input_fields      = context.request.params['fields'] || {}
+          actionable_fields = self.class.fields_for_action(context.action_name)
+          input_fields.each_with_object(
+            actionable_fields
+          ) do |(type, fields), field_map|
             type_sym            = type.to_sym
+            field_symbols       = fields.to_s.split(',').map(&:to_sym)
             field_map[type_sym] =
-              fields.to_s.split(',').map(&:to_sym).each_with_object([]) do |field, field_list|
-                attribute = self.class.api.resource(type_sym).attributes.find do |attribute|
-                  attribute.read? && attribute.name == field
+              field_symbols.each_with_object([]) do |field, field_list|
+                type_attributes = self.class.api.resource(type_sym).attributes
+                attribute = type_attributes.find do |attribute|
+                  attribute.name == field &&
+                    attribute.read? &&
+                    attribute.supports_action?(context.action_name)
                 end
-                attribute ? field_list << attribute.name : error(:field_not_permitted, type, field) && (should_error = true)
+                if attribute
+                  field_list << attribute.name
+                else
+                  error(:field_not_permitted, type, field)
+                  should_error = true
+                end
               end
+          end.tap do
+            raise Errors::RequestError if should_error
           end
-          raise Errors::RequestError if should_error
-          fields
         end
       end
     end
@@ -33,7 +46,9 @@ module JSONAPIonify::Api
     end
 
     def attribute(name, type, description = '', **options, &block)
-      Attribute.new(name, type, description, **options, &block).tap do |new_attribute|
+      Attribute.new(
+        name, type, description, **options, &block
+      ).tap do |new_attribute|
         attributes.delete(new_attribute)
         attributes << new_attribute
       end
@@ -53,6 +68,16 @@ module JSONAPIonify::Api
 
     def field_valid?(name)
       fields.include? name.to_sym
+    end
+
+    def fields_for_action(action)
+      api.fields.each_with_object({}) do |(type, attrs), fields|
+        fields[type] = attrs.select do |attr|
+          api.resource(type).attributes.find do |type_attr|
+            type_attr.name == attr
+          end.supports_action? action
+        end
+      end
     end
 
   end

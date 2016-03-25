@@ -17,7 +17,8 @@ module JSONAPIonify::Api
       klass = Class.new(resource_class, &resource_definitions[type]).set_type(type)
       param(:fields, type)
       const_set const_name, klass
-    rescue NameError
+    rescue NameError => e
+      raise e unless e.instance_of?(NameError)
       raise Errors::ResourceNotFound, "Resource not defined: #{type}"
     end
 

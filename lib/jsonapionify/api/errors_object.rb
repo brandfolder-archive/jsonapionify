@@ -33,8 +33,9 @@ module JSONAPIonify
         end
       end
 
-      def evaluate(*args, error_block:, runtime_block:, backtrace: nil)
+      def evaluate(*args, error_block:, runtime_block: nil, backtrace: nil)
         backtrace ||= caller
+        runtime_block ||= proc {}
         error     = Structure::Objects::Error.new
         evaluator = Evaluator.new(error)
         collection << error

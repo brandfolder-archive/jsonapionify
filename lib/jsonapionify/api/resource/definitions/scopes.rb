@@ -3,10 +3,10 @@ module JSONAPIonify::Api
 
     def scope(&block)
       define_singleton_method(:current_scope) do
-        Object.new.instance_eval(&block)
+        instance_exec(OpenStruct.new, &block)
       end
-      context :scope do
-        self.class.current_scope
+      context :scope do |context|
+        instance_exec(context, &block)
       end
     end
 

@@ -59,7 +59,7 @@ module JSONAPIonify::Api
     end
 
     def jsonapi_params
-      accept_params['application/vnd.api+json']
+      accept_params['application/vnd.api+json'] || {}
     end
 
     def accept

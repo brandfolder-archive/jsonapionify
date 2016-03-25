@@ -10,6 +10,12 @@ module JSONAPIonify::Api
                    :sticky_params, :authentication, :on_exception,
                    :example_id_generator, :after, :builder,
                    to: :resource_class
+
+          # Delegate anything we missed
+          def method_missing(m, *args, &block)
+            return super unless resource_class.respond_to?(m)
+            resource_class.send(m, *args, &block)
+          end
         end
       end
     end
