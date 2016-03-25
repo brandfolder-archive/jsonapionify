@@ -59,12 +59,12 @@ module JSONAPIonify::Types
 
     end
 
-    def load(value)
+    loader do |value|
       raise LoadError, 'input value was not a string' unless value.is_a?(String)
       value
     end
 
-    def dump(value)
+    dumper do |value|
       raise DumpError, 'cannot convert value to string' unless value.respond_to?(:to_s)
       value.to_s.tap do |string|
         raise DumpError, 'output value was not a string' unless string.is_a? String

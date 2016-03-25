@@ -4,8 +4,9 @@ module JSONAPIonify::Types
   extend JSONAPIonify::Autoload
   autoload_all
 
-  DumpError = Class.new(StandardError)
-  LoadError = Class.new(StandardError)
+  DumpError     = Class.new(StandardError)
+  LoadError     = Class.new(StandardError)
+  RequiredError = Class.new(StandardError)
 
   def types
     DefinitionFinder
@@ -23,6 +24,30 @@ module JSONAPIonify::Types
     include JSONAPIonify::Callbacks
     define_callbacks :initialize
 
+    def self.dumper(&block)
+      define_method(:dump) do |value|
+        return nil if value.nil? && !required?
+        raise RequiredError if value.nil? && required?
+        instance_exec(value, &block)
+      end
+    end
+
+    def self.loader(&block)
+      define_method(:load) do |value|
+        return nil if value.nil? && !required?
+        raise RequiredError if value.nil? && required?
+        instance_exec(value, &block)
+      end
+    end
+
+    loader do |value|
+      value
+    end
+
+    dumper do |value|
+      JSON.load JSON.dump value
+    end
+
     def name
       self.class.name.split('::').last.chomp('Type')
     end
@@ -33,15 +58,17 @@ module JSONAPIonify::Types
       run_callbacks :initialize do
         @options = options
       end
-      freeze
     end
 
-    def load(non_ruby)
-      non_ruby
+    def required!
+      @required = true
+      self
     end
 
-    def dump(ruby)
-      JSON.load JSON.dump ruby
+    private
+
+    def required?
+      !!@required
     end
 
     def verify(non_ruby)

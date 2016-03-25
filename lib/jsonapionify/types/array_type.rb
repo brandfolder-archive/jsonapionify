@@ -14,7 +14,7 @@ module JSONAPIonify::Types
       end
     end
 
-    def load(value)
+    loader do |value|
       raise LoadError, 'invalid type' unless value.is_a?(Array)
       return super(value) unless options[:of]
       value.map do |item|
@@ -22,7 +22,7 @@ module JSONAPIonify::Types
       end
     end
 
-    def dump(value)
+    dumper do |value|
       raise DumpError, 'cannot convert value to array' unless value.respond_to?(:to_a)
       value.to_a.tap do |array|
         raise DumpError, 'output value was not an array' unless array.is_a? Array

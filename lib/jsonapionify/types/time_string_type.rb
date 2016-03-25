@@ -2,11 +2,11 @@ require 'faker'
 
 module JSONAPIonify::Types
   class TimeStringType < StringType
-    def load(value)
+    loader do |value|
       Time.parse super(value)
     end
 
-    def dump(value)
+    dumper do |value|
       raise DumpError, 'cannot convert value to time' unless value.respond_to?(:to_time)
       JSON.load JSON.dump(value.to_time)
     end

@@ -17,9 +17,7 @@ module JSONAPIonify::Api
       except: nil,
       &block
     )
-      if required && !write
-        raise ArgumentError, 'required attributes must be writable'
-      end
+      # type.required! if required
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
       end
@@ -29,7 +27,6 @@ module JSONAPIonify::Api
       @example        = example
       @read           = read
       @write          = write
-      @required       = write ? required : false
       @block          = block || proc { |attr, instance| instance.send attr }
       @only_actions   = Array.wrap(only) if only
       @except_actions = Array.wrap(except) if except
@@ -53,13 +50,25 @@ module JSONAPIonify::Api
       type.dump block.unstrict.call(self.name, instance, context)
     rescue JSONAPIonify::Types::DumpError => ex
       error_block =
-        context.request_resource.error_definitions[:attribute_type_error]
+        context.resource.class.error_definitions[:attribute_type_error]
       context.errors.evaluate(
         name,
         error_block:   error_block,
         backtrace:     ex.backtrace,
         runtime_block: proc {
           detail ex.message
+        }
+      )
+    rescue JSONAPIonify::Types::RequiredError => ex
+      error_block =
+        context.resource.class.error_definitions[:attribute_required]
+      context.errors.evaluate(
+        name,
+        error_block:   error_block,
+        backtrace:     ex.backtrace,
+        runtime_block: proc {
+          detail ex.message
+          status '500'
         }
       )
       nil
@@ -70,14 +79,6 @@ module JSONAPIonify::Api
         name:     name,
         required: required
       }
-    end
-
-    def required?
-      !!@required
-    end
-
-    def optional?
-      !required?
     end
 
     def read?

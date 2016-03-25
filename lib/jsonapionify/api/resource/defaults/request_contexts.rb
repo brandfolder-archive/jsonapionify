@@ -41,6 +41,10 @@ module JSONAPIonify::Api
           rescue JSONAPIonify::Types::LoadError
             error :attribute_type_error, attr
             should_error = true
+          rescue JSONAPIonify::Types::RequiredError
+            error :attribute_required, attr
+            status '422'
+            should_error = true
           end
         end.tap do
           raise Errors::RequestError if should_error

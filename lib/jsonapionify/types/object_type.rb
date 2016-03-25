@@ -3,12 +3,12 @@ require 'active_support/core_ext/hash/keys'
 module JSONAPIonify::Types
   class ObjectType < BaseType
 
-    def load(value)
+    loader do |value|
       raise LoadError, 'invalid type' unless value.is_a?(Hash)
       super(value).deep_symbolize_keys
     end
 
-    def dump(value)
+    dumper do |value|
       raise DumpError, 'cannot convert value to hash' unless value.respond_to?(:to_h)
       value = value.to_h.tap do |hash|
         raise DumpError, 'output value was not a hash' unless hash.is_a? Hash

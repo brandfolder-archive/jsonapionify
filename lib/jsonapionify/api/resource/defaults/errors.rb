@@ -42,6 +42,12 @@ module JSONAPIonify::Api
         title "Attribute type error"
       end
 
+      error :attribute_required do |attribute|
+        pointer "data/attributes/#{attribute}"
+        title 'Attribute required'
+        detail "attribute required: #{attribute}"
+      end
+
       error :attribute_not_permitted do |attribute|
         pointer "data/attributes/#{attribute}"
         title 'Attribute not permitted'

@@ -5,12 +5,12 @@ module JSONAPIonify::Types
       rand(1..123)
     end
 
-    def load(value)
+    loader do |value|
       raise LoadError, 'input value was not an integer' unless value.is_a?(Fixnum)
       value
     end
 
-    def dump(value)
+    dumper do |value|
       raise DumpError, 'cannot convert value to integer' unless value.respond_to?(:to_i)
       value.to_i.tap do |int|
         raise DumpError, 'output value was not a Float' unless int.is_a? Integer

@@ -1,7 +1,7 @@
 module JSONAPIonify::Types
   class BooleanType < BaseType
 
-    def load(value)
+    loader do |value|
       case value
       when true, false
         value
@@ -10,7 +10,7 @@ module JSONAPIonify::Types
       end
     end
 
-    def dump(value)
+    dumper do |value|
       case value
       when true, false
         value

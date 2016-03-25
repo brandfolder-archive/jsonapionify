@@ -2,11 +2,11 @@ require 'faker'
 
 module JSONAPIonify::Types
   class DateStringType < StringType
-    def load(value)
+    loader do |value|
       Date.parse super(value)
     end
 
-    def dump(value)
+    dumper do |value|
       raise DumpError, 'cannot convert value to date' unless value.respond_to?(:to_date)
       JSON.load JSON.dump(value.to_date)
     end
