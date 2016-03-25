@@ -7,7 +7,7 @@ module JSONAPIonify::Types
     end
 
     def dump(value)
-      raise DumpError, 'cannot convert value to Date' unless value.respond_to?(:to_date)
+      raise DumpError, 'cannot convert value to date' unless value.respond_to?(:to_date)
       JSON.load JSON.dump(value.to_date)
     end
 

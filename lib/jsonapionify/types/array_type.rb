@@ -23,7 +23,7 @@ module JSONAPIonify::Types
     end
 
     def dump(value)
-      raise DumpError, 'cannot convert value to Array' unless value.respond_to?(:to_a)
+      raise DumpError, 'cannot convert value to array' unless value.respond_to?(:to_a)
       value.to_a.tap do |array|
         raise DumpError, 'output value was not an array' unless array.is_a? Array
       end
