@@ -3,6 +3,9 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
+      context :http_allow, readonly: true do |context|
+        self.class.path_actions(context.request).map(&:request_method)
+      end
       context(:action_name){}
       define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
         cache 'options-request'

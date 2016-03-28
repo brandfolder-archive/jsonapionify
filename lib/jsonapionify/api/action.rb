@@ -60,7 +60,7 @@ module JSONAPIonify::Api
         ).gsub(
           ':id', '(?<id>[^\/]+)'
         ).gsub(
-          '/*', '/?.*'
+          '/*', '/?[^\/]*'
         )
       Regexp.new('^' + raw_reqexp + '$')
     end
