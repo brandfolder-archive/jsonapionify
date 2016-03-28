@@ -28,7 +28,7 @@ module JSONAPIonify
     end
 
     def last_response_error_messages
-      last_response_errors.map do |error|
+      last_response_errors&.map do |error|
         {
           id:        error['id'],
           code:      error['code'],

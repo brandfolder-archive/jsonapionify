@@ -8,7 +8,7 @@ module JSONAPIonify::Types
 
     dumper do |value|
       raise DumpError, 'cannot convert value to time' unless value.respond_to?(:to_time)
-      JSON.load JSON.dump(value.to_time)
+      JSON.load JSON.dump(value.to_time.utc)
     end
 
     def sample(field_name)
