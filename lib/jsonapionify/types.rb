@@ -25,18 +25,20 @@ module JSONAPIonify::Types
     define_callbacks :initialize
 
     def self.dumper(&block)
+      meth = instance_method define_method(:dump, &block)
       define_method(:dump) do |value|
         return nil if value.nil? && !required?
         raise RequiredError if value.nil? && required?
-        instance_exec(value, &block)
+        meth.bind(self).call(value)
       end
     end
 
     def self.loader(&block)
+      meth = instance_method define_method(:load, &block)
       define_method(:load) do |value|
         return nil if value.nil? && !required?
         raise RequiredError if value.nil? && required?
-        instance_exec(value, &block)
+        meth.bind(self).call(value)
       end
     end
 
