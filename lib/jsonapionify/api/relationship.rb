@@ -74,7 +74,8 @@ module JSONAPIonify::Api
     def options_json
       {
         name: name,
-        type: resource
+        type: resource.type,
+        relationship_type: self.class.name.split(':').last.downcase
       }
     end
 
