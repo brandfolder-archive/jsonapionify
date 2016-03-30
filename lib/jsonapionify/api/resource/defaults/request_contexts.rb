@@ -22,11 +22,21 @@ module JSONAPIonify::Api
       end
 
       context(:request_attributes, readonly: true) do |context|
+        should_error = false
+
         request_attributes = context.request_data.fetch(:attributes) do
           error_now :attributes_missing
         end
 
-        should_error = false
+        # Check for required attributes
+        self.attributes.each do |attr|
+          next unless attr.required_for_action?(action_name)
+          unless request_attributes.has_key?(attr.name)
+            error :attribute_required, attr
+            should_error = true
+          end
+        end
+
         request_attributes.each_with_object({}) do |(attr, v), attributes|
           resource_attribute = self.attributes.find { |a| a.name == attr }
           is_writable = !!resource_attribute&.write?
@@ -40,10 +50,6 @@ module JSONAPIonify::Api
             attributes[attr] = resource_attribute.type.load(v)
           rescue JSONAPIonify::Types::LoadError
             error :attribute_type_error, attr
-            should_error = true
-          rescue JSONAPIonify::Types::RequiredError
-            error :attribute_required, attr
-            status '422'
             should_error = true
           end
         end.tap do

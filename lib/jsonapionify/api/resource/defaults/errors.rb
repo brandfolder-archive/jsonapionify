@@ -46,6 +46,13 @@ module JSONAPIonify::Api
         pointer "data/attributes/#{attribute}"
         title 'Attribute required'
         detail "attribute required: #{attribute}"
+        status '422'
+      end
+
+      error :attribute_cannot_be_null do |attribute|
+        pointer "data/attributes/#{attribute}"
+        title 'Attribute cannot be null'
+        status '500'
       end
 
       error :attribute_not_permitted do |attribute|

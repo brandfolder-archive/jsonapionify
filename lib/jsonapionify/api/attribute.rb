@@ -17,19 +17,25 @@ module JSONAPIonify::Api
       except: nil,
       &block
     )
-      # type.required! if required
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
       end
+
       @name           = name
       @type           = type
       @description    = description
       @example        = example
       @read           = read
       @write          = write
+      @required       = required
       @block          = block || proc { |attr, instance| instance.send attr }
       @only_actions   = Array.wrap(only) if only
       @except_actions = Array.wrap(except) if except
+
+      if required && required.is_a?(Symbol) && !supports_action?(required)
+        raise ArgumentError,
+              'required argument does not match a supported action'
+      end
     end
 
     def ==(other)
@@ -59,25 +65,27 @@ module JSONAPIonify::Api
           detail ex.message
         }
       )
-    rescue JSONAPIonify::Types::RequiredError => ex
+    rescue JSONAPIonify::Types::NotNullError => ex
       error_block =
-        context.resource.class.error_definitions[:attribute_required]
+        context.resource.class.error_definitions[:attribute_cannot_be_null]
       context.errors.evaluate(
         name,
         error_block:   error_block,
         backtrace:     ex.backtrace,
-        runtime_block: proc {
-          detail ex.message
-          status '500'
-        }
+        runtime_block: proc { detail ex.message }
       )
       nil
     end
 
-    def options_json
+    def required_for_action?(action_name)
+      supports_action?(action_name) &&
+        (required === true || Array.wrap(required).include?(action_name))
+    end
+
+    def options_json_for_action(action_name)
       {
         name:     name,
-        required: required
+        required: required_for_action?(action_name)
       }
     end
 

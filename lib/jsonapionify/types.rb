@@ -6,7 +6,7 @@ module JSONAPIonify::Types
 
   DumpError     = Class.new(StandardError)
   LoadError     = Class.new(StandardError)
-  RequiredError = Class.new(StandardError)
+  NotNullError = Class.new(StandardError)
 
   def types
     DefinitionFinder
@@ -27,8 +27,8 @@ module JSONAPIonify::Types
     def self.dumper(&block)
       meth = instance_method define_method(:dump, &block)
       define_method(:dump) do |value|
-        return nil if value.nil? && !required?
-        raise RequiredError if value.nil? && required?
+        return nil if value.nil? && !not_null?
+        raise NotNullError if value.nil? && not_null?
         meth.bind(self).call(value)
       end
     end
@@ -36,8 +36,8 @@ module JSONAPIonify::Types
     def self.loader(&block)
       meth = instance_method define_method(:load, &block)
       define_method(:load) do |value|
-        return nil if value.nil? && !required?
-        raise RequiredError if value.nil? && required?
+        return nil if value.nil? && !not_null?
+        raise NotNullError if value.nil? && not_null?
         meth.bind(self).call(value)
       end
     end
@@ -62,15 +62,15 @@ module JSONAPIonify::Types
       end
     end
 
-    def required!
-      @required = true
+    def not_null!
+      @not_null = true
       self
     end
 
     private
 
-    def required?
-      !!@required
+    def not_null?
+      !!@not_null
     end
 
     def verify(non_ruby)
