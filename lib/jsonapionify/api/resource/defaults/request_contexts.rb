@@ -24,13 +24,20 @@ module JSONAPIonify::Api
       context(:request_attributes, readonly: true) do |context|
         should_error = false
 
-        request_attributes = context.request_data.fetch(:attributes) do
-          error_now :attributes_missing
-        end
+        request_attributes =
+          context.request_data.fetch(:attributes) do
+            error_now :attributes_missing
+          end
 
         # Check for required attributes
         self.attributes.each do |attr|
           next unless attr.required_for_action?(action_name)
+          if attr.read? || context.id
+            example_id   = self.build_id(context.instance)
+            next unless attr.resolve(
+              context.instance, context, example_id: example_id
+            ).nil?
+          end
           unless request_attributes.has_key?(attr.name)
             error :attribute_required, attr.name
             should_error = true
@@ -39,8 +46,8 @@ module JSONAPIonify::Api
 
         request_attributes.each_with_object({}) do |(attr, v), attributes|
           resource_attribute = self.attributes.find { |a| a.name == attr }
-          is_writable = !!resource_attribute&.write?
-          is_actionable = !!resource_attribute&.supports_action?(action_name)
+          is_writable        = !!resource_attribute&.write?
+          is_actionable      = !!resource_attribute&.supports_action?(action_name)
           unless is_writable && is_actionable
             error :attribute_not_permitted, attr
             should_error = true
