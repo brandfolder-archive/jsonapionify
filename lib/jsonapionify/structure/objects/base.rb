@@ -89,7 +89,7 @@ module JSONAPIonify::Structure
       end
 
       def to_hash
-        object.reduce({}) do |hash, (k, v)|
+        object.sort.to_h.reduce({}) do |hash, (k, v)|
           hash[k] =
             case v
             when Objects::Base
