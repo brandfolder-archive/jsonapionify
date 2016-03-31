@@ -11,7 +11,7 @@ module JSONAPIonify
         if example.run && last_response && (last_response_json rescue false)
           aggregate_failures do
             "response failures"
-            last_response_error_messages.each do |message|
+            last_response_error_messages&.each do |message|
               expect(message).to be_empty, message
             end
           end
