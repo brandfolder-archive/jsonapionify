@@ -1,6 +1,8 @@
 module JSONAPIonify::Structure
   module Objects
     class Relationship < Base
+      define_order *%i{data meta links}
+
       # A "relationship object" MUST contain at least one of the following:
       must_contain_one_of! :links, # A links object.
                            :data, # Resource linkage.

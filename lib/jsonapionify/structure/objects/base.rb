@@ -39,6 +39,14 @@ module JSONAPIonify::Structure
         new hash.deep_symbolize_keys
       end
 
+      def self.define_order(*keys)
+        define_singleton_method :ordered_keys do
+          keys
+        end
+      end
+
+      define_order
+
       def self.from_json(json)
         from_hash Oj.load json
       end
@@ -89,7 +97,11 @@ module JSONAPIonify::Structure
       end
 
       def to_hash
-        object.sort.to_h.reduce({}) do |hash, (k, v)|
+        ordered_object = [
+          *object.slice(*self.class.ordered_keys),
+          *object.except(*self.class.ordered_keys)
+        ]
+        ordered_object.reduce({}) do |hash, (k, v)|
           hash[k] =
             case v
             when Objects::Base

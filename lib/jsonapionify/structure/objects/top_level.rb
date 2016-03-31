@@ -8,6 +8,8 @@ module JSONAPIonify::Structure
     class TopLevel < Base
       attr_reader :origin
 
+      define_order *%i{jsonapi data included errors meta links}
+
       default(:jsonapi) { Jsonapi.new version: '1.0' }
 
       # A document **MUST** contain at least one of:

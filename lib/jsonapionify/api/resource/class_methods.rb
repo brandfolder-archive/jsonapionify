@@ -52,7 +52,11 @@ module JSONAPIonify::Api
 
     def documented_actions_in_order
       indexes = %i{list create read update delete add replace remove}
-      documented_actions.sort_by { |action, _| indexes.index(action.name) || indexes.length }
+      documented_actions.reject do |a, *|
+        ['HEAD', 'OPTIONS'].include? a.request_method
+      end.sort_by do |action, *|
+        indexes.index(action.name) || indexes.length
+      end
     end
 
     def documentation_object(base_url)
@@ -60,7 +64,7 @@ module JSONAPIonify::Api
         name:          type,
         description:   JSONAPIonify::Documentation.render_markdown(@description || ''),
         relationships: relationships.map { |r| r.documentation_object },
-        attributes:    attributes.map(&:documentation_object),
+        attributes:    attributes.sort_by(&:name).map(&:documentation_object),
         actions:       documented_actions_in_order.map do |action, base, args|
           action.documentation_object File.join(base_url, base), *args
         end

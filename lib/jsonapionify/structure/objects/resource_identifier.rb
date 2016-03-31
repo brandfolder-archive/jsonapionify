@@ -1,6 +1,8 @@
 module JSONAPIonify::Structure
   module Objects
     class ResourceIdentifier < Base
+      define_order *%i{type id}
+
       # A resource object **MUST** contain at least the following top-level members:
       must_contain! :id, :type # Describes ResourceObjects that share common attributes and relationships.
 

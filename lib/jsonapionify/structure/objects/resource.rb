@@ -2,6 +2,8 @@ module JSONAPIonify::Structure
   module Objects
     # ResourceObjects appear in a JSON API document to represent resources.
     class Resource < ResourceIdentifier
+      define_order *%i{type id attributes relationships meta links}
+
       # The `id` member is not required when the resource object originates at the
       # client and represents a new resource to be created on the server.
       must_contain! :id, if: ->(obj) { obj.server? } # an id representing the resource

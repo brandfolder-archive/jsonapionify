@@ -1,6 +1,8 @@
 module JSONAPIonify::Structure
   module Objects
     class Error < Base
+      define_order *%i{id code status source title detail meta links}
+
       may_contain! :id, :links, :status, :code, :title, :detail, :source, :meta
 
       implements :links, as: Maps::ErrorLinks

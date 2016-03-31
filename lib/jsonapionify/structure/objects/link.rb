@@ -1,6 +1,7 @@
 module JSONAPIonify::Structure
   module Objects
     class Link < Base
+      define_order *%i{href meta}
 
       may_contain! :href, :meta
 

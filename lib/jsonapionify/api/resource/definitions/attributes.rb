@@ -54,6 +54,10 @@ module JSONAPIonify::Api
       end
     end
 
+    def remove_attribute(name)
+      attributes.delete_if { |attr| attr.name == name.to_sym }
+    end
+
     def fields
       attributes.select(&:read?).map(&:name)
     end
