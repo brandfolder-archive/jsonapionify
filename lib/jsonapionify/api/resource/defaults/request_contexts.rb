@@ -32,7 +32,7 @@ module JSONAPIonify::Api
         self.attributes.each do |attr|
           next unless attr.required_for_action?(action_name)
           unless request_attributes.has_key?(attr.name)
-            error :attribute_required, attr
+            error :attribute_required, attr.name
             should_error = true
           end
         end
