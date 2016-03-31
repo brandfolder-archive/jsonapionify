@@ -15,7 +15,7 @@ module JSONAPIonify::Api
       end.each_with_object({}) do |(name, value), hash|
         hash[name[5..-1].gsub('_', '-').downcase] = value
       end
-      env_headers['content-type'] = content_type
+      env_headers['content-type'] = content_type if content_type
       Rack::Utils::HeaderHash.new(env_headers)
     end
 
