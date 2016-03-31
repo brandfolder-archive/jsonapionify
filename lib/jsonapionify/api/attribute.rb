@@ -21,21 +21,22 @@ module JSONAPIonify::Api
         raise TypeError, "#{type} is not a valid JSON type"
       end
 
-      @name           = name
-      @type           = type
-      @description    = description
-      @example        = example
-      @read           = read
-      @write          = write
-      @required       = required
-      @block          = block || proc { |attr, instance| instance.send attr }
-      @only_actions   = Array.wrap(only) if only
-      @except_actions = Array.wrap(except) if except
+      @name           = name.to_sym
+      @type           = type&.freeze
+      @description    = description&.freeze
+      @example        = example&.freeze
+      @read           = read&.freeze
+      @write          = write&.freeze
+      @required       = required&.freeze
+      @block          = block&.freeze
+      @only_actions   = Array.wrap(only)&.freeze if only
+      @except_actions = Array.wrap(except)&.freeze if except
 
       if required && required.is_a?(Symbol) && !supports_action?(required)
         raise ArgumentError,
               'required argument does not match a supported action'
       end
+      freeze
     end
 
     def ==(other)
@@ -52,7 +53,11 @@ module JSONAPIonify::Api
       end
     end
 
-    def resolve(instance, context)
+    def resolve(instance, context, example_id: nil)
+      if context.respond_to?(:_is_example_) && context._is_example_ == true
+        return example(example_id)
+      end
+      block = self.block || proc { |attr, instance| instance.send attr }
       type.dump block.unstrict.call(self.name, instance, context)
     rescue JSONAPIonify::Types::DumpError => ex
       error_block =
@@ -112,7 +117,7 @@ module JSONAPIonify::Api
       OpenStruct.new(
         name:        name,
         type:        type.name,
-        required:    required?,
+        required:    Array.wrap(required).join(', '),
         description: JSONAPIonify::Documentation.render_markdown(description),
         allow:       allow
       )

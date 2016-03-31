@@ -88,7 +88,9 @@ module JSONAPIonify::Api
 
     def example_input(resource)
       request = Server::Request.env_for('http://example.org', request_method)
-      context = ContextDelegate::Mock.new(request: request)
+      context = ContextDelegate::Mock.new(
+        request: request, resource: resource.new, _is_example_: true
+      )
       case @example_input
       when :resource
         {
@@ -154,11 +156,10 @@ module JSONAPIonify::Api
       action = dup
       resource.new.instance_eval do
         sample_context                        = self.class.context_definitions.dup
+        sample_context[:_is_example_]   = Context.new proc { true }, true
         sample_context[:collection]           =
           Context.new proc {
-            3.times.map.each_with_index { |i|
-              resource.example_instance_for_action(action.name, index: i + 1)
-            }
+            3.times.map { resource.example_instance_for_action(action.name) }
           }, true
         sample_context[:paginated_collection] = Context.new proc { |context| context.collection }
         sample_context[:instance]             = Context.new proc { |context| context.collection.first }

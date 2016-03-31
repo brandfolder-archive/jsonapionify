@@ -15,6 +15,7 @@ module JSONAPIonify::Api
         links: true,
         include_cursor: false, &block
       )
+        example_id = generate_id
         include_rel_param = context.params['include-relationships']
         relationships     = false if FALSEY_STRINGS.include?(include_rel_param)
         return nil unless instance
@@ -28,7 +29,9 @@ module JSONAPIonify::Api
             Structure::Objects::Attributes.new
           ) do |member, attributes|
             attribute = self.attributes.find { |a| a.name == member.to_sym }
-            attributes[member.to_sym] = attribute.resolve(instance, context)
+            attributes[member.to_sym] = attribute.resolve(
+              instance, context, example_id: example_id
+            )
           end
 
           resource[:links]         = Structure::Objects::Links.new(
