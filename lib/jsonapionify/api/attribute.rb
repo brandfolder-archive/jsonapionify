@@ -13,29 +13,23 @@ module JSONAPIonify::Api
       write: true,
       required: false,
       example: nil,
-      only: nil,
-      except: nil,
       &block
     )
       unless type.is_a? JSONAPIonify::Types::BaseType
         raise TypeError, "#{type} is not a valid JSON type"
       end
 
-      @name           = name.to_sym
-      @type           = type&.freeze
-      @description    = description&.freeze
-      @example        = example&.freeze
-      @read           = read&.freeze
-      @write          = write&.freeze
-      @required       = required&.freeze
-      @block          = block&.freeze
-      @only_actions   = Array.wrap(only)&.freeze if only
-      @except_actions = Array.wrap(except)&.freeze if except
+      @name              = name.to_sym
+      @type              = type&.freeze
+      @description       = description&.freeze
+      @example           = example&.freeze
+      @read              = read&.freeze
+      @write             = write&.freeze
+      @required          = required&.freeze
+      @block             = block&.freeze
+      @writeable_actions = write
+      @readable_actions  = read
 
-      if required && required.is_a?(Symbol) && !supports_action?(required)
-        raise ArgumentError,
-              'required argument does not match a supported action'
-      end
       freeze
     end
 
@@ -44,12 +38,35 @@ module JSONAPIonify::Api
         self.name == other.name
     end
 
-    def supports_action?(action)
-      !!JSONAPIonify::Continuation.new(
-        if:     ->(a) { @only_actions.nil? || @only_actions.include?(a) },
-        unless: ->(a) { @except_actions.present? && @except_actions.include?(a) }
-      ).check(action) do
-        true
+    def supports_read_for_action?(action_name, context)
+      case (setting = @readable_actions)
+      when TrueClass, FalseClass
+        setting
+      when Hash
+        !!JSONAPIonify::Continuation.new(setting).check(action_name, context){ true }
+      when Array
+        setting.map(&:to_sym).include? action_name
+      when Symbol, String
+        setting.to_sym === action_name
+      else
+        false
+      end
+    end
+
+    def supports_write_for_action?(action_name, context)
+      action = context.resource.class.actions.find { |a| a.name == action_name }
+      return false unless %{POST PUT PATCH}.include? action.request_method
+      case (setting = @writeable_actions)
+      when TrueClass, FalseClass
+        setting
+      when Hash
+        !!JSONAPIonify::Continuation.new(setting).check(action_name, context){ true }
+      when Array
+        setting.map(&:to_sym).include? action_name
+      when Symbol, String
+        setting.to_sym === action_name
+      else
+        false
       end
     end
 
@@ -82,16 +99,21 @@ module JSONAPIonify::Api
       nil
     end
 
-    def required_for_action?(action_name)
-      supports_action?(action_name) &&
+    def required_for_action?(action_name, context)
+      supports_write_for_action?(action_name, context) &&
         (required === true || Array.wrap(required).include?(action_name))
     end
 
-    def options_json_for_action(action_name)
+    def options_json_for_action(action_name, context)
       {
-        name:     name,
-        required: required_for_action?(action_name)
-      }
+        name: @name,
+        type: @type.to_s,
+        description: JSONAPIonify::Documentation.onelinify_markdown(description),
+        example: example(context.resource.class.generate_id)
+      }.tap do |opts|
+        opts[:not_null] = true if @type.not_null?
+        opts[:required] = true if required_for_action?(action_name, context)
+      end
     end
 
     def read?

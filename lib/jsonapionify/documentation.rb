@@ -2,10 +2,12 @@ require 'erb'
 require 'redcarpet'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array'
+require 'redcarpet/render_strip'
 
 module JSONAPIonify
   class Documentation
     using JSONAPIonify::IndentedString
+    STRIPPER = Redcarpet::Markdown.new(Redcarpet::Render::StripDown)
     RENDERER = Redcarpet::Markdown.new(
       Redcarpet::Render::HTML,
       autolink:                     true,
@@ -22,6 +24,14 @@ module JSONAPIonify
 
     def self.render_markdown(string)
       RENDERER.render(string.deindent)
+    end
+
+    def self.onelinify_markdown(string)
+      strip_markdown(string).gsub(/[\r\n\t]/, ' ').strip
+    end
+
+    def self.strip_markdown(string)
+      STRIPPER.render(string.deindent)
     end
 
     attr_reader :api

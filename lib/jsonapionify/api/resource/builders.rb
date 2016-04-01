@@ -29,6 +29,15 @@ module JSONAPIonify::Api
             Structure::Objects::Attributes.new
           ) do |member, attributes|
             attribute = self.attributes.find { |a| a.name == member.to_sym }
+            unless attribute.supports_read_for_action?(context.action_name, context)
+              error_block =
+                context.resource.class.error_definitions[:internal_server_error]
+              context.errors.evaluate(
+                name,
+                error_block:   error_block,
+                runtime_block: proc {}
+              )
+            end
             attributes[member.to_sym] = attribute.resolve(
               instance, context, example_id: example_id
             )

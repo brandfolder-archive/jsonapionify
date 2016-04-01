@@ -13,7 +13,7 @@ module JSONAPIonify::Types
     dumper do |value|
       raise DumpError, 'cannot convert value to integer' unless value.respond_to?(:to_i)
       value.to_i.tap do |int|
-        raise DumpError, 'output value was not a Float' unless int.is_a? Integer
+        raise DumpError, 'output value was not a integer' unless int.is_a? Fixnum
       end
     end
 

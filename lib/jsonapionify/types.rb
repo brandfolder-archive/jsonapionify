@@ -62,16 +62,22 @@ module JSONAPIonify::Types
       end
     end
 
+    def to_s
+      name = self.class.name.split('::').last.chomp('Type')
+      name << "[#{options[:of].to_s}]" if options[:of]
+      name
+    end
+
     def not_null!
       @not_null = true
       self
     end
 
-    private
-
     def not_null?
       !!@not_null
     end
+
+    private
 
     def verify(non_ruby)
       dump(load(non_ruby)) == non_ruby

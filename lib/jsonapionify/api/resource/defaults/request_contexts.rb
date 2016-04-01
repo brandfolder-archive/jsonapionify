@@ -31,7 +31,7 @@ module JSONAPIonify::Api
 
         # Check for required attributes
         self.attributes.each do |attr|
-          next unless attr.required_for_action?(action_name)
+          next unless attr.required_for_action?(action_name, context)
           if attr.read? || context.id
             example_id   = self.build_id(context.instance)
             next unless attr.resolve(
@@ -46,9 +46,8 @@ module JSONAPIonify::Api
 
         request_attributes.each_with_object({}) do |(attr, v), attributes|
           resource_attribute = self.attributes.find { |a| a.name == attr }
-          is_writable        = !!resource_attribute&.write?
-          is_actionable      = !!resource_attribute&.supports_action?(action_name)
-          unless is_writable && is_actionable
+          is_actionable      = !!resource_attribute&.supports_write_for_action?(action_name, context)
+          unless is_actionable
             error :attribute_not_permitted, attr
             should_error = true
           end

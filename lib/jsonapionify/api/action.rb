@@ -96,16 +96,16 @@ module JSONAPIonify::Api
         {
           'data' => resource.build_resource(
             context,
-            resource.example_instance_for_action(name),
+            resource.example_instance_for_action(name, context),
             relationships: false,
             links:         false,
-            fields:        resource.fields_for_action(name)
+            fields:        resource.fields_for_action(name, context)
           ).as_json
         }.to_json
       when :resource_identifier
         {
           'data' => resource.build_resource_identifier(
-            resource.example_instance_for_action(name)
+            resource.example_instance_for_action(name, context)
           ).as_json
         }.to_json
       when Proc
@@ -158,9 +158,9 @@ module JSONAPIonify::Api
         sample_context                        = self.class.context_definitions.dup
         sample_context[:_is_example_]   = Context.new proc { true }, true
         sample_context[:collection]           =
-          Context.new proc {
-            3.times.map { resource.example_instance_for_action(action.name) }
-          }, true
+          Context.new(proc do |context|
+            3.times.map { resource.example_instance_for_action(action.name, context) }
+          end, true)
         sample_context[:paginated_collection] = Context.new proc { |context| context.collection }
         sample_context[:instance]             = Context.new proc { |context| context.collection.first }
         if sample_context.has_key? :owner_context
