@@ -22,7 +22,7 @@ module JSONAPIonify::Api
                 type_attributes = self.class.api.resource(type_sym).attributes
                 attribute = type_attributes.find do |attribute|
                   attribute.name == field &&
-                    attribute.supports_read_for_action?(context.action_name)
+                    attribute.supports_read_for_action?(context.action_name, context)
                 end
                 if attribute
                   field_list << attribute.name
