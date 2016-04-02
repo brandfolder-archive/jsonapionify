@@ -51,7 +51,7 @@ module JSONAPIonify::Api
 
       error :attribute_cannot_be_null do |attribute|
         pointer "data/attributes/#{attribute}"
-        title 'Attribute cannot be null'
+        title "Attribute cannot be null: #{attribute}"
         status '500'
       end
 
