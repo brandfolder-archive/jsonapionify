@@ -94,7 +94,7 @@ module JSONAPIonify::Api
         name,
         error_block:   error_block,
         backtrace:     ex.backtrace,
-        runtime_block: proc { detail ex.message }
+        runtime_block: proc {}
       )
       nil
     end

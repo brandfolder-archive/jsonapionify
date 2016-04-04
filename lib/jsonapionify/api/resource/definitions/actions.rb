@@ -9,8 +9,18 @@ module JSONAPIonify::Api
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
         include JSONAPIonify::Callbacks
-        define_callbacks :request, :list, :create, :read, :update, :delete,
-                         :show, :add, :remove, :replace, :exception, :response
+        define_callbacks(
+          :request, :exception, :response,
+          :list, :commit_list,
+          :create, :commit_create,
+          :read, :commit_read,
+          :update, :commit_update,
+          :delete, :commit_delete,
+          :show, :commit_show,
+          :add, :commit_add,
+          :remove, :commit_remove,
+          :replace, :commit_replace
+        )
         inherited_array_attribute :action_definitions
       end
     end

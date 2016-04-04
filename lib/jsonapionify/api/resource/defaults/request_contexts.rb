@@ -3,6 +3,31 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
+      before :commit_create, :commit_update do |context|
+        # Assign the attributes
+        context.request_attributes.each do |key, value|
+          context.instance.send "#{key}=", value
+        end
+
+        # Assign the relationships
+        context.request_relationships.each do |key, value|
+          context.instance.send "#{key}=", value
+        end
+      end
+
+      before :commit_add do |context|
+        context.scope.concat context.request_instances
+      end
+
+      before :commit_remove do |context|
+        context.request_instances.each { |instance| context.scope.delete(instance) }
+      end
+
+      before :commit_replace do |context|
+        context.request_instances.each { |instance| context.scope.delete(instance) }
+        context.scope.concat context.request_instances
+      end
+
       context(:request_body, readonly: true) do |context|
         context.request.body.read
       end
@@ -33,7 +58,7 @@ module JSONAPIonify::Api
         self.attributes.each do |attr|
           next unless attr.required_for_action?(action_name, context)
           if attr.read? || context.id
-            example_id   = self.build_id(context.instance)
+            example_id = self.build_id(context.instance)
             next unless attr.resolve(
               context.instance, context, example_id: example_id
             ).nil?
@@ -64,18 +89,26 @@ module JSONAPIonify::Api
 
       end
 
-      context(:request_instances, readonly: true) do |context|
-        should_error = false
+      context(:request_relationships, readonly: true) do |context|
         data         = context.request_data
-        instances    = data.map.each_with_index do |item, i|
-          begin
-            find_instance item, pointer: "data/#{i}"
-          rescue Errors::RequestError
-            should_error = true
+        if data[:relationships]
+          data[:relationships].each_with_object({}) do |(name, rel), obj|
+            pointer = "data/relationships/#{name}/data"
+            case rel[:data]
+            when JSONAPIonify::Structure::Collections::Base
+              obj[name] = find_instances(rel[:data], pointer: pointer)
+            when JSONAPIonify::Structure::Objects::Base
+              obj[name] = find_instance(rel[:data], pointer: pointer)
+            end
           end
+        else
+          {}
         end
-        raise Errors::RequestError if should_error
-        instances
+      end
+
+      context(:request_instances, readonly: true) do |context|
+        data         = context.request_data
+        data ? find_instances(data) : []
       end
 
       context(:request_instance, readonly: true) do |context|
@@ -96,6 +129,19 @@ module JSONAPIonify::Api
       context(:authentication, readonly: true) do
         OpenStruct.new
       end
+    end
+
+    def find_instances(items, pointer:)
+      should_error = false
+      instances = items.map.each_with_index do |item, i|
+        begin
+          find_instance item, pointer: "#{pointer}/#{i}"
+        rescue Errors::RequestError
+          should_error = true
+        end
+      end
+      raise Errors::RequestError if should_error
+      instances
     end
 
     def find_instance(item, pointer:)

@@ -230,44 +230,45 @@ module JSONAPIonify::Api
           context.response_headers
         end
 
-        define_singleton_method :invoke_response! do
-          response_definition = action.responses.find { |response| response.accept? request } ||
-            error_now(:not_acceptable)
-          response_definition.call(self, context).tap do |status, headers, body|
-            if action.cacheable && cache_options.present?
-              JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
-              self.class.cache_store.write(
-                cache_options[:key],
-                [status, headers, body.body],
-                **cache_options.except(:key)
-              )
-            end
-          end
+        define_singleton_method :response_definition do
+          action.responses.find do |response|
+            response.accept? request
+          end || error_now(:not_acceptable)
         end
 
-        commit_and_respond = proc {
-          fail Errors::RequestError if errors.present?
+        commit = proc {
           instance_exec(context, &action.block)
           fail Errors::RequestError if errors.present?
-          run_callbacks :response, context do
-            invoke_response!.tap do
-              raise Errors::RequestError if errors.present?
-            end
+        }
+
+        respond = proc {
+          response_definition.call(self, context).tap(&process_response)
+        }
+
+        process_response = proc { |status, headers, body|
+          raise Errors::RequestError if errors.present?
+          if action.cacheable && cache_options.present?
+            JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
+            self.class.cache_store.write(
+              cache_options[:key],
+              [status, headers, body.body],
+              **cache_options.except(:key)
+            )
           end
         }
 
+        commit_and_respond = proc {
+          fail Errors::RequestError if errors.present?
+          action.name && action.callbacks ? run_callbacks("commit_#{action.name}", context, &commit) : commit.call
+          action.callbacks ? run_callbacks(:response, context, &respond) : respond.call
+        }
+
+        request = proc {
+          action.name && action.callbacks ? run_callbacks(action.name, context, &commit_and_respond) : commit_and_respond.call
+        }
+
         begin
-          if action.callbacks
-            run_callbacks(:request, context) do
-              if action.name
-                run_callbacks(action.name, context, &commit_and_respond)
-              else
-                commit_and_respond.call
-              end
-            end || error_now(:internal_server_error)
-          else
-            commit_and_respond.call
-          end
+          action.callbacks ? run_callbacks(:request, context, &request) : request.call
         rescue Errors::RequestError
           error_response
         rescue Errors::CacheHit
