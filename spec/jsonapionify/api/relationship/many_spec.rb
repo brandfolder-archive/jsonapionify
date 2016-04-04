@@ -60,7 +60,7 @@ module JSONAPIonify::Api
         body = json(data: [{ id: Thing.last.id.to_s, type: 'things' }])
         content_type 'application/vnd.api+json'
         User.first.things.delete(Thing.last)
-        expect { patch "/users/#{User.first.id}/relationships/things", body }.to change { User.first.things.count }.to(1)
+        expect { patch "/users/#{User.first.id}/relationships/things", body }.to change { User.first.things.count }.to(1), -> { binding.pry }
         last_response_json['data'].each do |item|
           expect { User.first.things.find(item['id']) }.to_not raise_error
           identifier = JSONAPIonify::Structure::Objects::ResourceIdentifier.new(

@@ -236,16 +236,7 @@ module JSONAPIonify::Api
           end || error_now(:not_acceptable)
         end
 
-        commit = proc {
-          instance_exec(context, &action.block)
-          fail Errors::RequestError if errors.present?
-        }
-
-        respond = proc {
-          response_definition.call(self, context).tap(&process_response)
-        }
-
-        process_response = proc { |status, headers, body|
+        do_process_response = proc { |status, headers, body|
           raise Errors::RequestError if errors.present?
           if action.cacheable && cache_options.present?
             JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
@@ -257,18 +248,27 @@ module JSONAPIonify::Api
           end
         }
 
-        commit_and_respond = proc {
+        do_commit = proc {
+          instance_exec(context, &action.block)
           fail Errors::RequestError if errors.present?
-          action.name && action.callbacks ? run_callbacks("commit_#{action.name}", context, &commit) : commit.call
-          action.callbacks ? run_callbacks(:response, context, &respond) : respond.call
         }
 
-        request = proc {
-          action.name && action.callbacks ? run_callbacks(action.name, context, &commit_and_respond) : commit_and_respond.call
+        do_respond = proc {
+          response_definition.call(self, context).tap(&do_process_response)
+        }
+
+        do_commit_and_respond = proc {
+          fail Errors::RequestError if errors.present?
+          action.name && action.callbacks ? run_callbacks("commit_#{action.name}", context, &do_commit) : do_commit.call
+          action.callbacks ? run_callbacks(:response, context, &do_respond) : do_respond.call
+        }
+
+        do_request = proc {
+          action.name && action.callbacks ? run_callbacks(action.name, context, &do_commit_and_respond) : do_commit_and_respond.call
         }
 
         begin
-          action.callbacks ? run_callbacks(:request, context, &request) : request.call
+          action.callbacks ? run_callbacks(:request, context, &do_request) : do_request.call
         rescue Errors::RequestError
           error_response
         rescue Errors::CacheHit

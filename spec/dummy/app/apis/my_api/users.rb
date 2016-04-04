@@ -1,22 +1,8 @@
 MyApi.define_resource :users do
   relates_to_many :things do
-    add do |context|
-      # Set each request related instance's user to the owner instance
-      context.request_instances.each { |instance| instance.update user: context.owner_context.instance }
-    end
-
-    replace do |context|
-      # Find each existing instance in the collection and set its user to nil
-      context.collection.each { |instance| instance.update user: nil }
-
-      # Set each request related instance's user to the owner instance
-      context.request_instances.each { |instance| instance.update user: context.owner_context.instance }
-    end
-
-    remove do |context|
-      # Set the request instances to nil
-      context.request_instances.each { |instance| instance.update user: nil }
-    end
+    add
+    replace
+    remove
   end
 
   scope { User }
@@ -46,16 +32,8 @@ MyApi.define_resource :users do
     cache context.instance.cache_key
   end
 
-  create do |context|
-    context.instance.update! context.request_attributes
-  end
-
-  update do |context|
-    context.instance.update! context.request_attributes
-  end
-
-  delete do |context|
-    context.instance.destroy
-  end
+  create
+  update
+  delete
 
 end

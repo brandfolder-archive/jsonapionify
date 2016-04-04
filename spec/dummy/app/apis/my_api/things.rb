@@ -13,9 +13,7 @@ MyApi.define_resource :things do
   attribute :color, types.String, "The color."
   attribute :secret, types.String, "A super secret.", read: false
   relates_to_one :user, resource: :users do
-    replace do |context|
-      context.owner_context.instance.update! user: context.request_instance
-    end
+    replace
   end
 
   scope do
@@ -42,16 +40,15 @@ MyApi.define_resource :things do
     cache context.instance.cache_key
   end
 
-  create do |context|
-    context.instance.update context.request_attributes
-  end
+  create
+  update
+  delete
 
-  update do |context|
-    context.instance.update context.request_attributes
-  end
-
-  delete do |context|
-    context.instance.destroy
+  after :commit_create, :commit_update do |context|
+    context.instance.save
+    if context.instance.errors.present?
+      write_attribute_errors(context.instance.errors)
+    end
   end
 
 end
