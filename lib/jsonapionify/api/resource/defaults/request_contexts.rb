@@ -14,6 +14,9 @@ module JSONAPIonify::Api
           context.instance.send "#{key}=", value
         end
 
+      end
+
+      after :commit_create, :commit_update do |context|
         try_commit(context.instance)
       end
 
