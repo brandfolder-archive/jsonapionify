@@ -12,7 +12,7 @@ module JSONAPIonify::Api
       end
     end
 
-    def initialize(request, instance, definitions)
+    def initialize(request, instance, definitions, **overrides)
       memo         = {}
       delegate     = self
       @definitions = definitions
@@ -35,7 +35,9 @@ module JSONAPIonify::Api
 
       definitions.each do |name, context|
         define_singleton_method name do
-          memo[name] ||= context.call(instance, delegate)
+          memo[name] ||=
+            overrides.has_key?(name) ?
+              overrides[name] : context.call(instance, delegate)
         end
 
         define_singleton_method "#{name}=" do |value|

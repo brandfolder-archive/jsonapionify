@@ -5,6 +5,7 @@ require 'active_support/core_ext/hash'
 require 'active_support/core_ext/array/conversions'
 require 'active_support/core_ext/hash/keys'
 require 'enumerable_observer'
+require 'concurrent'
 
 module JSONAPIonify::Structure
   module Objects
@@ -53,7 +54,7 @@ module JSONAPIonify::Structure
 
       # Initialize the object
       def initialize(**attributes)
-        @object = {}
+        @object = Concurrent::Hash.new
         run_callbacks :initialize do
           attributes.each do |k, v|
             self[k] = v

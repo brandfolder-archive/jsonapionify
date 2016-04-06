@@ -15,6 +15,8 @@ module JSONAPIonify::Api
     include Builders
     include Defaults
 
+    delegate :type, :attributes, :relationships, to: :class
+
     def self.inherited(subclass)
       super(subclass)
       subclass.class_eval do

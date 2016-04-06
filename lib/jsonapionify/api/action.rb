@@ -186,7 +186,7 @@ module JSONAPIonify::Api
       end
     end
 
-    def call(resource, request)
+    def call(resource, request, **context_overrides)
       action        = dup
       cache_options = {}
       resource.new.instance_eval do
@@ -194,7 +194,8 @@ module JSONAPIonify::Api
         context = ContextDelegate.new(
           request,
           self,
-          self.class.context_definitions
+          self.class.context_definitions,
+          **context_overrides
         )
 
         context.action_name = action.name
@@ -213,13 +214,17 @@ module JSONAPIonify::Api
             key:    key
           )
           # If the cache exists, then fail to cache miss
-          if self.class.cache_store.exist?(cache_options[:key])
+          if self.class.cache_store.exist?(cache_options[:key]) && !context.invalidate_cache?
             raise Errors::CacheHit, cache_options[:key]
           end
         end if action.cacheable
 
+        define_singleton_method :action do
+          action
+        end
+
         define_singleton_method :action_name do
-          context.action_name
+          action.name
         end
 
         define_singleton_method :errors do

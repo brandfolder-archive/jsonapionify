@@ -3,40 +3,28 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
     included do
       id :id
-      scope { raise NotImplementedError, 'scope not implemented' }
-      collection { raise NotImplementedError, 'collection not implemented' }
-      instance { raise NotImplementedError, 'instance not implemented' }
-      new_instance { raise NotImplementedError, 'new instance not implemented' }
-
-      context :scope_defined? do |context|
-        begin
-          !!context.scope
-        rescue NotImplementedError
-          false
+      scope { self.type.classify.constantize }
+      collection do |scope|
+        if defined?(ActiveRecord) && scope < ActiveRecord::Base && scope.is_a?(Class)
+          scope.all
+        else
+          scope
         end
       end
 
-      context :collection_defined? do |context|
-        begin
-          !!context.collection
-        rescue NotImplementedError
-          false
+      instance do |scope, key|
+        if defined?(ActiveRecord) && scope < ActiveRecord::Base
+          scope.find_by id_attribute => key
+        else
+          raise NotImplementedError, 'instance not implemented'
         end
       end
 
-      context :instance_defined? do |context|
-        begin
-          !!context.instance
-        rescue NotImplementedError
-          false
-        end
-      end
-
-      context :new_instance_defined? do |context|
-        begin
-          !!context.new_instance
-        rescue NotImplementedError
-          false
+      new_instance do |scope|
+        if defined?(ActiveRecord) && scope < ActiveRecord::Base
+          scope.new
+        else
+          raise NotImplementedError, 'scope not implemented'
         end
       end
 

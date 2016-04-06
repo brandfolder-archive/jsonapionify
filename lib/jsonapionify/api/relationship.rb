@@ -64,10 +64,11 @@ module JSONAPIonify::Api
 
     attr_reader :owner, :class_proc, :name
 
-    def initialize(owner, name, resource: nil, &block)
+    def initialize(owner, name, resource: nil, includable: false, &block)
       @class_proc = block || proc {}
       @owner      = owner
       @name       = name
+      @includable = includable
       @resource   = resource || name
     end
 
@@ -103,6 +104,10 @@ module JSONAPIonify::Api
 
     def resource
       owner.api.resource(@resource)
+    end
+
+    def includable?
+      !!@includable
     end
 
   end

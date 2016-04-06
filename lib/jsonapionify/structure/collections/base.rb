@@ -1,9 +1,10 @@
 require 'enumerable_observer'
 require 'active_support/core_ext/module/delegation'
+require 'concurrent'
 
 module JSONAPIonify::Structure
   module Collections
-    class Base < Array
+    class Base < Concurrent::Array
       include EnumerableObserver
       include Helpers::InheritsOrigin
       attr_reader :parent
@@ -72,8 +73,14 @@ module JSONAPIonify::Structure
           when type_class
             instance
           else
-            raise ValidationError,
-                  " Can't initialize collection `#{self.class.name}` with a type of `#{instance.class.name}`"
+            if type_class < instance.class
+              type_class.from_hash instance.to_hash
+            else
+              raise(
+                ValidationError,
+                "Can't initialize collection `#{self.class.name}` with a type of `#{instance.class.name}`"
+              )
+            end
           end
         super new_instance
       end

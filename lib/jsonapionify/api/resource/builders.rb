@@ -55,7 +55,7 @@ module JSONAPIonify::Api
             Structure::Maps::Relationships.new
           ) do |rel, hash|
             hash[rel.name] = build_relationship(context, instance, rel.name)
-          end if relationships
+          end if relationships || context.includes.present?
 
           block.call(resource, instance) if block
         end
@@ -119,13 +119,13 @@ module JSONAPIonify::Api
         relationship = self.relationship(name)
         JSONAPIonify::Structure::Objects::Relationship.new.tap do |rel|
           rel[:links] = relationship.build_links(resource_url) if links
-          if data
+          if data || context.includes.present?
             rel[:data] =
-              if relationship < Resource::RelationshipToMany
+              if relationship.rel.is_a? Relationship::Many
                 instance.send(name).map do |child|
                   relationship.build_resource_identifier(child)
                 end
-              elsif relationship < Resource::RelationshipToOne
+              elsif relationship.rel.is_a? Relationship::One
                 value = instance.send(name)
                 relationship.build_resource_identifier value if value
               end

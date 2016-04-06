@@ -33,13 +33,6 @@ module JSONAPIonify::Api::Resource::Definitions
       end
     end
 
-    describe 'include' do
-      it 'should not raise an error' do
-        get "/things?include=user"
-        expect(last_response.status).to eq 200
-      end
-    end
-
     describe 'invalid parameter' do
       it 'should error' do
         get "/things?badparam=1"

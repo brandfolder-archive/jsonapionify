@@ -11,11 +11,15 @@ module JSONAPIonify::Api
 
         # Define Contexts
         context :sorted_collection do |context|
-          _, block = sorting_strategies.to_a.reverse.to_h.find do |mod, _|
-            Object.const_defined?(mod, false) && context.collection.class <= Object.const_get(mod, false)
+          if context.root_request?
+            _, block = sorting_strategies.to_a.reverse.to_h.find do |mod, _|
+              Object.const_defined?(mod, false) && context.collection.class <= Object.const_get(mod, false)
+            end
+            context.reset(:sort_params)
+            instance_exec(context.collection, context.sort_params, context, &block)
+          else
+            context.collection
           end
-          context.reset(:sort_params)
-          instance_exec(context.collection, context.sort_params, context, &block)
         end
 
         context(:sort_params, readonly: true) do |context|
@@ -24,7 +28,7 @@ module JSONAPIonify::Api
             fields.each do |field|
               unless self.class.field_valid?(field.name) || field.name == id_attribute
                 should_error = true
-                type = self.class.type
+                type         = self.class.type
                 error :sort_parameter_invalid do
                   detail "resource `#{type}` does not have field: #{field.name}"
                 end

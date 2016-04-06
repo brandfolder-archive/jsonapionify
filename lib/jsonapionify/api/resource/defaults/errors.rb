@@ -18,20 +18,20 @@ module JSONAPIonify::Api
 
       error :data_missing do
         pointer ''
-        title 'Missing Member'
+        title 'missing Member'
         detail 'missing data member'
         status '422'
       end
 
       error :json_parse_error do
-        title 'Parse Error'
-        detail 'could not parse JSON object'
+        title 'parse Error'
+        detail 'could not parse json object'
         status '422'
       end
 
       error :field_not_permitted do |type, field|
         parameter "fields[#{type}]"
-        title 'Invalid Field'
+        title 'invalid field'
         detail "type: `#{type}`, does not have field: `#{field}`"
         status '400'
       end
@@ -39,71 +39,77 @@ module JSONAPIonify::Api
       error :attribute_type_error do |attribute|
         pointer "data/attributes/#{attribute}"
         status '500'
-        title "Attribute type error"
+        title "attribute type error"
       end
 
       error :attribute_required do |attribute|
         pointer "data/attributes/#{attribute}"
-        title 'Attribute required'
+        title 'attribute required'
         detail "attribute required: #{attribute}"
         status '422'
       end
 
       error :attribute_cannot_be_null do |attribute|
         pointer "data/attributes/#{attribute}"
-        title "Attribute cannot be null: #{attribute}"
+        title "attribute cannot be null: #{attribute}"
         status '500'
       end
 
       error :attribute_not_permitted do |attribute|
         pointer "data/attributes/#{attribute}"
-        title 'Attribute not permitted'
+        title 'attribute not permitted'
         status '422'
         detail "attribute not permitted: #{attribute}"
       end
 
       error :attributes_missing do
         pointer 'data'
-        title 'Missing Member'
+        title 'missing Member'
         detail 'missing attributes member'
         status '422'
       end
 
       error :include_parameter_invalid do
         parameter 'sort'
-        title 'Include parameter is invalid'
+        title 'include parameter is invalid'
         status '400'
       end
 
       error :parameters_missing do |parameters|
-        title 'Missing required parameters'
+        title 'missing required parameters'
         detail "missing: #{parameters.to_sentence}"
         status '400'
       end
 
       error :parameter_invalid do |param|
         parameter param
-        title 'Parameter Invalid'
+        title 'parameter Invalid'
         detail "parameter invalid: #{param}"
         status '400'
       end
 
       error :headers_missing do |headers|
-        title 'Missing required headers'
+        title 'missing required headers'
         detail "missing: #{headers.to_sentence}"
         status '400'
       end
 
       error :sort_parameter_invalid do
         parameter 'sort'
-        title 'Sort parameter is invalid'
+        title 'port parameter is invalid'
         status '400'
       end
 
       error :page_parameter_invalid do |*paths|
         parameter ParamOptions.keypath_to_string(*paths)
-        title 'Page parameter invalid'
+        title 'page parameter invalid'
         status '400'
+      end
+
+      error :relationship_not_includable do |name|
+        parameter 'include'
+        title "relationship not includable: #{name}"
+        status '406'
       end
 
       error :request_object_invalid do |context, request_object|

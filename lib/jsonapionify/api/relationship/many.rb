@@ -71,7 +71,7 @@ module JSONAPIonify::Api
       end
 
       context :scope do |context|
-        context.owner_context.instance.send(rel.name)
+        context.owner.send(rel.name)
       end
 
       show

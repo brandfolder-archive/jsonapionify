@@ -8,24 +8,11 @@ MyApi.define_resource :things do
     | 1 | 2 | 3 |
   markdown
 
-  id :id
   attribute :name, types.String, "The name of the things."
   attribute :color, types.String, "The color."
   attribute :secret, types.String, "A super secret.", read: false
-  relates_to_one :user, resource: :users do
+  relates_to_one :user do
     replace
-  end
-
-  scope do
-    Thing
-  end
-
-  collection do |scope|
-    scope.all
-  end
-
-  instance do |scope, id|
-    scope.find id
   end
 
   new_instance do |scope|
@@ -33,7 +20,7 @@ MyApi.define_resource :things do
   end
 
   list do |context|
-    cache context.paginated_collection.cache_key
+    cache context.response_collection.map(&:cache_key).reduce(Digest::SHA2.new, :update).to_s
   end
 
   read do |context|
@@ -43,12 +30,5 @@ MyApi.define_resource :things do
   create
   update
   delete
-
-  after :commit_create, :commit_update do |context|
-    context.instance.save
-    if context.instance.errors.present?
-      write_attribute_errors(context.instance.errors)
-    end
-  end
 
 end

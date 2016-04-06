@@ -181,6 +181,14 @@ module JSONAPIonify::Api
       end
     end
 
+    def call_action(name, request, **context_overrides)
+      action(name).call(self, request, **context_overrides)
+    end
+
+    def action(name)
+      actions.find { |action| action.name == name }
+    end
+
     def actions
       return [] if action_definitions.blank?
       action_definitions.select do |action|

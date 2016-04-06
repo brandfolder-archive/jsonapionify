@@ -3,6 +3,9 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
+      context(:raw_collection?, readonly: true) { false }
+      context(:invalidate_cache?, readonly: true) { |c| c.includes.present? }
+
       # Response Objects
       context(:links, readonly: true) do |context|
         context.response_object[:links]
@@ -17,12 +20,16 @@ module JSONAPIonify::Api
       end
 
       context(:response_collection) do |context|
-        collections = %i{
+        if context.root_request?
+          collections = %i{
             paginated_collection
             sorted_collection
             collection
           }
-        context.public_send collections.find { |c| context.respond_to? c }
+          context.public_send collections.find { |c| context.respond_to? c }
+        else
+          context.collection
+        end
       end
 
     end
