@@ -32,8 +32,7 @@ module JSONAPIonify::Api
         request.env['jsonapionify.resource']      = resource if @resource
         request.env['jsonapionify.id']            = @id if @id
         @resource ? resource.process(request) : api_index
-      rescue Errors::ResourceNotFound => ex
-        binding.pry
+      rescue Errors::ResourceNotFound
         resource = @resource
         api.http_error(:not_found, request) do
           detail "Resource not found: #{resource}"
