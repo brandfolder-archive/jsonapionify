@@ -150,7 +150,7 @@ module JSONAPIonify::Api
     def commit_active_record(instance)
       instance.save
       if instance.errors.present?
-        instrance.errors.messages.each do |attr, messages|
+        instance.errors.messages.each do |attr, messages|
           messages.each do |message|
             error :invalid_attribute, attr, message
           end
