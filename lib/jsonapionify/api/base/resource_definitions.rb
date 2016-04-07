@@ -18,6 +18,7 @@ module JSONAPIonify::Api
       param(:fields, type)
       const_set const_name, klass
     rescue NameError => e
+      puts e
       raise e unless e.instance_of?(NameError)
       raise Errors::ResourceNotFound, "Resource not defined: #{type}"
     end
@@ -36,11 +37,13 @@ module JSONAPIonify::Api
 
     def define_resource(name, extend: nil, &block)
       resource_definitions[name.to_sym] =
-        if (extend)
-          resource(extend)
-          existing = resource_definitions[name.to_sym]
+        if extend
+          __api__ = self
+          extend_def = resource_definitions[extend.to_sym]
           proc do
-            class_eval &existing
+            __api__.resource(extend)
+            extend_def ||= __api__.resource_definitions[extend.to_sym]
+            class_eval &extend_def
             class_eval &block
           end
         else
