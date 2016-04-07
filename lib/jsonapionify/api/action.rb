@@ -253,6 +253,7 @@ module JSONAPIonify::Api
           end
         }
 
+        # Blocks
         do_commit = proc {
           instance_exec(context, &action.block)
           fail Errors::RequestError if errors.present?
@@ -272,15 +273,18 @@ module JSONAPIonify::Api
           action.name && action.callbacks ? run_callbacks(action.name, context, &do_commit_and_respond) : do_commit_and_respond.call
         }
 
+        response = [0, {}, []]
         begin
-          action.callbacks ? run_callbacks(:request, context, &do_request) : do_request.call
+          response = action.callbacks ? run_callbacks(:request, context, &do_request) : do_request.call
         rescue Errors::RequestError
-          error_response
+          response = error_response
         rescue Errors::CacheHit
           JSONAPIonify.logger.info "Cache Hit: #{cache_options[:key]}"
-          self.class.cache_store.read cache_options[:key]
+          response = self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
-          rescued_response exception
+          response = rescued_response exception
+        ensure
+          self.class.cache_store.delete cache_options[:key] unless response[0] < 300
         end
       end
     end
