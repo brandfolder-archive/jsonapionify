@@ -171,7 +171,8 @@ module JSONAPIonify::Api
 
     def find_supported_relationship(request)
       relationship_definitions.find do |rel|
-        relationship(rel.name).path_actions(request).present?
+        relationship = self.relationship(rel.name)
+        relationship != self && relationship.path_actions(request).present?
       end
     end
 
