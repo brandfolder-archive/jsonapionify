@@ -20,6 +20,12 @@ module JSONAPIonify::Api
         try_commit(context.instance)
       end
 
+      after :commit_delete do |context|
+        if defined?(ActiveRecord) && instance.is_a?(ActiveRecord::Base)
+          context.instance.destroy
+        end
+      end
+
       before :commit_add do |context|
         context.scope.concat context.request_instances
       end
