@@ -45,7 +45,8 @@ module JSONAPIonify::Api
       if included.present?
         context.response_object[:included] = included
         context.response_object[:included].tap(&:uniq!).reject! do |r|
-          Array.wrap(context.response_object[:data]).include? r
+          Array.wrap(context.response_object[:included]).include?(r) ||
+            Array.wrap(context.response_object[:data]).include?(r)
         end
       end
     end

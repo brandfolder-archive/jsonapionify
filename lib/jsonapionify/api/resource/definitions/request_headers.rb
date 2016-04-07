@@ -17,7 +17,10 @@ module JSONAPIonify::Api
             v.required
           end
 
-          if (missing_keys = required_headers.keys.map(&:downcase) - context.request.headers.keys.map(&:downcase)).present?
+          missing_keys =
+            required_headers.keys.map(&:downcase) -
+              context.request.headers.keys.map(&:downcase)
+          if context.root_request? && missing_keys.present?
             should_error = true
             error :headers_missing, missing_keys
           end

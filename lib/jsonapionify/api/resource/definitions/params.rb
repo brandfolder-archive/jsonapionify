@@ -27,14 +27,19 @@ module JSONAPIonify::Api
             reserved = ParamOptions.reserved?(k)
             allowed  = params.keys.include? keypath
             valid    = ParamOptions.valid?(k) || v.is_a?(Hash)
-            unless reserved || (allowed && valid)
+            unless reserved || (allowed && valid) || !context.root_request?
               should_error = true
               error :parameter_invalid, ParamOptions.keypath_to_string(*keypath)
             end
           end unless context.request.options?
 
           # Check for requirement
-          if (missing_params = ParamOptions.missing_parameters(context.request.params, required_params.values.map(&:keypath))).present?
+          missing_params =
+            ParamOptions.missing_parameters(
+              context.request.params,
+              required_params.values.map(&:keypath)
+            )
+          if context.root_request? && missing_params.present?
             error :parameters_missing, missing_params
           end
 
