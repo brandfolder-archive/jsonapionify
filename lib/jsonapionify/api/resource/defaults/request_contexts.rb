@@ -21,7 +21,7 @@ module JSONAPIonify::Api
       end
 
       after :commit_delete do |context|
-        if defined?(ActiveRecord) && instance.is_a?(ActiveRecord::Base)
+        if defined?(ActiveRecord) && context.instance.is_a?(ActiveRecord::Base)
           context.instance.destroy
         end
       end
