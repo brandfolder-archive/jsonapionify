@@ -13,7 +13,6 @@ module JSONAPIonify::Api
     end
 
     def call(env)
-      puts 'req'
       Processor.new(env, api).response
     end
 
