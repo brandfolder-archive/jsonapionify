@@ -18,7 +18,6 @@ module JSONAPIonify::Api
       param(:fields, type)
       const_set const_name, klass
     rescue NameError => e
-      puts e
       raise e unless e.instance_of?(NameError)
       raise Errors::ResourceNotFound, "Resource not defined: #{type}"
     end

@@ -20,14 +20,12 @@ module JSONAPIonify::Api
           end.map do |attr|
             attr.options_json_for_action(action.name, context)
           end
-          puts 'got request attrs'
 
           response_attributes_json = attributes.select do |attr|
             attr.supports_read_for_action? action.name, context
           end.map do |attr|
             attr.options_json_for_action(action.name, context)
           end
-          puts 'got response attrs'
 
           h['path'] = context.request.path
           h['url'] = context.request.url
@@ -35,9 +33,7 @@ module JSONAPIonify::Api
 
           if [ 'GET', 'POST', 'PUT', 'PATCH' ].include? action.request_method
             action_options[:response_attributes] = response_attributes_json
-            puts 'set response attrs'
             action_options[:relationships] = self.class.relationships.map(&:options_json)
-            puts 'set relationships'
           end
 
           if [ 'POST', 'PUT', 'PATCH' ].include? action.request_method
