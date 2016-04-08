@@ -38,7 +38,7 @@ module JSONAPIonify::Api
       end
 
       context :instance do |context|
-        context.owner.send(rel.name)
+        instance_exec rel.name, context.owner, context, &rel.resolve
       end
 
       show

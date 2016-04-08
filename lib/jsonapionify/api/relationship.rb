@@ -62,20 +62,21 @@ module JSONAPIonify::Api
       end
     end
 
-    attr_reader :owner, :class_proc, :name
+    attr_reader :owner, :class_proc, :name, :resolve
 
-    def initialize(owner, name, resource: nil, includable: false, &block)
+    def initialize(owner, name, resource: nil, includable: false, resolve: proc { |name, owner| owner.send(name) }, &block)
       @class_proc = block || proc {}
       @owner      = owner
       @name       = name
       @includable = includable
       @resource   = resource || name
+      @resolve    = resolve
     end
 
     def options_json
       {
-        name: name,
-        type: resource.type,
+        name:              name,
+        type:              resource.type,
         relationship_type: self.class.name.split(':').last.downcase
       }
     end
