@@ -13,7 +13,6 @@ module JSONAPIonify::Api
       define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
         cache 'options-request'
       end.response(status: 200) do |context|
-        binding.pry
         response_headers['Allow'] = context.http_allow.join(', ')
         requests                  = context.path_actions.each_with_object({}) do |action, h|
           request_attributes_json = attributes.select do |attr|
@@ -37,7 +36,6 @@ module JSONAPIonify::Api
           if [ 'GET', 'POST', 'PUT', 'PATCH' ].include? action.request_method
             action_options[:response_attributes] = response_attributes_json
             puts 'set response attrs'
-            binding.pry
             action_options[:relationships] = self.class.relationships.map(&:options_json)
             puts 'set relationships'
           end
