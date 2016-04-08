@@ -283,8 +283,8 @@ module JSONAPIonify::Api
           response = self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
           response = rescued_response exception
-        # ensure
-        #   self.class.cache_store.delete cache_options[:key] unless response[0] < 300
+        ensure
+          self.class.cache_store.delete cache_options[:key] unless response[0] < 300
         end
       end
     end
