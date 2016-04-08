@@ -36,11 +36,19 @@ module JSONAPIonify::Api
 
     def define_resource(name, extend: nil, &block)
       resource_definitions[name.to_sym] =
-        if (extend)
-          resource(extend)
-          existing = resource_definitions[extend.to_sym]
+        if extend
+          sup = superclass
+          cur = self
           proc do
-            class_eval &existing
+            extend_def =
+              if name.to_sym == extend.to_sym && sup.respond_to?(:resource)
+                sup.resource(extend)
+                sup.resource_definitions[extend.to_sym]
+              else
+                cur.resource(extend)
+                cur.resource_definitions[extend.to_sym]
+              end
+            class_eval &extend_def
             class_eval &block
           end
         else
