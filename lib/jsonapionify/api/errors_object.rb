@@ -42,7 +42,7 @@ module JSONAPIonify
         [runtime_block, error_block].each do |block|
           evaluator.instance_exec(*args, &block) if block
         end
-        unless JSONAPIonify.show_backtrace == true
+        if JSONAPIonify.show_backtrace == true
           error[:meta]             ||= {}
           error[:meta][:backtrace] = backtrace
         end
