@@ -47,7 +47,7 @@ module JSONAPIonify
   end
 
   def self.show_backtrace
-    return @show_backtrace if instance_variable_set?(:@show_backtrace)
+    return @show_backtrace if instance_variable_defined?(:@show_backtrace)
     @show_backtrace ||= ENV['RACK_ENV'] != 'production'
   end
 
