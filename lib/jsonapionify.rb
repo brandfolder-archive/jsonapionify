@@ -42,6 +42,15 @@ module JSONAPIonify
     )
   end
 
+  def show_backtrace=(value)
+    @show_backtrace = value
+  end
+
+  def show_backtrace
+    return @show_backtrace if instance_variable_set?(:@show_backtrace)
+    @show_backtrace ||= ENV['RACK_ENV'] != 'production'
+  end
+
   def self.logger=(logger)
     @logger = logger
   end
