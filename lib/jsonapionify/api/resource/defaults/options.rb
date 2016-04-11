@@ -14,7 +14,7 @@ module JSONAPIonify::Api
 
       instance do |scope, key|
         if defined?(ActiveRecord) && scope < ActiveRecord::Base
-          scope.find_by id_attribute => key
+          scope.find_by! id_attribute => key
         else
           raise NotImplementedError, 'instance not implemented'
         end
