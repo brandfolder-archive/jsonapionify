@@ -8,6 +8,7 @@ module JSONAPIonify::Api
                    :response_header,
                    :helper,
                    :rescue_from,
+                   :register_exception,
                    :error,
                    :enable_pagination,
                    :before,

@@ -5,8 +5,6 @@ class MyApi < JSONAPIonify::Api::Base
 
   link 'Website', 'http://example.org'
 
-  rescue_from ActiveRecord::RecordNotFound, error: :not_found
-
   documentation_order(
     %i{
       things

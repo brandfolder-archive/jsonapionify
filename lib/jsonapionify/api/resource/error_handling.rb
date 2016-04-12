@@ -15,8 +15,8 @@ module JSONAPIonify::Api
         self.error_definitions = self.error_definitions.merge name.to_sym => block
       end
 
-      def rescue_from(*klasses, error:, &block)
-        super(*klasses) do |exception|
+      def register_exception(*klasses, error:, &block)
+        rescue_from(*klasses) do |exception|
           errors.evaluate(
             error_block:   lookup_error(error),
             runtime_block: block || proc {},

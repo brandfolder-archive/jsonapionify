@@ -16,8 +16,6 @@ module JSONAPIonify
       attribute :name, types.String, ''
       attribute :color, types.String, ''
 
-      rescue_from ActiveRecord::RecordNotFound, error: :not_found
-
       list
       read
       update do |context|

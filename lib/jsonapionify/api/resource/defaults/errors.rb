@@ -5,8 +5,11 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-      rescue_from JSONAPIonify::Structure::ValidationError, error: :jsonapi_validation_error
-      rescue_from Oj::ParseError, error: :json_parse_error
+      register_exception 'ActiveRecord::RecordInvalid', error: :invalid_record
+      register_exception 'ActiveRecord::RecordNotUnique', error: :duplicate_record
+      register_exception 'ActiveRecord::RecordNotFound', error: :not_found
+      register_exception JSONAPIonify::Structure::ValidationError, error: :jsonapi_validation_error
+      register_exception Oj::ParseError, error: :json_parse_error
 
       Rack::Utils::SYMBOL_TO_STATUS_CODE.reject { |_, v| v < 400 }.each do |symbol, code|
         message = Rack::Utils::HTTP_STATUS_CODES[code]
@@ -119,6 +122,23 @@ module JSONAPIonify::Api
       error :resource_invalid do
         title 'Invalid Resource'
         status '404'
+      end
+
+      error :duplicate_record do
+        title 'Duplicate Record'
+        status "409"
+      end
+
+      error :invalid_attribute do |attr, message|
+        title attr.present? ? 'Invalid Attribute' : 'Invalid Record'
+        detail [attr, message].reject(&:empty?).join(' ')
+        pointer "data/attributes/#{attr}" if attr.present?
+        status "422"
+      end
+
+      error :invalid_record do
+        title 'Invalid Record'
+        status "422"
       end
     end
   end
