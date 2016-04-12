@@ -1,3 +1,5 @@
+require 'unstrict_proc'
+
 module JSONAPIonify::Api
   class Action
     attr_reader :name, :block, :content_type, :responses, :prepend,
@@ -89,7 +91,7 @@ module JSONAPIonify::Api
     def example_input(resource)
       request = Server::Request.env_for('http://example.org', request_method)
       context = ContextDelegate::Mock.new(
-        request: request, resource: resource.new, _is_example_: true
+        request: request, resource: resource.new, _is_example_: true, includes: []
       )
       case @example_input
       when :resource
@@ -156,7 +158,7 @@ module JSONAPIonify::Api
       action = dup
       resource.new.instance_eval do
         sample_context                        = self.class.context_definitions.dup
-        sample_context[:_is_example_]   = Context.new proc { true }, true
+        sample_context[:_is_example_]         = Context.new proc { true }, true
         sample_context[:collection]           =
           Context.new(proc do |context|
             3.times.map { resource.example_instance_for_action(action.name, context) }
@@ -241,17 +243,19 @@ module JSONAPIonify::Api
           end || error_now(:not_acceptable)
         end
 
-        do_process_response = proc { |status, headers, body|
-          raise Errors::RequestError if errors.present?
-          if action.cacheable && cache_options.present?
-            JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
-            self.class.cache_store.write(
-              cache_options[:key],
-              [status, headers, body.body],
-              **cache_options.except(:key)
-            )
+        define_singleton_method :respond do
+          response_definition.call(self, context).tap do |status, headers, body|
+            raise Errors::RequestError if errors.present?
+            if action.cacheable && cache_options.present?
+              JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
+              self.class.cache_store.write(
+                cache_options[:key],
+                [status, headers, body.body],
+                **cache_options.except(:key)
+              )
+            end
           end
-        }
+        end
 
         # Blocks
         do_commit = proc {
@@ -259,11 +263,8 @@ module JSONAPIonify::Api
           fail Errors::RequestError if errors.present?
         }
 
-        do_respond = proc {
-          response_definition.call(self, context).tap(&do_process_response)
-        }
-
         do_commit_and_respond = proc {
+          do_respond = proc { respond }
           fail Errors::RequestError if errors.present?
           action.name && action.callbacks ? run_callbacks("commit_#{action.name}", context, &do_commit) : do_commit.call
           action.callbacks ? run_callbacks(:response, context, &do_respond) : do_respond.call

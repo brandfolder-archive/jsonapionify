@@ -26,9 +26,9 @@ module JSONAPIonify::Api
     end
 
     def documentation_output(request)
-      #cache_store.fetch(resource_signature) do
-      JSONAPIonify::Documentation.new(documentation_object(request)).result
-      #end
+      cache_store.fetch(resource_signature) do
+        JSONAPIonify::Documentation.new(documentation_object(request)).result
+      end
     end
 
     def resources_in_order
