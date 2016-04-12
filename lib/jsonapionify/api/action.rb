@@ -282,7 +282,7 @@ module JSONAPIonify::Api
           JSONAPIonify.logger.info "Cache Hit: #{cache_options[:key]}"
           response = self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
-          response = rescued_response exception
+          response = rescued_response exception, context
         ensure
           self.class.cache_store.delete cache_options[:key] unless response[0] < 300
         end

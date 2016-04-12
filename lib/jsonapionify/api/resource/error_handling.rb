@@ -1,6 +1,9 @@
+require 'unstrict_proc'
+
 module JSONAPIonify::Api
   module Resource::ErrorHandling
     extend ActiveSupport::Concern
+    using UnstrictProc
 
     included do
       include ActiveSupport::Rescuable
@@ -68,8 +71,16 @@ module JSONAPIonify::Api
       end
     end
 
-    def rescued_response(exception)
-      rescue_with_handler(exception) || begin
+    # Tries to rescue the exception by looking up and calling a registered handler.
+    def rescue_with_handler(exception, context)
+      if (handler = handler_for_rescue(exception))
+        handler.unstrict.call(exception, context)
+        true # don't rely on the return value of the handler
+      end
+    end
+
+    def rescued_response(exception, context)
+      rescue_with_handler(exception, context) || begin
         verbose_errors = self.class.api.verbose_errors
         run_callbacks(:exception, exception)
         errors.evaluate(
