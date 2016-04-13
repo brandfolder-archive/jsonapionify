@@ -10,6 +10,12 @@ module JSONAPIonify::Api
       context(:errors, readonly: true) do
         ErrorsObject.new
       end
+      register_exception Exception, error: :internal_server_error do
+        if verbose_errors
+          detail exception.message
+          meta[:error_class] = exception.class.name
+        end
+      end
     end
 
     module ClassMethods
@@ -39,6 +45,35 @@ module JSONAPIonify::Api
         else
           @error_definitions
         end
+      end
+
+      def sorted_rescue_handlers
+        handlers           = self.rescue_handlers.dup
+        # logic to find invalid order
+        out_of_order_class = lambda do |klasses|
+          klass_index  = nil
+          parent_index = nil
+          klass        = klasses.find do |klass|
+            klass_index  = klasses.find_index { |k| k == klass }
+            parent_index = klasses[0..klass_index].find_index { |k| k < klass }
+          end
+          klass ? [klass_index, parent_index] : nil
+        end
+
+        # Map handler classes
+        klasses            = handlers.map do |klass_name, _|
+          klass = self.class.const_get(klass_name) rescue nil
+          klass ||= klass_name.constantize rescue nil
+          klass
+        end
+
+        # Loop until things are ordered
+        while (result = out_of_order_class[klasses])
+          klass_index, parent_index = result
+          handler                   = klasses.delete_at klass_index
+          handlers                  = [*handlers[0..parent_index-1], handler, *handlers[parent_index..-1]]
+        end
+        handlers.reverse
       end
     end
 
@@ -71,35 +106,44 @@ module JSONAPIonify::Api
       end
     end
 
-    # Tries to rescue the exception by looking up and calling a registered handler.
-    def rescue_with_handler(exception, context)
-      if (handler = handler_for_rescue(exception))
-        handler.unstrict.call(exception, context)
-        true # don't rely on the return value of the handler
+    def handler_for_rescue(exception)
+      _, rescuer = self.class.sorted_rescue_handlers.find do |klass_name, _|
+        klass = self.class.const_get(klass_name) rescue nil
+        klass ||= klass_name.constantize rescue nil
+        exception.is_a?(klass) if klass
+      end
+
+      case rescuer
+      when Symbol
+        method(rescuer)
+      when Proc
+        rescuer
       end
     end
 
-    def rescued_response(exception, context)
-      rescue_with_handler(exception, context) || begin
-        verbose_errors = self.class.api.verbose_errors
-        run_callbacks(:exception, exception)
-        errors.evaluate(
-          error_block:   lookup_error(:internal_server_error),
-          runtime_block: proc {
-            if verbose_errors
-              detail exception.message
-              meta[:error_class] = exception.class.name
-            end
-          },
-          backtrace:     exception.backtrace
-        )
+    # Tries to rescue the exception by looking up and calling a registered handler.
+    def rescue_with_handler(exception, context, respond_proc)
+      if (handler = handler_for_rescue(exception))
+        status, headers, body =
+          instance_exec exception, context, respond_proc, &handler.unstrict
+        if status.is_a?(Fixnum) && headers.is_a?(Hash) && body.respond_to?(:each)
+          [status, headers, body]
+        else
+          error_response
+        end
       end
-    ensure
+    end
+
+    def rescued_response(exception, context, respond_proc)
+      rescue_with_handler(exception, context, respond_proc) ||
+        fail(Exception)
+    rescue Exception
       return error_response
     end
 
     def error_response
       Rack::Response.new.tap do |response|
+        error :internal_server_error unless errors.present?
         error_collection = errors.collection
         status_codes     = error_collection.map { |error| error[:status] }.compact.uniq.sort
         response.status  =

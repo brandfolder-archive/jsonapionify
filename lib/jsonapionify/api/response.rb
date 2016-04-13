@@ -30,7 +30,8 @@ module JSONAPIonify::Api
       )
     end
 
-    def call(instance, context, status: status)
+    def call(instance, context, status: nil)
+      status = self.status
       response = self
       instance.instance_eval do
         body = instance_exec(context, &response.response_block)

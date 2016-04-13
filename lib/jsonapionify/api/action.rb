@@ -243,8 +243,10 @@ module JSONAPIonify::Api
           end || error_now(:not_acceptable)
         end
 
-        define_singleton_method :respond do
-          response_definition.call(self, context).tap do |status, headers, body|
+        define_singleton_method :respond do |**options|
+          raise Errors::DoubleRespondError if @response_called
+          @response_called = true
+          response_definition.call(self, context, **options).tap do |status, headers, body|
             raise Errors::RequestError if errors.present?
             if action.cacheable && cache_options.present?
               JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
@@ -258,13 +260,14 @@ module JSONAPIonify::Api
         end
 
         # Blocks
+        do_respond = proc { respond }
+
         do_commit = proc {
           instance_exec(context, &action.block)
           fail Errors::RequestError if errors.present?
         }
 
         do_commit_and_respond = proc {
-          do_respond = proc { respond }
           fail Errors::RequestError if errors.present?
           action.name && action.callbacks ? run_callbacks("commit_#{action.name}", context, &do_commit) : do_commit.call
           action.callbacks ? run_callbacks(:response, context, &do_respond) : do_respond.call
@@ -283,7 +286,7 @@ module JSONAPIonify::Api
           JSONAPIonify.logger.info "Cache Hit: #{cache_options[:key]}"
           response = self.class.cache_store.read cache_options[:key]
         rescue Exception => exception
-          response = rescued_response exception, context
+          response = rescued_response exception, context, do_respond
         ensure
           self.class.cache_store.delete cache_options[:key] unless response[0] < 300
         end

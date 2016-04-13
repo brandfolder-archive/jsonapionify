@@ -6,6 +6,7 @@ module JSONAPIonify::Api
     RequestError         = Class.new JSONAPIonifyError
     CacheHit             = Class.new JSONAPIonifyError
     DoubleCacheError     = Class.new JSONAPIonifyError
+    DoubleRespondError   = Class.new JSONAPIonifyError
     InvalidCursor        = Class.new JSONAPIonifyError
   end
 end
