@@ -30,12 +30,12 @@ module JSONAPIonify::Api
       )
     end
 
-    def call(instance, context)
+    def call(instance, context, status: status)
       response = self
       instance.instance_eval do
         body = instance_exec(context, &response.response_block)
         Rack::Response.new.tap do |rack_response|
-          rack_response.status = response.status
+          rack_response.status = status
           response_headers.each { |k, v| rack_response.headers[k.split('-').map(&:capitalize).join('-')] = v }
           rack_response.headers['Content-Type'] = response.accept unless response.accept == '*/*'
           rack_response.write(body) unless body.nil?
