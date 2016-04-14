@@ -11,9 +11,6 @@ module JSONAPIonify::Api
     extend Delegation
     extend ResourceDefinitions
 
-    class_attribute :verbose_errors, instance_writer: false, instance_reader: false
-    self.verbose_errors = ENV['RACK_ENV'] != 'production'
-
     def self.inherited(subclass)
       super(subclass)
       subclass.instance_exec(self) do |superclass|

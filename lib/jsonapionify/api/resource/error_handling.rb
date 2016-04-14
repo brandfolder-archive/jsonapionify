@@ -10,8 +10,8 @@ module JSONAPIonify::Api
       context(:errors, readonly: true) do
         ErrorsObject.new
       end
-      register_exception Exception, error: :internal_server_error do
-        if verbose_errors
+      register_exception Exception, error: :internal_server_error do |exception|
+        if JSONAPIonify.verbose_errors
           detail exception.message
           meta[:error_class] = exception.class.name
         end
@@ -25,10 +25,11 @@ module JSONAPIonify::Api
       end
 
       def register_exception(*klasses, error:, &block)
-        rescue_from(*klasses) do |exception|
+        block ||= proc {}
+        rescue_from(*klasses) do |exception, context|
           errors.evaluate(
             error_block:   lookup_error(error),
-            runtime_block: block || proc {},
+            runtime_block: proc { instance_exec exception, context, &block },
             backtrace:     exception.backtrace
           )
         end
@@ -121,29 +122,32 @@ module JSONAPIonify::Api
       end
     end
 
+    def invoke_rescue_handler(handler, exception, context, respond_proc)
+      status, headers, body =
+        instance_exec exception, context, respond_proc, &handler.unstrict
+      if status.is_a?(Fixnum) && headers.is_a?(Hash) && body.respond_to?(:each)
+        [status, headers, body]
+      else
+        error_response
+      end
+    end
+
     # Tries to rescue the exception by looking up and calling a registered handler.
     def rescue_with_handler(exception, context, respond_proc)
       if (handler = handler_for_rescue(exception))
-        status, headers, body =
-          instance_exec exception, context, respond_proc, &handler.unstrict
-        if status.is_a?(Fixnum) && headers.is_a?(Hash) && body.respond_to?(:each)
-          [status, headers, body]
-        else
-          error_response
-        end
+        invoke_rescue_handler(handler, exception, context, respond_proc)
       end
     end
 
     def rescued_response(exception, context, respond_proc)
-      rescue_with_handler(exception, context, respond_proc) ||
-        fail(Exception)
-    rescue Exception
-      return error_response
+      rescue_with_handler(exception, context, respond_proc)
+    rescue Exception => ex
+      handler = handler_for_rescue(Exception.new)
+      invoke_rescue_handler(handler, ex, context, respond_proc)
     end
 
     def error_response
       Rack::Response.new.tap do |response|
-        error :internal_server_error unless errors.present?
         error_collection = errors.collection
         status_codes     = error_collection.map { |error| error[:status] }.compact.uniq.sort
         response.status  =

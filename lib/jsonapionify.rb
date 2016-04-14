@@ -42,13 +42,22 @@ module JSONAPIonify
     )
   end
 
+  def self.verbose_errors=(value)
+    self.show_backtrace = @verbose_errors = value
+  end
+
+  def self.verbose_errors
+    return @verbose_errors if instance_variable_defined?(:@verbose_errors)
+    self.verbose_errors = ENV['RACK_ENV'] != 'production'
+  end
+
   def self.show_backtrace=(value)
     @show_backtrace = value
   end
 
   def self.show_backtrace
     return @show_backtrace if instance_variable_defined?(:@show_backtrace)
-    @show_backtrace ||= ENV['RACK_ENV'] != 'production'
+    self.show_backtrace = ENV['RACK_ENV'] != 'production'
   end
 
   def self.logger=(logger)
