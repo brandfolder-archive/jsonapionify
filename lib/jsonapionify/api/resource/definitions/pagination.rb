@@ -155,7 +155,7 @@ module JSONAPIonify::Api
       end
 
       def arel_select_past_cursor(collection, sort_params, key_values)
-        subselect = sort_params.length.times.map do |i|
+        subquery = sort_params.length.times.map do |i|
           set                             = sort_params[0..i]
           *contains_fields, outside_field = set
           contains_fields.reduce(collection.reorder(nil)) do |relation, field|
@@ -164,9 +164,11 @@ module JSONAPIonify::Api
             )
           end.where(
             collection.arel_table[outside_field.name].send(outside_field.outside_arel, key_values[outside_field.name.to_s])
-          ).to_sql
-        end.join(' UNION ')
-        collection.from("(#{subselect}) AS #{collection.table_name}")
+          )
+        end.reduce(:union)
+        collection.from("(#{subquery.to_sql}) AS #{collection.table_name}").tap(&:first)
+      rescue ActiveRecord::StatementInvalid
+        collection.where(id: subquery.ids)
       end
 
       def parse_and_validate_cursor(param, cursor, context)
