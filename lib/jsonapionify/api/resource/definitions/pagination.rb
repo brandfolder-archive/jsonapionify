@@ -165,8 +165,8 @@ module JSONAPIonify::Api
           end.where(
             collection.arel_table[outside_field.name].send(outside_field.outside_arel, key_values[outside_field.name.to_s])
           )
-        end.reduce(:union)
-        collection.from("(#{subquery.to_sql}) AS #{collection.table_name}").tap(&:first)
+        end.map { |rel| "( #{rel.to_sql} )" }.join(' UNION ')
+        collection.from("(#{subquery}) AS #{collection.table_name}").tap(&:first)
       rescue ActiveRecord::StatementInvalid
         collection.where(id: subquery.ids)
       end
