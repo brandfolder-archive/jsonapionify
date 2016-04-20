@@ -221,7 +221,6 @@ module JSONAPIonify::Api
 
         define_singleton_method :response_definition do
           action.responses.find { |response| response.accept_with_matcher? context } ||
-            action.responses.find { |response| response.accept_with_path? context } ||
             action.responses.find { |response| response.accept_with_header? context } ||
             error_now(:not_acceptable)
         end

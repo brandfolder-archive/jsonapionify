@@ -1,6 +1,7 @@
 require 'rack/request'
 require 'rack/utils'
 require 'rack/mock'
+require 'mime-types'
 
 module JSONAPIonify::Api
   class Server::Request < Rack::Request
@@ -44,16 +45,23 @@ module JSONAPIonify::Api
       body.rewind
     end
 
+    def extension
+      ext = File.extname(path)
+      return nil unless ext
+      ext[0] == '.' ? ext[1..-1] : ext
+    end
+
     def content_type
       super.try(:split, ';').try(:first)
     end
 
     def accept_params
       @accept_params ||= begin
-        types = (headers['accept'] || '*/*').split(',')
+        ext_mime = MIME::Types.type_for(path)[0]&.content_type
+        accepts = (headers['accept'] || ext_mime || '*/*').split(',')
+        types = [ext_mime].compact | accepts
         types.each_with_object({}) do |type, list|
-          list[Server::MediaType.type(type)] =
-            Server::MediaType.params(type)
+          list[Server::MediaType.type(type)] = Server::MediaType.params(type)
         end
       end
     end

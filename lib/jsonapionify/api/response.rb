@@ -1,8 +1,6 @@
-require 'mime-types'
-
 module JSONAPIonify::Api
   class Response
-    attr_reader :action, :accept, :mime_types, :response_block, :status,
+    attr_reader :action, :accept, :response_block, :status,
                 :matcher, :content_type
 
     def initialize(action, accept: 'application/vnd.api+json', content_type: nil, status: nil, match: nil, &block)
@@ -11,7 +9,6 @@ module JSONAPIonify::Api
       @accept         = accept unless match
       @content_type   = content_type || (@accept == '*/*' ? nil : @accept)
       @matcher        = match || proc {}
-      @mime_types     = MIME::Types[@accept]
       @status         = status || 200
     end
 
@@ -55,14 +52,9 @@ module JSONAPIonify::Api
     end
 
     def accept_with_header?(context)
-      return false unless MIME::Types.of(context.request.path).blank?
       context.request.accept.any? do |accept|
         self.accept == accept || self.accept == '*/*' || accept == '*/*'
       end
-    end
-
-    def accept_with_path?(context)
-      [mime_types, MIME::Types.of(context.request.path)].reduce(:&).present?
     end
 
     def accept_with_matcher?(context)
