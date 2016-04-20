@@ -168,18 +168,18 @@ module JSONAPIonify::Api
     end
 
     def sample_request(resource, request)
-      call(resource, request, context: sample_context(resource), callbacks: false)
+      call(resource, request, context_definitions: sample_context(resource), callbacks: false)
     end
 
-    def call(resource, request, context: nil, commit: true, callbacks: self.callbacks)
+    def call(resource, request, context_definitions: nil, commit: true, callbacks: self.callbacks)
       action        = dup
       cache_options = {}
       resource.new.instance_eval do
         # Bootstrap the Action
-        context ||= ContextDelegate.new(
+        context = ContextDelegate.new(
           request,
           self,
-          self.class.context_definitions
+          context_definitions || resource.context_definitions
         )
 
         context.action_name = action.name
