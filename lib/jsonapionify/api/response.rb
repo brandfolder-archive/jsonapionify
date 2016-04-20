@@ -46,7 +46,12 @@ module JSONAPIonify::Api
             else
               response.content_type
             end
-          rack_response.write(body) unless body.nil?
+          if body.respond_to?(:each)
+            rack_headers['Transfer-Encoding'] = 'chunked'
+            rack_response.body = body
+          elsif !body.nil?
+            rack_response.write(body)
+          end
         end.finish
       end
     end
