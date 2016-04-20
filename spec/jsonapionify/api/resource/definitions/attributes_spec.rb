@@ -1,6 +1,6 @@
 require 'spec_helper'
 module JSONAPIonify::Api::Resource::Definitions
-  describe Pagination do
+  describe Attributes do
     extend ApiHelper
     include JSONAPIonify::Api::TestHelper
 

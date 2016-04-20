@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'enumerable_observer'
   spec.add_dependency 'concurrent-ruby', '~> 1.0.1'
   spec.add_dependency 'concurrent-ruby-ext'
+  spec.add_dependency 'mime-types'
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'rocco'

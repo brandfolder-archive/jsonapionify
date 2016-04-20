@@ -64,7 +64,7 @@ module JSONAPIonify::Api
         ).gsub(
           '/*', '/?[^\/]*'
         )
-      Regexp.new('^' + raw_reqexp + '$')
+      Regexp.new('^' + raw_reqexp + '(\.[A-Za-z_-]+)?$')
     end
 
     def ==(other)
@@ -147,57 +147,39 @@ module JSONAPIonify::Api
         supports_content_type?(request)
     end
 
-    def response(status: nil, accept: nil, &block)
-      new_response = Response.new(self, status: status, accept: accept, &block)
+    def response(**options, &block)
+      new_response = Response.new(self, **options, &block)
       @responses.delete new_response
-      @responses << new_response
+      @responses.push new_response
       self
     end
 
-    def sample_request(resource, request)
-      action = dup
-      resource.new.instance_eval do
-        sample_context                        = self.class.context_definitions.dup
-        sample_context[:_is_example_]         = Context.new proc { true }, true
-        sample_context[:collection]           =
-          Context.new(proc do |context|
-            3.times.map { resource.example_instance_for_action(action.name, context) }
-          end, true)
-        sample_context[:paginated_collection] = Context.new proc { |context| context.collection }
-        sample_context[:instance]             = Context.new proc { |context| context.collection.first }
-        if sample_context.has_key? :owner_context
-          sample_context[:owner_context] = Context.new proc { ContextDelegate::Mock.new }, true
+    def sample_context(resource)
+      resource.context_definitions.dup.tap do |defs|
+        collection_context          = proc do |context|
+          3.times.map { resource.example_instance_for_action(action.name, context) }
         end
-
-        # Bootstrap the Action
-        context = ContextDelegate.new(request, self, sample_context)
-
-        define_singleton_method :errors do
-          context.errors
-        end
-
-        define_singleton_method :response_headers do
-          context.response_headers
-        end
-
-        # Render the response
-        response_definition =
-          action.responses.find { |response| response.accept? request } ||
-            error_now(:not_acceptable)
-        response_definition.call(self, context)
+        defs[:_is_example_]         = Context.new proc { true }, true
+        defs[:collection]           = Context.new collection_context
+        defs[:paginated_collection] = Context.new proc { |context| context.collection }
+        defs[:instance]             = Context.new proc { |context| context.collection.first }
+        defs[:owner_context]        = Context.new proc { ContextDelegate::Mock.new }, true if defs.has_key? :owner_context
       end
     end
 
-    def call(resource, request, **context_overrides)
+    def sample_request(resource, request)
+      call(resource, request, context: sample_context(resource), callbacks: false)
+    end
+
+    def call(resource, request, context: nil, commit: true, callbacks: self.callbacks)
       action        = dup
       cache_options = {}
       resource.new.instance_eval do
         # Bootstrap the Action
-        context = ContextDelegate.new(
+        context ||= ContextDelegate.new(
           request,
           self,
-          self.class.context_definitions,
-          **context_overrides
+          self.class.context_definitions
         )
 
         context.action_name = action.name
@@ -238,9 +220,10 @@ module JSONAPIonify::Api
         end
 
         define_singleton_method :response_definition do
-          action.responses.find do |response|
-            response.accept? request
-          end || error_now(:not_acceptable)
+          action.responses.find { |response| response.accept_with_matcher? context } ||
+            action.responses.find { |response| response.accept_with_path? context } ||
+            action.responses.find { |response| response.accept_with_header? context } ||
+            error_now(:not_acceptable)
         end
 
         define_singleton_method :respond do |**options|
@@ -263,23 +246,23 @@ module JSONAPIonify::Api
         do_respond = proc { respond }
 
         do_commit = proc {
-          instance_exec(context, &action.block)
+          instance_exec(context, &action.block) if commit
           fail Errors::RequestError if errors.present?
         }
 
         do_commit_and_respond = proc {
           fail Errors::RequestError if errors.present?
-          action.name && action.callbacks ? run_callbacks("commit_#{action.name}", context, &do_commit) : do_commit.call
-          action.callbacks ? run_callbacks(:response, context, &do_respond) : do_respond.call
+          action.name && callbacks ? run_callbacks("commit_#{action.name}", context, &do_commit) : do_commit.call
+          callbacks ? run_callbacks(:response, context, &do_respond) : do_respond.call
         }
 
         do_request = proc {
-          action.name && action.callbacks ? run_callbacks(action.name, context, &do_commit_and_respond) : do_commit_and_respond.call
+          action.name && callbacks ? run_callbacks(action.name, context, &do_commit_and_respond) : do_commit_and_respond.call
         }
 
         response = [0, {}, []]
         begin
-          response = action.callbacks ? run_callbacks(:request, context, &do_request) : do_request.call
+          response = callbacks ? run_callbacks(:request, context, &do_request) : do_request.call
         rescue Errors::RequestError
           response = error_response
         rescue Errors::CacheHit
