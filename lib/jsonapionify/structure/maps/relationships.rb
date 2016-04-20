@@ -18,6 +18,10 @@ module JSONAPIonify::Structure
 
       value_is Objects::Relationship, strict: true
 
+      def to_hash
+        super.sort.to_h
+      end
+
     end
   end
 end
