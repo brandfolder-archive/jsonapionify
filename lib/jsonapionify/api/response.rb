@@ -3,13 +3,18 @@ module JSONAPIonify::Api
     attr_reader :action, :accept, :response_block, :status,
                 :matcher, :content_type
 
-    def initialize(action, accept: 'application/vnd.api+json', content_type: nil, status: nil, match: nil, &block)
+    def initialize(action, accept: 'application/vnd.api+json', content_type: nil, status: nil, match: nil, cacheable: true, &block)
       @action         = action
       @response_block = block || proc {}
       @accept         = accept unless match
       @content_type   = content_type || (@accept == '*/*' ? nil : @accept)
       @matcher        = match || proc {}
       @status         = status || 200
+      @cacheable      = cacheable
+    end
+
+    def cacheable
+      action.cacheable && @cacheable
     end
 
     def ==(other)
@@ -47,7 +52,6 @@ module JSONAPIonify::Api
               response.content_type
             end
           if body.respond_to?(:each)
-            rack_response.headers['Transfer-Encoding'] = 'chunked'
             rack_response.body = body
           elsif !body.nil?
             rack_response.write(body)

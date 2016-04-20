@@ -230,7 +230,7 @@ module JSONAPIonify::Api
           @response_called = true
           response_definition.call(self, context, **options).tap do |status, headers, body|
             raise Errors::RequestError if errors.present?
-            if action.cacheable && cache_options.present?
+            if response_definition.cacheable && cache_options.present?
               JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
               self.class.cache_store.write(
                 cache_options[:key],
