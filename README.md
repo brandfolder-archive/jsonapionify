@@ -69,6 +69,52 @@ class MyCompanyApi < JSONAPIonify::Base
 end
 ```
 
+### Predefined Contexts
+
+#### request_body [readonly]
+The raw body of the request
+
+#### request_object [readonly]
+The JSON parsed into a JSONApionify Structure Object. Keys can be accessed as symbols.
+
+#### id [readonly]
+The id present in the request path, if present.
+
+#### request_id [readonly]
+The id of the requested resource, within the data attribute of the request object.
+
+#### request_attributes [readonly]
+The parsed attributes from the request object. Accessing this context, will also validate the data/structure.
+
+#### request_relationships [readonly]
+The parsed relationships from the request object. Accessing this context, will also validate the data/structure.
+
+#### request_instance [readonly]
+The instance of the object found from the request's data/type and data/id attibutes. This is determined from the resource's defined scope.
+
+#### request_resource [readonly]
+The resource's scope determined from the request's data/type attribute.
+
+#### request_data [readonly]
+The data attribute in the top level object of the request
+
+#### authentication [readonly]
+An object containing the authentication data.
+
+#### links
+The links object that will be present in the response.
+
+#### meta
+The meta object that will be present in the response.
+
+#### response_object
+The jsonapi object that will be used for the response.
+
+#### response_collection
+The response for the collection.
+
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -78,7 +124,6 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/brandfolder/jsonapionify. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
-
 
 ## License
 
