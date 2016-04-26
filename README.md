@@ -71,34 +71,34 @@ end
 
 ### Predefined Contexts
 
-#### request_body [readonly]
+#### request_body
 The raw body of the request
 
-#### request_object [readonly]
+#### request_object
 The JSON parsed into a JSONApionify Structure Object. Keys can be accessed as symbols.
 
-#### id [readonly]
+#### id
 The id present in the request path, if present.
 
-#### request_id [readonly]
+#### request_id
 The id of the requested resource, within the data attribute of the request object.
 
-#### request_attributes [readonly]
+#### request_attributes
 The parsed attributes from the request object. Accessing this context, will also validate the data/structure.
 
-#### request_relationships [readonly]
+#### request_relationships
 The parsed relationships from the request object. Accessing this context, will also validate the data/structure.
 
-#### request_instance [readonly]
+#### request_instance
 The instance of the object found from the request's data/type and data/id attibutes. This is determined from the resource's defined scope.
 
-#### request_resource [readonly]
+#### request_resource
 The resource's scope determined from the request's data/type attribute.
 
-#### request_data [readonly]
+#### request_data
 The data attribute in the top level object of the request
 
-#### authentication [readonly]
+#### authentication
 An object containing the authentication data.
 
 #### links
