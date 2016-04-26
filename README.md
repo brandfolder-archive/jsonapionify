@@ -29,8 +29,45 @@ And then execute:
 
 ## Usage
 
-Refer to the [wiki](https://github.com/brandfolder/jsonapionify/wiki) for detailed
-information on how to use the framework.
+### Context: Read First
+
+Before we get started with defining an API, you should understand a pattern used heavily throughout JSONAPIonify. This pattern is called a context. A context is a definition of data that is memoized and passed around a request. You may see context used as follows:
+
+```ruby
+before :create do |context|
+  puts context.request.request_method
+end
+```
+
+Contexts can also call other contexts within their definitions:
+
+```ruby
+context :request_method do |context|
+  context.request.request_method
+end
+```
+
+JSONApionify already ships with a set of predefined contexts.
+
+### Create an API
+
+Api Definitions are the basis of JSONApi's DSL. They encompass resources that are available and can be run as standalone rack apps or be mounted within a rails app.
+
+```
+class MyCompanyApi < JSONAPIonify::Base
+
+  # Write a description for your API.
+  description <<~markdown
+  A description of your API, that will be available at the top of the documentation.
+  markdown
+  
+  # Add some rack middleware
+  use Rack::SSL::Enforcer
+  
+  # Handle Authorization
+
+end
+```
 
 ## Development
 
