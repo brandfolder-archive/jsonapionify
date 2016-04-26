@@ -61,7 +61,7 @@ module JSONAPIonify::Api
         context.request.env['jsonapionify.id']
       end
 
-      context(:request_id) do |context|
+      context(:request_id, readonly: true) do |context|
         context.request_data[:id]
       end
 
@@ -139,7 +139,7 @@ module JSONAPIonify::Api
         find_resource item, pointer: 'data'
       end
 
-      context(:request_data) do |context|
+      context(:request_data, readonly: true) do |context|
         context.request_object.fetch(:data) {
           error_now(:data_missing)
         }

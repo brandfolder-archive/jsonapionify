@@ -3,7 +3,6 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-      context(:raw_collection?, readonly: true) { false }
       context(:invalidate_cache?, readonly: true) { |c| c.includes.present? }
 
       # Response Objects
@@ -15,11 +14,11 @@ module JSONAPIonify::Api
         JSONAPIonify::Structure::Helpers::MetaDelegate.new context.response_object
       end
 
-      context(:response_object) do |context|
+      context(:response_object, readonly: true) do |context|
         JSONAPIonify.parse(links: { self: context.request.url })
       end
 
-      context(:response_collection) do |context|
+      context(:response_collection, readonly: true) do |context|
         if context.root_request?
           collections = %i{
             paginated_collection
