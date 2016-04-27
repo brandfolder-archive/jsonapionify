@@ -168,7 +168,7 @@ module JSONAPIonify::Api
         end.map { |rel| "( #{rel.to_sql} )" }.join(' UNION ')
         collection.from("(#{subquery}) AS #{collection.table_name}").tap(&:first)
       rescue ActiveRecord::StatementInvalid
-        collection.where(id: subquery.ids)
+        collection.where(id: collection.find_by_sql(subquery).map(&:id))
       end
 
       def parse_and_validate_cursor(param, cursor, context)
