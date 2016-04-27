@@ -9,7 +9,11 @@ module JSONAPIonify::Api
     end
 
     def context(name, readonly: false, &block)
-      self.context_definitions[name.to_sym] = Context.new(block, readonly)
+      self.context_definitions[name.to_sym] = Context.new(
+        block,
+        readonly,
+        self.context_definitions[name.to_sym]
+      )
     end
 
   end
