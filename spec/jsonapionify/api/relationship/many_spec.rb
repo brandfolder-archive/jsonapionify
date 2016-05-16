@@ -36,6 +36,20 @@ module JSONAPIonify::Api
         end
         expect(last_response.status).to eq 200
       end
+
+      context 'Dynamic Counters' do
+        it "should return a proper count" do
+          get "/users"
+          last_response_json['data'].each do |item|
+            expect(item['attributes']['thing_count']).to eq User.find(item['id']).things.count
+          end
+        end
+
+        it "should return a proper count" do
+          get "/users/#{User.first.id}"
+          expect(last_response_json['data']['attributes']['thing_count']).to eq User.first.things.count
+        end
+      end
     end
 
     describe 'POST /:resource/:id/relationships/:name' do

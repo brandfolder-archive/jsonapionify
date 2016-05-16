@@ -1,5 +1,5 @@
 MyApi.define_resource :users do
-  relates_to_many :things, includable: true do
+  relates_to_many :things, includable: true, count_attribute: true do
     add
     replace
     remove

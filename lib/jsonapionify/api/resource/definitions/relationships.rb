@@ -8,13 +8,48 @@ module JSONAPIonify::Api
       end
     end
 
-    def relates_to_many(name, **opts, &block)
-      define_relationship(name, Relationship::Many, **opts, &block)
+    def relates_to_many(name, count_attribute: false, include_count: true, **opts, &block)
+      define_relationship(name, Relationship::Many, **opts, &block).tap do
+        define_relationship_counter(
+          name,
+          count_attribute === true ? "#{name.to_s.singularize}_count" : count_attribute.to_s,
+          include: include_count
+        ) if count_attribute
+      end
     end
 
     def relates_to_one(name, **opts, &block)
       opts[:resource] ||= name.to_s.pluralize.to_sym
       define_relationship(name, Relationship::One, **opts, &block)
+    end
+
+    def define_relationship_counter(rel_name, name, include: true)
+      before do |context|
+        if (context.scope.is_a?(ActiveRecord::Relation) || context.scope.is_a?(ActiveRecord::Base)) && context.scope._reflect_on_association(rel_name)
+          context.scope = context.scope.includes(rel_name)
+        end if context.fields[type&.to_sym].include? name.to_sym
+      end if include
+      attribute name.to_sym, types.Integer, "The number of #{rel_name}.", write: false do |_, instance, context|
+        rel = context.resource.class.relationship(rel_name)
+        context_definitions = rel.context_definitions.merge(
+          owner: JSONAPIonify::Api::Context.new(proc { instance }),
+          fields: JSONAPIonify::Api::Context.new(proc { context.fields.each_with_object({}) { |(k, _), o| o[k] = {} }})
+        )
+        rel_context = JSONAPIonify::Api::ContextDelegate.new(
+          context.request,
+          rel.new,
+          context_definitions
+        )
+        count = rel_context.collection.uniq.count
+        case count
+        when Hash
+          count.values.reduce(:+)
+        when Fixnum
+          count
+        else
+          error :internal_server_error
+        end
+      end
     end
 
     def define_relationship(name, klass, **opts, &block)
