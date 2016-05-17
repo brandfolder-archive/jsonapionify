@@ -21,8 +21,8 @@ module JSONAPIonify
 
     it 'should return the value of the block' do
       before_value = false
-      in_value = false
-      after_value = false
+      in_value     = false
+      after_value  = false
 
       klass.after_default do
         after_value = before_value && in_value

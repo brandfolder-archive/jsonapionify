@@ -171,108 +171,14 @@ module JSONAPIonify::Api
       call(resource, request, context_definitions: sample_context(resource), callbacks: false)
     end
 
-    def call(resource, request, context_definitions: nil, commit: true, callbacks: self.callbacks)
-      action        = dup
-      cache_options = {}
-      resource.new.instance_eval do
-        # Bootstrap the Action
-        context = ContextDelegate.new(
-          request,
-          self,
-          context_definitions || resource.context_definitions
-        )
-
-        context.action_name = action.name
-
-        # Define Singletons
-        define_singleton_method :cache do |key, **options|
-          raise Errors::DoubleCacheError, "Cache was already called for this action" if @called
-          @called = true
-          cache_options.merge! options
-
-          # Build the cache key, and obscure it.
-          context.meta[:cache_key] = cache_options[:key] = cache_key(
-            path:   request.path,
-            accept: request.accept,
-            params: context.params,
-            key:    key
-          )
-          # If the cache exists, then fail to cache miss
-          if self.class.cache_store.exist?(cache_options[:key]) && !context.invalidate_cache?
-            raise Errors::CacheHit, cache_options[:key]
-          end
-        end if action.cacheable
-
-        define_singleton_method :action do
-          action
-        end
-
-        define_singleton_method :action_name do
-          action.name
-        end
-
-        define_singleton_method :errors do
-          context.errors
-        end
-
-        define_singleton_method :response_headers do
-          context.response_headers
-        end
-
-        define_singleton_method :response_definition do
-          action.responses.find { |response| response.accept_with_matcher? context } ||
-            action.responses.find { |response| response.accept_with_header? context } ||
-            error_now(:not_acceptable)
-        end
-
-        define_singleton_method :respond do |**options|
-          raise Errors::DoubleRespondError if @response_called
-          @response_called = true
-          response_definition.call(self, context, **options).tap do |status, headers, body|
-            raise Errors::RequestError if errors.present?
-            if response_definition.cacheable && cache_options.present?
-              JSONAPIonify.logger.info "Cache Miss: #{cache_options[:key]}"
-              self.class.cache_store.write(
-                cache_options[:key],
-                [status, headers, body.body],
-                **cache_options.except(:key)
-              )
-            end
-          end
-        end
-
-        # Blocks
-        do_respond = proc { respond }
-
-        do_commit = proc {
-          instance_exec(context, &action.block) if commit
-          fail Errors::RequestError if errors.present?
-        }
-
-        do_commit_and_respond = proc {
-          fail Errors::RequestError if errors.present?
-          action.name && callbacks ? run_callbacks("commit_#{action.name}", context, &do_commit) : do_commit.call
-          callbacks ? run_callbacks(:response, context, &do_respond) : do_respond.call
-        }
-
-        do_request = proc {
-          action.name && callbacks ? run_callbacks(action.name, context, &do_commit_and_respond) : do_commit_and_respond.call
-        }
-
-        response = [0, {}, []]
-        begin
-          response = callbacks ? run_callbacks(:request, context, &do_request) : do_request.call
-        rescue Errors::RequestError
-          response = error_response
-        rescue Errors::CacheHit
-          JSONAPIonify.logger.info "Cache Hit: #{cache_options[:key]}"
-          response = self.class.cache_store.read cache_options[:key]
-        rescue Exception => exception
-          response = rescued_response exception, context, do_respond
-        ensure
-          self.class.cache_store.delete cache_options[:key] unless response[0] < 300
-        end
-      end
+    def call(resource, request, callbacks: self.callbacks, **opts)
+      resource.new(
+        request:   request,
+        callbacks: callbacks,
+        cacheable: cacheable,
+        action:    self,
+        **opts
+      ).call
     end
   end
 end

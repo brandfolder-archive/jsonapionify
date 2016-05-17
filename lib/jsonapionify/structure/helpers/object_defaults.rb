@@ -59,7 +59,7 @@ module JSONAPIonify::Structure
         inherited_hash_attribute :implementations, :collections
 
         before_initialize do
-          @unset = {}
+          @unset    = {}
           newly_set = unset.select { |_, v| v.present? }
           newly_set.each do |k, v|
             self[k] = v

@@ -54,11 +54,11 @@ module JSONAPIonify::Api
         out_of_order_class = lambda do |klasses|
           klass_index  = nil
           parent_index = nil
-          klass        = klasses.find do |klass|
+          sort_class   = klasses.find do |klass|
             klass_index  = klasses.find_index { |k| k == klass }
             parent_index = klasses[0..klass_index].find_index { |k| k < klass }
           end
-          klass ? [klass_index, parent_index] : nil
+          sort_class ? [klass_index, parent_index] : nil
         end
 
         # Map handler classes

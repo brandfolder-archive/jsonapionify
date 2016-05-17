@@ -2,7 +2,7 @@ require 'spec_helper'
 module JSONAPIonify
   describe 'Documentation' do
     include JSONAPIonify::Api::TestHelper
-    let(:app){
+    let(:app) {
       Class.new(JSONAPIonify::Api::Base)
     }
 

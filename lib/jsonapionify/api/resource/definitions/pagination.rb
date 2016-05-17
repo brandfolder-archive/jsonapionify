@@ -99,7 +99,7 @@ module JSONAPIonify::Api
       param :page, :before, actions: %i{list}
       param :page, :first, actions: %i{list}
       param :page, :last, actions: %i{list}
-      context :paginated_collection do |context|
+      context :paginated_collection, readonly: true do |context|
         if context.root_request?
           collection = context.sorted_collection
           _, block   = pagination_strategies.to_a.reverse.to_h.find do |mod, _|

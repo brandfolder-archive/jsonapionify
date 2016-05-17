@@ -6,14 +6,14 @@ module JSONAPIonify::Api::Resource::Definitions
 
     describe ".attribute" do
       username = Faker::Internet.user_name
-      let(:username){ username }
+      let(:username) { username }
       simple_object_api(:sample_resources).create_model do
         field :name
         field :color
         field :weight
       end.seed(count: 20) do |instance|
-        instance.name = Faker::Commerce.product_name
-        instance.color = Faker::Commerce.color
+        instance.name   = Faker::Commerce.product_name
+        instance.color  = Faker::Commerce.color
         instance.weight = rand(0..100)
       end.create_api do |model|
         scope { model }

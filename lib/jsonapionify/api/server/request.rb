@@ -58,8 +58,8 @@ module JSONAPIonify::Api
     def accept_params
       @accept_params ||= begin
         ext_mime = MIME::Types.type_for(path)[0]&.content_type
-        accepts = (headers['accept'] || ext_mime || '*/*').split(',')
-        types = [ext_mime].compact | accepts
+        accepts  = (headers['accept'] || ext_mime || '*/*').split(',')
+        types    = [ext_mime].compact | accepts
         types.each_with_object({}) do |type, list|
           list[Server::MediaType.type(type)] = Server::MediaType.params(type)
         end

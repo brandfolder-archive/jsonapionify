@@ -7,12 +7,12 @@ module JSONAPIonify::Api
     included do
       before :list, :create, :read, :update do |context|
         supports_includes = context.root_request? && context.includes.present?
-        is_active_record = defined?(ActiveRecord) && context.scope.respond_to?(:<) && context.scope < ActiveRecord::Base
+        is_active_record  = defined?(ActiveRecord) && context.scope.respond_to?(:<) && context.scope < ActiveRecord::Base
         if supports_includes && is_active_record
           valid_includes = context.includes.select do |k, v|
             context.scope._reflect_on_association(k)
           end.to_h
-          context.scope = context.scope.includes valid_includes
+          context.scope  = context.scope.includes valid_includes
         end
       end
 

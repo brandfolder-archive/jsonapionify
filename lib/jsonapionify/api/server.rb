@@ -23,7 +23,7 @@ module JSONAPIonify::Api
         @api     = api
         @request = Request.new(env)
         request.path_info.split('/').tap(&:shift).tap do |parts|
-          parts[-1] = File.basename(parts[-1], File.extname(parts[-1])) if parts[-1]
+          parts[-1]                                                 = File.basename(parts[-1], File.extname(parts[-1])) if parts[-1]
           @resource, @id, @relationship, @relationship_name, *@more = parts
         end
       end

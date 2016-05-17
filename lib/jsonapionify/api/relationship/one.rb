@@ -12,9 +12,9 @@ module JSONAPIonify::Api
       define_singleton_method(:show) do |content_type: nil, callbacks: true, &block|
         options = {
           content_type: content_type,
-          callbacks: callbacks,
-          cacheable: true,
-          prepend: 'relationships'
+          callbacks:    callbacks,
+          cacheable:    true,
+          prepend:      'relationships'
         }
         define_action(:show, 'GET', **options, &block).response status: 200 do |context|
           context.response_object[:data] = build_resource_identifier(context.instance)
@@ -25,9 +25,9 @@ module JSONAPIonify::Api
       define_singleton_method(:replace) do |content_type: nil, callbacks: true, &block|
         options = {
           content_type: content_type,
-          callbacks: callbacks,
-          cacheable: false,
-          prepend: 'relationships'
+          callbacks:    callbacks,
+          cacheable:    false,
+          prepend:      'relationships'
         }
         define_action(:replace, 'PATCH', **options, &block).response status: 200 do |context|
           context.owner_context.reset(:instance)

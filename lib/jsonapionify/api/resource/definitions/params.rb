@@ -65,7 +65,7 @@ module JSONAPIonify::Api
           definition.keypath == keypath
         end
         next {} unless definition
-        value      = definition.extract_value(params)
+        value = definition.extract_value(params)
         if definition.default_value?(value)
           {}
         else

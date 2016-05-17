@@ -8,13 +8,17 @@ module JSONAPIonify
 
     included do
       around(:each) do |example|
-        if example.run && last_response && (last_response_json rescue false)
-          aggregate_failures do
-            "response failures"
-            last_response_error_messages&.each do |message|
-              expect(message).to be_empty, message
+        begin
+          if example.run && last_response && last_response_json
+            aggregate_failures do
+              "response failures"
+              last_response_error_messages&.each do |message|
+                expect(message).to be_empty, message
+              end
             end
           end
+        rescue Oj::ParseError
+          expect(last_response.body).to be_empty, last_response.body
         end
       end
     end
@@ -42,7 +46,7 @@ module JSONAPIonify
           meta:      error['meta']&.except('backtrace')&.each_with_object([]) { |(k, v), a|
             a << "\n  #{k}: #{v}" if v
           }&.join,
-          ': ':       ':',
+          ': ':      ':',
           backtrace: ["\n", *(error.dig('meta', 'backtrace') || [])].join("\n")
         }.each_with_object([]) { |(k, v), a|
           a << "#{k}: #{v}" if v&.strip

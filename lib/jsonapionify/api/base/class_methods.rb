@@ -47,7 +47,7 @@ module JSONAPIonify::Api
     end
 
     def process_index(request)
-      headers                    = ContextDelegate.new(request, resource_class.new, resource_class.context_definitions).response_headers
+      headers                    = resource_class.new(request: request).exec { |c| c.response_headers }
       obj                        = JSONAPIonify.new_object
       obj[:meta]                 = { resources: {} }
       obj[:links]                = { self: request.url }

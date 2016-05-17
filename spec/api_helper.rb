@@ -6,15 +6,15 @@ module ApiHelper
     attr_reader :name, :spec, :model
 
     def initialize(name, spec)
-      @name       = name
-      @spec       = spec
+      @name = name
+      @spec = spec
       create_model
       create_api
       seed(count: 0)
     end
 
     def create_api(&block)
-      block ||= proc {}
+      block  ||= proc {}
       helper = self
       spec.let!(:app) do
         seed
@@ -67,7 +67,7 @@ module ApiHelper
     end
 
     def create_table(&block)
-      block ||= proc {}
+      block  ||= proc {}
       helper = self
       spec.let!(:migration) do
         Class.new ActiveRecord::Migration do
@@ -92,7 +92,7 @@ module ApiHelper
     end
 
     def create_model(&block)
-      block ||= proc {}
+      block  ||= proc {}
       helper = self
       spec.let!(:model) do
         migration

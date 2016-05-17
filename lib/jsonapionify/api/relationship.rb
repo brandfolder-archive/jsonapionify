@@ -23,7 +23,7 @@ module JSONAPIonify::Api
       end
 
       owner_context_proc = Proc.new do |request|
-        ContextDelegate.new(request, rel.owner.new, rel.owner.context_definitions)
+        rel.owner.new(request: request).exec { |c| c }
       end
 
       context(:owner_context, readonly: true, persisted: true) do |context|

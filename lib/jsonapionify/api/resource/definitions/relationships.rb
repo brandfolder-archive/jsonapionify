@@ -30,16 +30,16 @@ module JSONAPIonify::Api
         end if context.fields[type&.to_sym].include? name.to_sym
       end if include
       attribute name.to_sym, types.Integer, "The number of #{rel_name}.", write: false do |_, instance, context|
-        rel = context.resource.class.relationship(rel_name)
+        rel          = context.resource.class.relationship(rel_name)
         blank_fields = context.fields.map { |k, _| [k, {}] }.to_h
-        rel_context = JSONAPIonify::Api::ContextDelegate.new(
-          context.request,
-          rel.new,
-          rel.context_definitions,
-          owner: instance,
-          fields: blank_fields
-        )
-        count = rel_context.collection.uniq.count
+        rel_context  = rel.new(
+          request:           context.request,
+          context_overrides: {
+            owner:  instance,
+            fields: blank_fields
+          }
+        ).exec { |c| c }
+        count        = rel_context.collection.uniq.count
         case count
         when Hash
           count.values.reduce(:+)

@@ -9,7 +9,7 @@ module JSONAPIonify
       t.string :name
       t.string :color
     end.seed(count: 5) do |instance|
-      instance.name = Faker::Commerce.product_name
+      instance.name  = Faker::Commerce.product_name
       instance.color = Faker::Commerce.color
     end.create_api do |model|
       scope { model }

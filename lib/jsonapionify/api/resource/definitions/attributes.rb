@@ -20,7 +20,7 @@ module JSONAPIonify::Api
             field_map[type_sym] =
               field_symbols.each_with_object([]) do |field, field_list|
                 type_attributes = self.class.api.resource(type_sym).attributes
-                attribute = type_attributes.find do |attribute|
+                attribute       = type_attributes.find do |attribute|
                   attribute.name == field &&
                     attribute.supports_read_for_action?(context.action_name, context)
                 end

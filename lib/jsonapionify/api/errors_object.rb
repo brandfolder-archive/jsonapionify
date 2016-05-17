@@ -34,10 +34,10 @@ module JSONAPIonify
       end
 
       def evaluate(*args, error_block:, runtime_block: nil, backtrace: nil)
-        backtrace ||= caller
+        backtrace     ||= caller
         runtime_block ||= proc {}
-        error     = Structure::Objects::Error.new
-        evaluator = Evaluator.new(error)
+        error         = Structure::Objects::Error.new
+        evaluator     = Evaluator.new(error)
         collection << error
         [runtime_block, error_block].each do |block|
           evaluator.instance_exec(*args, &block) if block

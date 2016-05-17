@@ -8,7 +8,7 @@ module JSONAPIonify::Api::Resource::Definitions
 
     describe ".attribute" do
       username = Faker::Internet.user_name
-      let(:username){ username }
+      let(:username) { username }
       simple_object_api(:sample_resources).create_api do |model|
         scope { model }
         collection { |scope| scope.all }

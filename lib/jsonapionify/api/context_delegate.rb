@@ -3,7 +3,7 @@ module JSONAPIonify::Api
     class Mock
       def initialize(**attrs)
         attrs.each do |attr, value|
-          define_singleton_method(attr){ value }
+          define_singleton_method(attr) { value }
         end
       end
 
@@ -13,10 +13,10 @@ module JSONAPIonify::Api
     end
 
     def initialize(request, instance, definitions, **overrides)
-      memo          = {}
+      memo           = {}
       persisted_memo = {}
-      delegate      = self
-      @definitions  = definitions
+      delegate       = self
+      @definitions   = definitions
 
       define_singleton_method :request do
         request

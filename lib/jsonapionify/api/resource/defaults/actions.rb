@@ -11,7 +11,7 @@ module JSONAPIonify::Api
         context.path_actions.map(&:request_method).freeze
       end
 
-      context(:action_name, persisted: true){ }
+      context(:action_name, persisted: true) {}
       define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
         cache 'options-request'
       end.response(status: 200) do |context|
@@ -29,16 +29,16 @@ module JSONAPIonify::Api
             attr.options_json_for_action(action.name, context)
           end
 
-          h['path'] = context.request.path
-          h['url'] = context.request.url
+          h['path']      = context.request.path
+          h['url']       = context.request.url
           action_options = h[action.request_method] = {}
 
-          if [ 'GET', 'POST', 'PUT', 'PATCH' ].include? action.request_method
+          if ['GET', 'POST', 'PUT', 'PATCH'].include? action.request_method
             action_options[:response_attributes] = response_attributes_json
-            action_options[:relationships] = self.class.relationships.map(&:options_json)
+            action_options[:relationships]       = self.class.relationships.map(&:options_json)
           end
 
-          if [ 'POST', 'PUT', 'PATCH' ].include? action.request_method
+          if ['POST', 'PUT', 'PATCH'].include? action.request_method
             action_options[:request_attributes] = request_attributes_json
           end
         end

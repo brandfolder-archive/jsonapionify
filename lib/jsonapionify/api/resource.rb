@@ -57,14 +57,28 @@ module JSONAPIonify::Api
 
     example_id_generator { |val| val }
 
-    def action_name
+    attr_reader :errors, :action, :response_headers
+
+    def initialize(request:, context_definitions: self.class.context_definitions, commit: true, callbacks: true, context_overrides: {}, cacheable: true, action: nil)
+      context_overrides[:action_name] = action.name if action
+      @__context                        = ContextDelegate.new(
+        request,
+        self,
+        context_definitions,
+        context_overrides
+      )
+      @errors                         = @__context.errors
+      @action                         = action
+      @response_headers               = @__context.response_headers
+      @callbacks                      = action ? callbacks : false
+      @cache_options                  = {}
+      extend Caller if commit && action
+      extend Exec unless action
+      extend Caching if cacheable
     end
 
-    def cache_key(**options)
-      self.class.cache_key(
-        **options,
-        action_name: action_name
-      )
+    def action_name
+      action&.name
     end
 
   end

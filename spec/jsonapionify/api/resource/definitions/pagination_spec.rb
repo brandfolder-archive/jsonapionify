@@ -10,8 +10,8 @@ module JSONAPIonify::Api::Resource::Definitions
         field :color
         field :weight
       end.seed(count: 20) do |instance|
-        instance.name = Faker::Commerce.product_name
-        instance.color = Faker::Commerce.color
+        instance.name   = Faker::Commerce.product_name
+        instance.color  = Faker::Commerce.color
         instance.weight = rand(0..100)
       end.create_api do |model|
         scope { model }
@@ -41,8 +41,8 @@ module JSONAPIonify::Api::Resource::Definitions
         field :color
         field :weight
       end.seed(count: 20) do |instance|
-        instance.name = Faker::Commerce.product_name
-        instance.color = Faker::Commerce.color
+        instance.name   = Faker::Commerce.product_name
+        instance.color  = Faker::Commerce.color
         instance.weight = rand(0..100)
       end.create_api do |model|
         scope { model }
@@ -232,8 +232,8 @@ module JSONAPIonify::Api::Resource::Definitions
         t.string :color
         t.integer :weight
       end.seed(count: 20) do |instance|
-        instance.name = Faker::Commerce.product_name
-        instance.color = Faker::Commerce.color
+        instance.name   = Faker::Commerce.product_name
+        instance.color  = Faker::Commerce.color
         instance.weight = rand(0..100)
       end.create_api do |model|
         scope { model }

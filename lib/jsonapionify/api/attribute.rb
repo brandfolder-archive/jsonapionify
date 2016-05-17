@@ -43,7 +43,7 @@ module JSONAPIonify::Api
       when TrueClass, FalseClass
         setting
       when Hash
-        !!JSONAPIonify::Continuation.new(setting).check(action_name, context){ true }
+        !!JSONAPIonify::Continuation.new(setting).check(action_name, context) { true }
       when Array
         setting.map(&:to_sym).include? action_name
       when Symbol, String
@@ -60,7 +60,7 @@ module JSONAPIonify::Api
       when TrueClass, FalseClass
         setting
       when Hash
-        !!JSONAPIonify::Continuation.new(setting).check(action_name, context){ true }
+        !!JSONAPIonify::Continuation.new(setting).check(action_name, context) { true }
       when Array
         setting.map(&:to_sym).include? action_name
       when Symbol, String
@@ -106,10 +106,10 @@ module JSONAPIonify::Api
 
     def options_json_for_action(action_name, context)
       {
-        name: @name,
-        type: @type.to_s,
+        name:        @name,
+        type:        @type.to_s,
         description: JSONAPIonify::Documentation.onelinify_markdown(description),
-        example: example(context.resource.class.generate_id)
+        example:     example(context.resource.class.generate_id)
       }.tap do |opts|
         opts[:not_null] = true if @type.not_null?
         opts[:required] = true if required_for_action?(action_name, context)
