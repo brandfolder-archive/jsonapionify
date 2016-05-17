@@ -6,7 +6,7 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         inherited_hash_attribute :request_header_definitions
 
-        context(:request_headers) do |context|
+        context(:request_headers, persisted: true, readonly: true) do |context|
           should_error     = false
 
           # Check for validity
@@ -27,7 +27,7 @@ module JSONAPIonify::Api
 
           raise Errors::RequestError if should_error
 
-          context.request.headers
+          context.request.headers.freeze
         end
       end
     end

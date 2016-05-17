@@ -3,18 +3,20 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-      context(:invalidate_cache?, readonly: true) { |c| c.includes.present? }
+      before(:response) { |context| context.clear }
+
+      context(:invalidate_cache?, readonly: true, persisted: true) { |c| c.includes.present? }
 
       # Response Objects
-      context(:links, readonly: true) do |context|
+      context(:links, readonly: true, persisted: true) do |context|
         context.response_object[:links]
       end
 
-      context(:meta, readonly: true) do |context|
+      context(:meta, readonly: true, persisted: true) do |context|
         JSONAPIonify::Structure::Helpers::MetaDelegate.new context.response_object
       end
 
-      context(:response_object, readonly: true) do |context|
+      context(:response_object, readonly: true, persisted: true) do |context|
         JSONAPIonify.parse(links: { self: context.request.url })
       end
 

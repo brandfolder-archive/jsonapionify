@@ -6,7 +6,7 @@ module JSONAPIonify::Api
     end
 
     def authentication(&block)
-      context :authentication, readonly: true do |context|
+      context :authentication, readonly: true, persisted: true do |context|
         OpenStruct.new.tap do |authentication_object|
           if instance_exec(context.request, authentication_object, &block) == false
             error_now :forbidden

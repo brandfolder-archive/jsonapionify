@@ -6,7 +6,7 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         inherited_hash_attribute :response_header_definitions
 
-        context(:response_headers) do |context|
+        context(:response_headers, persisted: true) do |context|
           self.class.response_header_definitions.each_with_object({}) do |(name, block), headers|
             headers[name.to_s] = instance_exec(context, &block)
           end

@@ -26,15 +26,15 @@ module JSONAPIonify::Api
         ContextDelegate.new(request, rel.owner.new, rel.owner.context_definitions)
       end
 
-      context(:owner_context) do |context|
+      context(:owner_context, readonly: true, persisted: true) do |context|
         owner_context_proc.call(context.request)
       end
 
-      context(:owner) do |context|
+      context(:owner, readonly: true, persisted: true) do |context|
         context.owner_context.instance
       end
 
-      context(:id) do
+      context(:id, readonly: true, persisted: true) do
         nil
       end
 

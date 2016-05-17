@@ -24,21 +24,20 @@ module JSONAPIonify::Api
     end
 
     def define_relationship_counter(rel_name, name, include: true)
-      before do |context|
+      before :response do |context|
         if (context.scope.is_a?(ActiveRecord::Relation) || context.scope.is_a?(ActiveRecord::Base)) && context.scope._reflect_on_association(rel_name)
           context.scope = context.scope.includes(rel_name)
         end if context.fields[type&.to_sym].include? name.to_sym
       end if include
       attribute name.to_sym, types.Integer, "The number of #{rel_name}.", write: false do |_, instance, context|
         rel = context.resource.class.relationship(rel_name)
-        context_definitions = rel.context_definitions.merge(
-          owner: JSONAPIonify::Api::Context.new(proc { instance }),
-          fields: JSONAPIonify::Api::Context.new(proc { context.fields.each_with_object({}) { |(k, _), o| o[k] = {} }})
-        )
+        blank_fields = context.fields.map { |k, _| [k, {}] }.to_h
         rel_context = JSONAPIonify::Api::ContextDelegate.new(
           context.request,
           rel.new,
-          context_definitions
+          rel.context_definitions,
+          owner: instance,
+          fields: blank_fields
         )
         count = rel_context.collection.uniq.count
         case count

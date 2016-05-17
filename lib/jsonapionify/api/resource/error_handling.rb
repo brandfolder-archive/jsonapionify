@@ -7,7 +7,7 @@ module JSONAPIonify::Api
 
     included do
       include ActiveSupport::Rescuable
-      context(:errors, readonly: true) do
+      context(:errors, readonly: true, persisted: true) do
         ErrorsObject.new
       end
       register_exception Exception, error: :internal_server_error do |exception|

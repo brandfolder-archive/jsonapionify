@@ -62,7 +62,7 @@ module JSONAPIonify::Api
     end
 
     def builder(&block)
-      context :builder, readonly: true do |context|
+      context :builder, readonly: true, persisted: true do |context|
         proc do |resource, instance|
           block.call resource, instance, context
         end

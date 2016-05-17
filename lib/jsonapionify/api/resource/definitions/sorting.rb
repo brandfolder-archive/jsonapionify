@@ -10,7 +10,7 @@ module JSONAPIonify::Api
         delegate :sort_fields_from_sort_string, to: :class
 
         # Define Contexts
-        context :sorted_collection do |context|
+        context :sorted_collection, readonly: true do |context|
           if context.root_request?
             _, block = sorting_strategies.to_a.reverse.to_h.find do |mod, _|
               Object.const_defined?(mod, false) && context.collection.class <= Object.const_get(mod, false)
@@ -22,7 +22,7 @@ module JSONAPIonify::Api
           end
         end
 
-        context(:sort_params, readonly: true) do |context|
+        context(:sort_params, readonly: true, persisted: true) do |context|
           sort_fields_from_sort_string(context.params['sort']).tap do |fields|
             should_error = false
             fields.each do |field|
@@ -36,7 +36,7 @@ module JSONAPIonify::Api
               end
             end
             raise Errors::RequestError if should_error
-          end
+          end.freeze
         end
 
         define_sorting_strategy('Object') do |collection|

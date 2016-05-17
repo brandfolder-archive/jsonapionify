@@ -6,7 +6,7 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         inherited_hash_attribute :param_definitions
 
-        context(:params, readonly: true) do |context|
+        context(:params, readonly: true, persisted: true) do |context|
           should_error = false
 
           params = self.class.param_definitions.select do |_, v|
