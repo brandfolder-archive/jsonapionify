@@ -48,7 +48,8 @@ module JSONAPIonify::Api
     def extension
       ext = File.extname(path)
       return nil unless ext
-      ext[0] == '.' ? ext[1..-1] : ext
+      ext = ext[0] == '.' ? ext[1..-1] : ext
+      ext.to_s.empty? ? nil : ext
     end
 
     def content_type
