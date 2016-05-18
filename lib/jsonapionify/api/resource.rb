@@ -61,7 +61,7 @@ module JSONAPIonify::Api
 
     def initialize(request:, context_definitions: self.class.context_definitions, commit: true, callbacks: true, context_overrides: {}, cacheable: true, action: nil)
       context_overrides[:action_name] = action.name if action
-      @__context                        = ContextDelegate.new(
+      @__context                      = ContextDelegate.new(
         request,
         self,
         context_definitions,
