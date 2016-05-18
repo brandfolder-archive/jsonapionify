@@ -36,7 +36,7 @@ module JSONAPIonify::Api
               end
             end
             raise Errors::RequestError if should_error
-          end.freeze
+          end
         end
 
         define_sorting_strategy('Object') do |collection|

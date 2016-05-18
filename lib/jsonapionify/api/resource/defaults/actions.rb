@@ -4,11 +4,11 @@ module JSONAPIonify::Api
 
     included do
       context :path_actions, readonly: true, persisted: true do |context|
-        self.class.path_actions(context.request).freeze
+        self.class.path_actions(context.request)
       end
 
       context :http_allow, readonly: true, persisted: true do |context|
-        context.path_actions.map(&:request_method).freeze
+        context.path_actions.map(&:request_method)
       end
 
       context(:action_name, persisted: true) {}

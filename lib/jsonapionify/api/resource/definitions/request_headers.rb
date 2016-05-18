@@ -27,7 +27,7 @@ module JSONAPIonify::Api
 
           raise Errors::RequestError if should_error
 
-          context.request.headers.freeze
+          context.request.headers
         end
       end
     end

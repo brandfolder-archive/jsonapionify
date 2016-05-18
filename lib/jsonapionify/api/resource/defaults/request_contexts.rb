@@ -5,21 +5,21 @@ module JSONAPIonify::Api
     included do
 
       context(:request_body, readonly: true, persisted: true) do |context|
-        context.request.body.read.freeze
+        context.request.body.read
       end
 
       context(:request_object, readonly: true, persisted: true) do |context|
         JSONAPIonify.parse(context.request_body).as(:client).tap do |input|
           error_now(:request_object_invalid, context, input) unless input.validate
-        end.freeze
+        end
       end
 
       context(:id, readonly: true, persisted: true) do |context|
-        context.request.env['jsonapionify.id'].freeze
+        context.request.env['jsonapionify.id']
       end
 
       context(:request_id, readonly: true, persisted: true) do |context|
-        context.request_data[:id].freeze
+        context.request_data[:id]
       end
 
       context(:request_attributes, readonly: true, persisted: true) do |context|
@@ -61,8 +61,7 @@ module JSONAPIonify::Api
           end
         end.tap do
           raise Errors::RequestError if should_error
-        end.freeze
-
+        end
       end
 
       context(:request_relationships, readonly: true, persisted: true) do |context|
@@ -79,12 +78,12 @@ module JSONAPIonify::Api
           end
         else
           {}
-        end.freeze
+        end
       end
 
       context(:request_instances, readonly: true, persisted: true) do |context|
         data = context.request_data
-        (data ? find_instances(data, pointer: '/data') : []).freeze
+        (data ? find_instances(data, pointer: '/data') : [])
       end
 
       context(:request_instance, readonly: true, persisted: true) do |context|
