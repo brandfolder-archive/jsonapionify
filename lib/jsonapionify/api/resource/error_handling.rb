@@ -16,6 +16,12 @@ module JSONAPIonify::Api
           meta[:error_class] = exception.class.name
         end
       end
+      register_exception Errors::RequestError, error: :internal_server_error do |exception|
+        if JSONAPIonify.verbose_errors
+          detail exception.message
+          meta[:error_class] = exception.class.name
+        end
+      end
     end
 
     module ClassMethods
@@ -88,7 +94,7 @@ module JSONAPIonify::Api
 
     def error_now(name, *args, &block)
       error(name, *args, &block)
-      raise Errors::RequestError
+      halt
     end
 
     def set_errors(collection)
@@ -97,6 +103,12 @@ module JSONAPIonify::Api
 
     def error_meta
       errors.meta
+    end
+
+    def halt
+      error = Errors::RequestError.new
+      error.set_backtrace caller
+      raise error
     end
 
     private

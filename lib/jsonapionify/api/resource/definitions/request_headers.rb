@@ -25,7 +25,7 @@ module JSONAPIonify::Api
             error :headers_missing, missing_keys
           end
 
-          raise Errors::RequestError if should_error
+          halt if should_error
 
           context.request.headers
         end

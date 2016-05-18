@@ -36,7 +36,8 @@ module JSONAPIonify::Api
           request:           context.request,
           context_overrides: {
             owner:  instance,
-            fields: blank_fields
+            fields: blank_fields,
+            params: {}
           }
         ).exec { |c| c }
         count        = rel_context.collection.uniq.count

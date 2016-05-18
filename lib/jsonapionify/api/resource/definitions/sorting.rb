@@ -35,7 +35,7 @@ module JSONAPIonify::Api
                 next
               end
             end
-            raise Errors::RequestError if should_error
+            halt if should_error
           end
         end
 

@@ -60,7 +60,7 @@ module JSONAPIonify::Api
             should_error = true
           end
         end.tap do
-          raise Errors::RequestError if should_error
+          halt if should_error
         end
       end
 
@@ -115,7 +115,7 @@ module JSONAPIonify::Api
           should_error = true
         end
       end
-      raise Errors::RequestError if should_error
+      halt if should_error
       instances
     end
 
@@ -129,7 +129,7 @@ module JSONAPIonify::Api
           self.detail "could not find resource: `#{item[:type]}` with id: #{item[:id]}"
         end
       end
-      raise Errors::RequestError if should_error
+      halt if should_error
       instance
     end
 
@@ -142,7 +142,7 @@ module JSONAPIonify::Api
           self.detail "could not find resource: `#{item[:type]}`"
         end
       end
-      raise Errors::RequestError if should_error
+      halt if should_error
       resource
     end
 

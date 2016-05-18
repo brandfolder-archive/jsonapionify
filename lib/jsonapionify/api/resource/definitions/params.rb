@@ -43,9 +43,7 @@ module JSONAPIonify::Api
             error :parameters_missing, missing_params
           end
 
-          if should_error
-            raise Errors::RequestError
-          end
+          halt if should_error
 
           # Return the params
           context.request.params

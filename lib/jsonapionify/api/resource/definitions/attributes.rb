@@ -32,7 +32,7 @@ module JSONAPIonify::Api
                 end
               end
           end.tap do
-            raise Errors::RequestError if should_error
+            halt if should_error
           end
         end
       end

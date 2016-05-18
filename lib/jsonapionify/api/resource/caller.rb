@@ -4,7 +4,8 @@ module JSONAPIonify::Api
       do_respond = proc { __respond }
       do_request = proc { __request }
       response   = @callbacks ? run_callbacks(:request, @__context, &do_request) : do_request.call
-    rescue Errors::RequestError
+    rescue Errors::RequestError => e
+      raise e unless errors.present?
       response = error_response
     rescue Errors::CacheHit
       JSONAPIonify.logger.info "Cache Hit: #{@cache_options[:key]}"
@@ -25,13 +26,13 @@ module JSONAPIonify::Api
 
     def __commit
       instance_exec(@__context, &action.block)
-      fail Errors::RequestError if errors.present?
+      halt if errors.present?
     end
 
     def __commit_and_respond
       do_respond = proc { __respond }
       do_commit  = proc { __commit }
-      fail Errors::RequestError if errors.present?
+      halt if errors.present?
       action.name && @callbacks ? run_callbacks("commit_#{action.name}", @__context, &do_commit) : do_commit.call
       @callbacks ? run_callbacks(:response, @__context, &do_respond) : do_respond.call
     end
@@ -45,7 +46,7 @@ module JSONAPIonify::Api
       raise Errors::DoubleRespondError if @response_called
       @response_called = true
       response_definition.call(self, @__context, **options).tap do |status, headers, body|
-        raise Errors::RequestError if errors.present?
+        halt if errors.present?
         if response_definition.cacheable && @cache_options.present?
           JSONAPIonify.logger.info "Cache Miss: #{@cache_options[:key]}"
           self.class.cache_store.write(

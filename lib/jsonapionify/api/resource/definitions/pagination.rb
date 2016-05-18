@@ -190,7 +190,7 @@ module JSONAPIonify::Api
             detail 'The cursor sort does not match the request sort'
           end
         end
-        raise Errors::RequestError if should_error
+        halt if should_error
 
         options['a']
       end
