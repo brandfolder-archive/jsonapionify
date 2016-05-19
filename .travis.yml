@@ -6,3 +6,11 @@ cache: bundler
 addons:
   code_climate:
     repo_token: 8954c3078fac0b34ca184e61ca41e6b1dda3d820d5a0f3f18101d00bd86cdb1b
+deploy:
+  provider: rubygems
+  api_key:
+    secure: e6pDIHcdw8vgoHQxMOyQ1AalytHueDIF4F0AaGPnLujcwQBh1WzNHpBC3ck2V9Wsk4eFZ/UaEsNvYGiZgmhPKuDC728dUAEF3Ww12a3F3/8Qgp8oiKlGQM+K7YncZesWi4/1d0R9iNTNsypuX2RuF7cUP0rMt4/RpP3AU7th6BfjYbAyR29vNxcWY51W4tYUVqQXljg32OPel05j/I9KU/KcgB0VheYPr2sb9+jzFJaU5h+bKwi/esJiC5eBXUr+JkUhl+TLiuY8lvEzmzQB9WY2WvjjMiDbsMMR642fp6a3vt4sEMj7BxcQ6+QpAyetH5xeQNsXIWiTxEroyw/F1zlBaWYNi0ees4wGCU4bi/1iN4hZ2/BN0gsn7N5ZXf8+uWILUYHjG+CT/qPvn69YbOPgW/Ap1HtZTXK5Ais5RUUJxZnAVYfKLxGLHGEg/7sEk/oCGiKlpmfnIK7wvgWU19T19Ki50wuUPAl1dZecwGHL3iK9Q7v5GcuDgIzNgseGZQHr99WzcTken9NSQd/pO1Qwli7yX3id/lmuN3qsYiEJn0DkgTRJ9Ccf9fgk32ehWt3asw1X9eXgp0Ai57LAtbCZaz+OeSFhydrBqCQ8zVe1gGAhBBr1keKyptevMyqkRmJ1z4UIxEgwIAWbvW+5e+xCDREGa5lMtQyvgcG7OwU=
+  gem: jsonapionify
+  on:
+    tags: true
+    repo: brandfolder/jsonapionify
