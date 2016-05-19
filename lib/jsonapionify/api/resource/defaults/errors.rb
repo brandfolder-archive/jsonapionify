@@ -99,7 +99,7 @@ module JSONAPIonify::Api
 
       error :sort_parameter_invalid do
         parameter 'sort'
-        title 'port parameter is invalid'
+        title 'sort parameter is invalid'
         status '400'
       end
 

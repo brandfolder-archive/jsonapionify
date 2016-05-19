@@ -74,7 +74,7 @@ module JSONAPIonify::Api
       if context.respond_to?(:_is_example_) && context._is_example_ == true
         return example(example_id)
       end
-      block = self.block || proc { |attr, instance| instance.send attr }
+      block = self.block || proc { |attr, i| i.send attr }
       type.dump block.unstrict.call(self.name, instance, context)
     rescue JSONAPIonify::Types::DumpError => ex
       error_block =
