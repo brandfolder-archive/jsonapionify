@@ -1,5 +1,5 @@
 require 'spec_helper'
 module JSONAPIonify::Api
-  describe Base::DocHelper do
+  describe Base::Documentation do
   end
 end

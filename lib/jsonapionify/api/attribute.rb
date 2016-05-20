@@ -2,6 +2,10 @@ require 'unstrict_proc'
 
 module JSONAPIonify::Api
   class Attribute
+    extend JSONAPIonify::Autoload
+    autoload_all
+
+    include Documentation
     using UnstrictProc
     attr_reader :name, :type, :description, :read, :write, :required, :block
 
@@ -104,18 +108,6 @@ module JSONAPIonify::Api
         (required === true || Array.wrap(required).include?(action_name))
     end
 
-    def options_json_for_action(action_name, context)
-      {
-        name:        @name,
-        type:        @type.to_s,
-        description: JSONAPIonify::Documentation.onelinify_markdown(description),
-        example:     example(context.resource.class.generate_id)
-      }.tap do |opts|
-        opts[:not_null] = true if @type.not_null?
-        opts[:required] = true if required_for_action?(action_name, context)
-      end
-    end
-
     def read?
       !!@read
     end
@@ -133,16 +125,6 @@ module JSONAPIonify::Api
       else
         type.dump @example
       end
-    end
-
-    def documentation_object
-      OpenStruct.new(
-        name:        name,
-        type:        type.name,
-        required:    Array.wrap(required).join(', '),
-        description: JSONAPIonify::Documentation.render_markdown(description),
-        allow:       allow
-      )
     end
 
     def allow

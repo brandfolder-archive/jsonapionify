@@ -9,6 +9,7 @@ module JSONAPIonify::Api
 
     extend Definitions
     extend ClassMethods
+    extend Documentation
 
     include ErrorHandling
     include Includer
@@ -31,31 +32,6 @@ module JSONAPIonify::Api
         resource: name
       )
     end
-
-    def self.example_id_generator(&block)
-      index = 0
-      define_singleton_method(:generate_id) do
-        instance_exec index += 1, &block
-      end
-      context :example_id do
-        self.class.generate_id
-      end
-    end
-
-    def self.example_instance_for_action(action, context)
-      id = generate_id
-      OpenStruct.new.tap do |instance|
-        instance.send "#{id_attribute}=", id.to_s
-        actionable_attributes = attributes.select do |attr|
-          attr.supports_read_for_action?(action, context)
-        end
-        actionable_attributes.each do |attribute|
-          instance.send "#{attribute.name}=", attribute.example(id)
-        end
-      end
-    end
-
-    example_id_generator { |val| val }
 
     attr_reader :errors, :action, :response_headers
 

@@ -3,7 +3,7 @@ module JSONAPIonify
   describe 'Documentation' do
     include JSONAPIonify::Api::TestHelper
     let(:app) {
-      Class.new(JSONAPIonify::Api::Base)
+      Class.new(MyApi)
     }
 
     it "should compile" do

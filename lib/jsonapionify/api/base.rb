@@ -6,7 +6,7 @@ module JSONAPIonify::Api
     extend JSONAPIonify::Autoload
     autoload_all
     extend AppBuilder
-    extend DocHelper
+    extend Documentation
     extend ClassMethods
     extend Delegation
     extend ResourceDefinitions

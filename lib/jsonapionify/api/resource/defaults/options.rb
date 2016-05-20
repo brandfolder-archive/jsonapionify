@@ -4,7 +4,7 @@ module JSONAPIonify::Api
     included do
       id :id
       scope { self.type.classify.constantize }
-      collection do |scope|
+      collection do |scope, context|
         if defined?(ActiveRecord) && scope < ActiveRecord::Base && scope.is_a?(Class)
           scope.all
         else

@@ -390,10 +390,10 @@
                             <div class="col-xs-4 attribute-name">
                               <strong><%= attribute.name %></strong>
                               <i class="attribute-type"><%= attribute.type %></i>
-                              <% if attribute.required.present? %>
-                                  <p class="optional">required: <%= attribute.required? %></p>
+                              <% if attribute.required %>
+                                <p class="optional">required: <%= attribute.required %></p>
                               <% else %>
-                                  <p class="optional">optional</p>
+                                <p class="optional">optional</p>
                               <% end %>
                             </div>
                             <div class="col-xs-8 attribute-description">

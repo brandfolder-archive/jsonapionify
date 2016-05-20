@@ -1,12 +1,15 @@
 module JSONAPIonify::Api
   class Response
     attr_reader :action, :accept, :response_block, :status,
-                :matcher, :content_type
+                :matcher, :content_type, :extension, :example_accept
 
-    def initialize(action, accept: 'application/vnd.api+json', content_type: nil, status: nil, match: nil, cacheable: true, &block)
+    def initialize(action, accept: 'application/vnd.api+json', content_type: nil, status: nil, match: nil, cacheable: true, extension: nil, &block)
+      accept          = MIME::Types.type_for("ex.#{extension}")[0]&.content_type if extension
+      @extension      = extension.to_s if extension
       @action         = action
       @response_block = block || proc {}
       @accept         = accept unless match
+      @example_accept = accept
       @content_type   = content_type || (@accept == '*/*' ? nil : @accept)
       @matcher        = match || proc {}
       @status         = status || 200
