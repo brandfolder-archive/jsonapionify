@@ -33,7 +33,6 @@ module JSONAPIonify::Api
     end
 
     def initialize_copy(new_instance)
-      puts "DUPED!"
       super
       %i{@responses}.each do |ivar|
         value = instance_variable_get(ivar)

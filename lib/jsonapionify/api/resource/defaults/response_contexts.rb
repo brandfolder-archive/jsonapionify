@@ -3,8 +3,6 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-      before(:response) { |context| context.clear }
-
       context(:invalidate_cache?, readonly: true, persisted: true) { |c| c.includes.present? }
 
       # Response Objects

@@ -12,8 +12,7 @@ module JSONAPIonify::Api
       define_relationship(name, Relationship::Many, **opts, &block).tap do
         define_relationship_counter(
           name,
-          count_attribute === true ? "#{name.to_s.singularize}_count" : count_attribute.to_s,
-          include: include_count
+          count_attribute === true ? "#{name.to_s.singularize}_count" : count_attribute.to_s
         ) if count_attribute
       end
     end
@@ -24,11 +23,6 @@ module JSONAPIonify::Api
     end
 
     def define_relationship_counter(rel_name, name, include: true)
-      before :response do |context|
-        if (context.scope.is_a?(ActiveRecord::Relation) || context.scope.is_a?(ActiveRecord::Base)) && context.scope._reflect_on_association(rel_name)
-          context.scope = context.scope.includes(rel_name)
-        end if context.fields[type&.to_sym].include? name.to_sym
-      end if include
       attribute name.to_sym, types.Integer, "The number of #{rel_name}.", write: false do |_, instance, context|
         rel          = context.resource.class.relationship(rel_name)
         blank_fields = context.fields.map { |k, _| [k, {}] }.to_h

@@ -30,8 +30,6 @@ module JSONAPIonify::Api
           prepend:      'relationships'
         }
         define_action(:replace, 'PATCH', **options, &block).response status: 200 do |context|
-          context.owner_context.reset(:instance)
-          context.reset(:instance)
           context.response_object[:data] = build_resource_identifier(context.instance)
           context.response_object.to_json
         end

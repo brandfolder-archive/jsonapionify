@@ -12,47 +12,52 @@ module JSONAPIonify::Api
       end
     end
 
-    def initialize(request, instance, definitions, **overrides)
-      memo           = {}
-      persisted_memo = {}
-      delegate       = self
-      @definitions   = definitions
+    attr_reader :request
 
-      define_singleton_method :request do
-        request
-      end
+    def initialize(request, resource_instance, definitions, **overrides)
+      @memo              = {}
+      @request           = request
+      @persisted_memo    = {}
+      @definitions       = definitions
+      @overrides         = overrides
+      @resource_instance = resource_instance
+      delegate           = self
 
       %i{initialize_dup initialize_clone}.each do |method|
         define_singleton_method method do |copy|
-          memo.each do |k, v|
+          @memo.each do |k, v|
             copy.public_send "#{k}=", v
           end
         end
       end
 
-      define_singleton_method(:reset) do |key|
-        memo.delete(key)
-      end
-
-      define_singleton_method(:clear) do
-        memo.clear
-      end
-
       definitions.each do |name, context|
+        raise Errors::ReservedContextName if respond_to? name
         define_singleton_method name do
-          return persisted_memo[name] if persisted_memo.has_key? name
-          (context.persisted? ? persisted_memo : memo)[name] ||=
-            if overrides.has_key?(name)
-              overrides[name]
-            else
-              context.call(instance, delegate)
-            end
+          return @overrides[name] if @overrides.has_key? name
+          return @persisted_memo[name] if @persisted_memo.has_key? name
+          return @memo[name] if @memo.has_key? name
+          write_memo = (context.persisted? ? @persisted_memo : @memo)
+          write_memo[name] = context.call(@resource_instance, delegate)
         end
 
         define_singleton_method "#{name}=" do |value|
-          persisted_memo[name] = value
+          @persisted_memo[name] = value
         end unless context.readonly?
       end
+      freeze
+    end
+
+    def reset key
+      @memo.delete(key)
+    end
+
+    def clear
+      @memo.clear
+    end
+
+    def inspect
+      to_s.chomp('>') << " memoed: #{@memo.keys.inspect}, persisted: #{@persisted_memo.keys.inspect}, overridden: #{@overrides.keys}" << '>'
     end
 
   end

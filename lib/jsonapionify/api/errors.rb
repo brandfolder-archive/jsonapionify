@@ -9,5 +9,6 @@ module JSONAPIonify::Api
     DoubleRespondError   = Class.new JSONAPIonifyError
     InvalidCursor        = Class.new JSONAPIonifyError
     MissingContentType   = Class.new JSONAPIonifyError
+    ReservedContextName  = Class.new JSONAPIonifyError
   end
 end
