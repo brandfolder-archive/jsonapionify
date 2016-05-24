@@ -65,7 +65,7 @@ module JSONAPIonify::Api
       end
 
       context :scope do |context|
-        instance_exec(rel.name, context.owner, context, &rel.resolve).dup
+        instance_exec(rel.name, context.owner, context, &rel.resolve)
       end
 
       show
