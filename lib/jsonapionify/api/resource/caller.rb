@@ -13,7 +13,7 @@ module JSONAPIonify::Api
     rescue Exception => exception
       response = rescued_response exception, @__context, do_respond
     ensure
-      self.class.cache_store.delete @cache_options[:key] unless response[0] < 300
+      self.class.cache_store.delete @cache_options[:key] unless !response || response[0] < 300
     end
 
     def response_definition

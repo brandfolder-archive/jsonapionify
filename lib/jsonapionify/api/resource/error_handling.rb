@@ -10,13 +10,13 @@ module JSONAPIonify::Api
       context(:errors, readonly: true, persisted: true) do
         ErrorsObject.new
       end
-      register_exception Exception, error: :internal_server_error do |exception|
+      register_exception Exception, error: :internal_server_error, callbacks: true do |exception|
         if JSONAPIonify.verbose_errors
           detail exception.message
           meta[:error_class] = exception.class.name
         end
       end
-      register_exception Errors::RequestError, error: :internal_server_error do |exception|
+      register_exception Errors::RequestError, error: :internal_server_error, callbacks: true do |exception|
         if JSONAPIonify.verbose_errors
           detail exception.message
           meta[:error_class] = exception.class.name
@@ -30,14 +30,21 @@ module JSONAPIonify::Api
         self.error_definitions = self.error_definitions.merge name.to_sym => block
       end
 
-      def register_exception(*klasses, error:, &block)
+      def register_exception(*klasses, callbacks: false, error:, &block)
         block ||= proc {}
         rescue_from(*klasses) do |exception, context|
-          errors.evaluate(
-            error_block:   lookup_error(error),
-            runtime_block: proc { instance_exec exception, context, &block },
-            backtrace:     exception.backtrace
-          )
+          evaluate = proc {
+            errors.evaluate(
+              error_block:   lookup_error(error),
+              runtime_block: proc { instance_exec exception, context, &block },
+              backtrace:     exception.backtrace
+            )
+          }
+          if callbacks
+            run_callbacks :exception, exception, &evaluate
+          else
+            evaluate.call
+          end
         end
       end
 
