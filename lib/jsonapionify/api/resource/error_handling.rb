@@ -41,7 +41,7 @@ module JSONAPIonify::Api
             )
           }
           if callbacks
-            run_callbacks :exception, exception, &evaluate
+            run_callbacks :exception, exception, context, &evaluate
           else
             evaluate.call
           end
