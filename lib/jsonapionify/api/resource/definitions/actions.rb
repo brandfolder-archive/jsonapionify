@@ -5,114 +5,82 @@ module JSONAPIonify::Api
   module Resource::Definitions::Actions
     ActionNotFound = Class.new StandardError
 
+    INSTANCE_RESPONSE = proc do |context|
+      builder                        =
+        context.respond_to?(:builder) ? context.builder : nil
+      context.response_object[:data] =
+        build_resource(
+          context: context,
+          instance: context.instance,
+          &builder
+        )
+      context.response_object.to_json
+    end
+
+    COLLECTION_RESPONSE = proc do |context|
+      builder                        = context.respond_to?(:builder) ? context.builder : nil
+      context.response_object[:data] = build_resource_collection(
+        context: context,
+        collection: context.response_collection,
+        include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?,
+        &builder
+      )
+      context.response_object.to_json
+    end
+
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
         include JSONAPIonify::Callbacks
         define_callbacks(
-          :request, :exception, :response,
-          :list, :commit_list,
-          :create, :commit_create,
-          :read, :commit_read,
-          :update, :commit_update,
-          :delete, :commit_delete,
-          :show, :commit_show,
-          :add, :commit_add,
-          :remove, :commit_remove,
+          :request,
+          :exception,
+          :response,
+          :list,    :commit_list,
+          :create,  :commit_create,
+          :read,    :commit_read,
+          :update,  :commit_update,
+          :delete,  :commit_delete,
+          :show,    :commit_show,
+          :add,     :commit_add,
+          :remove,  :commit_remove,
           :replace, :commit_replace
         )
         inherited_array_attribute :action_definitions
       end
     end
 
-    def list(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       true
-      }
-      define_action(:list, 'GET', **options, &block).tap do |action|
-        action.response status: 200 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource_collection(
-            context: context,
-            collection: context.response_collection,
-            include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?,
-            &builder
-          )
-          context.response_object.to_json
+    def list(**options, &block)
+      define_action(:list, 'GET', **options, cacheable: true, &block).tap do |action|
+        action.response(status: 200, &COLLECTION_RESPONSE)
+      end
+    end
+
+    def create(**options, &block)
+      define_action(:create, 'POST', '', **options, cacheable: false, example_input: :resource, &block).tap do |action|
+        action.response(status: 201) do |context|
+          instance_exec(context, &INSTANCE_RESPONSE).tap do
+            response_headers['Location'] = context.response_object[:data][:links][:self]
+          end
         end
       end
     end
 
-    def create(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       false,
-        example_input:   :resource
-      }
-      define_action(:create, 'POST', **options, &block).tap do |action|
-        action.response status: 201 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(
-            context: context,
-            instance: context.instance,
-            &builder
-          )
-          response_headers['Location']   = context.response_object[:data][:links][:self]
-          context.response_object.to_json
-        end
+    def read(**options, &block)
+      define_action(:read, 'GET', '/:id', **options, cacheable: true, &block).tap do |action|
+        action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
-    def read(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       true
-      }
-      define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
-        action.response status: 200 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(
-            context: context,
-            instance: context.instance, &builder
-          )
-          context.response_object.to_json
-        end
+    def update(**options, &block)
+      define_action(:update, 'PATCH', '/:id', **options, cacheable: false, example_input: :resource, &block).tap do |action|
+        action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
-    def update(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       false,
-        example_input:   :resource
-      }
-      define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
-        action.response status: 200 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(context: context, instance: context.instance,  &builder)
-          context.response_object.to_json
-        end
-      end
-    end
-
-    def delete(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       false
-      }
-      define_action(:delete, 'DELETE', '/:id', **options, &block).tap do |action|
-        action.response status: 204
+    def delete(**options, &block)
+      define_action(:delete, 'DELETE', '/:id', **options, cacheable: false, &block).tap do |action|
+        action.response(status: 204)
       end
     end
 
@@ -126,17 +94,12 @@ module JSONAPIonify::Api
       end
     end
 
-    def after(*action_names, &block)
-      return after_request(&block) if action_names.blank?
-      action_names.each do |action_name|
-        send("after_#{action_name}", &block)
-      end
-    end
-
-    def before(*action_names, &block)
-      return before_request(&block) if action_names.blank?
-      action_names.each do |action_name|
-        send("before_#{action_name}", &block)
+    %i{before after}.each do |cb|
+      define_method(cb) do |*action_names, &block|
+        return send(:"#{cb}_request", &block) if action_names.blank?
+        action_names.each do |action_name|
+          send("#{cb}_#{action_name}", &block)
+        end
       end
     end
 

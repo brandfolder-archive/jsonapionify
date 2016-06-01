@@ -89,7 +89,7 @@ module JSONAPIonify
 
       describe 'DELETE /:resource/:id' do
         it 'should delete a resource instance' do
-          expect { delete "/things/#{Thing.first.id}" }.to change { model.count }.by -1
+          expect { delete "/things/#{Thing.first.id}" }.to change { model.count }.by(-1)
           expect(last_response.status).to eq 204
           expect(last_response.body).to be_blank
         end
