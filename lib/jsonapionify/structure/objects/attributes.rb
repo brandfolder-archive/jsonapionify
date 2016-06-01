@@ -24,7 +24,7 @@ module JSONAPIonify::Structure
       # **SHOULD NOT** appear as attributes.
       should_not_contain! { |key| key.to_s.end_with? '_id' }
 
-      def to_hash
+      def to_h
         super.sort.to_h
       end
 

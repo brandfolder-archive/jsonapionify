@@ -39,7 +39,7 @@ module JSONAPIonify::Structure::Objects
       pending
     end
 
-    describe '#to_hash' do
+    describe '#to_h' do
       pending
     end
   end

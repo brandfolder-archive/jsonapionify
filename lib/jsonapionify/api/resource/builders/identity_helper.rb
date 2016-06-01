@@ -10,7 +10,7 @@ module JSONAPIonify::Api
       end
 
       def build_id
-        instance.send(resource.id_attribute).to_s
+        IdBuilder.build(resource, instance: instance)
       end
     end
   end

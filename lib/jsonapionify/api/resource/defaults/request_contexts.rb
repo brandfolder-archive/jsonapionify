@@ -34,7 +34,7 @@ module JSONAPIonify::Api
         self.attributes.each do |attr|
           next unless attr.required_for_action?(action_name, context)
           if attr.read? || context.id
-            example_id = self.build_id(context.instance)
+            example_id = self.build_id(instance: context.instance)
             next unless attr.resolve(
               context.instance, context, example_id: example_id
             ).nil?

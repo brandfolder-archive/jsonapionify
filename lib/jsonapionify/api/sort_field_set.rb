@@ -8,8 +8,8 @@ module JSONAPIonify::Api
       freeze
     end
 
-    def to_hash
-      map(&:to_hash).reduce(:merge)
+    def to_h
+      map(&:to_h).reduce(:merge)
     end
 
     def invert

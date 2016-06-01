@@ -1,6 +1,6 @@
 module JSONAPIonify::Api
   class SortField
-    delegate :to_s, :inspect, to: :to_hash
+    delegate :to_s, :inspect, to: :to_h
     attr_reader :name, :order
 
     def initialize(name)
@@ -69,7 +69,7 @@ module JSONAPIonify::Api
       @str
     end
 
-    def to_hash
+    def to_h
       { name => order }
     end
 

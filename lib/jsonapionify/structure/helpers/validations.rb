@@ -77,12 +77,13 @@ module JSONAPIonify::Structure
         def must_not_contain_deep!(*keys, **options, &block)
           before_validation do
             JSONAPIonify::Continuation.new(**options).check(self) do
-              all_invalid_keys = []
-              keys             += self.keys.select(&block) if block_given?
-              is_invalid       = proc do |hash|
-                invalid_keys     = hash.keys.map(&:to_sym) & keys.map(&:to_sym)
+              all_invalid_keys   = []
+              keys               += self.keys.select(&block) if block_given?
+              is_invalid         = proc do |hash|
+                hash = hash.to_h
+                invalid_keys     = hash.keys.map(&:to_sym) & keys.map(&:to_sym) rescue binding.pry
                 all_invalid_keys += invalid_keys
-                children         = hash.values.select { |v| v.respond_to?(:to_hash) }
+                children         = hash.values.select { |v| v.respond_to?(:to_h) }
                 invalid_keys.present? | children.map { |c| is_invalid.call c }.reduce(:|)
               end
               if is_invalid.call(self)

@@ -39,6 +39,10 @@ module JSONAPIonify::Api
         CursorBuilder.build(self, **options)
       end
 
+      def build_id(**options)
+        IdBuilder.build(self, **options)
+      end
+
     end
 
     delegated_methods = ClassMethods.instance_methods - instance_methods

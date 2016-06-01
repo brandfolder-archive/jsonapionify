@@ -31,11 +31,11 @@ module JSONAPIonify::Api
         end
 
         define_sorting_strategy('Enumerable') do |collection, fields|
-          collection.to_a.deep_sort(fields.to_hash)
+          collection.to_a.deep_sort(fields.to_h)
         end
 
         define_sorting_strategy('ActiveRecord::Relation') do |collection, fields|
-          collection.reorder(fields.to_hash).order(self.class.id_attribute)
+          collection.reorder(fields.to_h).order(self.class.id_attribute)
         end
 
       end

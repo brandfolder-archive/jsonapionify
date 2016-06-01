@@ -26,7 +26,7 @@ module JSONAPIonify::Structure
       attr_reader :object, :parent
 
       delegate :cache_store, to: JSONAPIonify
-      delegate *(Hash.instance_methods - instance_methods), to: :object
+      delegate(*(Hash.instance_methods - instance_methods), to: :object)
 
       before_initialize do
         observe(self.object).added do |items|
@@ -63,7 +63,7 @@ module JSONAPIonify::Structure
       end
 
       def copy
-        self.class.from_hash to_hash
+        self.class.from_hash to_h
       end
 
       def ==(other)
@@ -82,7 +82,7 @@ module JSONAPIonify::Structure
 
       def compile(validate: true)
         self.validate if validate && !JSONAPIonify.validation_disabled?
-        to_hash
+        to_h
       end
 
       def as_json(**opts)
@@ -91,15 +91,13 @@ module JSONAPIonify::Structure
 
       def to_json(**opts)
         Oj.dump(as_json **opts)
-      rescue NoMemoryError
-        binding.pry
       end
 
       def signature
-        "#{self.class.name}:#{Digest::SHA2.hexdigest to_hash.to_s}"
+        "#{self.class.name}:#{Digest::SHA2.hexdigest to_h.to_s}"
       end
 
-      def to_hash
+      def to_h
         ordered_object = [
           *object.slice(*self.class.ordered_keys),
           *object.except(*self.class.ordered_keys)
@@ -108,7 +106,7 @@ module JSONAPIonify::Structure
           hash[k] =
             case v
             when Objects::Base
-              v.to_hash
+              v.to_h
             when Hash
               v.deep_stringify_keys
             when Collections::Base

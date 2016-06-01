@@ -85,7 +85,7 @@ module JSONAPIonify::Structure
           self.class.new(
             errors: all_errors,
             meta:   {
-              invalid_object: to_hash
+              invalid_object: to_h
             }
           ).compile
         else

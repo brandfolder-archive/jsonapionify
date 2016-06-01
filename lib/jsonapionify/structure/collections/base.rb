@@ -48,7 +48,7 @@ module JSONAPIonify::Structure
         map do |member|
           case member
           when Objects::Base, Hash
-            member.to_hash
+            member.to_h
           else
             member
           end
@@ -74,7 +74,7 @@ module JSONAPIonify::Structure
             instance
           else
             if type_class < instance.class
-              type_class.from_hash instance.to_hash
+              type_class.from_hash instance.to_h
             else
               raise(
                 ValidationError,
