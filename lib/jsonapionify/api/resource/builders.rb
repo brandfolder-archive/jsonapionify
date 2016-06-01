@@ -24,7 +24,7 @@ module JSONAPIonify::Api
       end
 
       def build_resource_identifier(instance:)
-        ResourceIdentifierBuilder.build(self, instance: instance)
+        ResourceIdentiferBuilder.build(self, instance: instance)
       end
 
       def build_resource_identifier_collection(collection:)
