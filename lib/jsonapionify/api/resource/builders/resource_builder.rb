@@ -1,6 +1,6 @@
 module JSONAPIonify::Api
   module Resource::Builders
-    class ResourceBuilder < ResourceIdentifierBuilder
+    class ResourceBuilder < ResourceIdentiferBuilder
       delegate :attributes, :relationships, :type, :relationship, to: :resource, prefix: true
       delegate :params, :includes, :fields, :action_name, :request, to: :context
 

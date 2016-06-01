@@ -1,6 +1,6 @@
 module JSONAPIonify::Api
   module Resource::Builders
-    class ResourceIdentifierBuilder < BaseBuilder
+    class ResourceIdentiferBuilder < BaseBuilder
       include IdentityHelper
 
       attr_reader :example_id, :instance
