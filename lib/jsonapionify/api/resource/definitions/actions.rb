@@ -75,28 +75,17 @@ module JSONAPIonify::Api
       end
     end
 
-    def read(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       true
-      }
-      define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
-        action.response(status: 200, &INSTANCE_RESPONSE)
-      end
-    end
-
-    def update(content_type: nil, only_associated: false, callbacks: true, &block)
-      options = {
-        content_type:    content_type,
-        only_associated: only_associated,
-        callbacks:       callbacks,
-        cacheable:       false,
-        example_input:   :resource
-      }
-      define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
-        action.response(status: 200, &INSTANCE_RESPONSE)
+    %i{read update}.each do |method|
+      define_method method do |content_type: nil, only_associated: false, callbacks: true, &block|
+        options = {
+          content_type:    content_type,
+          only_associated: only_associated,
+          callbacks:       callbacks,
+          cacheable:       true
+        }
+        define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
+          action.response(status: 200, &INSTANCE_RESPONSE)
+        end
       end
     end
 
