@@ -18,18 +18,61 @@ module JSONAPIonify::Api::Resource::Definitions
       end.create_api do |model|
         scope { model }
         collection { |scope| scope.all }
+        instance { |scope, id| scope.find id }
 
         context :username do
           username
         end
 
+        noop = proc { '' }
         attribute :name, types.String, ''
+        attribute :hidden, types.String, '', hidden: true, &noop
+        attribute :hidden_list, types.String, '', hidden: :list, &noop
+        attribute :hidden_many, types.String, '', hidden: [:list, :update], &noop
         attribute :weight, types.Integer, ''
         attribute :color, types.String, '' do |attr, instance, context|
           "#{context.username} is #{instance.send(attr).upcase}"
         end
 
+        update
         list
+      end
+
+      context 'hidden attribute' do
+        context 'all actions' do
+          it 'should have the proper keys' do
+            get "/sample_resources/#{model.first.id}"
+            expect(last_response_json['data']['attributes']).to_not have_key 'hidden'
+          end
+        end
+
+        context 'one action' do
+          it 'should have the proper keys' do
+            get "/sample_resources"
+            expect(last_response_json['data'][0]['attributes']).to_not have_key 'hidden_list'
+            get "/sample_resources/#{model.first.id}"
+            expect(last_response_json['data']['attributes']).to have_key 'hidden_list'
+          end
+        end
+
+        context 'multiple actions' do
+          it 'should have the proper keys' do
+            content_type 'application/vnd.api+json'
+            patch "/sample_resources/#{model.first.id}", json(data: { type: 'sample_resources', id: model.first.id, attributes: {} })
+            expect(last_response_json['data']['attributes']).to_not have_key 'hidden_many'
+            get "/sample_resources"
+            expect(last_response_json['data'][0]['attributes']).to_not have_key 'hidden_many'
+            get "/sample_resources/#{model.first.id}"
+            expect(last_response_json['data']['attributes']).to have_key 'hidden_many'
+          end
+        end
+
+        context 'field specified' do
+          it 'should have the proper keys' do
+            get "/sample_resources?fields[sample_resources]=hidden"
+            expect(last_response_json['data'][0]['attributes']).to have_key 'hidden'
+          end
+        end
       end
 
       context 'custom resolution' do
