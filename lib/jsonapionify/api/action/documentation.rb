@@ -20,17 +20,15 @@ module JSONAPIonify::Api
       when :resource
         {
           'data' => resource.build_resource(
-            context,
-            resource.example_instance_for_action(name, context),
-            relationships: false,
-            links:         false,
-            fields:        resource.fields_for_action(name, context)
+            context: context,
+            instance: resource.example_instance_for_action(name, context),
+            links:         false
           ).as_json
         }.to_json
       when :resource_identifier
         {
           'data' => resource.build_resource_identifier(
-            resource.example_instance_for_action(name, context)
+            instance: resource.example_instance_for_action(name, context)
           ).as_json
         }.to_json
       when Proc

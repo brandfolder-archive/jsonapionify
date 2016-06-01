@@ -25,14 +25,9 @@ module JSONAPIonify::Api
     def define_relationship_counter(rel_name, name, include: true)
       attribute name.to_sym, types.Integer, "The number of #{rel_name}.", write: false do |_, instance, context|
         rel          = context.resource.class.relationship(rel_name)
-        blank_fields = context.fields.map { |k, _| [k, {}] }.to_h
         rel_context  = rel.new(
           request:           context.request,
-          context_overrides: {
-            owner:  instance,
-            fields: blank_fields,
-            params: {}
-          }
+          context_overrides: { owner:  instance, fields: {}, params: {} }
         ).exec { |c| c }
         count        = rel_context.collection.uniq.count
         case count

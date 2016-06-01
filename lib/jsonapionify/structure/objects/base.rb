@@ -91,6 +91,8 @@ module JSONAPIonify::Structure
 
       def to_json(**opts)
         Oj.dump(as_json **opts)
+      rescue NoMemoryError
+        binding.pry
       end
 
       def signature

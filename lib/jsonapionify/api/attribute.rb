@@ -7,7 +7,7 @@ module JSONAPIonify::Api
 
     include Documentation
     using UnstrictProc
-    attr_reader :name, :type, :description, :read, :write, :required, :block
+    attr_reader :name, :type, :description, :read, :write, :required, :hidden, :block
 
     def initialize(
       name,
@@ -17,6 +17,7 @@ module JSONAPIonify::Api
       write: true,
       required: false,
       example: nil,
+      hidden: false,
       &block
     )
       unless type.is_a? JSONAPIonify::Types::BaseType
@@ -33,6 +34,7 @@ module JSONAPIonify::Api
       @block             = block&.freeze
       @writeable_actions = write
       @readable_actions  = read
+      @hidden            = !!hidden && Array.wrap(hidden)
 
       freeze
     end
@@ -40,6 +42,11 @@ module JSONAPIonify::Api
     def ==(other)
       self.class == other.class &&
         self.name == other.name
+    end
+
+    def hidden_for_action?(action_name)
+      return false if hidden == false
+      Array.wrap(hidden).any? { |h| h == true || h.to_s == action_name.to_s }
     end
 
     def supports_read_for_action?(action_name, context)

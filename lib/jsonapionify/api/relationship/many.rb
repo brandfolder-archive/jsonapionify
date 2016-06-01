@@ -16,7 +16,7 @@ module JSONAPIonify::Api
           prepend:      'relationships'
         }
         define_action(:show, 'GET', **options, &block).response status: 200 do |context|
-          context.response_object[:data] = build_identifier_collection(context.collection)
+          context.response_object[:data] = build_resource_identifier_collection(collection: context.collection)
           context.response_object.to_json
         end
       end
@@ -30,7 +30,7 @@ module JSONAPIonify::Api
           example_input: :resource_identifier
         }
         define_action(:replace, 'PATCH', **options, &block).response status: 200 do |context|
-          context.response_object[:data] = build_identifier_collection(context.collection)
+          context.response_object[:data] = build_resource_identifier_collection(collection: context.collection)
           context.response_object.to_json
         end
       end
@@ -44,7 +44,7 @@ module JSONAPIonify::Api
           example_input: :resource_identifier
         }
         define_action(:add, 'POST', **options, &block).response status: 200 do |context|
-          context.response_object[:data] = build_identifier_collection(context.collection)
+          context.response_object[:data] = build_resource_identifier_collection(collection: context.collection)
           context.response_object.to_json
         end
       end
@@ -59,7 +59,7 @@ module JSONAPIonify::Api
         }
         options[:prepend] = 'relationships'
         define_action(:remove, 'DELETE', **options, &block).response status: 200 do |context|
-          context.response_object[:data] = build_identifier_collection(context.collection)
+          context.response_object[:data] = build_resource_identifier_collection(collection: context.collection)
           context.response_object.to_json
         end
       end

@@ -23,20 +23,7 @@ module JSONAPIonify::Api
         end
 
         context(:sort_params, readonly: true, persisted: true) do |context|
-          sort_fields_from_sort_string(context.params['sort']).tap do |fields|
-            should_error = false
-            fields.each do |field|
-              unless self.class.field_valid?(field.name) || field.name == id_attribute
-                should_error = true
-                type         = self.class.type
-                error :sort_parameter_invalid do
-                  detail "resource `#{type}` does not have field: #{field.name}"
-                end
-                next
-              end
-            end
-            halt if should_error
-          end
+          sort_fields_from_sort_string(context.params['sort'])
         end
 
         define_sorting_strategy('Object') do |collection|

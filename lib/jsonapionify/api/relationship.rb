@@ -63,15 +63,21 @@ module JSONAPIonify::Api
       end
     end
 
-    attr_reader :owner, :class_proc, :name, :resolve
+    attr_reader :owner, :class_proc, :name, :resolve, :hidden
 
-    def initialize(owner, name, resource: nil, includable: false, resolve: proc { |name, owner| owner.send(name) }, &block)
+    def initialize(owner, name, resource: nil, includable: false, hidden: :index, resolve: proc { |n, o| o.send(n) }, &block)
       @class_proc = block || proc {}
       @owner      = owner
       @name       = name
       @includable = includable
       @resource   = resource || name
       @resolve    = resolve
+      @hidden     = !!hidden && Array.wrap(hidden)
+    end
+
+    def hidden_for_action?(action_name)
+      return false if hidden == false
+      Array.wrap(hidden).any? { |h| h == true || h.to_s == action_name.to_s }
     end
 
     def resource_class
@@ -82,9 +88,9 @@ module JSONAPIonify::Api
             rel
           end
 
-          rel.class_prepends.each { |prepend| class_eval &prepend }
+          rel.class_prepends.each { |prepend| class_eval(&prepend) }
           class_eval(&rel.class_proc)
-          rel.class_appends.each { |append| class_eval &append }
+          rel.class_appends.each { |append| class_eval(&append) }
         end
       end
     end
