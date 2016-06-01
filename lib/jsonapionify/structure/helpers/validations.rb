@@ -80,10 +80,9 @@ module JSONAPIonify::Structure
               all_invalid_keys   = []
               keys               += self.keys.select(&block) if block_given?
               is_invalid         = proc do |hash|
-                hash = hash.to_h
-                invalid_keys     = hash.keys.map(&:to_sym) & keys.map(&:to_sym) rescue binding.pry
+                invalid_keys     = hash.keys.map(&:to_sym) & keys.map(&:to_sym)
                 all_invalid_keys += invalid_keys
-                children         = hash.values.select { |v| v.respond_to?(:to_h) }
+                children         = hash.values.select { |v| v.respond_to?(:keys) && v.respond_to?(:values) }
                 invalid_keys.present? | children.map { |c| is_invalid.call c }.reduce(:|)
               end
               if is_invalid.call(self)
