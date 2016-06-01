@@ -16,7 +16,8 @@ module JSONAPIonify::Api
 
       def build_sparce
         resource_fields.each_with_object(Objects::Relationships.new) do |field, attrs|
-          relationship = resource_relationships.find { |rel| rel.name = field.name.to_sym }
+          field = field.to_sym
+          relationship = resource_relationships.find { |rel| rel.name == field }
           attrs[field] = build_relationship(relationship) if relationship
         end
       end

@@ -72,7 +72,7 @@ module JSONAPIonify::Api
       @includable = includable
       @resource   = resource || name
       @resolve    = resolve
-      @hidden     = !!hidden && Array.wrap(hidden)
+      @hidden     = !!hidden && (hidden == true || Array.wrap(hidden))
     end
 
     def hidden_for_action?(action_name)

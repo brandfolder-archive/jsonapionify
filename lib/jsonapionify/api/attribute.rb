@@ -34,7 +34,7 @@ module JSONAPIonify::Api
       @block             = block&.freeze
       @writeable_actions = write
       @readable_actions  = read
-      @hidden            = !!hidden && Array.wrap(hidden)
+      @hidden            = !!hidden && (hidden == true || Array.wrap(hidden))
 
       freeze
     end
