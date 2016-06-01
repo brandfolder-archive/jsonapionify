@@ -9,6 +9,7 @@ module JSONAPIonify::Api
       def initialize(resource, instance:)
         super(resource)
         @instance = instance
+        @example_id = resource.generate_id
       end
 
       def build

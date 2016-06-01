@@ -5,6 +5,18 @@ module JSONAPIonify::Api
   module Resource::Definitions::Actions
     ActionNotFound = Class.new StandardError
 
+    INSTANCE_RESPONSE = proc do |context|
+      builder                        =
+        context.respond_to?(:builder) ? context.builder : nil
+      context.response_object[:data] =
+        build_resource(
+          context: context,
+          instance: context.instance,
+          &builder
+        )
+      context.response_object.to_json
+    end
+
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
@@ -56,14 +68,9 @@ module JSONAPIonify::Api
       }
       define_action(:create, 'POST', **options, &block).tap do |action|
         action.response status: 201 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(
-            context: context,
-            instance: context.instance,
-            &builder
-          )
-          response_headers['Location']   = context.response_object[:data][:links][:self]
-          context.response_object.to_json
+          instance_exec(context, &INSTANCE_RESPONSE).tap do
+            response_headers['Location'] = context.response_object[:data][:links][:self]
+          end
         end
       end
     end
@@ -76,14 +83,7 @@ module JSONAPIonify::Api
         cacheable:       true
       }
       define_action(:read, 'GET', '/:id', **options, &block).tap do |action|
-        action.response status: 200 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(
-            context: context,
-            instance: context.instance, &builder
-          )
-          context.response_object.to_json
-        end
+        action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
@@ -96,11 +96,7 @@ module JSONAPIonify::Api
         example_input:   :resource
       }
       define_action(:update, 'PATCH', '/:id', **options, &block).tap do |action|
-        action.response status: 200 do |context|
-          builder                        = context.respond_to?(:builder) ? context.builder : nil
-          context.response_object[:data] = build_resource(context: context, instance: context.instance,  &builder)
-          context.response_object.to_json
-        end
+        action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
