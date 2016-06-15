@@ -65,7 +65,7 @@ module JSONAPIonify::Api
 
     attr_reader :owner, :class_proc, :name, :resolve, :hidden
 
-    def initialize(owner, name, resource: nil, includable: false, hidden: :index, resolve: proc { |n, o| o.send(n) }, &block)
+    def initialize(owner, name, resource: nil, includable: false, hidden: :list, resolve: proc { |n, o| o.send(n) }, &block)
       @class_proc = block || proc {}
       @owner      = owner
       @name       = name
