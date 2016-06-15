@@ -4,7 +4,7 @@ module JSONAPIonify::Api
 
       attr_reader :context, :instance, :example_id
       delegate :action_name, :fields, to: :context
-      delegate :type, to: :resource, prefix: true  
+      delegate :type, to: :resource, prefix: true
 
       def initialize(resource, instance:, context:, example_id:)
         super(resource)
