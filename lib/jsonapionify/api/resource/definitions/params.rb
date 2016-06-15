@@ -59,8 +59,8 @@ module JSONAPIonify::Api
     def sticky_params(params)
       sticky_param_definitions = param_definitions.values.select(&:sticky)
       ParamOptions.hash_to_keypaths(params).map do |keypath|
-        definition = sticky_param_definitions.find do |definition|
-          definition.keypath == keypath
+        definition = sticky_param_definitions.find do |d|
+          d.keypath == keypath
         end
         next {} unless definition
         value = definition.extract_value(params)

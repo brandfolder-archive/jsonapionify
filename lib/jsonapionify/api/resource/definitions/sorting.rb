@@ -55,7 +55,7 @@ module JSONAPIonify::Api
         else
           options.to_s
         end
-      param :sort, default: string, sticky: true
+      param :sort, default: string
     end
 
     def sort_attrs_from_sort(sort_string)
