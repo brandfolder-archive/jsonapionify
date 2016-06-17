@@ -29,27 +29,7 @@ And then execute:
 
 ## Usage
 
-### Context: Read First
-
-Before we get started with defining an API, you should understand a pattern used heavily throughout JSONAPIonify. This pattern is called a context. A context is a definition of data that is memoized and passed around a request. You may see context used as follows:
-
-```ruby
-before :create do |context|
-  puts context.request.request_method
-end
-```
-
-Contexts can also call other contexts within their definitions:
-
-```ruby
-context :request_method do |context|
-  context.request.request_method
-end
-```
-
-JSONApionify already ships with a set of predefined contexts.
-
-### Create an API
+### APIs
 
 Api Definitions are the basis of JSONApi's DSL. They encompass resources that are available and can be run as standalone rack apps or be mounted within a rails app.
 
@@ -60,60 +40,172 @@ class MyCompanyApi < JSONAPIonify::Base
   description <<~markdown
   A description of your API, that will be available at the top of the documentation.
   markdown
-  
+
   # Add some rack middleware
   use Rack::SSL::Enforcer
-  
+
   # Handle Authorization
 
 end
 ```
 
+### Resources
+
+Resources are what the API serves. They usually link to models. Resources are defined by calling `.define_resource` on the class of a defined api.
+
+```ruby
+MyCompanyApi.define_resource :users do
+  # ... The resource definition
+end
+```
+
+#### Scope
+Each api uses a scope to determine how to look up objects the serve the request. By default the resource will look for a class that is similar to it's scope.
+
+```ruby
+MyCompanyApi.define_resource :users do
+  scope { Person }
+end
+```
+
+#### ID Attribute
+JSONAPI needs an attribute to represent the object's id. This defaults to the `id` method, but can be overridden.
+
+```ruby
+MyCompanyApi.define_resource :users do
+  id :key
+end
+```
+
+#### Instance Lookup
+In order to locate an instance in the defined scope, the resource needs a instructions to do so. If the scope is a descendant of `ActiveRecord::Base`, it will automatically use `scope.find(id)` for the lookup.
+
+```ruby
+MyCompanyApi.define_resource :users do
+  instance { |scope, id| scope.find_by key: id }
+end
+```
+
+#### Instance Builder
+When creating an instance, the resource needs to know how to build a new object. If the scope is a descendant of `ActiveRecord::Base`, it will automatically use `scope.new` to build the object.
+
+#### Contexts
+Contexts are memoized blocks of code that are used throughout the request lifecycle of a resource. They can be referenced in [`hooks`](#hooks), [`actions`](#hooks), other [`contexts`](#contexts), etc. A context is defined as follows:
+
+```ruby
+MyCompanyApi.define_resource :users do
+  context :request_method do |context|
+    context.request.request_method
+  end
+end
+```
+
+> **NOTE:** The gem ships with [predefined contexts](#predefined-contexts).
+
+#### Actions
+Actions define the routes of a resource and what processing happens when that route is called.
+
+**Root level resources have the following actions:**
+
+| Action | Path
+|--------|-----
+| List   | `GET /{resource}`
+| Create | `POST /{resource}`
+| Read   | `GET /{resource}/{id}`
+| Update | `PATCH /{resource}/{id}`
+| Delete | `DELETE /{resource}/{id}`
+
+**One-to-Many relationships resources have the following actions:**
+
+| Action | Path
+|--------|-----
+| List   | `GET /{resource}/{id}/{relationship}`
+| Create | `POST /{resource}/{id}/{relationship}`
+| Show   | `GET /{resource}/{id}/relationships/{relationship}`
+| Add    | `POST /{resource}/{id}/relationships/{relationship}`
+| Remove | `DELETE /{resource}/{id}/relationships/{relationship}`
+| Replace| `PATCH /{resource}/{id}/relationships/{relationship}`
+
+**One-to-One relationships resources have the following actions:**
+
+| Action | Path
+|--------|-----
+| Read   | `GET /{resource}/{id}/{relationship}`
+| Show   | `GET /{resource}/{id}/relationships/{relationship}`
+| Replace| `PATCH /{resource}/{id}/relationships/{relationship}`
+
+#### Hooks
+Hooks can be invoked throughout the request lifecycle. They are defined in the following order:
+
+```
+before_request
+  before_{action}
+    before_commit_{action}
+      [commit action]
+    after_commit_{action}
+    before_response
+      [response]
+    after_response
+  after_{action}
+after_request
+```
+
+A hook can be defined on a resource with:
+
+```ruby
+MyCompanyApi.define_resource :users do
+  before :create do |context|
+    puts context.request.request_method
+  end
+end
+```
+
 ### Predefined Contexts
 
-#### request_body
-The raw body of the request
+#### `request`
+The request.
 
-#### request_object
+#### `request_body`
+The raw body of the request.
+
+#### `request_object`
 The JSON parsed into a JSONApionify Structure Object. Keys can be accessed as symbols.
 
-#### id
+#### `id`
 The id present in the request path, if present.
 
-#### request_id
+#### `request_id`
 The id of the requested resource, within the data attribute of the request object.
 
-#### request_attributes
+#### `request_attributes`
 The parsed attributes from the request object. Accessing this context, will also validate the data/structure.
 
-#### request_relationships
+#### `request_relationships`
 The parsed relationships from the request object. Accessing this context, will also validate the data/structure.
 
-#### request_instance
+#### `request_instance`
 The instance of the object found from the request's data/type and data/id attibutes. This is determined from the resource's defined scope.
 
-#### request_resource
+#### `request_resource`
 The resource's scope determined from the request's data/type attribute.
 
-#### request_data
+#### `request_data`
 The data attribute in the top level object of the request
 
-#### authentication
+#### `authentication`
 An object containing the authentication data.
 
-#### links
+#### `links`
 The links object that will be present in the response.
 
-#### meta
+#### `meta`
 The meta object that will be present in the response.
 
-#### response_object
+#### `response_object`
 The jsonapi object that will be used for the response.
 
-#### response_collection
+#### `response_collection`
 The response for the collection.
-
-
 
 ## Development
 
