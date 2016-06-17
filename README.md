@@ -90,7 +90,7 @@ end
 When creating an instance, the resource needs to know how to build a new object. If the scope is a descendant of `ActiveRecord::Base`, it will automatically use `scope.new` to build the object.
 
 #### Contexts
-Contexts are memoized blocks of code that are used throughout the request lifecycle of a resource. They can be referenced in [`hooks`](#hooks), [`actions`](#hooks), other [`contexts`](#contexts), etc. A context is defined as follows:
+Contexts are memoized blocks of code that are used throughout the request lifecycle of a resource. They can be referenced in [`hooks`](#hooks), [`actions`](#hooks), [`attributes`](#attributes), other [`contexts`](#contexts), etc. A context is defined as follows:
 
 ```ruby
 MyCompanyApi.define_resource :users do
@@ -101,6 +101,50 @@ end
 ```
 
 > **NOTE:** The gem ships with [predefined contexts](#predefined-contexts).
+
+#### Attributes
+Attributes define what fields will appear in the response. Attribute definitions require a name, a type, and a description. In addition, the attribute may include a block that defines how the value is resolved.
+
+```ruby
+MyCompanyApi.define_resource :users do
+  attribute :name, types.String, 'the users name' do |attr_name, instance, context| do
+    instance.public_send(attr_name)
+  end
+end
+```
+
+##### Attribute types
+Attributes require a type that map to JSON types. They are as follows:  
+`types.String`, `types.Boolean`, `types.Integer`, `types.Float`, `types.Array(of: ?)`, `types.Object`
+
+> Array types take an `of` keyword of another type.
+
+#### Relationships
+Relationships define the way resources reference each other. There are two types of relationships. Relationships behave just like the resource they represent except it's scoped to the parent object. By default the scope of of a relationship resolves to a method equal to the name of the relationship. This can be overridden by passing a `Proc` to the resolve keyword. In addition, the default resource the object resolves to can be specified with the `resource` keyword. If a relationship is given a block it is treated the same as a resource definition, but it's [actions](#actions) are limited by the type of the relationship.
+
+##### One-to-One
+One-to-One relationships allow a parent resource to reference a single instance of another resource. It is defined as follows:
+
+```ruby
+MyCompanyApi.define_resource :users do
+  relates_to_one :thing, resolve: proc { |rel, instance, context| instance.public_send(rel) } do
+    replace
+  end
+end
+```
+
+##### One-to-Many
+One-to-One relationships allow a parent resource to reference a collection of another resource. It is defined as follows:
+
+```ruby
+MyCompanyApi.define_resource :users do
+  relates_to_many :friends, resource: :users, resolve: proc { |rel, instance, context| instance.public_send(rel) } do
+    add
+    replace
+    remove
+  end
+end
+```
 
 #### Actions
 Actions define the routes of a resource and what processing happens when that route is called.
@@ -162,50 +206,23 @@ end
 
 ### Predefined Contexts
 
-#### `request`
-The request.
-
-#### `request_body`
-The raw body of the request.
-
-#### `request_object`
-The JSON parsed into a JSONApionify Structure Object. Keys can be accessed as symbols.
-
-#### `id`
-The id present in the request path, if present.
-
-#### `request_id`
-The id of the requested resource, within the data attribute of the request object.
-
-#### `request_attributes`
-The parsed attributes from the request object. Accessing this context, will also validate the data/structure.
-
-#### `request_relationships`
-The parsed relationships from the request object. Accessing this context, will also validate the data/structure.
-
-#### `request_instance`
-The instance of the object found from the request's data/type and data/id attibutes. This is determined from the resource's defined scope.
-
-#### `request_resource`
-The resource's scope determined from the request's data/type attribute.
-
-#### `request_data`
-The data attribute in the top level object of the request
-
-#### `authentication`
-An object containing the authentication data.
-
-#### `links`
-The links object that will be present in the response.
-
-#### `meta`
-The meta object that will be present in the response.
-
-#### `response_object`
-The jsonapi object that will be used for the response.
-
-#### `response_collection`
-The response for the collection.
+| Context                 | Description
+|---------                |----------
+| `request`               | The request.  
+| `request_body`          | The raw body of the request.
+| `request_object`        | The JSON parsed into a JSONApionify Structure Object. Keys can be accessed as symbols.
+| `id`                    | The id present in the request path, if present.
+| `request_id`            | The id of the requested resource, within the data attribute of the request object.
+| `request_attributes`    | The parsed attributes from the request object. Accessing this context, will also validate the data/structure.
+| `request_relationships` | The parsed relationships from the request object. Accessing this context, will also validate the data/structure.
+| `request_instance`      | The instance of the object found from the request's data/type and data/id attributes. This is determined from the resource's defined scope.
+| `request_resource`      | The resource's scope determined from the request's data/type attribute.
+| `request_data`          | The data attribute in the top level object of the request
+| `authentication`        | An object containing the authentication data.
+| `links`                 | The links object that will be present in the response.
+| `meta`                  | The meta object that will be present in the response.
+| `response_object`       | The jsonapi object that will be used for the response.
+| `response_collection`   | The response for the collection.
 
 ## Development
 
