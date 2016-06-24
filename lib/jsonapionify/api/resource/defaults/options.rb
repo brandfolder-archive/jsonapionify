@@ -5,7 +5,7 @@ module JSONAPIonify::Api
       id :id
       scope { self.type.classify.constantize }
       collection do |scope, context|
-        if defined?(ActiveRecord) && scope < ActiveRecord::Base && scope.is_a?(Class)
+        if defined?(ActiveRecord) && scope.is_a?(Class) && scope < ActiveRecord::Base
           scope.all
         else
           scope
@@ -13,7 +13,7 @@ module JSONAPIonify::Api
       end
 
       instance do |scope, key|
-        if defined?(ActiveRecord) && scope < ActiveRecord::Base
+        if defined?(ActiveRecord) && scope.is_a?(Class) && scope < ActiveRecord::Base
           scope.find_by! id_attribute => key
         else
           raise NotImplementedError, 'instance not implemented'
@@ -21,7 +21,7 @@ module JSONAPIonify::Api
       end
 
       new_instance do |scope|
-        if defined?(ActiveRecord) && scope < ActiveRecord::Base
+        if defined?(ActiveRecord) && scope.is_a?(Class) && scope < ActiveRecord::Base
           scope.new
         else
           raise NotImplementedError, 'scope not implemented'
