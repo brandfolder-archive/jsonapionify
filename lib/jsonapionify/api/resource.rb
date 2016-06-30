@@ -7,8 +7,9 @@ module JSONAPIonify::Api
     extend JSONAPIonify::Autoload
     autoload_all
 
-    extend Definitions
+    include Callbacks
     extend ClassMethods
+    extend Definitions
     extend Documentation
 
     include ErrorHandling

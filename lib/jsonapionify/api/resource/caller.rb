@@ -3,7 +3,7 @@ module JSONAPIonify::Api
     def call
       do_respond = proc { __respond }
       do_request = proc { __request }
-      response   = @callbacks ? run_callbacks(:request, @__context, &do_request) : do_request.call
+      response   = @callbacks ? run_callbacks(:request, &do_request) : do_request.call
     rescue Errors::RequestError => e
       raise e unless errors.present?
       response = error_response
@@ -25,7 +25,7 @@ module JSONAPIonify::Api
     private
 
     def __commit
-      instance_exec(@__context, &action.block)
+      instance_exec(@__context, **@__context.kwargs(action.block), &action.block)
       halt if errors.present?
     end
 
@@ -33,13 +33,13 @@ module JSONAPIonify::Api
       do_respond = proc { __respond }
       do_commit  = proc { __commit }
       halt if errors.present?
-      action.name && @callbacks ? run_callbacks("commit_#{action.name}", @__context, &do_commit) : do_commit.call
-      @callbacks ? run_callbacks(:response, @__context, &do_respond) : do_respond.call
+      action.name && @callbacks ? run_callbacks("commit_#{action.name}", &do_commit) : do_commit.call
+      @callbacks ? run_callbacks(:response, &do_respond) : do_respond.call
     end
 
     def __request
       do_commit_and_respond = proc { __commit_and_respond }
-      action.name && @callbacks ? run_callbacks(action.name, @__context, &do_commit_and_respond) : do_commit_and_respond.call
+      action.name && @callbacks ? run_callbacks(action.name, &do_commit_and_respond) : do_commit_and_respond.call
     end
 
     def __respond(**options)

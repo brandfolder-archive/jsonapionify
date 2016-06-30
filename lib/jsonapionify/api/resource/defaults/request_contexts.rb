@@ -3,40 +3,38 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-
-      context(:request_body, readonly: true, persisted: true) do |context|
-        context.request.body.read
+      context(:request_body, readonly: true, persisted: true) do |request:|
+        request.body.read
       end
 
-      context(:request_object, readonly: true, persisted: true) do |context|
-        JSONAPIonify.parse(context.request_body).as(:client).tap do |input|
+      context(:request_object, readonly: true, persisted: true) do |context, request_body:|
+        JSONAPIonify.parse(request_body).as(:client).tap do |input|
           error_now(:request_object_invalid, context, input) unless input.validate
         end
       end
 
-      context(:id, readonly: true, persisted: true) do |context|
-        context.request.env['jsonapionify.id']
+      context(:id, readonly: true, persisted: true) do |request:|
+        request.env['jsonapionify.id']
       end
 
-      context(:request_id, readonly: true, persisted: true) do |context|
-        context.request_data[:id]
+      context(:request_id, readonly: true, persisted: true) do |request_data:|
+        request_data[:id]
       end
 
-      context(:request_attributes, readonly: true, persisted: true) do |context|
+      context(:request_attributes, readonly: true, persisted: true) do |context, request:, instance:, action_name:, id:, request_data:|
         should_error = false
 
-        request_attributes =
-          context.request_data.fetch(:attributes) do
-            error_now :attributes_missing
-          end
+        request_attributes = request_data.fetch(:attributes) do
+          error_now :attributes_missing
+        end
 
         # Check for required attributes
         self.attributes.each do |attr|
           next unless attr.required_for_action?(action_name, context)
-          if attr.read? || context.id
-            example_id = self.build_id(instance: context.instance)
+          if attr.read? || id
+            example_id = self.build_id(instance: instance)
             next unless attr.resolve(
-              context.instance, context, example_id: example_id
+              instance, context, example_id: example_id
             ).nil?
           end
           unless request_attributes.has_key?(attr.name)
@@ -64,10 +62,9 @@ module JSONAPIonify::Api
         end
       end
 
-      context(:request_relationships, readonly: true, persisted: true) do |context|
-        data = context.request_data
-        if data[:relationships]
-          data[:relationships].each_with_object({}) do |(name, rel), obj|
+      context(:request_relationships, readonly: true, persisted: true) do |request_data:|
+        if request_data[:relationships]
+          request_data[:relationships].each_with_object({}) do |(name, rel), obj|
             pointer = "data/relationships/#{name}/data"
             case rel[:data]
             when JSONAPIonify::Structure::Collections::Base
@@ -81,22 +78,20 @@ module JSONAPIonify::Api
         end
       end
 
-      context(:request_instances, readonly: true, persisted: true) do |context|
-        data = context.request_data
-        (data ? find_instances(data, pointer: '/data') : [])
+      context(:request_instances, readonly: true, persisted: true) do |request_data:|
+        (request_data ? find_instances(request_data, pointer: '/data') : [])
       end
 
-      context(:request_instance, readonly: true, persisted: true) do |context|
-        find_instance(context.request_data, pointer: 'data')
+      context(:request_instance, readonly: true, persisted: true) do |request_data:|
+        find_instance(request_data, pointer: 'data')
       end
 
-      context(:request_resource, readonly: true, persisted: true) do |context|
-        item = context.request_data
-        find_resource item, pointer: 'data'
+      context(:request_resource, readonly: true, persisted: true) do |request_data:|
+        find_resource request_data, pointer: 'data'
       end
 
-      context(:request_data, readonly: true, persisted: true) do |context|
-        context.request_object.fetch(:data) {
+      context(:request_data, readonly: true, persisted: true) do |request_object:|
+        request_object.fetch(:data) {
           error_now(:data_missing)
         }
       end

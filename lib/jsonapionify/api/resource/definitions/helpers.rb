@@ -20,7 +20,7 @@ module JSONAPIonify::Api
     end
 
     def on_exception(&block)
-      before_exception &block
+      before_exception(&block)
     end
 
   end

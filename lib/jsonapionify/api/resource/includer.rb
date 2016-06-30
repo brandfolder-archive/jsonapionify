@@ -5,17 +5,6 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-      before :list, :create, :read, :update do |context|
-        supports_includes = context.root_request? && context.includes.present?
-        is_active_record  = defined?(ActiveRecord) && context.scope.is_a?(Class) && context.scope < ActiveRecord::Base
-        if supports_includes && is_active_record
-          valid_includes = context.includes.select do |k, v|
-            context.scope._reflect_on_association(k)
-          end.to_h
-          context.scope  = context.scope.includes valid_includes
-        end
-      end
-
       after :commit_list do |context|
         if context.includes.present?
           included =
@@ -33,10 +22,6 @@ module JSONAPIonify::Api
           )
           append_included(context, included)
         end
-      end
-
-      context :root_request?, readonly: true do
-        true
       end
 
       context :includes do |context|
@@ -59,9 +44,9 @@ module JSONAPIonify::Api
       context.includes.each_with_object(collection) do |(name, _),|
         res = self.class.relationship(name)
         if res.rel.includable?
-          overrides = overrides.merge includes:      context.includes[name],
-                                      errors:        context.errors,
-                                      root_request?: false
+          overrides = overrides.merge includes:       context.includes[name],
+                                      errors:         context.errors,
+                                      nested_request: true
           *, body   =
             case res.rel
             when Relationship::One
@@ -77,8 +62,8 @@ module JSONAPIonify::Api
     end
 
     def self.includes_to_hashes(path)
-      path.to_s.split(',').each_with_object({}) do |path, obj|
-        rel, *sub_path = path.split('.')
+      path.to_s.split(',').each_with_object({}) do |p, obj|
+        rel, *sub_path = p.split('.')
         obj[rel]       = includes_to_hashes(sub_path.join('.'))
       end
     end

@@ -8,8 +8,8 @@ module JSONAPIonify::Api
         inherited_array_attribute :attributes
         delegate :id_attribute, :attributes, to: :class
 
-        context(:fields, readonly: true) do |context|
-          context.params['fields']&.map do |type, fields|
+        context(:fields, readonly: true) do |params:|
+          params['fields']&.map do |type, fields|
             [type, fields.split(',')]
           end&.to_h
         end

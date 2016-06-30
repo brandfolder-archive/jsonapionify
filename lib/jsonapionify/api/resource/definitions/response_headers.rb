@@ -8,7 +8,7 @@ module JSONAPIonify::Api
 
         context(:response_headers, persisted: true) do |context|
           self.class.response_header_definitions.each_with_object({}) do |(name, block), headers|
-            headers[name.to_s] = instance_exec(context, &block)
+            headers[name.to_s] = instance_exec(context, **context.kwargs(block), &block)
           end
         end
       end

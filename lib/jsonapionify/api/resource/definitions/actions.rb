@@ -5,33 +5,43 @@ module JSONAPIonify::Api
   module Resource::Definitions::Actions
     ActionNotFound = Class.new StandardError
 
-    INSTANCE_RESPONSE = proc do |context|
-      builder                        =
-        context.respond_to?(:builder) ? context.builder : nil
-      context.response_object[:data] =
-        build_resource(
-          context: context,
-          instance: context.instance,
-          &builder
-        )
-      context.response_object.to_json
+    DEFAULT_SAVE_COMMIT = proc do |instance:, request_attributes:, request_relationships:|
+      # Assign the attributes
+      request_attributes.each do |key, value|
+        instance.send "#{key}=", value
+      end
+
+      # Assign the relationships
+      request_relationships.each do |key, value|
+        instance.send "#{key}=", value
+      end
+
+      # Save the instance
+      instance.save if instance.respond_to? :save
     end
 
-    COLLECTION_RESPONSE = proc do |context|
-      builder                        = context.respond_to?(:builder) ? context.builder : nil
-      context.response_object[:data] = build_resource_collection(
+    DEFAULT_DELETE_COMMIT = proc do |instance:|
+      instance.respond_to?(:destroy) ? instance.destroy : instance.respond_to?(:delete) ? instance.delete : nil
+    end
+
+    INSTANCE_RESPONSE = proc do |context, instance:, response_object:, builder: nil|
+      response_object[:data] = build_resource(context: context, instance: instance, &builder)
+      response_object.to_json
+    end
+
+    COLLECTION_RESPONSE = proc do |context, response_collection:, links:, response_object:, builder: nil|
+      response_object[:data] = build_resource_collection(
         context: context,
-        collection: context.response_collection,
-        include_cursors: (context.links.keys & [:first, :last, :next, :prev]).present?,
+        collection: response_collection,
+        include_cursors: (links.keys & [:first, :last, :next, :prev]).present?,
         &builder
       )
-      context.response_object.to_json
+      response_object.to_json
     end
 
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
-        include JSONAPIonify::Callbacks
         define_callbacks(
           :request,
           :exception,
@@ -57,10 +67,11 @@ module JSONAPIonify::Api
     end
 
     def create(**options, &block)
+      block ||= DEFAULT_SAVE_COMMIT
       define_action(:create, 'POST', '', **options, cacheable: false, example_input: :resource, &block).tap do |action|
-        action.response(status: 201) do |context|
-          instance_exec(context, &INSTANCE_RESPONSE).tap do
-            response_headers['Location'] = context.response_object[:data][:links][:self]
+        action.response(status: 201) do |context, response_object:|
+          instance_exec(context, **context.kwargs(INSTANCE_RESPONSE), &INSTANCE_RESPONSE).tap do
+            response_headers['Location'] = response_object[:data][:links][:self]
           end
         end
       end
@@ -73,12 +84,14 @@ module JSONAPIonify::Api
     end
 
     def update(**options, &block)
+      block ||= DEFAULT_SAVE_COMMIT
       define_action(:update, 'PATCH', '/:id', **options, cacheable: false, example_input: :resource, &block).tap do |action|
         action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
     def delete(**options, &block)
+      block ||= DEFAULT_DELETE_COMMIT
       define_action(:delete, 'DELETE', '/:id', **options, cacheable: false, &block).tap do |action|
         action.response(status: 204)
       end

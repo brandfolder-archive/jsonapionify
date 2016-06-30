@@ -5,14 +5,13 @@ module JSONAPIonify::Api
       @readonly         = readonly
       @persisted        = persisted
       @existing_context = existing_context
-      @block            = block
+      @block            = block || proc {}
     end
 
     def call(instance, delegate)
       existing_context = @existing_context || proc {}
       existing_block   = proc { existing_context.call(instance, delegate) }
-      block            = @block || proc {}
-      instance.instance_exec(delegate, existing_block, &block)
+      instance.instance_exec(delegate, existing_block, **delegate.kwargs(@block), &@block)
     end
 
     def readonly?

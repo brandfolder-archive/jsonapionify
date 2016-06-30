@@ -3,20 +3,21 @@ module JSONAPIonify::Api
     extend ActiveSupport::Concern
 
     included do
-      context :path_actions, readonly: true, persisted: true do |context|
-        self.class.path_actions(context.request)
+      context :path_actions, readonly: true, persisted: true do |request:|
+        self.class.path_actions(request)
       end
 
-      context :http_allow, readonly: true, persisted: true do |context|
-        context.path_actions.map(&:request_method)
+      context :http_allow, readonly: true, persisted: true do |path_actions:|
+        path_actions.map(&:request_method)
       end
 
-      context(:action_name, persisted: true) {}
+      context(:action_name, persisted: true)
+
       define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
         cache 'options-request'
-      end.response(status: 200) do |context|
-        response_headers['Allow'] = context.http_allow.join(', ')
-        requests                  = context.path_actions.each_with_object({}) do |action, h|
+      end.response(status: 200) do |context, request:, http_allow:, path_actions:|
+        response_headers['Allow'] = http_allow.join(', ')
+        requests                  = path_actions.each_with_object({}) do |action, h|
           request_attributes_json = attributes.select do |attr|
             attr.supports_write_for_action? action.name, context
           end.map do |attr|
@@ -26,11 +27,11 @@ module JSONAPIonify::Api
           response_attributes_json = attributes.select do |attr|
             attr.supports_read_for_action? action.name, context
           end.map do |attr|
-            attr.options_json_for_action(action.name, context)
+            attr.options_json_for_action action.name, context
           end
 
-          h['path']      = context.request.path
-          h['url']       = context.request.url
+          h['path']      = request.path
+          h['url']       = request.url
           action_options = h[action.request_method] = {}
 
           if ['GET', 'POST', 'PUT', 'PATCH'].include? action.request_method
@@ -50,7 +51,7 @@ module JSONAPIonify::Api
         ).to_json
       end
 
-      before(:create) { |context| context.instance = context.new_instance }
+      before(:create) { |context, new_instance:| context.instance = new_instance }
       read
     end
   end

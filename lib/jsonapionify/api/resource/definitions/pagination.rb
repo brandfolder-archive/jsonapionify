@@ -99,29 +99,25 @@ module JSONAPIonify::Api
       param :page, :before, actions: %i{list}
       param :page, :first, actions: %i{list}
       param :page, :last, actions: %i{list}
-      context :paginated_collection, readonly: true do |context|
-        if context.root_request?
-          collection = context.sorted_collection
+      context :paginated_collection, readonly: true do |context, nested_request: false, sorted_collection:, collection:, request:, params:, links:|
+        if !nested_request
+          collection = sorted_collection
           _, block   = pagination_strategies.to_a.reverse.to_h.find do |mod, _|
-            Object.const_defined?(mod, false) && context.collection.class <= Object.const_get(mod, false)
+            Object.const_defined?(mod, false) && collection.class <= Object.const_get(mod, false)
           end
 
-          links_delegate = PaginationLinksDelegate.new(
-            context.request.url,
-            context.params,
-            context.links
-          )
+          links_delegate = PaginationLinksDelegate.new(request.url, params, links)
 
           instance_exec(
             collection,
-            context.request.params['page'] || {},
+            request.params['page'] || {},
             links_delegate,
             per,
             context,
             &block
           )
         else
-          context.collection
+          collection
         end
       end
     end

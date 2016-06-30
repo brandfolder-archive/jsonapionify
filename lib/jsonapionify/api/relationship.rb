@@ -27,12 +27,12 @@ module JSONAPIonify::Api
         rel.owner.new(request: request).exec { |c| c }
       end
 
-      context(:owner_context, readonly: true, persisted: true) do |context|
-        owner_context_proc.call(context.request)
+      context(:owner_context, readonly: true, persisted: true) do |request:|
+        owner_context_proc.call(request)
       end
 
-      context(:owner, readonly: true, persisted: true) do |context|
-        context.owner_context.instance
+      context(:owner, readonly: true, persisted: true) do |owner_context:|
+        owner_context.instance
       end
 
       context(:id, readonly: true, persisted: true) do

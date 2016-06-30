@@ -5,7 +5,7 @@ module JSONAPIonify::Api
     end
 
     def exec(&block)
-      instance_exec @__context, &block
+      instance_exec @__context, **@__context.kwargs(block), &block
     end
   end
 end

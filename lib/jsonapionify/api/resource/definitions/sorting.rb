@@ -10,20 +10,20 @@ module JSONAPIonify::Api
         delegate :sort_fields_from_sort_string, to: :class
 
         # Define Contexts
-        context :sorted_collection, readonly: true do |context|
-          if context.root_request?
+        context :sorted_collection, readonly: true do |context, collection:, sort_params:, nested_request: false|
+          if !nested_request
             _, block = sorting_strategies.to_a.reverse.to_h.find do |mod, _|
-              Object.const_defined?(mod, false) && context.collection.class <= Object.const_get(mod, false)
+              Object.const_defined?(mod, false) && collection.class <= Object.const_get(mod, false)
             end
             context.reset(:sort_params)
-            instance_exec(context.collection, context.sort_params, context, &block)
+            instance_exec(collection, sort_params, context, **context.kwargs(block), &block)
           else
-            context.collection
+            collection
           end
         end
 
-        context(:sort_params, readonly: true, persisted: true) do |context|
-          sort_fields_from_sort_string(context.params['sort'])
+        context(:sort_params, readonly: true, persisted: true) do |params:|
+          sort_fields_from_sort_string(params['sort'])
         end
 
         define_sorting_strategy('Object') do |collection|

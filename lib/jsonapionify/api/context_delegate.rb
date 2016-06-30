@@ -48,6 +48,13 @@ module JSONAPIonify::Api
       freeze
     end
 
+    def kwargs(block)
+      keys = block&.parameters&.select { |type, _| type == :key || type == :keyreq } || []
+      keys.each_with_object({}) do |(type, key), kw|
+        kw[key] = send(key) if type == :keyreq || __has_context?(key)
+      end
+    end
+
     def reset key
       @memo.delete(key)
     end
@@ -58,6 +65,12 @@ module JSONAPIonify::Api
 
     def inspect
       to_s.chomp('>') << " memoed: #{@memo.keys.inspect}, persisted: #{@persisted_memo.keys.inspect}, overridden: #{@overrides.keys}" << '>'
+    end
+
+    private
+
+    def __has_context?(name)
+      [@definitions, @overrides, @memo, @persisted_memo].map(&:keys).reduce(:|).include? name
     end
 
   end

@@ -86,7 +86,7 @@ module JSONAPIonify::Api
         return example(example_id)
       end
       block = self.block || proc { |attr, i| i.send attr }
-      type.dump block.unstrict.call(self.name, instance, context)
+      type.dump block.unstrict.call(self.name, instance, context, **context.kwargs(block))
     rescue JSONAPIonify::Types::DumpError => ex
       error_block =
         context.resource.class.error_definitions[:attribute_type_error]

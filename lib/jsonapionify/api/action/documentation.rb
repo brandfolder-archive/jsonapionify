@@ -63,8 +63,8 @@ module JSONAPIonify::Api
         end
         defs[:_is_example_]         = Context.new(readonly: true) { true }
         defs[:collection]           = Context.new(&collection_context)
-        defs[:paginated_collection] = Context.new { |context| context.collection }
-        defs[:instance]             = Context.new(readonly: true) { |context| context.collection.first }
+        defs[:paginated_collection] = Context.new { |collection:| collection }
+        defs[:instance]             = Context.new(readonly: true) { |collection:| collection.first }
         defs[:owner_context]        = Context.new(readonly: true) { ContextDelegate::Mock.new } if defs.has_key? :owner_context
       end
     end

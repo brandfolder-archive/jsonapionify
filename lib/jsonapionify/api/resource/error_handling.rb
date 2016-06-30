@@ -41,7 +41,7 @@ module JSONAPIonify::Api
             )
           }
           if callbacks
-            run_callbacks :exception, exception, context, &evaluate
+            run_callbacks :exception, exception, &evaluate
           else
             evaluate.call
           end
@@ -95,7 +95,8 @@ module JSONAPIonify::Api
       errors.evaluate(
         *args,
         error_block:   lookup_error(name),
-        runtime_block: block
+        runtime_block: block,
+        backtrace: caller
       )
     end
 

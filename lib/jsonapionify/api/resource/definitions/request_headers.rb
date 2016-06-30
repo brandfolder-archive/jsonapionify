@@ -6,28 +6,26 @@ module JSONAPIonify::Api
         extend JSONAPIonify::InheritedAttributes
         inherited_hash_attribute :request_header_definitions
 
-        context(:request_headers, persisted: true, readonly: true) do |context|
-          should_error     = false
+        # Define context
+        context(:request_headers, persisted: true, readonly: true) do |request:|
+          request.headers
+        end
 
-          # Check for validity
-          headers          = self.class.request_header_definitions.select do |_, v|
+        # Validate headers before request
+        before do |request_headers:, action_name:, nested_request: false|
+          # Gather Definitions
+          defined_headers = self.class.request_header_definitions.select do |_, v|
             v.actions.blank? || v.actions.include?(action_name)
           end
-          required_headers = headers.select do |_, v|
+
+          # Gather required Headers
+          required_headers = defined_headers.select do |_, v|
             v.required
           end
 
-          missing_keys =
-            required_headers.keys.map(&:downcase) -
-              context.request.headers.keys.map(&:downcase)
-          if context.root_request? && missing_keys.present?
-            should_error = true
-            error :headers_missing, missing_keys
-          end
-
-          halt if should_error
-
-          context.request.headers
+          # Gather Missing Keys
+          missing_keys = required_headers.keys.map(&:downcase) - request_headers.keys.map(&:downcase)
+          error :headers_missing, missing_keys if !nested_request && missing_keys.present?
         end
       end
     end

@@ -4,7 +4,7 @@ module JSONAPIonify::Api
     included do
       id :id
       scope { self.type.classify.constantize }
-      collection do |scope, context|
+      collection do |scope|
         if defined?(ActiveRecord) && scope.is_a?(Class) && scope < ActiveRecord::Base
           scope.all
         else
@@ -28,13 +28,8 @@ module JSONAPIonify::Api
         end
       end
 
-      before do |context|
-        context.request_headers # pull request_headers so they verify
-      end
-
-      before do |context|
-        context.params # pull params so they verify
-      end
+      # Invoke validating contexts
+      before { |request_headers:| }
 
     end
   end

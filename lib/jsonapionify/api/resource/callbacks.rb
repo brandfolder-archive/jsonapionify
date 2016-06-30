@@ -1,7 +1,7 @@
 require 'active_support/concern'
 
-module JSONAPIonify
-  module Callbacks
+module JSONAPIonify::Api
+  module Resource::Callbacks
     extend ActiveSupport::Concern
     included do
 
@@ -29,8 +29,8 @@ module JSONAPIonify
               prev_chain  = instance_method(chains[timing])
               define_method chains[timing] do |*args, &block|
                 begin
-                  if prev_chain.bind(self).call(*args, &block) != false
-                    instance_exec(*args, &outer_block)
+                  if prev_chain.bind(self).call(@__context, *args, **@__context.kwargs(block), &block) != false
+                    instance_exec(@__context, *args, **@__context.kwargs(outer_block), &outer_block)
                   end
                 rescue => e
                   e.backtrace.unshift outer_block.source_location.join(':') + ":in `(callback) #{callback_name}`"
@@ -47,7 +47,13 @@ module JSONAPIonify
     end
 
     def run_callbacks(name, *args, &block)
-      send("__#{name}_callback_chain", *args, &block)
+      send(
+        "__#{name}_callback_chain",
+        @__context,
+        *args,
+        **@__context.kwargs(block),
+        &block
+      )
     end
 
   end
