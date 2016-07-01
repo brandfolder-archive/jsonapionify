@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mime-types'
 
   spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'yard'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'rocco'
   spec.add_development_dependency 'bundler', '~> 1.10'
