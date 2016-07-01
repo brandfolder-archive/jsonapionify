@@ -65,11 +65,10 @@ module JSONAPIonify::Api
 
     attr_reader :owner, :class_proc, :name, :resolve, :hidden
 
-    def initialize(owner, name, resource: nil, includable: false, hidden: :list, resolve: proc { |n, o| o.send(n) }, &block)
+    def initialize(owner, name, resource: nil, hidden: :list, resolve: proc { |n, o| o.send(n) }, &block)
       @class_proc = block || proc {}
       @owner      = owner
       @name       = name
-      @includable = includable
       @resource   = resource || name
       @resolve    = resolve
       @hidden     = !!hidden && (hidden == true || Array.wrap(hidden))
@@ -97,10 +96,6 @@ module JSONAPIonify::Api
 
     def resource
       owner.api.resource(@resource)
-    end
-
-    def includable?
-      !!@includable
     end
 
   end
