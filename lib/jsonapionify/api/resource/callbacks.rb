@@ -17,7 +17,7 @@ module JSONAPIonify::Api
             block ||= proc {}
             if send(chains[:before], *args) != false
               value = begin
-                instance_exec(@__context, *args, &block&.destructure(0))
+                instance_exec(*args, @__context, &block&.destructure)
               rescue => e
                 e.backtrace.unshift block.source_location.join(':') + ":in `(callback)`"
                 raise e
@@ -35,8 +35,8 @@ module JSONAPIonify::Api
               prev_chain  = instance_method(chains[timing])
               define_method chains[timing] do |*args, &block|
                 begin
-                  if prev_chain.bind(self).call(@__context, *args, &block&.destructure(0)) != false
-                    instance_exec(@__context, *args, &outer_block&.destructure(0))
+                  if prev_chain.bind(self).call(*args, @__context, &block&.destructure) != false
+                    instance_exec(*args, @__context, &outer_block&.destructure)
                   end
                 rescue => e
                   e.backtrace.unshift outer_block.source_location.join(':') + ":in `(callback) #{callback_name}`"
