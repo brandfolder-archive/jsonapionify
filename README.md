@@ -29,6 +29,9 @@ And then execute:
 
 ## Usage
 
+Below is a high level overview of all the available methods. For for detail see
+the yard documentation and the [examples](examples).
+
 ### APIs
 
 Api Definitions are the basis of JSONApi's DSL. They encompass resources that are available and can be run as standalone rack apps or be mounted within a rails app.

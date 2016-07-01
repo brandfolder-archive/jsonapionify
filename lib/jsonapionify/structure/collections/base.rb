@@ -4,8 +4,7 @@ require 'concurrent'
 
 module JSONAPIonify::Structure
   module Collections
-    class Base < Concurrent::Array
-      include EnumerableObserver
+    class Base < Array
       include Helpers::InheritsOrigin
       attr_reader :parent
 
@@ -20,11 +19,6 @@ module JSONAPIonify::Structure
       value_is Objects::Base
 
       def initialize(array = [])
-        observe.added do |items|
-          items.each do |item|
-            item.instance_variable_set(:@parent, self) unless item.frozen?
-          end
-        end
         array.each do |instance|
           self << instance
         end
@@ -82,7 +76,25 @@ module JSONAPIonify::Structure
               )
             end
           end
-        super new_instance
+        self[length] = new_instance
+      end
+
+      def [] k
+        v = super
+        v.nil? || v.instance_variable_get(:@parent) == self ? v : self[k] = v
+      end
+
+      def []= k, v
+        unless v.nil? || v.instance_variable_get(:@parent) == self
+          v = v.dup.tap { |obj| obj.instance_variable_set :@parent, self}
+        end
+        super(k, v)
+      end
+
+      def each
+        length.times do |i|
+          yield self[i]
+        end
       end
 
       def errors

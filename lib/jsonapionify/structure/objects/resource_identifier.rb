@@ -23,7 +23,7 @@ module JSONAPIonify::Structure
 
       def duplicate_exists?
         return false unless parent.is_a?(Array)
-        parent.select { |peer| peer == self }.length > 1
+        parent.select { |peer| peer.eql? self }.length > 1
       end
 
       def duplicate_does_not_exist?

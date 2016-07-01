@@ -54,7 +54,7 @@ module JSONAPIonify::Structure
 
       # Initialize the object
       def initialize(**attributes)
-        @object = Concurrent::Hash.new
+        @object = Hash.new
         run_callbacks :initialize do
           attributes.each do |k, v|
             self[k] = v
