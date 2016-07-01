@@ -90,7 +90,7 @@ module JSONAPIonify::Structure
       end
 
       def to_json(**opts)
-        Oj.dump(as_json **opts)
+        Oj.dump as_json(**opts)
       end
 
       def signature
@@ -153,6 +153,15 @@ module JSONAPIonify::Structure
 
       def pretty_json
         JSON.pretty_generate as_json
+      end
+
+      def inspect
+        hash_inspect = to_h.to_s.gsub(
+          /\:([a-zA-Z_-]+)=>/, '\\1: '
+        )[1..-2].gsub(
+          /\{([^\s])/, '{ \\1').gsub(/([^\s])\}/, '\\1 }'
+        )
+        to_s.sub(/>$/, " #{hash_inspect}>")
       end
 
       private

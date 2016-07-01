@@ -1,7 +1,8 @@
 module JSONAPIonify::Structure
   module Objects
     class ResourceIdentifier < Base
-      define_order *%i{type id}
+
+      define_order :type, :id
 
       # A resource object **MUST** contain at least the following top-level members:
       must_contain! :id, :type # Describes ResourceObjects that share common attributes and relationships.
@@ -22,25 +23,19 @@ module JSONAPIonify::Structure
 
       def duplicate_exists?
         return false unless parent.is_a?(Array)
-        peers = parent - [self]
-        !!peers.index(self)
-      end
-
-      def ==(other)
-        same_as? other
+        parent.select { |peer| peer == self }.length > 1
       end
 
       def duplicate_does_not_exist?
         !duplicate_exists?
       end
 
-      def same_as?(other)
-        return false unless other.is_a? ResourceIdentifier
-        other_type, other_id = other.values_at :type, :id
-        local_type, local_id = values_at :type, :id
-        other_type == local_type &&
-          !(other_id || local_id).nil? &&
-          other_id == local_id
+      def hash
+        { type: self[:type], id: self[:id] }.hash
+      end
+
+      def eql?(other)
+        other.hash == self.hash
       end
 
     end
