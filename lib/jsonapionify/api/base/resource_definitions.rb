@@ -1,6 +1,5 @@
 module JSONAPIonify::Api
   module Base::ResourceDefinitions
-
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
@@ -54,10 +53,9 @@ module JSONAPIonify::Api
         else
           block
         end
-      const_name                        = name.to_s.camelcase + 'Resource'
+      const_name = name.to_s.camelcase + 'Resource'
       remove_const(const_name) if const_defined? const_name, false
       name
     end
-
   end
 end
