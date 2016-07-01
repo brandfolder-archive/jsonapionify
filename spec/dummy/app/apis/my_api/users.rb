@@ -1,8 +1,12 @@
 MyApi.define_resource :users do
-  relates_to_many :things, includable: true, count_attribute: true do
+  relates_to_many :things, count_attribute: true do
     add
     replace
     remove
+  end
+
+  includable :things do |collection|
+    collection.includes :user
   end
 
   attribute :email, types.String, "The email address", required: true

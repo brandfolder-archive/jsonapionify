@@ -36,14 +36,14 @@ module JSONAPIonify::Api
       end
     end
 
-    COLLECTION_RESPONSE = proc do |context, response_collection:, links:, response_object:, builder: nil|
+    COLLECTION_RESPONSE = proc do |context, response_collection:, links:, response_object:, builder: nil, nested_request: false|
       response_object[:data] = build_resource_collection(
         context: context,
         collection: response_collection,
         include_cursors: (links.keys & [:first, :last, :next, :prev]).present?,
         &builder
       )
-      response_object.to_json
+      response_object.to_json unless nested_request
     end
 
     def self.extended(klass)

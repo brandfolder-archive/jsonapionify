@@ -30,7 +30,7 @@ module JSONAPIonify::Api
       @description       = description&.freeze
       @example           = example&.freeze
       @read              = read&.freeze
-      @write             = write&.freeze
+      @write             = (!block && write)&.freeze
       @required          = required&.freeze
       @block             = block&.freeze
       @writeable_actions = write

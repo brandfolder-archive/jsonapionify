@@ -22,8 +22,19 @@ module JSONAPIonify::Api
     end
 
     def collection(&block)
-      context :collection do |context, scope:|
-        Object.new.instance_exec(scope, context, &block)
+      context :collection do |context, scope:, includes:|
+        collection = Object.new.instance_exec(scope, context, &block)
+
+        # Compute includes manipulations
+        self.class.include_definitions.select do |relationship, _|
+          includes.keys.include? relationship.to_s
+        end.reduce(collection) do |lv, (name, include_block)|
+          lv.instance_exec(lv, includes[name.to_s], &include_block)
+        end
+
+        # TODO: Compute field manipulations
+
+        # TODO: Compute param manipulations
       end
     end
 

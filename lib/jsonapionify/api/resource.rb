@@ -45,7 +45,7 @@ module JSONAPIonify::Api
       cacheable: true,
       action: nil
     )
-      context_overrides[:action_name] = action.name if action
+      context_overrides[:action_name] ||= action.name if action
       @__context                      = ContextDelegate.new(
         request,
         self,
@@ -60,10 +60,6 @@ module JSONAPIonify::Api
       extend Caller if commit && action
       extend Exec unless action
       extend Caching if cacheable
-    end
-
-    def action_name
-      action&.name
     end
 
   end

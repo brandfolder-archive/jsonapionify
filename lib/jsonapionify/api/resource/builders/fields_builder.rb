@@ -14,11 +14,11 @@ module JSONAPIonify::Api
       end
 
       def resource_fields
-        fields[resource_type] || {}
+        fields && fields[resource_type]
       end
 
       def build
-        fields.nil? ? build_default : build_sparce
+        resource_fields.nil? ? build_default : build_sparce
       end
 
     end

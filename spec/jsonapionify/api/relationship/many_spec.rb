@@ -39,7 +39,7 @@ module JSONAPIonify::Api
 
       context 'Dynamic Counters' do
         it "should return a proper count" do
-          get "/users"
+          get "/users?fields[users]=thing_count"
           last_response_json['data'].each do |item|
             expect(item['attributes']['thing_count']).to eq User.find(item['id']).things.count
           end

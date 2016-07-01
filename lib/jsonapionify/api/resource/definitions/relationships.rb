@@ -8,7 +8,7 @@ module JSONAPIonify::Api
       end
     end
 
-    def relates_to_many(name, count_attribute: false, count_hidden: false, **opts, &block)
+    def relates_to_many(name, count_attribute: false, count_hidden: :list, **opts, &block)
       define_relationship(name, Relationship::Many, **opts, &block).tap do
         define_relationship_counter(
           name,
@@ -23,8 +23,8 @@ module JSONAPIonify::Api
       define_relationship(name, Relationship::One, **opts, &block)
     end
 
-    def define_relationship_counter(rel_name, name, hidden = false)
-      attribute name.to_sym, types.Integer, "The number of #{rel_name}.", hidden: hidden, write: false do |_, instance, context|
+    def define_relationship_counter(rel_name, name, hidden)
+      attribute name.to_sym, types.Integer, "The number of #{rel_name}.", hidden: hidden do |_, instance, context|
         rel          = context.resource.class.relationship(rel_name)
         rel_context  = rel.new(
           request:           context.request,

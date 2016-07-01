@@ -25,13 +25,14 @@ module JSONAPIonify::Api
       private
 
       def build_data
+        rel_resource = resource.relationship(relationship.name)
         case relationship
         when Relationship::Many
           resolution.map do |child|
-            relationship.build_resource_identifier(child)
+            rel_resource.build_resource_identifier(instance: child)
           end
         when Relationship::One
-          relationship.build_resource_identifier resolution
+          rel_resource.build_resource_identifier instance: resolution
         end
       end
 

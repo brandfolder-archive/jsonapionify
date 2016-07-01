@@ -10,7 +10,7 @@ module JSONAPIonify::Api
       raise e unless errors.present?
       response = error_response
     rescue Errors::CacheHit
-      JSONAPIonify.logger.info "Cache Hit: #{@cache_options[:key]}"
+      JSONAPIonify.logger.debug "Cache Hit: #{@cache_options[:key]}"
       response = self.class.cache_store.read @cache_options[:key]
     rescue Exception => exception
       response = rescued_response exception, @__context, do_respond

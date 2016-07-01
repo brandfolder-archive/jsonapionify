@@ -2,15 +2,16 @@ require 'concurrent'
 
 module JSONAPIonify::Api
   module Resource::Includer
+    include JSONAPIonify::Structure
     extend ActiveSupport::Concern
 
     included do
       after :commit_list do |context|
         if context.includes.present?
           included =
-            Concurrent::Array.new(context.response_collection).map do |instance|
+            context.response_collection.map do |instance|
               fetch_included(context, owner: instance)
-            end.reduce(:+)
+            end.reduce(:|)
           append_included(context, included)
         end
       end
@@ -31,51 +32,34 @@ module JSONAPIonify::Api
 
     def append_included(context, included)
       if included.present?
-        context.response_object[:included] = included
-        context.response_object[:included].tap(&:uniq!).reject! do |r|
-          Array.wrap(context.response_object[:included]).include?(r) ||
-            Array.wrap(context.response_object[:data]).include?(r)
-        end
+        context.response_object[:included] |= included
       end
     end
 
     def fetch_included(context, **overrides)
-      collection = JSONAPIonify::Structure::Collections::IncludedResources.new
-      context.includes.each_with_object(collection) do |(name, _),|
-        res = self.class.relationship(name)
-        if res.rel.includable?
-          overrides = overrides.merge includes:       context.includes[name],
-                                      errors:         context.errors,
-                                      nested_request: true
-          *, body   =
-            case res.rel
-            when Relationship::One
-              res.call_action(:read, context.request, **overrides)
-            when Relationship::Many
-              res.call_action(:list, context.request, **overrides)
-            end
-          collection.concat expand_body(body)
+      context.includes.reduce(Collections::IncludedResources.new) do |lv, (name, _)|
+        if self.class.include_definitions.keys.include?(name.to_sym)
+          response_object = JSONAPIonify.new_object
+          res = self.class.relationship(name)
+          overrides = overrides.merge includes:         context.includes[name],
+                                      errors:           context.errors,
+                                      root_request?:    false,
+                                      action_name:      context.action_name,
+                                      response_object:  response_object
+          action_name = res.rel.is_a?(Relationship::One) ? :read : :list
+          res.call_action(action_name, context.request, context_overrides: overrides)
+          lv | (Array.wrap(response_object[:data]).compact + response_object[:included])
         else
           error :relationship_not_includable, res.rel.name
+          lv
         end
-      end.uniq
+      end
     end
 
     def self.includes_to_hashes(path)
       path.to_s.split(',').each_with_object({}) do |p, obj|
         rel, *sub_path = p.split('.')
         obj[rel]       = includes_to_hashes(sub_path.join('.'))
-      end
-    end
-
-    def expand_body(body)
-      case body
-      when Rack::BodyProxy
-        json = JSONAPIonify.parse(body.body.join)
-        Array.wrap(json[:data]) + (json[:included] || [])
-      when Array
-        json = JSONAPIonify.parse(body.join)
-        Array.wrap(json[:data]) + (json[:included] || [])
       end
     end
 

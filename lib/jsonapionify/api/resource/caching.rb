@@ -19,10 +19,7 @@ module JSONAPIonify::Api
     end
 
     def cache_key(**options)
-      self.class.cache_key(
-        **options,
-        action_name: action_name
-      )
+      self.class.cache_key(**options, action_name: @__context.action_name)
     end
   end
 end
