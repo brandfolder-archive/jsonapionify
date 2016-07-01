@@ -1,5 +1,6 @@
 module JSONAPIonify::Api
   class Relationship::One < Relationship
+    using JSONAPIonify::DestructuredProc
 
     DEFAULT_REPLACE_COMMIT = proc { |owner:, request_instance:|
       # Set the association
@@ -45,7 +46,7 @@ module JSONAPIonify::Api
       end
 
       context :instance do |context, owner:|
-        instance_exec rel.name, owner, context, **context.kwargs(rel.resolve), &rel.resolve
+        instance_exec(rel.name, owner, context, &rel.resolve.destructure)
       end
 
       after :commit_replace do |owner:|

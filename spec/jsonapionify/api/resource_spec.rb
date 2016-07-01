@@ -51,6 +51,7 @@ module JSONAPIonify
         it 'should add a resource instance' do
           body = json(data: { type: 'things', attributes: { name: 'Card', color: 'blue' } })
           content_type 'application/vnd.api+json'
+          $pry = true
           expect { post '/things', body }.to change { model.count }.by 1
           expect(model.last.id.to_s).to eq last_response_json['data']['id']
           expect(model.last.name).to eq 'Card'

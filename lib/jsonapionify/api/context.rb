@@ -1,5 +1,6 @@
 module JSONAPIonify::Api
   class Context
+    using JSONAPIonify::DestructuredProc
 
     def initialize(readonly: false, persisted: false, existing_context: nil, &block)
       @readonly         = readonly
@@ -11,7 +12,12 @@ module JSONAPIonify::Api
     def call(instance, delegate)
       existing_context = @existing_context || proc {}
       existing_block   = proc { existing_context.call(instance, delegate) }
-      instance.instance_exec(delegate, existing_block, **delegate.kwargs(@block), &@block)
+      begin
+        instance.instance_exec(delegate, existing_block, &@block.destructure(0))
+      rescue => e
+        e.backtrace.unshift @block.source_location.join(':') + ":in (context)"
+        raise e
+      end
     end
 
     def readonly?

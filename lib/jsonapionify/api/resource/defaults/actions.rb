@@ -51,7 +51,9 @@ module JSONAPIonify::Api
         ).to_json
       end
 
-      before(:create) { |context, new_instance:| context.instance = new_instance }
+      before(:create) do |context|
+        context.instance = context.new_instance
+      end
       read
     end
   end

@@ -1,5 +1,7 @@
 module JSONAPIonify::Api
   module Resource::Caller
+    using JSONAPIonify::DestructuredProc
+
     def call
       do_respond = proc { __respond }
       do_request = proc { __request }
@@ -25,8 +27,7 @@ module JSONAPIonify::Api
     private
 
     def __commit
-      instance_exec(@__context, **@__context.kwargs(action.block), &action.block)
-      halt if errors.present?
+      instance_exec(@__context, &action.block.destructure)
     end
 
     def __commit_and_respond

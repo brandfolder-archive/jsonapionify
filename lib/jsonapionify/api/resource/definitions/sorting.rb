@@ -3,6 +3,7 @@ require 'set'
 module JSONAPIonify::Api
   module Resource::Definitions::Sorting
     using JSONAPIonify::DeepSortCollection
+    using JSONAPIonify::DestructuredProc
 
     def self.extended(klass)
       klass.class_eval do
@@ -16,7 +17,7 @@ module JSONAPIonify::Api
               Object.const_defined?(mod, false) && collection.class <= Object.const_get(mod, false)
             end
             context.reset(:sort_params)
-            instance_exec(collection, sort_params, context, **context.kwargs(block), &block)
+            instance_exec(collection, sort_params, context, &block.destructure)
           else
             collection
           end

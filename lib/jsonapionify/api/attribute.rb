@@ -7,6 +7,7 @@ module JSONAPIonify::Api
 
     include Documentation
     using UnstrictProc
+    using JSONAPIonify::DestructuredProc
     attr_reader :name, :type, :description, :read, :write, :required, :hidden, :block
 
     def initialize(
@@ -86,7 +87,7 @@ module JSONAPIonify::Api
         return example(example_id)
       end
       block = self.block || proc { |attr, i| i.send attr }
-      type.dump block.unstrict.call(self.name, instance, context, **context.kwargs(block))
+      type.dump block.unstrict.destructure.call(self.name, instance, context)
     rescue JSONAPIonify::Types::DumpError => ex
       error_block =
         context.resource.class.error_definitions[:attribute_type_error]

@@ -21,7 +21,7 @@ module JSONAPIonify::Api
         request_data[:id]
       end
 
-      context(:request_attributes, readonly: true, persisted: true) do |context, request:, instance:, action_name:, id:, request_data:|
+      context(:request_attributes, readonly: true, persisted: true) do |context, request:, action_name:, id:, request_data:|
         should_error = false
 
         request_attributes = request_data.fetch(:attributes) do
@@ -32,9 +32,9 @@ module JSONAPIonify::Api
         self.attributes.each do |attr|
           next unless attr.required_for_action?(action_name, context)
           if attr.read? || id
-            example_id = self.build_id(instance: instance)
+            example_id = self.build_id(instance: context.instance)
             next unless attr.resolve(
-              instance, context, example_id: example_id
+              context.instance, context, example_id: example_id
             ).nil?
           end
           unless request_attributes.has_key?(attr.name)

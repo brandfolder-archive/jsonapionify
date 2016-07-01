@@ -1,5 +1,6 @@
 module JSONAPIonify::Api
   module Resource::Definitions::ResponseHeaders
+    using JSONAPIonify::DestructuredProc
 
     def self.extended(klass)
       klass.class_eval do
@@ -8,7 +9,7 @@ module JSONAPIonify::Api
 
         context(:response_headers, persisted: true) do |context|
           self.class.response_header_definitions.each_with_object({}) do |(name, block), headers|
-            headers[name.to_s] = instance_exec(context, **context.kwargs(block), &block)
+            headers[name.to_s] = instance_exec(context, &block.destructure)
           end
         end
       end

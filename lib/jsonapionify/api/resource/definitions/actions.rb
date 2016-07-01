@@ -3,6 +3,7 @@ require 'active_support/core_ext/array/wrap'
 
 module JSONAPIonify::Api
   module Resource::Definitions::Actions
+    using JSONAPIonify::DestructuredProc
     ActionNotFound = Class.new StandardError
 
     DEFAULT_SAVE_COMMIT = proc do |instance:, request_attributes:, request_relationships:|
@@ -27,6 +28,12 @@ module JSONAPIonify::Api
     INSTANCE_RESPONSE = proc do |context, instance:, response_object:, builder: nil|
       response_object[:data] = build_resource(context: context, instance: instance, &builder)
       response_object.to_json
+    end
+
+    CREATE_RESPONSE = proc do |context, instance:, response_object:, builder: nil, response_headers:|
+      instance_exec(context, instance: instance, response_object: response_object, builder: builder, &INSTANCE_RESPONSE).tap do
+        response_headers['Location'] = response_object[:data][:links][:self]
+      end
     end
 
     COLLECTION_RESPONSE = proc do |context, response_collection:, links:, response_object:, builder: nil|
@@ -69,11 +76,7 @@ module JSONAPIonify::Api
     def create(**options, &block)
       block ||= DEFAULT_SAVE_COMMIT
       define_action(:create, 'POST', '', **options, cacheable: false, example_input: :resource, &block).tap do |action|
-        action.response(status: 201) do |context, response_object:|
-          instance_exec(context, **context.kwargs(INSTANCE_RESPONSE), &INSTANCE_RESPONSE).tap do
-            response_headers['Location'] = response_object[:data][:links][:self]
-          end
-        end
+        action.response(status: 201, &CREATE_RESPONSE)
       end
     end
 

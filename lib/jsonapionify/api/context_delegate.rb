@@ -48,13 +48,6 @@ module JSONAPIonify::Api
       freeze
     end
 
-    def kwargs(block)
-      keys = block&.parameters&.select { |type, _| type == :key || type == :keyreq } || []
-      keys.each_with_object({}) do |(type, key), kw|
-        kw[key] = send(key) if type == :keyreq || __has_context?(key)
-      end
-    end
-
     def reset key
       @memo.delete(key)
     end

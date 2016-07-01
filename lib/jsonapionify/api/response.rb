@@ -1,5 +1,7 @@
 module JSONAPIonify::Api
   class Response
+    using JSONAPIonify::DestructuredProc
+
     attr_reader :action, :accept, :response_block, :status,
                 :matcher, :content_type, :extension, :example_accept
 
@@ -39,7 +41,7 @@ module JSONAPIonify::Api
       status   ||= self.status
       response = self
       instance.instance_eval do
-        body = instance_exec(context, **context.kwargs(response.response_block), &response.response_block)
+        body = instance_exec(context, &response.response_block.destructure)
         Rack::Response.new.tap do |rack_response|
           rack_response.status = status
           response_headers.each do |k, v|
