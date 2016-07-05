@@ -17,7 +17,7 @@ module JSONAPIonify::Api
           :replace, :commit_replace
         )
         class << klass
-          alias_method :on_exeception, :before_exception
+          alias_method :on_exception, :before_exception
           remove_method :before_exception
           remove_method :after_exception
         end
