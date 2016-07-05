@@ -49,20 +49,6 @@ module JSONAPIonify::Api
     def self.extended(klass)
       klass.class_eval do
         extend JSONAPIonify::InheritedAttributes
-        define_callbacks(
-          :request,
-          :exception,
-          :response,
-          :list,    :commit_list,
-          :create,  :commit_create,
-          :read,    :commit_read,
-          :update,  :commit_update,
-          :delete,  :commit_delete,
-          :show,    :commit_show,
-          :add,     :commit_add,
-          :remove,  :commit_remove,
-          :replace, :commit_replace
-        )
         inherited_array_attribute :action_definitions
       end
     end
@@ -107,15 +93,6 @@ module JSONAPIonify::Api
         relationship(rel.name).process(request)
       else
         no_action_response(request).call(self, request)
-      end
-    end
-
-    %i{before after}.each do |cb|
-      define_method(cb) do |*action_names, &block|
-        return send(:"#{cb}_request", &block) if action_names.blank?
-        action_names.each do |action_name|
-          send("#{cb}_#{action_name}", &block)
-        end
       end
     end
 

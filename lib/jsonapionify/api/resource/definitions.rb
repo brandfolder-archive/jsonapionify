@@ -5,6 +5,7 @@ module JSONAPIonify::Api
 
     def self.extended(klass)
       klass.extend Contexts
+      klass.extend Hooks
       constants(false).each do |const|
         mod = const_get(const, false)
         klass.extend mod unless klass.singleton_class < mod
