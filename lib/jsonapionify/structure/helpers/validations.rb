@@ -100,7 +100,7 @@ module JSONAPIonify::Structure
               keys       += self.keys.select(&block) if block_given?
               valid_keys = keys.map(&:to_sym) & self.keys.map(&:to_sym)
               unless valid_keys.present?
-                errors.add('*', "must contain one of: #{keys_to_sentence(*valid_keys)}")
+                errors.add('*', "must contain one of: #{keys_to_sentence(*self.keys)}")
               end
             end
           end
