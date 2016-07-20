@@ -65,13 +65,6 @@ module JSONAPIonify::Api
         detail "attribute not permitted: #{attribute}"
       end
 
-      error :attributes_missing do
-        pointer 'data'
-        title 'missing Member'
-        detail 'missing attributes member'
-        status '422'
-      end
-
       error :include_parameter_invalid do
         parameter 'sort'
         title 'include parameter is invalid'

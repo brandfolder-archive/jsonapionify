@@ -24,9 +24,7 @@ module JSONAPIonify::Api
       context(:request_attributes, readonly: true, persisted: true) do |context, request:, action_name:, id:, request_data:|
         should_error = false
 
-        request_attributes = request_data.fetch(:attributes) do
-          error_now :attributes_missing
-        end
+        request_attributes = request_data.fetch(:attributes, {})
 
         # Check for required attributes
         self.attributes.each do |attr|
