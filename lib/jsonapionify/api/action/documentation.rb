@@ -61,11 +61,11 @@ module JSONAPIonify::Api
         collection_context          = proc do |context|
           3.times.map { resource.example_instance_for_action(action.name, context) }
         end
-        defs[:_is_example_]         = Context.new(readonly: true) { true }
-        defs[:collection]           = Context.new(&collection_context)
-        defs[:paginated_collection] = Context.new { |collection:| collection }
-        defs[:instance]             = Context.new(readonly: true) { |collection:| collection.first }
-        defs[:owner_context]        = Context.new(readonly: true) { ContextDelegate::Mock.new } if defs.has_key? :owner_context
+        defs[:_is_example_]         = Context.new(:_is_example_, readonly: true) { true }
+        defs[:collection]           = Context.new(:collection, &collection_context)
+        defs[:paginated_collection] = Context.new(:paginated_collection) { |collection:| collection }
+        defs[:instance]             = Context.new(:instance, readonly: true) { |collection:| collection.first }
+        defs[:owner_context]        = Context.new(:owner_context, readonly: true) { ContextDelegate::Mock.new } if defs.has_key? :owner_context
       end
     end
 

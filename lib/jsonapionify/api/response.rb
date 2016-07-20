@@ -65,12 +65,8 @@ module JSONAPIonify::Api
       end
     end
 
-    def accept_with_header?(context)
-      context.request.accept.any? do |accept|
-        self.accept == accept ||
-          (self.accept == '*/*' && !context.request.extension) ||
-          (accept == '*/*' && !context.request.extension)
-      end
+    def accept_with_header?(accept:, extension:)
+      self.accept == accept || (self.accept == '*/*' && !extension) || (accept == '*/*' && !extension)
     end
 
     def accept_with_matcher?(context)

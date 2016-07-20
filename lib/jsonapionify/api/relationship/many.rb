@@ -100,6 +100,7 @@ module JSONAPIonify::Api
         end
       end
 
+      list
       show
     end
   end

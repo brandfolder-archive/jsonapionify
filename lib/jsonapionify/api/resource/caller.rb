@@ -19,9 +19,15 @@ module JSONAPIonify::Api
     end
 
     def response_definition
-      action.responses.find { |response| response.accept_with_matcher? @__context } ||
-        action.responses.find { |response| response.accept_with_header? @__context } ||
-        error_now(:not_acceptable)
+      extension = @__context.request.extension
+      responses = action.responses
+      response = nil
+      @__context.request.accept.each do |accept|
+        response = responses.find { |r| r.accept_with_matcher? @__context } ||
+          responses.find { |r| r.accept_with_header? accept: accept, extension: extension }
+        break if response
+      end
+      response || error_now(:not_acceptable)
     end
 
     private

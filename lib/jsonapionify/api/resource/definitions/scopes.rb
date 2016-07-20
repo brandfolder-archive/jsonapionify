@@ -1,12 +1,13 @@
 module JSONAPIonify::Api
   module Resource::Definitions::Scopes
+    using JSONAPIonify::DestructuredProc
 
     def scope(&block)
       define_singleton_method(:current_scope) do
-        instance_exec(OpenStruct.new, &block)
+        instance_exec(OpenStruct.new, &block.destructure)
       end
       context :scope do |context|
-        instance_exec(context, &block)
+        instance_exec(context, &block.destructure)
       end
     end
 
@@ -14,16 +15,16 @@ module JSONAPIonify::Api
 
     def instance(&block)
       define_singleton_method(:find_instance) do |id|
-        instance_exec(current_scope, id, OpenStruct.new, &block)
+        instance_exec(current_scope, id, OpenStruct.new, &block.destructure)
       end
       context :instance, persisted: true do |context, scope:, id:|
-        instance_exec(scope, id, context, &block)
+        instance_exec(scope, id, context, &block.destructure)
       end
     end
 
     def collection(&block)
       context :collection do |context, scope:, includes:|
-        collection = Object.new.instance_exec(scope, context, &block)
+        collection = instance_exec(scope, context, &block.destructure)
 
         # Compute includes manipulations
         self.class.include_definitions.select do |relationship, _|
@@ -40,10 +41,10 @@ module JSONAPIonify::Api
 
     def new_instance(&block)
       define_singleton_method(:build_instance) do
-        Object.new.instance_exec(current_scope, &block)
+        Object.new.instance_exec(current_scope, &block.destructure)
       end
       context :new_instance, persisted: true, readonly: true do |context, scope:|
-        Object.new.instance_exec(scope, context, &block)
+        Object.new.instance_exec(scope, context, &block.destructure)
       end
     end
   end

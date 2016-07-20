@@ -3,6 +3,7 @@ require 'active_support/core_ext/module/delegation'
 
 module JSONAPIonify::Api
   class Base
+    extend ActiveSupport::DescendantsTracker
     extend JSONAPIonify::Autoload
     autoload_all
     extend AppBuilder

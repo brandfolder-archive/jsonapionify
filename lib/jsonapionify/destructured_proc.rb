@@ -5,16 +5,18 @@ module JSONAPIonify::DestructuredProc
       original = self
       Proc.new do |*args|
         kwargs = original.kwargs_destructured(args[at_index])
-        instance_exec(*args, **kwargs, &original)
+        JSONAPIonify::CustomRescue.perform(remove: __FILE__, source: original, formatter: ->(meta) { meta.source_location.join(':') + ":in `block (destructured)'" }) do
+          instance_exec(*args, **kwargs, &original)
+        end
       end
     end
 
     def kwargs
-      parameters.select { |t, k| t.to_s.start_with? 'key' }
+      parameters.select { |t, k| t.to_s.start_with?('key') && !t.to_s.end_with?('rest') }
     end
 
     def arguments
-      parameters.reject { |t, k| t.to_s.start_with? 'key' }
+      parameters.reject { |t, k| t.to_s.start_with?('key') || t.to_s.end_with?('rest') }
     end
 
     def kwargs_destructured(target)

@@ -79,7 +79,7 @@ module JSONAPIonify::Api
           klass = self.class.const_get(klass_name) rescue nil
           klass ||= klass_name.constantize rescue nil
           klass
-        end
+        end.compact
 
         # Loop until things are ordered
         while (result = out_of_order_class[klasses])
