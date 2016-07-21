@@ -49,6 +49,8 @@ module JSONAPIonify::Api
               collection.first(size)
             end
 
+          context.meta[:total_count] = collection.count
+
           links.first first: size
           links.last last: size
           links.prev before: build_cursor(context: context, instance: slice.first), last: size unless !slice.first || slice.first == collection.first
@@ -79,6 +81,8 @@ module JSONAPIonify::Api
             else
               collection.limit(size)
             end
+
+          context.meta[:total_count] = collection.count
 
           links.first first: size
           links.last last: size
