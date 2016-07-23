@@ -15,16 +15,17 @@ module JSONAPIonify::Api
 
     def instance(&block)
       define_singleton_method(:find_instance) do |id|
-        instance_exec(current_scope, id, OpenStruct.new, &block.destructure)
+        instance_exec(current_scope, id, OpenStruct.new, &block.destructure(object: context))
       end
       context :instance, persisted: true do |context, scope:, id:|
-        instance_exec(scope, id, context, &block.destructure)
+        $pry = true
+        instance_exec(scope, id, context, &block.destructure(object: context))
       end
     end
 
     def collection(&block)
       context :collection do |context, scope:, includes:|
-        collection = instance_exec(scope, context, &block.destructure)
+        collection = instance_exec(scope, context, &block.destructure(object: context))
 
         # Compute includes manipulations
         self.class.include_definitions.select do |relationship, _|
@@ -41,10 +42,10 @@ module JSONAPIonify::Api
 
     def new_instance(&block)
       define_singleton_method(:build_instance) do
-        Object.new.instance_exec(current_scope, &block.destructure)
+        Object.new.instance_exec(current_scope, &block.destructure(object: context))
       end
       context :new_instance, persisted: true, readonly: true do |context, scope:|
-        Object.new.instance_exec(scope, context, &block.destructure)
+        Object.new.instance_exec(scope, context, &block.destructure(object: context))
       end
     end
   end

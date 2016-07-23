@@ -1,10 +1,10 @@
 module JSONAPIonify::DestructuredProc
   refine Proc do
-    def destructure(at_index = arguments.length-1)
+    def destructure(at_index = -1, object: nil)
       return self unless kwargs.present?
       original = self
       Proc.new do |*args|
-        kwargs = original.kwargs_destructured(args[at_index])
+        kwargs = original.kwargs_destructured(object || args[at_index])
         JSONAPIonify::CustomRescue.perform(remove: __FILE__, source: original, formatter: ->(meta) { meta.source_location.join(':') + ":in `block (destructured)'" }) do
           instance_exec(*args, **kwargs, &original)
         end
