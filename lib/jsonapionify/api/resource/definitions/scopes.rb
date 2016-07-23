@@ -15,7 +15,7 @@ module JSONAPIonify::Api
 
     def instance(&block)
       define_singleton_method(:find_instance) do |id|
-        instance_exec(current_scope, id, OpenStruct.new, &block.destructure(object: context))
+        instance_exec(current_scope, id, OpenStruct.new, &block.destructure(object: OpenStruct.new))
       end
       context :instance, persisted: true do |context, scope:, id:|
         $pry = true
@@ -42,7 +42,7 @@ module JSONAPIonify::Api
 
     def new_instance(&block)
       define_singleton_method(:build_instance) do
-        Object.new.instance_exec(current_scope, &block.destructure(object: context))
+        Object.new.instance_exec(current_scope, &block.destructure(object: OpenStruct.new))
       end
       context :new_instance, persisted: true, readonly: true do |context, scope:|
         Object.new.instance_exec(scope, context, &block.destructure(object: context))
