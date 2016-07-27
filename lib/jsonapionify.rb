@@ -36,10 +36,17 @@ module JSONAPIonify
     self.cache_store = ActiveSupport::Cache.lookup_store(store, *args)
   end
 
+  def self.files
+    Dir.glob(File.join __dir__, './**/*.rb').map { |f| File.expand_path f }.sort
+  end
+
   def self.digest
-    @digest ||= Digest::SHA2.hexdigest(
-      Dir.glob(File.join __dir__, '**/*.rb').map { |f| File.read f }.join
-    )
+    @digest ||=
+      files.map do |f|
+        File.read f
+      end.reduce(
+        Digest::SHA2.new, :update
+      ).to_s
   end
 
   def self.verbose_errors=(value)
