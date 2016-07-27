@@ -109,7 +109,6 @@ module JSONAPIonify::Structure::Objects
         it_should_behave_like 'a valid jsonapi object', **hash
 
         it 'should be a resource identifier object' do
-          $pry = true
           expect(described_class.new(hash)[:data]).to be_a ResourceIdentifier
         end
       end

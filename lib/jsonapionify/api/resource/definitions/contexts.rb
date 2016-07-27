@@ -17,5 +17,9 @@ module JSONAPIonify::Api
       )
     end
 
+    def remove_context name
+      self.context_definitions.delete(name)
+    end
+
   end
 end

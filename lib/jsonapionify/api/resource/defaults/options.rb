@@ -21,8 +21,7 @@ module JSONAPIonify::Api
       end
 
       new_instance do |scope|
-        raise NotImplementedError, 'new_instance not implemented' unless scope.respond_to?(:new)
-        scope.new
+        scope.new if scope.respond_to?(:new)
       end
 
       # Invoke validating contexts

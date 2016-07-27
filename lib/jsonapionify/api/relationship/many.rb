@@ -83,6 +83,10 @@ module JSONAPIonify::Api
         end
       end
 
+      context :instance do
+        nil
+      end
+
       context :scope do |context, owner:|
         instance_exec(rel.name, owner, context, &rel.resolve.destructure)
       end
