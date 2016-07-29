@@ -36,12 +36,16 @@ module JSONAPIonify::Api
       end
     end
 
-    def example_instance_for_action(action, context)
+    def example_instance_for_action(action, context, write = false)
       id = generate_id
       OpenStruct.new.tap do |instance|
         instance.send "#{id_attribute}=", id.to_s
         actionable_attributes = attributes.select do |attr|
-          attr.supports_read_for_action?(action, context)
+          if write
+            attr.supports_write_for_action?(action, context)
+          else
+            attr.supports_read_for_action?(action, context)
+          end
         end
         actionable_attributes.each do |attribute|
           instance.send "#{attribute.name}=", attribute.example(id)

@@ -8,8 +8,8 @@ module JSONAPIonify::Api
 
       def initialize(resource, instance:, context:, example_id:)
         super(resource)
-        @instance = instance
-        @context = context
+        @instance   = instance
+        @context    = context
         @example_id = example_id
       end
 

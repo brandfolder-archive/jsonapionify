@@ -4,13 +4,14 @@ module JSONAPIonify::Api
       delegate :attributes, :relationships, :type, :relationship, to: :resource, prefix: true
       delegate :params, :includes, :fields, :action_name, :request, to: :context
 
-      attr_reader :context, :links, :include_cursor, :block
+      attr_reader :context, :links, :include_cursor, :block, :write
 
-      def initialize(resource, context:, links: true, include_cursor: false, **opts, &block)
+      def initialize(resource, context:, links: true, include_cursor: false, write: false, **opts, &block)
         super(resource, **opts)
         @context = context
         @links = links
         @include_cursor = include_cursor
+        @write = write
         @block = block
       end
 
@@ -33,7 +34,8 @@ module JSONAPIonify::Api
           resource,
           instance:   instance,
           context:    context,
-          example_id: example_id
+          example_id: example_id,
+          write:      write
         )
       end
 

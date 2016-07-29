@@ -11,7 +11,9 @@ module JSONAPIonify::Api
         path_actions.map(&:request_method)
       end
 
-      context(:action_name, persisted: true)
+      context(:action_name, persisted: true) do |action: nil|
+        action&.name
+      end
 
       define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
         cache 'options-request'
