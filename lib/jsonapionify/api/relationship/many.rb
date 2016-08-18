@@ -43,8 +43,7 @@ module JSONAPIonify::Api
           content_type:  content_type,
           callbacks:     callbacks,
           cacheable:     false,
-          prepend:       'relationships',
-          example_input: :resource_identifier
+          prepend:       'relationships'
         }
         define_action(:replace, 'PATCH', **options, &block).response status: 200 do |collection:, response_object:|
           response_object[:data] = build_resource_identifier_collection(collection: collection)
@@ -58,8 +57,7 @@ module JSONAPIonify::Api
           content_type:  content_type,
           callbacks:     callbacks,
           cacheable:     false,
-          prepend:       'relationships',
-          example_input: :resource_identifier
+          prepend:       'relationships'
         }
         define_action(:add, 'POST', **options, &block).response status: 200 do |collection:, response_object:|
           response_object[:data] = build_resource_identifier_collection(collection: collection)
@@ -73,8 +71,7 @@ module JSONAPIonify::Api
           content_type:  content_type,
           callbacks:     callbacks,
           cacheable:     false,
-          prepend:       'relationships',
-          example_input: :resource_identifier
+          prepend:       'relationships'
         }
         options[:prepend] = 'relationships'
         define_action(:remove, 'DELETE', **options, &block).response status: 200 do |collection:, response_object:|

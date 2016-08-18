@@ -54,6 +54,10 @@ module JSONAPIonify::Types
       self.class.name.split('::').last.chomp('Type')
     end
 
+    def swagger_name
+      name.camelize(:lower)
+    end
+
     attr_reader :options
 
     def initialize(**options)

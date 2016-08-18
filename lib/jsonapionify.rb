@@ -40,6 +40,12 @@ module JSONAPIonify
     Dir.glob(File.join __dir__, './**/*.rb').map { |f| File.expand_path f }.sort
   end
 
+  def self.copy_ivars(from, to)
+    from.instance_variables.each do |ivar|
+      to.instance_variable_set ivar, from.instance_variable_get(ivar)
+    end
+  end
+
   def self.digest
     @digest ||=
       files.map do |f|

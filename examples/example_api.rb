@@ -10,7 +10,7 @@ end
 # **define_resource**<br />
 # Calling `define_resource` on an Api class will define a resource.
 # This will not only define the resource, but add routes to the api to access
-# the resouce. By default only the **`read`** route (`GET /:resource/:id`) is
+# the resouce. By default only the **`read`** route (`GET /{resource}/{id}`) is
 # added when you define a resource. Additional routes will have to be specified
 # in the resource definition.
 ExampleApi.define_resource :users do

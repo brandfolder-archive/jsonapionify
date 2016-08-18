@@ -7,10 +7,12 @@ module JSONAPIonify::Api
     extend JSONAPIonify::Autoload
     autoload_all
     extend AppBuilder
-    extend Documentation
     extend ClassMethods
     extend Delegation
     extend ResourceDefinitions
+    extend Swagger
+
+    include Documentation
 
     def self.inherited(subclass)
       super(subclass)

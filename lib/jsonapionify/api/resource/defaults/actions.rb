@@ -11,11 +11,11 @@ module JSONAPIonify::Api
         path_actions.map(&:request_method)
       end
 
-      context(:action_name, persisted: true) do |action: nil|
+      context(:action_name, persisted: true) do
         action&.name
       end
 
-      define_action(:options, 'OPTIONS', '*', cacheable: true, callbacks: false) do
+      define_action(:options, 'OPTIONS', '{path*}', cacheable: true, callbacks: false) do
         cache 'options-request'
       end.response(status: 200) do |context, request:, http_allow:, path_actions:|
         response_headers['Allow'] = http_allow.join(', ')

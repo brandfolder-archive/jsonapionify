@@ -15,10 +15,6 @@ module JSONAPIonify::Api
 
     append_class do
 
-      def self.supports_path?
-        false
-      end
-
       def self.relationship(name)
         rel.resource.relationship(name)
       end
@@ -35,16 +31,20 @@ module JSONAPIonify::Api
         owner_context.instance
       end
 
-      context(:id, readonly: true, persisted: true) do
-        nil
+      context(:parent_id, readonly: true, persisted: true) do
+        action.path_params[:parent_id]
       end
 
-      define_singleton_method :base_path do
-        "/#{rel.owner.type}/:id"
+      define_singleton_method :base_path do |prepend: '/'|
+        File.join rel.owner.base_path, '{parent_id}', prepend, rel.name.to_s
       end
 
       define_singleton_method :path_name do
         rel.name.to_s
+      end
+
+      define_method :supports? do
+        !!action
       end
 
       define_singleton_method(:build_links) do |base_url|

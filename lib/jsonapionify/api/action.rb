@@ -1,90 +1,65 @@
 require 'unstrict_proc'
 
 module JSONAPIonify::Api
-  class Action
-    extend JSONAPIonify::Autoload
-    autoload_all
-    extend Dummy
-    include Documentation
+  class Action < UnboundAction
 
-    attr_reader :name, :block, :content_type, :responses, :prepend,
-                :path, :request_method, :only_associated, :cacheable,
-                :callbacks
+    attr_reader :resource, :context
+    delegate :include_path, :base_path, to: :resource
+    delegate :request, to: :context
 
-    def initialize(name, request_method, path = nil,
-                   example_input: nil,
-                   content_type: nil,
-                   prepend: nil,
-                   only_associated: false,
-                   cacheable: false,
-                   callbacks: true,
-                   &block)
-      @request_method  = request_method
-      @path            = path || ''
-      @prepend         = prepend
-      @only_associated = only_associated
-      @name            = name
-      @example_input   = example_input
-      @content_type    = content_type || 'application/vnd.api+json'
-      @block           = block || proc {}
-      @responses       = []
-      @cacheable       = cacheable
-      @callbacks       = callbacks
+    def initialize
+      raise 'Cannot be directly invoked, use bind instead'
     end
 
-    def initialize_copy(new_instance)
-      super
-      %i{@responses}.each do |ivar|
-        value = instance_variable_get(ivar)
-        new_instance.instance_variable_set(
-          ivar, value.frozen? ? value : value.dup
-        )
+    def pathname
+      resource.class.respond_to?(:rel) ? super.chomp('/{id}') : super
+    end
+
+    def path
+      @path ||= File.join(resource.class.base_path(prepend: prepend), *pathname).chomp('/')
+    end
+
+    def path_regex
+      @path_regex ||= begin
+        string = path.
+          gsub(/\{([\w-]+)\}/, '(?<\\1>[\\w-]+)'). # Sub out named params
+          gsub(/(\/)?\{([\w-]+)\*\}/, '\\1(?<\\2>.*)'). # Sub out Named Wildcards
+          gsub(/(\/)?\{\*\}/, '\\1(.*)') # Sub out wildcards
+        Regexp.new "^#{string}(\\.[\\w-]+)?$"
       end
     end
 
-    def build_path(base, name, include_path)
-      File.join(*[base].tap do |parts|
-        parts << prepend if prepend
-        parts << name
-        parts << path if path.present? && include_path
-      end)
+    def path_matches
+      @path_matches ||= request.path_info.match path_regex
     end
 
-    def path_regex(base, name, include_path)
-      raw_reqexp =
-        build_path(
-          base, name, include_path
-        ).gsub(
-          ':id', '(?<id>[^\/]+)'
-        ).gsub(
-          '/*', '/?[^\/]*'
-        )
-      Regexp.new('^' + raw_reqexp + '(\.[A-Za-z_-]+)?$')
+    def path_params
+      @path_params ||= path_matches&.names&.each_with_object({}) do |name, hash|
+        hash[name.to_sym] = path_matches[name]
+      end
     end
 
-    def ==(other)
-      self.class == other.class &&
-        %i{@request_method @path @content_type @prepend}.all? do |ivar|
-          instance_variable_get(ivar) == other.instance_variable_get(ivar)
-        end
+    def supports_path?
+      !!path_matches
     end
 
-    def supports_path?(request, base, name, include_path)
-      request.path_info.match(path_regex(base, name, include_path))
+    def inspect
+    to_s.chomp('>') + " " +
+      %i{name request_method path content_type cacheable callbacks only_associated}.map do |method|
+        "#{method}=#{send(method).inspect}"
+      end.join(', ')
     end
 
-    def supports_content_type?(request)
+    def supports_content_type?
       @content_type == request.content_type || !request.has_body?
     end
 
-    def supports_request_method?(request)
+    def supports_request_method?
       request.request_method == @request_method
     end
 
-    def supports?(request, base, name, include_path)
-      supports_path?(request, base, name, include_path) &&
-        supports_request_method?(request) &&
-        supports_content_type?(request)
+    def supports?
+      supports_path? && supports_request_method? && supports_content_type?
     end
 
     def response(**options, &block)
@@ -92,16 +67,6 @@ module JSONAPIonify::Api
       @responses.delete new_response
       @responses.push new_response
       self
-    end
-
-    def call(resource, request, callbacks: self.callbacks, **opts)
-      resource.new(
-        request:   request,
-        callbacks: callbacks,
-        cacheable: cacheable,
-        action:    self,
-        **opts
-      ).call
     end
   end
 end

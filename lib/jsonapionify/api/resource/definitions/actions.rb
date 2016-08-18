@@ -4,7 +4,8 @@ require 'active_support/core_ext/array/wrap'
 module JSONAPIonify::Api
   module Resource::Definitions::Actions
     using JSONAPIonify::DestructuredProc
-    ActionNotFound = Class.new StandardError
+    NoActionError = Class.new NotImplementedError
+    NoRelationshipError = Class.new NotImplementedError
 
     DEFAULT_SAVE_COMMIT = proc do |instance:, request_attributes:, request_relationships:|
       # Assign the attributes
@@ -61,80 +62,39 @@ module JSONAPIonify::Api
 
     def create(**options, &block)
       block ||= DEFAULT_SAVE_COMMIT
-      define_action(:create, 'POST', '', **options, cacheable: false, example_input: :resource, &block).tap do |action|
+      define_action(:create, 'POST', '', **options, cacheable: false, &block).tap do |action|
         action.response(status: 201, &CREATE_RESPONSE)
       end
     end
 
     def read(**options, &block)
-      define_action(:read, 'GET', '/:id', **options, cacheable: true, &block).tap do |action|
+      define_action(:read, 'GET', '/{id}', **options, cacheable: true, &block).tap do |action|
         action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
     def update(**options, &block)
       block ||= DEFAULT_SAVE_COMMIT
-      define_action(:update, 'PATCH', '/:id', **options, cacheable: false, example_input: :resource, &block).tap do |action|
+      define_action(:update, 'PATCH', '/{id}', **options, cacheable: false, &block).tap do |action|
         action.response(status: 200, &INSTANCE_RESPONSE)
       end
     end
 
     def delete(**options, &block)
       block ||= DEFAULT_DELETE_COMMIT
-      define_action(:delete, 'DELETE', '/:id', **options, cacheable: false, &block).tap do |action|
+      define_action(:delete, 'DELETE', '/{id}', **options, cacheable: false, body: false, &block).tap do |action|
         action.response(status: 204)
       end
     end
 
-    def process(request)
-      if (action = find_supported_action(request))
-        action.call(self, request)
-      elsif (rel = find_supported_relationship(request))
-        relationship(rel.name).process(request)
-      else
-        no_action_response(request).call(self, request)
-      end
+    def call(request)
+      self.new(request: request).call
     end
 
     def define_action(name, *args, **options, &block)
-      Action.new(name, *args, **options, &block).tap do |new_action|
+      UnboundAction.new(name, *args, **options, &block).tap do |new_action|
         action_definitions.delete new_action
         action_definitions << new_action
-      end
-    end
-
-    def find_supported_action(request)
-      actions.find do |action|
-        action.supports?(request, base_path, path_name, supports_path?)
-      end
-    end
-
-    def no_action_response(request)
-      if request_method_actions(request).present?
-        Action.error :unsupported_media_type
-      elsif self.path_actions(request).present?
-        Action.error :forbidden
-      else
-        Action.error :not_found
-      end
-    end
-
-    def path_actions(request)
-      actions.select do |action|
-        action.supports_path?(request, base_path, path_name, supports_path?)
-      end
-    end
-
-    def request_method_actions(request)
-      path_actions(request).select do |action|
-        action.supports_request_method?(request)
-      end
-    end
-
-    def find_supported_relationship(request)
-      relationship_definitions.find do |rel|
-        relationship = self.relationship(rel.name)
-        relationship != self && relationship.path_actions(request).present?
       end
     end
 
@@ -144,8 +104,8 @@ module JSONAPIonify::Api
       end
     end
 
-    def call_action(name, request, **context_overrides)
-      action(name).call(self, request, **context_overrides)
+    def call_action(name, request, context_overrides: {})
+      new(request: request, action: action(name), context_overrides: context_overrides).call
     end
 
     def action(name)
@@ -165,7 +125,7 @@ module JSONAPIonify::Api
       relationships = descendants.select { |descendant| descendant.respond_to? :rel }
       rels          = relationships.each_with_object([]) do |rel, ary|
         rel.actions.each do |action|
-          ary << [action, "#{rel.rel.owner.type}/:id", [rel, rel.rel.name, false, "#{action.name} #{rel.rel.owner.type.singularize.possessive} #{rel.rel.name}"]]
+          ary << [action, "#{rel.rel.owner.type}/{id}", [rel, rel.rel.name, false, "#{action.name} #{rel.rel.owner.type.singularize.possessive} #{rel.rel.name}"]]
         end
       end
       actions.map do |action|
@@ -173,18 +133,9 @@ module JSONAPIonify::Api
       end + rels
     end
 
-    private
-
-    def base_path
-      ''
+    def base_path(prepend: '/')
+      File.join prepend, type || ''
     end
 
-    def supports_path?
-      true
-    end
-
-    def path_name
-      type.to_s
-    end
   end
 end

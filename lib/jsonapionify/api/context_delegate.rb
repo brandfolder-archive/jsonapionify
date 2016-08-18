@@ -14,11 +14,11 @@ module JSONAPIonify::Api
 
     attr_reader :request
 
-    def initialize(request, resource_instance, definitions, **overrides)
+    def initialize(request, resource_instance, **overrides)
       @memo              = {}
       @request           = request
       @persisted_memo    = {}
-      @definitions       = definitions
+      @definitions       = definitions = resource_instance.class.context_definitions
       @overrides         = overrides
       @resource_instance = resource_instance
       delegate           = self

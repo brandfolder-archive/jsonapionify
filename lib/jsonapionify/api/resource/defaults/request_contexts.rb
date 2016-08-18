@@ -13,8 +13,8 @@ module JSONAPIonify::Api
         end
       end
 
-      context(:id, readonly: true, persisted: true) do |request:|
-        request.env['jsonapionify.id']
+      context(:id, readonly: true, persisted: true) do
+        action&.path_params&.dig(:id) || relationship&.action&.path_params&.dig(:parent_id)
       end
 
       context(:request_id, readonly: true, persisted: true) do |request_data:|

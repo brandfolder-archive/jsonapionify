@@ -1,3 +1,5 @@
+require 'faker'
+
 users = 100.times.map do
   User.new(
     first_name: Faker::Name.first_name,
