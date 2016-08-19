@@ -37,7 +37,9 @@ module JSONAPIonify
   end
 
   def self.files
-    Dir.glob(File.join __dir__, './**/*.rb').map { |f| File.expand_path f }.sort
+    files = Dir.glob(File.join __dir__, './**/*.rb').map { |f| File.expand_path f }
+    files << File.expand_path('./jsonapionify/documentation/template.erb', __dir__)
+    files.sort
   end
 
   def self.digest

@@ -48,36 +48,14 @@ module JSONAPIonify::Api
         accept = response.accept || response.example_accept
         opts['HTTP_ACCEPT']   = accept
         if content_type == 'application/vnd.api+json' && @example_input
-          opts[:input] = example_input(resource)
+          opts[:input] = "{ ...request body... }"
         end
         url = "#{url}.#{response.extension}" if response.extension
         request  = Server::Request.env_for(url, request_method, opts)
-        response = Server::MockResponse.new(*sample_request(resource, request))
-
         OpenStruct.new(
           request:  request.http_string,
-          response: response.http_string
         )
       end
-    end
-
-    def sample_context(resource)
-      action = self
-      resource.context_definitions.dup.tap do |defs|
-        collection_context          = proc do |context|
-          3.times.map { resource.example_instance_for_action(action.name, context) }
-        end
-        defs[:_is_example_]         = Context.new(:_is_example_, readonly: true) { true }
-        defs[:collection]           = Context.new(:collection, &collection_context)
-        defs[:paginated_collection] = Context.new(:paginated_collection) { |collection:| collection }
-        defs[:instance]             = Context.new(:instance, readonly: true) { |collection:| collection.first }
-        defs[:owner_context]        = Context.new(:owner_context, readonly: true) { ContextDelegate::Mock.new } if defs.has_key? :owner_context
-        defs[:action]               = Context.new(:action, readonly: true) { action }
-      end
-    end
-
-    def sample_request(resource, request)
-      call(resource, request, context_definitions: sample_context(resource), callbacks: false)
     end
   end
 end

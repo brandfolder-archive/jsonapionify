@@ -16,11 +16,13 @@ module JSONAPIonify::Api
 
     def documentation_object(base_url)
       OpenStruct.new(
-        name:          type,
-        description:   JSONAPIonify::Documentation.render_markdown(@description || ''),
-        relationships: relationships.map { |r| r.documentation_object },
-        attributes:    attributes.sort_by(&:name).map(&:documentation_object),
-        actions:       documented_actions_in_order.map do |action, base, args|
+        name:             type,
+        description:      JSONAPIonify::Documentation.render_markdown(@description || ''),
+        relationships:    relationships.map { |r| r.documentation_object },
+        request_headers:  request_header_definitions.values.map { |h| OpenStruct.new name: h.name, required: h.required, actions: h.actions },
+        params:           param_definitions.values.map { |p| OpenStruct.new name: p.string, required: p.required, default: p.default_value }.reject { |p| p.name.start_with? 'fields[' },
+        attributes:       attributes.sort_by(&:name).map(&:documentation_object),
+        actions:          documented_actions_in_order.map do |action, base, args|
           action.documentation_object File.join(base_url, base), *args
         end
       )

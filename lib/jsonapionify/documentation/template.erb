@@ -381,6 +381,51 @@
             <p><%= resource.description %></p>
 
             <div class="details">
+              <% if resource.request_headers.present? %>
+                  <h4 id="<%= resource.name %>-params">Request Headers</h4>
+                  <ul class="attributes">
+                    <% resource.request_headers.each do |header| %>
+                        <li>
+                          <div class="row-attribute">
+                            <div class="col-xs-4 param-name">
+                              <strong><%= header.name %></strong>
+                              <% if header.required %>
+                                <p class="optional">required: <%= header.required %></p>
+                              <% else %>
+                                <p class="optional">optional</p>
+                              <% end %>
+                            </div>
+                            <div style="clear: both;"></div>
+                          </div>
+                        </li>
+                    <% end %>
+                  </ul>
+              <% end %>
+
+              <% if resource.params.present? %>
+                  <h4 id="<%= resource.name %>-params">Query Params</h4>
+                  <ul class="attributes">
+                    <% resource.params.each do |param| %>
+                        <li>
+                          <div class="row-attribute">
+                            <div class="col-xs-4 param-name">
+                              <strong><%= param.name %></strong>
+                              <% if param.default.present? %>
+                                <i class="attribute-default">&mdash; default: <%= param.default %></i>
+                              <% end %>
+                              <% if param.required %>
+                                <p class="optional">required: <%= param.required %></p>
+                              <% else %>
+                                <p class="optional">optional</p>
+                              <% end %>
+                            </div>
+                            <div style="clear: both;"></div>
+                          </div>
+                        </li>
+                    <% end %>
+                  </ul>
+              <% end %>
+
               <% if resource.attributes.present? %>
                   <h4 id="<%= resource.name %>-attributes">Attributes</h4>
                   <ul class="attributes">
@@ -423,8 +468,6 @@
                   <% action.sample_requests.each do |sample_request| %>
                       <h5>Request</h5>
                       <pre><code class="http"><%= sample_request.request %></code></pre>
-                      <h5>Response</h5>
-                      <pre><code class="http"><%= sample_request.response %></code></pre>
                   <% end %>
               <% end %>
             </div>

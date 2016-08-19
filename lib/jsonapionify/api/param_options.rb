@@ -66,6 +66,10 @@ module JSONAPIonify::Api
       with_value @default
     end
 
+    def default_value
+      @default
+    end
+
     def extract_value(params)
       keypath.reduce(params) do |p, key|
         p[key.to_s]
